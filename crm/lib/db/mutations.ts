@@ -12,12 +12,13 @@
 // (getCurrentUser) when the caller doesn't pass one.
 import "server-only";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { getCurrentUser } from "@/lib/db";
+import { getAccount, getCurrentUser } from "@/lib/db";
 import {
   caseStatusToDb,
   mapActivity,
   mapCase,
   mapCaseNote,
+  mapContact,
   mapDeal,
   mapNotification,
   mapOffer,
@@ -26,6 +27,7 @@ import {
   stageToDb,
 } from "./mappers";
 import type {
+  Account,
   Activity,
   ActivityType,
   AppNotification,
@@ -33,6 +35,7 @@ import type {
   CasePriority,
   CaseStatus,
   Channel,
+  Contact,
   ContextType,
   Deal,
   InboxMessage,
@@ -80,6 +83,74 @@ async function loadOffer(admin: Admin, offerId: string) {
     .select("*")
     .eq("offer_id", offerId);
   return mapOffer(data, lines ?? []);
+}
+
+// --- accounts & contacts ----------------------------------------------------
+
+export interface UpdateAccountInput {
+  /** Free-text industry label (round-trips through toIndustry on read). */
+  industry?: string;
+  /** ISO country / region label. Mapped to accounts.country. */
+  country?: string;
+  website?: string;
+}
+
+/** Patch an account's enrichable header fields. Only the supplied fields are
+ *  written — used by the enrichment agent's approval write and editable
+ *  anywhere a rep curates an account. */
+export async function updateAccount(
+  accountId: string,
+  patch: UpdateAccountInput,
+): Promise<Account | null> {
+  const admin = createAdminClient();
+  const update: Partial<TablesInsert<"accounts">> = {};
+  if (patch.industry !== undefined) update.industry = patch.industry;
+  if (patch.country !== undefined) update.country = patch.country;
+  if (patch.website !== undefined) update.website = patch.website;
+  if (Object.keys(update).length > 0) {
+    const { error } = await admin
+      .from("accounts")
+      .update(update)
+      .eq("id", accountId);
+    if (error) throw new Error(error.message);
+  }
+  return getAccount(accountId);
+}
+
+export interface CreateContactInput {
+  accountId: string;
+  /** Full name; split on the first space into first/last for storage. */
+  name: string;
+  jobTitle?: string;
+  email?: string;
+  phone?: string;
+  isPrimary?: boolean;
+}
+
+export async function createContact(
+  input: CreateContactInput,
+): Promise<Contact> {
+  const admin = createAdminClient();
+  const trimmed = input.name.trim();
+  const sep = trimmed.indexOf(" ");
+  const firstName = sep === -1 ? trimmed : trimmed.slice(0, sep);
+  const lastName = sep === -1 ? "" : trimmed.slice(sep + 1).trim();
+  const row: TablesInsert<"contacts"> = {
+    account_id: input.accountId,
+    first_name: firstName,
+    last_name: lastName,
+    job_title: input.jobTitle ?? null,
+    email: input.email ?? null,
+    phone: input.phone ?? null,
+    is_primary: input.isPrimary ?? false,
+  };
+  const { data, error } = await admin
+    .from("contacts")
+    .insert(row)
+    .select()
+    .single();
+  if (error || !data) throw new Error(error?.message ?? "Failed to create contact");
+  return mapContact(data);
 }
 
 // --- deals ------------------------------------------------------------------

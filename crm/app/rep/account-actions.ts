@@ -5,12 +5,14 @@ import {
   setForecastPhases,
   createDeal,
   createCase,
+  createContact,
   logActivity,
 } from "@/lib/db/mutations";
 import type {
   ForecastPhaseInput,
   CreateDealInput,
   CreateCaseInput,
+  CreateContactInput,
 } from "@/lib/db/mutations";
 
 // ---------------------------------------------------------------------------
@@ -65,4 +67,23 @@ export async function createCaseAction(
   revalidatePath(`/rep/accounts/${input.accountId}`);
   revalidatePath("/tam");
   return { id: c.id };
+}
+
+// ---------------------------------------------------------------------------
+// Create contact
+// ---------------------------------------------------------------------------
+
+export async function createContactAction(
+  input: CreateContactInput,
+): Promise<{ id: string }> {
+  const contact = await createContact(input);
+  await logActivity({
+    accountId: input.accountId,
+    eventType: "note",
+    title: `Contact added: ${contact.name}`,
+    entityType: "account",
+    entityId: input.accountId,
+  });
+  revalidatePath(`/rep/accounts/${input.accountId}`);
+  return { id: contact.id };
 }

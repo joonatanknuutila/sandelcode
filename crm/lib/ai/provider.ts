@@ -1,28 +1,32 @@
 // Model provider — the single place that talks to an LLM.
 //
-// Configured via env (Azure OpenAI by default). When no creds are present the
-// app still works: callers fall back to the deterministic, grounded logic in
-// the rest of lib/ (summariseCase, nextBestAction, forecast narrative). That
-// keeps the demo live without a key and turns "real" the moment creds land —
-// no UI or call-site changes.
+// Priority: Google Vertex AI (Gemini) when configured, else Azure OpenAI, else
+// nothing. When no model is reachable the app still works: callers fall back to
+// the deterministic, grounded logic in the rest of lib/ (summariseCase,
+// nextBestAction, forecast narrative). So the demo stays live without creds and
+// turns "real" the moment creds land — no UI or call-site changes.
 //
-// Env (set in .env.local, never hardcoded):
-//   AZURE_OPENAI_ENDPOINT      e.g. https://<resource>.openai.azure.com
-//   AZURE_OPENAI_API_KEY
-//   AZURE_OPENAI_DEPLOYMENT    deployment (model) name
-//   AZURE_OPENAI_API_VERSION   default 2024-08-01-preview
+// --- Vertex AI (Gemini) — preferred -----------------------------------------
+// Vertex uses IAM, NOT an API key. Auth is Application Default Credentials:
+//   LOCAL:  `gcloud auth application-default login` (one-time), then set
+//           GOOGLE_VERTEX_PROJECT in .env.local. The Google SDK finds the creds.
+//   VERCEL: ADC isn't available on serverless, so leave GOOGLE_VERTEX_PROJECT
+//           unset there — complete() returns null and the deterministic
+//           fallback renders. (To enable later: a service-account key or
+//           Workload Identity Federation, no code change here.)
+// Env (.env.local, never hardcoded):
+//   GOOGLE_VERTEX_PROJECT     e.g. ferrous-wonder-491213-e7  (or GOOGLE_CLOUD_PROJECT)
+//   GOOGLE_VERTEX_LOCATION    default us-central1 (e.g. europe-west1 for EU)
+//   GOOGLE_VERTEX_MODEL       default gemini-2.5-flash
+//
+// --- Azure OpenAI — fallback ------------------------------------------------
+//   AZURE_OPENAI_ENDPOINT / AZURE_OPENAI_API_KEY / AZURE_OPENAI_DEPLOYMENT
+//   AZURE_OPENAI_API_VERSION  default 2024-08-01-preview
+import "server-only";
 
 export interface ChatMessage {
   role: "system" | "user" | "assistant";
   content: string;
-}
-
-export function isModelConfigured(): boolean {
-  return Boolean(
-    process.env.AZURE_OPENAI_ENDPOINT &&
-      process.env.AZURE_OPENAI_API_KEY &&
-      process.env.AZURE_OPENAI_DEPLOYMENT,
-  );
 }
 
 export interface CompleteOptions {
@@ -31,6 +35,24 @@ export interface CompleteOptions {
   maxTokens?: number;
   /** Ask the model to return strict JSON. */
   json?: boolean;
+}
+
+function isVertexConfigured(): boolean {
+  return Boolean(
+    process.env.GOOGLE_VERTEX_PROJECT || process.env.GOOGLE_CLOUD_PROJECT,
+  );
+}
+
+function isAzureConfigured(): boolean {
+  return Boolean(
+    process.env.AZURE_OPENAI_ENDPOINT &&
+      process.env.AZURE_OPENAI_API_KEY &&
+      process.env.AZURE_OPENAI_DEPLOYMENT,
+  );
+}
+
+export function isModelConfigured(): boolean {
+  return isVertexConfigured() || isAzureConfigured();
 }
 
 /**
@@ -42,8 +64,105 @@ export async function complete(
   messages: ChatMessage[],
   opts: CompleteOptions = {},
 ): Promise<string | null> {
-  if (!isModelConfigured()) return null;
+  if (isVertexConfigured()) return completeVertex(messages, opts);
+  if (isAzureConfigured()) return completeAzure(messages, opts);
+  return null;
+}
 
+// --- Vertex AI (Gemini) -----------------------------------------------------
+
+/** Mint a short-lived OAuth token from Application Default Credentials. Returns
+ *  null (→ deterministic fallback) if ADC isn't available, e.g. the user hasn't
+ *  run `gcloud auth application-default login`, or on Vercel. */
+async function vertexAccessToken(): Promise<string | null> {
+  try {
+    const { GoogleAuth } = await import("google-auth-library");
+    const auth = new GoogleAuth({
+      scopes: "https://www.googleapis.com/auth/cloud-platform",
+    });
+    const token = await auth.getAccessToken();
+    return token ?? null;
+  } catch (err) {
+    console.error(
+      "Vertex ADC unavailable — run `gcloud auth application-default login`",
+      err,
+    );
+    return null;
+  }
+}
+
+async function completeVertex(
+  messages: ChatMessage[],
+  opts: CompleteOptions,
+): Promise<string | null> {
+  const project =
+    process.env.GOOGLE_VERTEX_PROJECT ?? process.env.GOOGLE_CLOUD_PROJECT!;
+  const location = process.env.GOOGLE_VERTEX_LOCATION ?? "us-central1";
+  const model = process.env.GOOGLE_VERTEX_MODEL ?? "gemini-2.5-flash";
+
+  const token = await vertexAccessToken();
+  if (!token) return null;
+
+  const host =
+    location === "global"
+      ? "aiplatform.googleapis.com"
+      : `${location}-aiplatform.googleapis.com`;
+  const url = `https://${host}/v1/projects/${project}/locations/${location}/publishers/google/models/${model}:generateContent`;
+
+  // Gemini wants system text in `systemInstruction`, and roles "user"/"model".
+  const systemText = messages
+    .filter((m) => m.role === "system")
+    .map((m) => m.content)
+    .join("\n\n");
+  const contents = messages
+    .filter((m) => m.role !== "system")
+    .map((m) => ({
+      role: m.role === "assistant" ? "model" : "user",
+      parts: [{ text: m.content }],
+    }));
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        ...(systemText
+          ? { systemInstruction: { parts: [{ text: systemText }] } }
+          : {}),
+        contents,
+        generationConfig: {
+          temperature: opts.temperature ?? 0.2,
+          maxOutputTokens: opts.maxTokens ?? 700,
+          ...(opts.json ? { responseMimeType: "application/json" } : {}),
+        },
+      }),
+      // Don't let a slow model wedge a request.
+      signal: AbortSignal.timeout(20_000),
+    });
+    if (!res.ok) {
+      console.error("Vertex AI error", res.status, await res.text());
+      return null;
+    }
+    const data = await res.json();
+    const text: string | undefined = data.candidates?.[0]?.content?.parts
+      ?.map((p: { text?: string }) => p.text ?? "")
+      .join("");
+    return text && text.length > 0 ? text : null;
+  } catch (err) {
+    console.error("Vertex AI call failed", err);
+    return null;
+  }
+}
+
+// --- Azure OpenAI (fallback) ------------------------------------------------
+
+async function completeAzure(
+  messages: ChatMessage[],
+  opts: CompleteOptions,
+): Promise<string | null> {
   const endpoint = process.env.AZURE_OPENAI_ENDPOINT!.replace(/\/$/, "");
   const deployment = process.env.AZURE_OPENAI_DEPLOYMENT!;
   const apiVersion = process.env.AZURE_OPENAI_API_VERSION ?? "2024-08-01-preview";
@@ -62,7 +181,6 @@ export async function complete(
         max_tokens: opts.maxTokens ?? 700,
         ...(opts.json ? { response_format: { type: "json_object" } } : {}),
       }),
-      // Don't let a slow model wedge a request.
       signal: AbortSignal.timeout(20_000),
     });
     if (!res.ok) {
