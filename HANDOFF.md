@@ -55,12 +55,22 @@ people/<name>/prompt/<ts>.md  +  tmux paste-injects into that person's pane
    ▼
 Claude session (tmux 2x2 grid, session "hmd") builds it in worktrees/<name> on person/<name>
    ▼
-session commits  →  autopush.sh pushes person/* to GitHub every 60s
+session commits ──┬─► autopush.sh pushes person/* to GitHub every 60s
+                  └─► poll.mjs posts each new commit to that person's Notion 📝 Planning (output feed, OUT)
    ▼
-[merge person/* → main]  (currently MANUAL: PR + click, or integrator)
+merge-integrator.sh: merges person/* → main every 60s, GATED on `crm/` building; pushes main
    ▼
 Vercel auto-deploys main (root=crm) → live site
 ```
+
+**Bidirectional Notion**: IN = prompt inbox → session (deletes blocks after ingest). OUT = each session
+commit is posted to that person's 📝 Planning page as `🔧 <sha> · <subject> · <N files> · <time>`
+(poll.mjs `reportCommits`; baselines silently on first sight so no backlog dump).
+
+**Auto-merge** is live via `merge-integrator.sh` (local daemon), NOT GitHub Actions — no branch-protection
+paywall / workflow-permission toggle needed. Per-branch build gate: a branch that breaks `crm/` build is
+rolled back (`git reset --hard`) and skipped until fixed; good branches still ship. It pauses any cycle where
+the ROOT worktree is dirty (so commit/stash root edits to keep integration flowing).
 
 - **tmux**: session `hmd`, one window `grid`, 4 panes (joonatan/arttu/nuutti/aarni), labeled by worktree. Mouse mode ON. Poller targets panes **by worktree path** (not pane id), so it survives layout changes.
 - **Notion IDs**: see §6.
@@ -84,6 +94,11 @@ pkill -f watcher/poll.mjs                                               # stop
 
 # --- keep GitHub continuously synced (push person/* every 60s) ---
 nohup ./autopush.sh 60 > watcher/autopush.log 2>&1 &
+
+# --- auto-merge person/* -> main, build-gated, deploy on green (runs in ROOT/main) ---
+nohup ./merge-integrator.sh 60 > watcher/integrator.log 2>&1 &
+tail -f watcher/integrator.log     # watch;  pkill -f merge-integrator.sh  to stop
+#  NOTE: pauses while the root worktree is dirty — commit/stash root edits to resume.
 
 # --- re-seed a session after editing prompts/<name>.md ---
 #   send /clear to the pane, then load-buffer + paste-buffer the prompt file + Enter
