@@ -368,7 +368,7 @@ export function CatalogEditor({ products: initProducts, services: initServices }
                   <td className="px-4 py-2 text-muted">{p.sku ?? "—"}</td>
                   <td className="px-4 py-2 text-muted">{p.category ?? "—"}</td>
                   <td className="px-4 py-2 text-right font-mono">
-                    <span style={{ color: "#e4ff00", textShadow: "0 0 6px #e4ff0060" }}>
+                    <span className="font-semibold">
                       {eur(p.unit_price)}
                     </span>
                   </td>
@@ -448,7 +448,7 @@ export function CatalogEditor({ products: initProducts, services: initServices }
                     {(s.invoicing_model ?? "—").replace(/_/g, " ")}
                   </td>
                   <td className="px-4 py-2 text-right font-mono">
-                    <span style={{ color: "#e4ff00", textShadow: "0 0 6px #e4ff0060" }}>
+                    <span className="font-semibold">
                       {eur(s.base_price)}
                     </span>
                   </td>

@@ -98,8 +98,8 @@ export async function createOfferAction(
           userId: sm.id,
           title: "Offer pending your approval",
           body: `"${input.title}" requires SM approval${input.discountPct > 0 ? ` (${input.discountPct}% discount)` : ""}.`,
-          entityType: "offer",
-          entityId: offer.id,
+          entityType: "deal",
+          entityId: input.dealId,
         }),
       ),
     );
