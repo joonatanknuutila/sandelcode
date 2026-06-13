@@ -1,0 +1,26 @@
+[
+  {
+    "id": "lead-1781350562677",
+    "created_at": "2026-06-13T11:36:02.677Z",
+    "first_name": "Marc",
+    "last_name": "Hofmann",
+    "email": "marc.hofmann@nordea.com",
+    "company": "Nordea",
+    "industry": "Banking & Financial Services",
+    "country": "Finland",
+    "product_interest": "HMD Fota",
+    "message": "Haluan jutella"
+  },
+  {
+    "id": "lead-1781350959864",
+    "created_at": "2026-06-13T11:42:39.864Z",
+    "first_name": "Marc",
+    "last_name": "Hofmann",
+    "email": "marc.hofmann@nordea.com",
+    "company": "Nordea",
+    "industry": "Banking & Financial Services",
+    "country": "Finland",
+    "product_interest": "HMD Fota",
+    "message": "Haluan meet"
+  }
+]
