@@ -22,6 +22,7 @@ import {
   Contact,
   Deal,
   Offer,
+  OfferStatus,
   STAGE_PROBABILITY,
   User,
 } from "./types";
@@ -113,4 +114,42 @@ export function getRepSummary(repId: string): RepSummary {
     weightedPipeline: repDeals.reduce((s, d) => s + weightedValue(d), 0),
     stalled: repDeals.filter(isStalled).length,
   };
+}
+
+// --- Team-wide views (Sales Manager + Finance) -----------------------------
+
+/** Every deal across all reps — the Sales Manager / Finance lens. */
+export function getAllDeals(): Deal[] {
+  return deals;
+}
+
+/** Open (non-terminal) deals across the whole team. */
+export function getOpenDeals(): Deal[] {
+  return deals.filter((d) => d.stage !== "won" && d.stage !== "lost");
+}
+
+/** Won deals — committed, no longer probability-weighted. */
+export function getWonDeals(): Deal[] {
+  return deals.filter((d) => d.stage === "won");
+}
+
+/** Sales reps, for the manager's per-owner pipeline grouping. */
+export function getReps(): User[] {
+  return users.filter((u) => u.role === "rep");
+}
+
+/** Team-wide rollup of the open pipeline (Sales Manager dashboard). */
+export function getTeamSummary(): RepSummary {
+  const open = getOpenDeals();
+  return {
+    openDeals: open.length,
+    totalTcv: open.reduce((s, d) => s + d.tcv, 0),
+    weightedPipeline: open.reduce((s, d) => s + weightedValue(d), 0),
+    stalled: open.filter(isStalled).length,
+  };
+}
+
+/** Offers sitting at a given approval gate (e.g. pending_sm, pending_finance). */
+export function getOffersByStatus(status: OfferStatus): Offer[] {
+  return offers.filter((o) => o.status === status);
 }

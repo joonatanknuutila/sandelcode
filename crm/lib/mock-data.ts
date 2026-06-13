@@ -135,6 +135,7 @@ const f2 = ramp(200, 1500, 690, 14);
 const f3 = ramp(80, 400, 850, 18);
 const f4 = ramp(150, 900, 640, 10);
 const f5 = ramp(120, 800, 700, 11);
+const f6 = ramp(1000, 5000, 700, 12);
 
 export const deals: Deal[] = [
   {
@@ -167,6 +168,12 @@ export const deals: Deal[] = [
     serviceModel: "monthly_recurring", expectedCloseDate: "2026-11-30",
     createdAt: "2026-05-28", updatedAt: "2026-05-28",
   },
+  {
+    id: "d-6", accountId: "a-6", ownerId: "u-rep-2", name: "Maersk port & vessel fleet",
+    stage: "won", channel: "direct", tcv: tcvOf(f6), forecast: f6,
+    serviceModel: "monthly_recurring", expectedCloseDate: "2026-05-30",
+    createdAt: "2026-01-15", updatedAt: "2026-05-30",
+  },
 ];
 
 export const cases: Case[] = [
@@ -192,6 +199,15 @@ export const offers: Offer[] = [
     ],
     total: 77_184, justification: "Competitive displacement vs incumbent; 12% to win the pilot.",
     createdAt: "2026-05-21",
+  },
+  {
+    id: "o-2", accountId: "a-1", dealId: "d-1", version: 3, status: "pending_finance",
+    lines: [
+      { productId: "p-skyline-sec", name: "HMD Skyline Secure", quantity: 4000, unitPrice: 720, discountPct: 15 },
+      { productId: "s-mdm", name: "Secure MDM (monthly, 36mo)", quantity: 4000, unitPrice: 144, discountPct: 8 },
+    ],
+    total: 2_937_600, justification: "Fleet-volume discount; SM approved. 15% to close the 3-year frame agreement.",
+    createdAt: "2026-06-11",
   },
 ];
 
