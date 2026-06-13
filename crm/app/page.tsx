@@ -6,3 +6,5 @@ import { redirect } from "next/navigation";
 export default function Home() {
   redirect("/rep");
 }
+
+<!-- integrator pipeline test 2026-06-13T13:21:21Z -->
