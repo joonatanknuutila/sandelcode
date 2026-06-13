@@ -249,6 +249,74 @@ export function triageSort(list: Case[]): Case[] {
   });
 }
 
+// --- Request tracking: what is this case blocked on? -----------------------
+
+export type WaitingOn = "hmd" | "customer" | "third_party" | "none";
+
+export interface RequestStatus {
+  waitingOn: WaitingOn;
+  label: string;
+}
+
+/** Derive "who owes the next move" from the case state + latest notes. */
+export function requestStatus(c: Case): RequestStatus {
+  if (c.status === "resolved") return { waitingOn: "none", label: "Closed — no action" };
+  if (c.escalatedToThirdParty) return { waitingOn: "third_party", label: "Waiting on 3rd-party vendor" };
+  const latestWorking = getNotesForCase(c.id).find((n) => n.visibility === "working");
+  // A trailing question to the customer means the ball is in their court.
+  if (latestWorking && /\?\s*$/.test(latestWorking.body.trim())) {
+    return { waitingOn: "customer", label: "Waiting on customer reply" };
+  }
+  return { waitingOn: "hmd", label: "Action with HMD" };
+}
+
+// --- Case summary (the AI hint) --------------------------------------------
+// Deterministic now — same contract the real model agent will use, so the UI
+// doesn't change when Azure OpenAI lands (mirrors lib/ai.ts nextBestAction).
+// Grounded: reads only this case's notes + the account's service history.
+
+export interface CaseSummary {
+  headline: string;
+  bullets: string[];
+  /** Suggested next step the TAM can act on. */
+  suggestion: string;
+}
+
+export function summariseCase(c: Case): CaseSummary {
+  const sla = slaInfo(c);
+  const req = requestStatus(c);
+  const internal = getNotesForCase(c.id).filter((n) => n.visibility === "internal");
+  const history = getServiceHistory(c.accountId).filter((e) => e.kind === "incident");
+
+  const bullets: string[] = [];
+  bullets.push(`${c.priority.toUpperCase()} · ${caseAgeDays(c)}d old · ${sla.label}.`);
+  if (internal[0]) bullets.push(`Latest internal finding: ${internal[0].body}`);
+  // Surface a likely-related prior incident (recurring/known-fix detection).
+  const related = history.find((e) => e.caseId !== c.id && /#\d{3,}|batch/i.test(e.body));
+  if (related) bullets.push(`Possibly related: ${related.body}`);
+  bullets.push(`Request status: ${req.label}.`);
+
+  const headline =
+    sla.state === "breach"
+      ? "Past SLA — needs action now"
+      : sla.state === "soon"
+        ? "SLA approaching — keep it moving"
+        : c.escalatedToThirdParty
+          ? "Blocked on a 3rd party"
+          : "On track";
+
+  const suggestion =
+    req.waitingOn === "third_party"
+      ? "Chase the vendor RMA and post a working-note update so the customer isn't in the dark."
+      : req.waitingOn === "customer"
+        ? "Customer owes a reply — a gentle nudge keeps the SLA clock fair."
+        : sla.state === "breach" || sla.state === "soon"
+          ? "Apply the known fix and draft the customer-facing resolution note."
+          : "Confirm next checkpoint and keep the timeline current.";
+
+  return { headline, bullets, suggestion };
+}
+
 export interface TamSummary {
   openCases: number;
   breaching: number;
