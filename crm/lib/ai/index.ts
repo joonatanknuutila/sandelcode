@@ -2,9 +2,9 @@
 // Azure OpenAI agent (brief P1). Same signature; the UI doesn't change when the
 // real model lands. Picks a sensible next step from the deal's stage + timeline.
 
-import { getActivitiesForDeal } from "./api";
-import { Deal, STAGE_LABELS } from "./types";
-import { relativeDays } from "./format";
+import { getActivitiesForDeal } from "../api";
+import { Deal, STAGE_LABELS } from "../types";
+import { relativeDays } from "../format";
 
 export interface NextBestAction {
   headline: string;
