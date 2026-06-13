@@ -1,18 +1,17 @@
+# secrets / env (local only)
 .env
-.supabase-newproject.json
+.env.local
 *.secret.json
-node_modules/
-worktrees/
-watcher/.state.json
-watcher/poll.log
-watcher/poll.out
-watcher/autopush.log
-watcher/integrator.log
-watcher/*.out
-people/*/prompt/*.md
-.DS_Store
+.supabase-newproject.json
 
-# dead scaffold (replaced by crm/) and stray build/runtime noise
-web/
-*.log
+# dependencies & build output
+node_modules/
+.next/
+*.tsbuildinfo
+
+# vercel
 .vercel/
+
+# logs & OS
+*.log
+.DS_Store
