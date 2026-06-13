@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+/* HMD Secure brand palette — sourced from hmd.com (see BRAND.md).
+   HMD is a typographic-wordmark brand: teal primary, orange accent, gray
+   secondary. "Secure" (gov/enterprise) leans on a charcoal app chrome so the
+   teal reads as a precise, confident accent. */
+:root {
+  --hmd-teal: #47d7ac; /* primary brand — fills, accents, active-on-dark */
+  --hmd-teal-600: #1f9e7a; /* derived — interactive elements on white */
+  --hmd-teal-700: #177a5f; /* derived — hover / emphasis */
+  --hmd-orange: #ff7f41; /* accent — use sparingly */
+  --hmd-gray: #788890; /* secondary */
+  --hmd-charcoal: #161d23; /* app chrome / sidebar */
+  --hmd-charcoal-soft: #1f2830;
+
+  --background: #f5f7f7;
+  --surface: #ffffff;
+  --border: #e3e8e8;
+  --foreground: #0f1719;
+  --muted: #5b6a72;
+
+  --success: #16a34a;
+  --warning: #d97706;
+  --danger: #dc2626;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+
+  --color-hmd-teal: var(--hmd-teal);
+  --color-hmd-teal-600: var(--hmd-teal-600);
+  --color-hmd-teal-700: var(--hmd-teal-700);
+  --color-hmd-orange: var(--hmd-orange);
+  --color-hmd-gray: var(--hmd-gray);
+  --color-hmd-charcoal: var(--hmd-charcoal);
+  --color-hmd-charcoal-soft: var(--hmd-charcoal-soft);
+
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
