@@ -465,6 +465,53 @@ export async function getNotifications(
   return (data ?? []).map(mapNotification);
 }
 
+// --- forecast targets & confidence overrides (S4) --------------------------
+
+export interface ForecastTarget {
+  period: string; // 'YYYY-Qn'
+  amountEur: number;
+}
+
+/** Quarterly revenue targets (Finance gap-to-target), ordered by period. */
+export async function getTargets(): Promise<ForecastTarget[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("forecast_targets")
+    .select("*")
+    .order("period");
+  return (data ?? []).map((t) => ({
+    period: t.period,
+    amountEur: Number(t.amount_eur),
+  }));
+}
+
+export interface ConfidenceOverride {
+  value: number;
+  reason: string | null;
+  setBy: string | null;
+  setAt: string;
+}
+
+/** All Finance confidence overrides, keyed by deal id. */
+export async function getConfidenceOverrides(): Promise<
+  Record<string, ConfidenceOverride>
+> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("deal_confidence_overrides")
+    .select("*");
+  const out: Record<string, ConfidenceOverride> = {};
+  for (const row of data ?? []) {
+    out[row.deal_id] = {
+      value: row.value,
+      reason: row.reason,
+      setBy: row.set_by,
+      setAt: row.set_at,
+    };
+  }
+  return out;
+}
+
 // --- derived analytics (pure; mirror lib/api.ts) ---------------------------
 
 /** Weighted value of a deal = TCV x win-probability (deal's own, else stage). */

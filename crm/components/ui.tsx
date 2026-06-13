@@ -3,6 +3,172 @@
 
 import { Stage, STAGE_LABELS } from "@/lib/types";
 
+// ---------------------------------------------------------------------------
+// Input
+// ---------------------------------------------------------------------------
+export function Input({
+  label,
+  error,
+  className = "",
+  id,
+  ...props
+}: React.InputHTMLAttributes<HTMLInputElement> & {
+  label?: string;
+  error?: string;
+  id?: string;
+}) {
+  const inputId = id ?? (label ? label.toLowerCase().replace(/\s+/g, "-") : undefined);
+  return (
+    <div className="flex flex-col gap-1">
+      {label && (
+        <label
+          htmlFor={inputId}
+          className="text-xs font-medium uppercase tracking-wide text-muted"
+        >
+          {label}
+        </label>
+      )}
+      <input
+        id={inputId}
+        className={`rounded-lg border border-border bg-surface px-3 py-2 text-sm text-foreground placeholder:text-muted outline-none transition-colors focus:border-hmd-teal focus:ring-2 focus:ring-hmd-teal/40 disabled:opacity-50 ${error ? "border-danger" : ""} ${className}`}
+        {...props}
+      />
+      {error && <p className="text-xs text-danger">{error}</p>}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Textarea
+// ---------------------------------------------------------------------------
+export function Textarea({
+  label,
+  error,
+  className = "",
+  id,
+  ...props
+}: React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
+  label?: string;
+  error?: string;
+  id?: string;
+}) {
+  const inputId = id ?? (label ? label.toLowerCase().replace(/\s+/g, "-") : undefined);
+  return (
+    <div className="flex flex-col gap-1">
+      {label && (
+        <label
+          htmlFor={inputId}
+          className="text-xs font-medium uppercase tracking-wide text-muted"
+        >
+          {label}
+        </label>
+      )}
+      <textarea
+        id={inputId}
+        rows={4}
+        className={`rounded-lg border border-border bg-surface px-3 py-2 text-sm text-foreground placeholder:text-muted outline-none transition-colors focus:border-hmd-teal focus:ring-2 focus:ring-hmd-teal/40 disabled:opacity-50 resize-y ${error ? "border-danger" : ""} ${className}`}
+        {...props}
+      />
+      {error && <p className="text-xs text-danger">{error}</p>}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Select
+// ---------------------------------------------------------------------------
+export function Select({
+  label,
+  error,
+  options,
+  placeholder,
+  className = "",
+  id,
+  ...props
+}: React.SelectHTMLAttributes<HTMLSelectElement> & {
+  label?: string;
+  error?: string;
+  options: { value: string; label: string }[];
+  placeholder?: string;
+  id?: string;
+}) {
+  const inputId = id ?? (label ? label.toLowerCase().replace(/\s+/g, "-") : undefined);
+  return (
+    <div className="flex flex-col gap-1">
+      {label && (
+        <label
+          htmlFor={inputId}
+          className="text-xs font-medium uppercase tracking-wide text-muted"
+        >
+          {label}
+        </label>
+      )}
+      <select
+        id={inputId}
+        className={`rounded-lg border border-border bg-surface px-3 py-2 text-sm text-foreground outline-none transition-colors focus:border-hmd-teal focus:ring-2 focus:ring-hmd-teal/40 disabled:opacity-50 appearance-none cursor-pointer ${error ? "border-danger" : ""} ${className}`}
+        {...props}
+      >
+        {placeholder && (
+          <option value="" disabled>
+            {placeholder}
+          </option>
+        )}
+        {options.map((opt) => (
+          <option key={opt.value} value={opt.value}>
+            {opt.label}
+          </option>
+        ))}
+      </select>
+      {error && <p className="text-xs text-danger">{error}</p>}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Slider
+// ---------------------------------------------------------------------------
+export function Slider({
+  label,
+  value,
+  formatValue,
+  className = "",
+  id,
+  ...props
+}: React.InputHTMLAttributes<HTMLInputElement> & {
+  label?: string;
+  value?: number | string;
+  formatValue?: (v: number) => string;
+  id?: string;
+}) {
+  const inputId = id ?? (label ? label.toLowerCase().replace(/\s+/g, "-") : undefined);
+  const numVal = typeof value === "string" ? parseFloat(value) : (value ?? 0);
+  const display = formatValue ? formatValue(numVal) : String(numVal);
+  return (
+    <div className="flex flex-col gap-1">
+      {label && (
+        <div className="flex items-center justify-between">
+          <label
+            htmlFor={inputId}
+            className="text-xs font-medium uppercase tracking-wide text-muted"
+          >
+            {label}
+          </label>
+          <span className="rounded bg-hmd-teal px-1.5 py-0.5 text-xs font-semibold text-hmd-teal-700">
+            {display}
+          </span>
+        </div>
+      )}
+      <input
+        id={inputId}
+        type="range"
+        value={value}
+        className={`h-2 w-full cursor-pointer appearance-none rounded-full bg-border accent-hmd-teal [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-hmd-teal [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-hmd-teal-700 ${className}`}
+        {...props}
+      />
+    </div>
+  );
+}
+
 export function Card({
   children,
   className = "",

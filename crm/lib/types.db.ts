@@ -156,6 +156,44 @@ export type Database = {
         Update: Partial<Database["public"]["Tables"]["contacts"]["Insert"]>
         Relationships: []
       }
+      deal_confidence_overrides: {
+        Row: {
+          deal_id: string
+          id: string
+          reason: string | null
+          set_at: string
+          set_by: string | null
+          value: number
+        }
+        Insert: {
+          deal_id: string
+          id?: string
+          reason?: string | null
+          set_at?: string
+          set_by?: string | null
+          value: number
+        }
+        Update: Partial<Database["public"]["Tables"]["deal_confidence_overrides"]["Insert"]>
+        Relationships: []
+      }
+      forecast_targets: {
+        Row: {
+          amount_eur: number
+          created_at: string
+          id: string
+          period: string
+          updated_at: string
+        }
+        Insert: {
+          amount_eur?: number
+          created_at?: string
+          id?: string
+          period: string
+          updated_at?: string
+        }
+        Update: Partial<Database["public"]["Tables"]["forecast_targets"]["Insert"]>
+        Relationships: []
+      }
       deal_forecast_phases: {
         Row: {
           created_at: string

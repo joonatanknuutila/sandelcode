@@ -65,12 +65,42 @@ export function toStage(s: Tables<"deals">["stage"]): Stage {
   return STAGE_MAP[s];
 }
 
+/** UI stage -> DB stage (inverse of STAGE_MAP, for writes). */
+const STAGE_TO_DB: Record<Stage, Tables<"deals">["stage"]> = {
+  interest: "interest_shown",
+  rfi: "rfi_answered",
+  rfp: "rfp_offer_given",
+  customer_test: "customer_test",
+  contract_negotiation: "contract_negotiation",
+  won: "won",
+  lost: "lost",
+};
+export function stageToDb(s: Stage): Tables<"deals">["stage"] {
+  return STAGE_TO_DB[s];
+}
+
+/** UI role -> DB role. Alias of `fromRole`, named for the write-side contract. */
+export function roleToDb(r: Role): Tables<"profiles">["role"] {
+  return fromRole(r);
+}
+
 export function toCasePriority(p: Tables<"cases">["priority"]): CasePriority {
   return p === "critical" ? "urgent" : p;
 }
 
+/** UI priority -> DB priority (urgent -> critical). */
+export function priorityToDb(p: CasePriority): Tables<"cases">["priority"] {
+  return p === "urgent" ? "critical" : p;
+}
+
 export function toCaseStatus(s: Tables<"cases">["status"]): CaseStatus {
   return s === "closed" ? "resolved" : s;
+}
+
+/** UI case status -> DB case status. The UI has no `closed`, so all four UI
+ *  values map straight through; `resolved` stays `resolved` (not `closed`). */
+export function caseStatusToDb(s: CaseStatus): Tables<"cases">["status"] {
+  return s;
 }
 
 const OFFER_STATUS_MAP: Record<Tables<"offers">["status"], OfferStatus> = {
@@ -84,6 +114,20 @@ const OFFER_STATUS_MAP: Record<Tables<"offers">["status"], OfferStatus> = {
 };
 export function toOfferStatus(s: Tables<"offers">["status"]): OfferStatus {
   return OFFER_STATUS_MAP[s];
+}
+
+/** UI offer status -> DB offer status. The DB has extra terminal states
+ *  (`locked`/`sent`) the UI collapses into `approved`; on the write side a UI
+ *  `approved` maps to the canonical DB `approved`. */
+const OFFER_STATUS_TO_DB: Record<OfferStatus, Tables<"offers">["status"]> = {
+  draft: "draft",
+  pending_sm: "pending_sm_approval",
+  pending_finance: "pending_finance_approval",
+  approved: "approved",
+  rejected: "rejected",
+};
+export function offerStatusToDb(s: OfferStatus): Tables<"offers">["status"] {
+  return OFFER_STATUS_TO_DB[s];
 }
 
 const INDUSTRIES: Industry[] = [
