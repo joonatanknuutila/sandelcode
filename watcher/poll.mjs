@@ -62,34 +62,38 @@ async function readPromptBody(pageId) {
   return out.join("\n").trim();
 }
 
-const SESSION = cfg.tmuxSession || "hmd";
-
 function tmux(args) {
   return execFileSync("tmux", args, { encoding: "utf8" });
 }
 
-// True if the tmux window <session>:<name> exists (i.e. a visible claude session is running there).
-function targetExists(name) {
+// Find the tmux pane id whose working directory is this person's worktree.
+// Robust to any layout (separate windows OR a 2x2 grid of panes in one window).
+function findPaneId(person) {
+  const want = resolve(ROOT, person.worktree);
   try {
-    const wins = tmux(["list-windows", "-t", SESSION, "-F", "#{window_name}"]).split("\n");
-    return wins.includes(name);
+    const lines = tmux(["list-panes", "-a", "-F", "#{pane_id}|#{pane_current_path}"]).trim().split("\n");
+    for (const line of lines) {
+      const [id, path] = line.split("|");
+      if (path === want || path?.endsWith(`/worktrees/${person.name}`)) return id;
+    }
   } catch {
-    return false; // session not running
+    /* tmux server not running */
   }
+  return null;
 }
 
-// Paste the prompt into that person's visible claude session via bracketed paste, then submit.
+// Paste the prompt into that person's visible claude pane via bracketed paste, then submit.
 function injectToSession(person, prompt) {
-  const target = `${SESSION}:${person.name}`;
-  if (!targetExists(person.name)) {
-    log(`WARN: tmux window ${target} not found — start sessions with ./start-sessions.sh. Prompt saved to file only.`);
+  const pane = findPaneId(person);
+  if (!pane) {
+    log(`WARN: no tmux pane for ${person.name} (worktree ${person.worktree}) — start sessions with ./start-sessions.sh. Prompt saved to file only.`);
     return;
   }
   const buf = `prompt-${person.name}`;
-  tmux(["set-buffer", "-b", buf, prompt]);          // load text (literal arg, no shell)
-  tmux(["paste-buffer", "-t", target, "-b", buf, "-p", "-d"]); // -p bracketed paste, -d delete buffer
-  tmux(["send-keys", "-t", target, "Enter"]);       // submit
-  log(`-> injected prompt into ${target} (${prompt.length} chars)`);
+  tmux(["set-buffer", "-b", buf, prompt]);             // load text (literal arg, no shell)
+  tmux(["paste-buffer", "-t", pane, "-b", buf, "-p", "-d"]); // -p bracketed paste, -d delete buffer
+  tmux(["send-keys", "-t", pane, "Enter"]);            // submit
+  log(`-> injected prompt into ${person.name} pane ${pane} (${prompt.length} chars)`);
 }
 
 async function checkPerson(person) {
