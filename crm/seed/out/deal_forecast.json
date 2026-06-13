@@ -1006,5 +1006,117 @@
     "device_units": 462,
     "device_revenue_eur": 346038,
     "service_revenue_eur": 83160
+  },
+  {
+    "id": "fc_00ai",
+    "deal_id": "deal_00ah",
+    "period": "2026-Q2",
+    "device_units": 600,
+    "device_revenue_eur": 449400,
+    "service_revenue_eur": 112500
+  },
+  {
+    "id": "fc_00aj",
+    "deal_id": "deal_00ah",
+    "period": "2026-Q3",
+    "device_units": 800,
+    "device_revenue_eur": 599200,
+    "service_revenue_eur": 144000
+  },
+  {
+    "id": "fc_00ak",
+    "deal_id": "deal_00ah",
+    "period": "2026-Q4",
+    "device_units": 1000,
+    "device_revenue_eur": 749000,
+    "service_revenue_eur": 180000
+  },
+  {
+    "id": "fc_00al",
+    "deal_id": "deal_00ah",
+    "period": "2027-Q1",
+    "device_units": 1200,
+    "device_revenue_eur": 898800,
+    "service_revenue_eur": 216000
+  },
+  {
+    "id": "fc_00am",
+    "deal_id": "deal_00ah",
+    "period": "2027-Q2",
+    "device_units": 1200,
+    "device_revenue_eur": 898800,
+    "service_revenue_eur": 216000
+  },
+  {
+    "id": "fc_00an",
+    "deal_id": "deal_00ah",
+    "period": "2027-Q3",
+    "device_units": 1100,
+    "device_revenue_eur": 823900,
+    "service_revenue_eur": 198000
+  },
+  {
+    "id": "fc_00ao",
+    "deal_id": "deal_00ah",
+    "period": "2027-Q4",
+    "device_units": 1000,
+    "device_revenue_eur": 749000,
+    "service_revenue_eur": 180000
+  },
+  {
+    "id": "fc_00ap",
+    "deal_id": "deal_00ah",
+    "period": "2028-Q1",
+    "device_units": 1100,
+    "device_revenue_eur": 823900,
+    "service_revenue_eur": 198000
+  },
+  {
+    "id": "fc_00bo",
+    "deal_id": "deal_00bn",
+    "period": "2026-Q2",
+    "device_units": 300,
+    "device_revenue_eur": 224700,
+    "service_revenue_eur": 58500
+  },
+  {
+    "id": "fc_00bp",
+    "deal_id": "deal_00bn",
+    "period": "2026-Q3",
+    "device_units": 450,
+    "device_revenue_eur": 337050,
+    "service_revenue_eur": 81000
+  },
+  {
+    "id": "fc_00bq",
+    "deal_id": "deal_00bn",
+    "period": "2026-Q4",
+    "device_units": 600,
+    "device_revenue_eur": 449400,
+    "service_revenue_eur": 108000
+  },
+  {
+    "id": "fc_00br",
+    "deal_id": "deal_00bn",
+    "period": "2027-Q1",
+    "device_units": 700,
+    "device_revenue_eur": 524300,
+    "service_revenue_eur": 126000
+  },
+  {
+    "id": "fc_00bs",
+    "deal_id": "deal_00bn",
+    "period": "2027-Q2",
+    "device_units": 700,
+    "device_revenue_eur": 524300,
+    "service_revenue_eur": 126000
+  },
+  {
+    "id": "fc_00bt",
+    "deal_id": "deal_00bn",
+    "period": "2027-Q3",
+    "device_units": 650,
+    "device_revenue_eur": 486850,
+    "service_revenue_eur": 117000
   }
 ]

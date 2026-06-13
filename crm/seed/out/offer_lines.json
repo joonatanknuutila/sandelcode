@@ -158,5 +158,25 @@
     "unit_price_eur": 72,
     "discount_pct": 0,
     "line_total_eur": 16416
+  },
+  {
+    "id": "ol_00b4",
+    "offer_id": "off_00b3",
+    "product_id": "prd_0008",
+    "service_id": null,
+    "qty": 2000,
+    "unit_price_eur": 749,
+    "discount_pct": 12,
+    "line_total_eur": 1318240
+  },
+  {
+    "id": "ol_00b5",
+    "offer_id": "off_00b3",
+    "product_id": null,
+    "service_id": "svc_000f",
+    "qty": 2000,
+    "unit_price_eur": 72,
+    "discount_pct": 12,
+    "line_total_eur": 126720
   }
 ]

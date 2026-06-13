@@ -9,10 +9,10 @@
     "priority": "low",
     "tam_id": "usr_0004",
     "customer_contact_id": "con_000m",
-    "sla_due_at": "2026-06-13T10:46:00.855Z",
+    "sla_due_at": "2026-06-13T13:30:18.569Z",
     "escalated_to_3p": false,
-    "created_at": "2026-06-10T10:46:00.855Z",
-    "resolved_at": "2026-06-10T10:46:00.855Z"
+    "created_at": "2026-06-10T13:30:18.569Z",
+    "resolved_at": "2026-06-10T13:30:18.569Z"
   },
   {
     "id": "cas_008h",
@@ -24,9 +24,9 @@
     "priority": "medium",
     "tam_id": "usr_0004",
     "customer_contact_id": "con_000o",
-    "sla_due_at": "2026-06-14T10:46:00.855Z",
+    "sla_due_at": "2026-06-14T13:30:18.569Z",
     "escalated_to_3p": false,
-    "created_at": "2026-06-10T10:46:00.855Z",
+    "created_at": "2026-06-10T13:30:18.569Z",
     "resolved_at": null
   },
   {
@@ -39,9 +39,9 @@
     "priority": "low",
     "tam_id": "usr_0004",
     "customer_contact_id": "con_000w",
-    "sla_due_at": "2026-06-15T10:46:00.855Z",
+    "sla_due_at": "2026-06-15T13:30:18.569Z",
     "escalated_to_3p": false,
-    "created_at": "2026-06-12T10:46:00.855Z",
+    "created_at": "2026-06-12T13:30:18.569Z",
     "resolved_at": null
   },
   {
@@ -54,10 +54,10 @@
     "priority": "high",
     "tam_id": "usr_0004",
     "customer_contact_id": "con_000x",
-    "sla_due_at": "2026-05-22T10:46:00.855Z",
+    "sla_due_at": "2026-05-22T13:30:18.569Z",
     "escalated_to_3p": false,
-    "created_at": "2026-05-17T10:46:00.855Z",
-    "resolved_at": "2026-06-12T10:46:00.855Z"
+    "created_at": "2026-05-17T13:30:18.569Z",
+    "resolved_at": "2026-06-12T13:30:18.569Z"
   },
   {
     "id": "cas_008r",
@@ -69,9 +69,9 @@
     "priority": "urgent",
     "tam_id": "usr_0005",
     "customer_contact_id": "con_0013",
-    "sla_due_at": "2026-06-11T10:46:00.855Z",
+    "sla_due_at": "2026-06-11T13:30:18.569Z",
     "escalated_to_3p": true,
-    "created_at": "2026-06-04T10:46:00.855Z",
+    "created_at": "2026-06-04T13:30:18.569Z",
     "resolved_at": null
   },
   {
@@ -84,10 +84,10 @@
     "priority": "low",
     "tam_id": "usr_0004",
     "customer_contact_id": "con_0016",
-    "sla_due_at": "2026-06-12T10:46:00.855Z",
+    "sla_due_at": "2026-06-12T13:30:18.569Z",
     "escalated_to_3p": false,
-    "created_at": "2026-06-07T10:46:00.855Z",
-    "resolved_at": "2026-06-12T10:46:00.855Z"
+    "created_at": "2026-06-07T13:30:18.569Z",
+    "resolved_at": "2026-06-12T13:30:18.569Z"
   },
   {
     "id": "cas_008z",
@@ -99,10 +99,10 @@
     "priority": "urgent",
     "tam_id": "usr_0004",
     "customer_contact_id": "con_0019",
-    "sla_due_at": "2026-05-30T10:46:00.855Z",
+    "sla_due_at": "2026-05-30T13:30:18.569Z",
     "escalated_to_3p": false,
-    "created_at": "2026-05-24T10:46:00.855Z",
-    "resolved_at": "2026-06-11T10:46:00.855Z"
+    "created_at": "2026-05-24T13:30:18.569Z",
+    "resolved_at": "2026-06-11T13:30:18.569Z"
   },
   {
     "id": "cas_0092",
@@ -114,9 +114,9 @@
     "priority": "low",
     "tam_id": "usr_0004",
     "customer_contact_id": "con_0019",
-    "sla_due_at": "2026-06-13T10:46:00.855Z",
+    "sla_due_at": "2026-06-13T13:30:18.569Z",
     "escalated_to_3p": true,
-    "created_at": "2026-06-07T10:46:00.855Z",
+    "created_at": "2026-06-07T13:30:18.569Z",
     "resolved_at": null
   },
   {
@@ -129,10 +129,10 @@
     "priority": "medium",
     "tam_id": "usr_0004",
     "customer_contact_id": "con_001c",
-    "sla_due_at": "2026-05-17T10:46:00.855Z",
+    "sla_due_at": "2026-05-17T13:30:18.569Z",
     "escalated_to_3p": false,
-    "created_at": "2026-05-10T10:46:00.855Z",
-    "resolved_at": "2026-06-11T10:46:00.855Z"
+    "created_at": "2026-05-10T13:30:18.569Z",
+    "resolved_at": "2026-06-11T13:30:18.569Z"
   },
   {
     "id": "cas_0099",
@@ -144,9 +144,9 @@
     "priority": "low",
     "tam_id": "usr_0004",
     "customer_contact_id": "con_001c",
-    "sla_due_at": "2026-05-25T10:46:00.855Z",
+    "sla_due_at": "2026-05-25T13:30:18.569Z",
     "escalated_to_3p": false,
-    "created_at": "2026-05-21T10:46:00.855Z",
+    "created_at": "2026-05-21T13:30:18.569Z",
     "resolved_at": null
   },
   {
@@ -159,10 +159,10 @@
     "priority": "high",
     "tam_id": "usr_0005",
     "customer_contact_id": "con_001f",
-    "sla_due_at": "2026-05-29T10:46:00.855Z",
+    "sla_due_at": "2026-05-29T13:30:18.570Z",
     "escalated_to_3p": false,
-    "created_at": "2026-05-25T10:46:00.855Z",
-    "resolved_at": "2026-06-08T10:46:00.855Z"
+    "created_at": "2026-05-25T13:30:18.570Z",
+    "resolved_at": "2026-06-08T13:30:18.570Z"
   },
   {
     "id": "cas_009h",
@@ -174,9 +174,9 @@
     "priority": "medium",
     "tam_id": "usr_0005",
     "customer_contact_id": "con_001g",
-    "sla_due_at": "2026-05-28T10:46:00.855Z",
+    "sla_due_at": "2026-05-28T13:30:18.570Z",
     "escalated_to_3p": false,
-    "created_at": "2026-05-22T10:46:00.855Z",
+    "created_at": "2026-05-22T13:30:18.570Z",
     "resolved_at": null
   },
   {
@@ -189,10 +189,10 @@
     "priority": "urgent",
     "tam_id": "usr_0005",
     "customer_contact_id": "con_001e",
-    "sla_due_at": "2026-06-06T10:46:00.855Z",
+    "sla_due_at": "2026-06-06T13:30:18.570Z",
     "escalated_to_3p": false,
-    "created_at": "2026-06-01T10:46:00.855Z",
-    "resolved_at": "2026-06-09T10:46:00.855Z"
+    "created_at": "2026-06-01T13:30:18.570Z",
+    "resolved_at": "2026-06-09T13:30:18.570Z"
   },
   {
     "id": "cas_009o",
@@ -204,9 +204,9 @@
     "priority": "medium",
     "tam_id": "usr_0004",
     "customer_contact_id": "con_001n",
-    "sla_due_at": "2026-05-15T10:46:00.855Z",
+    "sla_due_at": "2026-05-15T13:30:18.570Z",
     "escalated_to_3p": false,
-    "created_at": "2026-05-10T10:46:00.855Z",
+    "created_at": "2026-05-10T13:30:18.570Z",
     "resolved_at": null
   },
   {
@@ -219,10 +219,10 @@
     "priority": "high",
     "tam_id": "usr_0004",
     "customer_contact_id": "con_001o",
-    "sla_due_at": "2026-05-17T10:46:00.855Z",
+    "sla_due_at": "2026-05-17T13:30:18.570Z",
     "escalated_to_3p": false,
-    "created_at": "2026-05-11T10:46:00.855Z",
-    "resolved_at": "2026-06-08T10:46:00.855Z"
+    "created_at": "2026-05-11T13:30:18.570Z",
+    "resolved_at": "2026-06-08T13:30:18.570Z"
   },
   {
     "id": "cas_009v",
@@ -234,10 +234,10 @@
     "priority": "medium",
     "tam_id": "usr_0004",
     "customer_contact_id": "con_001q",
-    "sla_due_at": "2026-06-02T10:46:00.855Z",
+    "sla_due_at": "2026-06-02T13:30:18.570Z",
     "escalated_to_3p": false,
-    "created_at": "2026-05-30T10:46:00.855Z",
-    "resolved_at": "2026-06-11T10:46:00.855Z"
+    "created_at": "2026-05-30T13:30:18.570Z",
+    "resolved_at": "2026-06-11T13:30:18.570Z"
   },
   {
     "id": "cas_009z",
@@ -249,10 +249,10 @@
     "priority": "low",
     "tam_id": "usr_0005",
     "customer_contact_id": "con_001v",
-    "sla_due_at": "2026-06-04T10:46:00.855Z",
+    "sla_due_at": "2026-06-04T13:30:18.570Z",
     "escalated_to_3p": false,
-    "created_at": "2026-05-30T10:46:00.855Z",
-    "resolved_at": "2026-06-09T10:46:00.855Z"
+    "created_at": "2026-05-30T13:30:18.570Z",
+    "resolved_at": "2026-06-09T13:30:18.570Z"
   },
   {
     "id": "cas_00a2",
@@ -264,9 +264,9 @@
     "priority": "high",
     "tam_id": "usr_0005",
     "customer_contact_id": "con_001u",
-    "sla_due_at": "2026-05-10T10:46:00.855Z",
+    "sla_due_at": "2026-05-10T13:30:18.570Z",
     "escalated_to_3p": false,
-    "created_at": "2026-05-07T10:46:00.855Z",
+    "created_at": "2026-05-07T13:30:18.570Z",
     "resolved_at": null
   },
   {
@@ -279,10 +279,10 @@
     "priority": "high",
     "tam_id": "usr_0004",
     "customer_contact_id": "con_0020",
-    "sla_due_at": "2026-05-17T10:46:00.855Z",
+    "sla_due_at": "2026-05-17T13:30:18.570Z",
     "escalated_to_3p": false,
-    "created_at": "2026-05-11T10:46:00.855Z",
-    "resolved_at": "2026-06-13T10:46:00.855Z"
+    "created_at": "2026-05-11T13:30:18.570Z",
+    "resolved_at": "2026-06-13T13:30:18.570Z"
   },
   {
     "id": "cas_00a9",
@@ -294,9 +294,54 @@
     "priority": "high",
     "tam_id": "usr_0004",
     "customer_contact_id": "con_001x",
-    "sla_due_at": "2026-06-02T10:46:00.855Z",
+    "sla_due_at": "2026-06-02T13:30:18.570Z",
     "escalated_to_3p": false,
-    "created_at": "2026-05-30T10:46:00.855Z",
-    "resolved_at": "2026-06-13T10:46:00.855Z"
+    "created_at": "2026-05-30T13:30:18.570Z",
+    "resolved_at": "2026-06-13T13:30:18.570Z"
+  },
+  {
+    "id": "cas_00b9",
+    "account_id": "acc_00ae",
+    "service_id": "svc_000f",
+    "title": "MDM enrolment failing on S30 batch (Command-2)",
+    "type": "complaint",
+    "status": "resolved",
+    "priority": "high",
+    "tam_id": "usr_0004",
+    "customer_contact_id": "con_00af",
+    "sla_due_at": "2026-03-13T13:30:18.579Z",
+    "escalated_to_3p": false,
+    "created_at": "2026-03-10T13:30:18.579Z",
+    "resolved_at": "2026-03-17T13:30:18.579Z"
+  },
+  {
+    "id": "cas_00bd",
+    "account_id": "acc_00ae",
+    "service_id": "svc_000k",
+    "title": "SOC escalation — anomalous traffic from 6 devices",
+    "type": "complaint",
+    "status": "escalated",
+    "priority": "urgent",
+    "tam_id": "usr_0004",
+    "customer_contact_id": "con_00af",
+    "sla_due_at": "2026-06-14T13:30:18.580Z",
+    "escalated_to_3p": true,
+    "created_at": "2026-06-11T13:30:18.580Z",
+    "resolved_at": null
+  },
+  {
+    "id": "cas_00bh",
+    "account_id": "acc_00ae",
+    "service_id": "svc_000f",
+    "title": "Request: add geofencing policy for border units",
+    "type": "request",
+    "status": "in_progress",
+    "priority": "medium",
+    "tam_id": "usr_0004",
+    "customer_contact_id": "con_00af",
+    "sla_due_at": "2026-06-07T13:30:18.580Z",
+    "escalated_to_3p": false,
+    "created_at": "2026-06-04T13:30:18.580Z",
+    "resolved_at": null
   }
 ]
