@@ -7,7 +7,7 @@
     "type": "stage_change",
     "body": "Deal moved to interest",
     "actor_id": "usr_0002",
-    "created_at": "2026-05-25T10:46:00.854Z"
+    "created_at": "2026-05-25T13:30:18.569Z"
   },
   {
     "id": "act_002h",
@@ -17,7 +17,7 @@
     "type": "email",
     "body": "Pricing discussion",
     "actor_id": "usr_0002",
-    "created_at": "2026-04-22T10:46:00.854Z"
+    "created_at": "2026-04-22T13:30:18.569Z"
   },
   {
     "id": "act_002p",
@@ -27,7 +27,7 @@
     "type": "stage_change",
     "body": "Deal moved to contract_negotiation",
     "actor_id": "usr_0003",
-    "created_at": "2026-05-26T10:46:00.854Z"
+    "created_at": "2026-05-26T13:30:18.569Z"
   },
   {
     "id": "act_002q",
@@ -37,7 +37,7 @@
     "type": "meeting",
     "body": "Pricing discussion",
     "actor_id": "usr_0003",
-    "created_at": "2026-05-31T10:46:00.854Z"
+    "created_at": "2026-05-31T13:30:18.569Z"
   },
   {
     "id": "act_002y",
@@ -47,7 +47,7 @@
     "type": "stage_change",
     "body": "Deal moved to rfi",
     "actor_id": "usr_0003",
-    "created_at": "2026-05-23T10:46:00.854Z"
+    "created_at": "2026-05-23T13:30:18.569Z"
   },
   {
     "id": "act_002z",
@@ -57,7 +57,7 @@
     "type": "email",
     "body": "Pricing discussion",
     "actor_id": "usr_0003",
-    "created_at": "2026-06-08T10:46:00.854Z"
+    "created_at": "2026-06-08T13:30:18.569Z"
   },
   {
     "id": "act_0038",
@@ -67,7 +67,7 @@
     "type": "stage_change",
     "body": "Deal moved to rfp",
     "actor_id": "usr_0003",
-    "created_at": "2026-05-19T10:46:00.854Z"
+    "created_at": "2026-05-19T13:30:18.569Z"
   },
   {
     "id": "act_0039",
@@ -77,7 +77,7 @@
     "type": "meeting",
     "body": "Intro call with procurement",
     "actor_id": "usr_0003",
-    "created_at": "2026-04-16T10:46:00.854Z"
+    "created_at": "2026-04-16T13:30:18.569Z"
   },
   {
     "id": "act_003i",
@@ -87,7 +87,7 @@
     "type": "stage_change",
     "body": "Deal moved to rfp",
     "actor_id": "usr_0001",
-    "created_at": "2026-05-24T10:46:00.854Z"
+    "created_at": "2026-05-24T13:30:18.569Z"
   },
   {
     "id": "act_003j",
@@ -97,7 +97,7 @@
     "type": "meeting",
     "body": "Pricing discussion",
     "actor_id": "usr_0001",
-    "created_at": "2026-04-28T10:46:00.854Z"
+    "created_at": "2026-04-28T13:30:18.569Z"
   },
   {
     "id": "act_003r",
@@ -107,7 +107,7 @@
     "type": "stage_change",
     "body": "Deal moved to contract_negotiation",
     "actor_id": "usr_0001",
-    "created_at": "2026-06-09T10:46:00.854Z"
+    "created_at": "2026-06-09T13:30:18.569Z"
   },
   {
     "id": "act_003s",
@@ -117,7 +117,7 @@
     "type": "email",
     "body": "Sent RFI response",
     "actor_id": "usr_0001",
-    "created_at": "2026-05-20T10:46:00.854Z"
+    "created_at": "2026-05-20T13:30:18.569Z"
   },
   {
     "id": "act_003z",
@@ -127,7 +127,7 @@
     "type": "stage_change",
     "body": "Deal moved to rfp",
     "actor_id": "usr_0003",
-    "created_at": "2026-05-31T10:46:00.854Z"
+    "created_at": "2026-05-31T13:30:18.569Z"
   },
   {
     "id": "act_0040",
@@ -137,7 +137,7 @@
     "type": "email",
     "body": "Sent RFI response",
     "actor_id": "usr_0003",
-    "created_at": "2026-05-29T10:46:00.855Z"
+    "created_at": "2026-05-29T13:30:18.569Z"
   },
   {
     "id": "act_0048",
@@ -147,7 +147,7 @@
     "type": "stage_change",
     "body": "Deal moved to rfi",
     "actor_id": "usr_0003",
-    "created_at": "2026-05-17T10:46:00.855Z"
+    "created_at": "2026-05-17T13:30:18.569Z"
   },
   {
     "id": "act_0049",
@@ -157,7 +157,7 @@
     "type": "call",
     "body": "Intro call with procurement",
     "actor_id": "usr_0003",
-    "created_at": "2026-05-07T10:46:00.855Z"
+    "created_at": "2026-05-07T13:30:18.569Z"
   },
   {
     "id": "act_004h",
@@ -167,7 +167,7 @@
     "type": "stage_change",
     "body": "Deal moved to rfi",
     "actor_id": "usr_0003",
-    "created_at": "2026-06-08T10:46:00.855Z"
+    "created_at": "2026-06-08T13:30:18.569Z"
   },
   {
     "id": "act_004i",
@@ -177,7 +177,7 @@
     "type": "meeting",
     "body": "Pilot scoping workshop",
     "actor_id": "usr_0003",
-    "created_at": "2026-04-24T10:46:00.855Z"
+    "created_at": "2026-04-24T13:30:18.569Z"
   },
   {
     "id": "act_004r",
@@ -187,7 +187,7 @@
     "type": "stage_change",
     "body": "Deal moved to lost",
     "actor_id": "usr_0003",
-    "created_at": "2026-04-20T10:46:00.855Z"
+    "created_at": "2026-04-20T13:30:18.569Z"
   },
   {
     "id": "act_004s",
@@ -197,7 +197,7 @@
     "type": "meeting",
     "body": "Pilot scoping workshop",
     "actor_id": "usr_0003",
-    "created_at": "2026-04-14T10:46:00.855Z"
+    "created_at": "2026-04-14T13:30:18.569Z"
   },
   {
     "id": "act_0051",
@@ -207,7 +207,7 @@
     "type": "stage_change",
     "body": "Deal moved to customer_test",
     "actor_id": "usr_0001",
-    "created_at": "2026-05-22T10:46:00.855Z"
+    "created_at": "2026-05-22T13:30:18.569Z"
   },
   {
     "id": "act_0052",
@@ -217,7 +217,7 @@
     "type": "email",
     "body": "Intro call with procurement",
     "actor_id": "usr_0001",
-    "created_at": "2026-05-05T10:46:00.855Z"
+    "created_at": "2026-05-05T13:30:18.569Z"
   },
   {
     "id": "act_005b",
@@ -227,7 +227,7 @@
     "type": "stage_change",
     "body": "Deal moved to interest",
     "actor_id": "usr_0001",
-    "created_at": "2026-05-30T10:46:00.855Z"
+    "created_at": "2026-05-30T13:30:18.569Z"
   },
   {
     "id": "act_005c",
@@ -237,7 +237,7 @@
     "type": "call",
     "body": "Security architecture review",
     "actor_id": "usr_0001",
-    "created_at": "2026-05-10T10:46:00.855Z"
+    "created_at": "2026-05-10T13:30:18.569Z"
   },
   {
     "id": "act_005l",
@@ -247,7 +247,7 @@
     "type": "stage_change",
     "body": "Deal moved to rfi",
     "actor_id": "usr_0003",
-    "created_at": "2026-06-05T10:46:00.855Z"
+    "created_at": "2026-06-05T13:30:18.569Z"
   },
   {
     "id": "act_005m",
@@ -257,7 +257,7 @@
     "type": "call",
     "body": "Intro call with procurement",
     "actor_id": "usr_0003",
-    "created_at": "2026-05-24T10:46:00.855Z"
+    "created_at": "2026-05-24T13:30:18.569Z"
   },
   {
     "id": "act_005u",
@@ -267,7 +267,7 @@
     "type": "stage_change",
     "body": "Deal moved to customer_test",
     "actor_id": "usr_0003",
-    "created_at": "2026-06-05T10:46:00.855Z"
+    "created_at": "2026-06-05T13:30:18.569Z"
   },
   {
     "id": "act_005v",
@@ -277,7 +277,7 @@
     "type": "call",
     "body": "Security architecture review",
     "actor_id": "usr_0003",
-    "created_at": "2026-05-14T10:46:00.855Z"
+    "created_at": "2026-05-14T13:30:18.569Z"
   },
   {
     "id": "act_0064",
@@ -287,7 +287,7 @@
     "type": "stage_change",
     "body": "Deal moved to rfp",
     "actor_id": "usr_0002",
-    "created_at": "2026-05-29T10:46:00.855Z"
+    "created_at": "2026-05-29T13:30:18.569Z"
   },
   {
     "id": "act_0065",
@@ -297,7 +297,7 @@
     "type": "call",
     "body": "Sent RFI response",
     "actor_id": "usr_0002",
-    "created_at": "2026-05-26T10:46:00.855Z"
+    "created_at": "2026-05-26T13:30:18.569Z"
   },
   {
     "id": "act_006e",
@@ -307,7 +307,7 @@
     "type": "stage_change",
     "body": "Deal moved to customer_test",
     "actor_id": "usr_0001",
-    "created_at": "2026-05-17T10:46:00.855Z"
+    "created_at": "2026-05-17T13:30:18.569Z"
   },
   {
     "id": "act_006f",
@@ -317,7 +317,7 @@
     "type": "email",
     "body": "Sent RFI response",
     "actor_id": "usr_0001",
-    "created_at": "2026-04-27T10:46:00.855Z"
+    "created_at": "2026-04-27T13:30:18.569Z"
   },
   {
     "id": "act_006m",
@@ -327,7 +327,7 @@
     "type": "stage_change",
     "body": "Deal moved to rfi",
     "actor_id": "usr_0001",
-    "created_at": "2026-06-01T10:46:00.855Z"
+    "created_at": "2026-06-01T13:30:18.569Z"
   },
   {
     "id": "act_006n",
@@ -337,7 +337,7 @@
     "type": "call",
     "body": "Pricing discussion",
     "actor_id": "usr_0001",
-    "created_at": "2026-05-14T10:46:00.855Z"
+    "created_at": "2026-05-14T13:30:18.569Z"
   },
   {
     "id": "act_006v",
@@ -347,7 +347,7 @@
     "type": "stage_change",
     "body": "Deal moved to interest",
     "actor_id": "usr_0001",
-    "created_at": "2026-05-17T10:46:00.855Z"
+    "created_at": "2026-05-17T13:30:18.569Z"
   },
   {
     "id": "act_006w",
@@ -357,7 +357,7 @@
     "type": "email",
     "body": "Intro call with procurement",
     "actor_id": "usr_0001",
-    "created_at": "2026-05-27T10:46:00.855Z"
+    "created_at": "2026-05-27T13:30:18.569Z"
   },
   {
     "id": "act_0074",
@@ -367,7 +367,7 @@
     "type": "stage_change",
     "body": "Deal moved to rfi",
     "actor_id": "usr_0001",
-    "created_at": "2026-05-28T10:46:00.855Z"
+    "created_at": "2026-05-28T13:30:18.569Z"
   },
   {
     "id": "act_0075",
@@ -377,7 +377,7 @@
     "type": "meeting",
     "body": "Intro call with procurement",
     "actor_id": "usr_0001",
-    "created_at": "2026-05-31T10:46:00.855Z"
+    "created_at": "2026-05-31T13:30:18.569Z"
   },
   {
     "id": "act_007d",
@@ -387,7 +387,7 @@
     "type": "stage_change",
     "body": "Deal moved to customer_test",
     "actor_id": "usr_0002",
-    "created_at": "2026-05-31T10:46:00.855Z"
+    "created_at": "2026-05-31T13:30:18.569Z"
   },
   {
     "id": "act_007e",
@@ -397,7 +397,7 @@
     "type": "call",
     "body": "Pilot scoping workshop",
     "actor_id": "usr_0002",
-    "created_at": "2026-05-19T10:46:00.855Z"
+    "created_at": "2026-05-19T13:30:18.569Z"
   },
   {
     "id": "act_007j",
@@ -407,7 +407,7 @@
     "type": "offer",
     "body": "Offer v1 created (22% discount, pending_finance)",
     "actor_id": "usr_0003",
-    "created_at": "2026-05-25T10:46:00.855Z"
+    "created_at": "2026-05-25T13:30:18.569Z"
   },
   {
     "id": "act_007n",
@@ -417,7 +417,7 @@
     "type": "offer",
     "body": "Offer v1 created (0% discount, approved)",
     "actor_id": "usr_0003",
-    "created_at": "2026-05-22T10:46:00.855Z"
+    "created_at": "2026-05-22T13:30:18.569Z"
   },
   {
     "id": "act_007r",
@@ -427,7 +427,7 @@
     "type": "offer",
     "body": "Offer v1 created (0% discount, approved)",
     "actor_id": "usr_0001",
-    "created_at": "2026-06-06T10:46:00.855Z"
+    "created_at": "2026-06-06T13:30:18.569Z"
   },
   {
     "id": "act_007w",
@@ -437,7 +437,7 @@
     "type": "offer",
     "body": "Offer v1 created (5% discount, approved)",
     "actor_id": "usr_0001",
-    "created_at": "2026-05-12T10:46:00.855Z"
+    "created_at": "2026-05-12T13:30:18.569Z"
   },
   {
     "id": "act_0080",
@@ -447,7 +447,7 @@
     "type": "offer",
     "body": "Offer v1 created (0% discount, approved)",
     "actor_id": "usr_0003",
-    "created_at": "2026-05-04T10:46:00.855Z"
+    "created_at": "2026-05-04T13:30:18.569Z"
   },
   {
     "id": "act_0084",
@@ -457,7 +457,7 @@
     "type": "offer",
     "body": "Offer v1 created (0% discount, approved)",
     "actor_id": "usr_0001",
-    "created_at": "2026-05-19T10:46:00.855Z"
+    "created_at": "2026-05-19T13:30:18.569Z"
   },
   {
     "id": "act_0088",
@@ -467,7 +467,7 @@
     "type": "offer",
     "body": "Offer v1 created (0% discount, approved)",
     "actor_id": "usr_0003",
-    "created_at": "2026-06-08T10:46:00.855Z"
+    "created_at": "2026-06-08T13:30:18.569Z"
   },
   {
     "id": "act_008c",
@@ -477,7 +477,7 @@
     "type": "offer",
     "body": "Offer v1 created (0% discount, approved)",
     "actor_id": "usr_0002",
-    "created_at": "2026-06-04T10:46:00.855Z"
+    "created_at": "2026-06-04T13:30:18.569Z"
   },
   {
     "id": "act_008g",
@@ -487,7 +487,7 @@
     "type": "system",
     "body": "Case opened: Threat intel feed latency",
     "actor_id": "usr_0004",
-    "created_at": "2026-06-10T10:46:00.855Z"
+    "created_at": "2026-06-10T13:30:18.569Z"
   },
   {
     "id": "act_008k",
@@ -497,7 +497,7 @@
     "type": "system",
     "body": "Case opened: OS update bricked 3 devices",
     "actor_id": "usr_0004",
-    "created_at": "2026-06-10T10:46:00.855Z"
+    "created_at": "2026-06-10T13:30:18.569Z"
   },
   {
     "id": "act_008n",
@@ -507,7 +507,7 @@
     "type": "system",
     "body": "Case opened: SOC escalation — suspicious traffic",
     "actor_id": "usr_0004",
-    "created_at": "2026-06-12T10:46:00.855Z"
+    "created_at": "2026-06-12T13:30:18.569Z"
   },
   {
     "id": "act_008q",
@@ -517,7 +517,7 @@
     "type": "system",
     "body": "Case opened: Bulk provisioning slow",
     "actor_id": "usr_0004",
-    "created_at": "2026-05-17T10:46:00.855Z"
+    "created_at": "2026-05-17T13:30:18.569Z"
   },
   {
     "id": "act_008u",
@@ -527,7 +527,7 @@
     "type": "system",
     "body": "Case opened: Threat intel feed latency",
     "actor_id": "usr_0005",
-    "created_at": "2026-06-04T10:46:00.855Z"
+    "created_at": "2026-06-04T13:30:18.569Z"
   },
   {
     "id": "act_008y",
@@ -537,7 +537,7 @@
     "type": "system",
     "body": "Case opened: Request: add geofencing policy",
     "actor_id": "usr_0004",
-    "created_at": "2026-06-07T10:46:00.855Z"
+    "created_at": "2026-06-07T13:30:18.569Z"
   },
   {
     "id": "act_0091",
@@ -547,7 +547,7 @@
     "type": "system",
     "body": "Case opened: Request: add geofencing policy",
     "actor_id": "usr_0004",
-    "created_at": "2026-05-24T10:46:00.855Z"
+    "created_at": "2026-05-24T13:30:18.569Z"
   },
   {
     "id": "act_0094",
@@ -557,7 +557,7 @@
     "type": "system",
     "body": "Case opened: Threat intel feed latency",
     "actor_id": "usr_0004",
-    "created_at": "2026-06-07T10:46:00.855Z"
+    "created_at": "2026-06-07T13:30:18.569Z"
   },
   {
     "id": "act_0098",
@@ -567,7 +567,7 @@
     "type": "system",
     "body": "Case opened: MDM enrolment failing on S30 batch",
     "actor_id": "usr_0004",
-    "created_at": "2026-05-10T10:46:00.855Z"
+    "created_at": "2026-05-10T13:30:18.569Z"
   },
   {
     "id": "act_009c",
@@ -577,7 +577,7 @@
     "type": "system",
     "body": "Case opened: Tamper alert false positives",
     "actor_id": "usr_0004",
-    "created_at": "2026-05-21T10:46:00.855Z"
+    "created_at": "2026-05-21T13:30:18.569Z"
   },
   {
     "id": "act_009g",
@@ -587,7 +587,7 @@
     "type": "system",
     "body": "Case opened: MDM enrolment failing on S30 batch",
     "actor_id": "usr_0005",
-    "created_at": "2026-05-25T10:46:00.855Z"
+    "created_at": "2026-05-25T13:30:18.570Z"
   },
   {
     "id": "act_009k",
@@ -597,7 +597,7 @@
     "type": "system",
     "body": "Case opened: OS update bricked 3 devices",
     "actor_id": "usr_0005",
-    "created_at": "2026-05-22T10:46:00.855Z"
+    "created_at": "2026-05-22T13:30:18.570Z"
   },
   {
     "id": "act_009n",
@@ -607,7 +607,7 @@
     "type": "system",
     "body": "Case opened: SOC escalation — suspicious traffic",
     "actor_id": "usr_0005",
-    "created_at": "2026-06-01T10:46:00.855Z"
+    "created_at": "2026-06-01T13:30:18.570Z"
   },
   {
     "id": "act_009q",
@@ -617,7 +617,7 @@
     "type": "system",
     "body": "Case opened: Tamper alert false positives",
     "actor_id": "usr_0004",
-    "created_at": "2026-05-10T10:46:00.855Z"
+    "created_at": "2026-05-10T13:30:18.570Z"
   },
   {
     "id": "act_009u",
@@ -627,7 +627,7 @@
     "type": "system",
     "body": "Case opened: SOC escalation — suspicious traffic",
     "actor_id": "usr_0004",
-    "created_at": "2026-05-11T10:46:00.855Z"
+    "created_at": "2026-05-11T13:30:18.570Z"
   },
   {
     "id": "act_009y",
@@ -637,7 +637,7 @@
     "type": "system",
     "body": "Case opened: Request: add geofencing policy",
     "actor_id": "usr_0004",
-    "created_at": "2026-05-30T10:46:00.855Z"
+    "created_at": "2026-05-30T13:30:18.570Z"
   },
   {
     "id": "act_00a1",
@@ -647,7 +647,7 @@
     "type": "system",
     "body": "Case opened: Tamper alert false positives",
     "actor_id": "usr_0005",
-    "created_at": "2026-05-30T10:46:00.855Z"
+    "created_at": "2026-05-30T13:30:18.570Z"
   },
   {
     "id": "act_00a4",
@@ -657,7 +657,7 @@
     "type": "system",
     "body": "Case opened: MDM enrolment failing on S30 batch",
     "actor_id": "usr_0005",
-    "created_at": "2026-05-07T10:46:00.855Z"
+    "created_at": "2026-05-07T13:30:18.570Z"
   },
   {
     "id": "act_00a8",
@@ -667,7 +667,7 @@
     "type": "system",
     "body": "Case opened: SOC escalation — suspicious traffic",
     "actor_id": "usr_0004",
-    "created_at": "2026-05-11T10:46:00.855Z"
+    "created_at": "2026-05-11T13:30:18.570Z"
   },
   {
     "id": "act_00ab",
@@ -677,6 +677,256 @@
     "type": "system",
     "body": "Case opened: Threat intel feed latency",
     "actor_id": "usr_0004",
-    "created_at": "2026-05-30T10:46:00.855Z"
+    "created_at": "2026-05-30T13:30:18.570Z"
+  },
+  {
+    "id": "act_00aq",
+    "account_id": "acc_00ae",
+    "deal_id": "deal_00ah",
+    "case_id": null,
+    "type": "note",
+    "body": "Inbound interest via federal procurement portal — secure handset replacement programme across 3 commands.",
+    "actor_id": "usr_0001",
+    "created_at": "2025-10-11T13:30:18.570Z"
+  },
+  {
+    "id": "act_00ar",
+    "account_id": "acc_00ae",
+    "deal_id": "deal_00ah",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to interest",
+    "actor_id": "usr_0001",
+    "created_at": "2025-10-12T13:30:18.570Z"
+  },
+  {
+    "id": "act_00as",
+    "account_id": "acc_00ae",
+    "deal_id": "deal_00ah",
+    "case_id": null,
+    "type": "call",
+    "body": "Qualification call with CISO Klara Müller — driver is post-incident hardening + EU data residency.",
+    "actor_id": "usr_0001",
+    "created_at": "2025-10-24T13:30:18.570Z"
+  },
+  {
+    "id": "act_00at",
+    "account_id": "acc_00ae",
+    "deal_id": "deal_00ah",
+    "case_id": null,
+    "type": "email",
+    "body": "Sent RFI response covering Secure OS, MDM, SOC escalation and compliance attestations.",
+    "actor_id": "usr_0001",
+    "created_at": "2025-11-15T13:30:18.570Z"
+  },
+  {
+    "id": "act_00au",
+    "account_id": "acc_00ae",
+    "deal_id": "deal_00ah",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to rfi",
+    "actor_id": "usr_0001",
+    "created_at": "2025-11-19T13:30:18.570Z"
+  },
+  {
+    "id": "act_00av",
+    "account_id": "acc_00ae",
+    "deal_id": "deal_00ah",
+    "case_id": null,
+    "type": "meeting",
+    "body": "RFP scoping workshop with procurement + IT security. Scoped 2,000-unit pilot then ramp.",
+    "actor_id": "usr_0001",
+    "created_at": "2025-12-17T13:30:18.570Z"
+  },
+  {
+    "id": "act_00aw",
+    "account_id": "acc_00ae",
+    "deal_id": "deal_00ah",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to rfp",
+    "actor_id": "usr_0001",
+    "created_at": "2025-12-30T13:30:18.570Z"
+  },
+  {
+    "id": "act_00ax",
+    "account_id": "acc_00ae",
+    "deal_id": "deal_00ah",
+    "case_id": null,
+    "type": "meeting",
+    "body": "Pilot kickoff — 2,000 S30 units provisioned for Command-1.",
+    "actor_id": "usr_0004",
+    "created_at": "2026-02-13T13:30:18.570Z"
+  },
+  {
+    "id": "act_00ay",
+    "account_id": "acc_00ae",
+    "deal_id": "deal_00ah",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to customer_test",
+    "actor_id": "usr_0001",
+    "created_at": "2026-02-21T13:30:18.570Z"
+  },
+  {
+    "id": "act_00az",
+    "account_id": "acc_00ae",
+    "deal_id": "deal_00ah",
+    "case_id": null,
+    "type": "meeting",
+    "body": "Commercial terms + 3-yr pricing review with Sales Manager and Finance.",
+    "actor_id": "usr_0001",
+    "created_at": "2026-04-16T13:30:18.570Z"
+  },
+  {
+    "id": "act_00b0",
+    "account_id": "acc_00ae",
+    "deal_id": "deal_00ah",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to contract_negotiation",
+    "actor_id": "usr_0001",
+    "created_at": "2026-04-28T13:30:18.570Z"
+  },
+  {
+    "id": "act_00b1",
+    "account_id": "acc_00ae",
+    "deal_id": "deal_00ah",
+    "case_id": null,
+    "type": "meeting",
+    "body": "Final terms agreed; framework signed for 8,000 units over 3 years.",
+    "actor_id": "usr_0001",
+    "created_at": "2026-05-30T13:30:18.570Z"
+  },
+  {
+    "id": "act_00b2",
+    "account_id": "acc_00ae",
+    "deal_id": "deal_00ah",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to won",
+    "actor_id": "usr_0001",
+    "created_at": "2026-06-07T13:30:18.570Z"
+  },
+  {
+    "id": "act_00b8",
+    "account_id": "acc_00ae",
+    "deal_id": "deal_00ah",
+    "case_id": null,
+    "type": "offer",
+    "body": "Offer v2 approved (12% discount) — €1,444,960",
+    "actor_id": "usr_0001",
+    "created_at": "2026-01-14T13:30:18.579Z"
+  },
+  {
+    "id": "act_00ba",
+    "account_id": "acc_00ae",
+    "deal_id": null,
+    "case_id": "cas_00b9",
+    "type": "system",
+    "body": "Case opened: MDM enrolment failing on S30 batch (Command-2)",
+    "actor_id": "usr_0004",
+    "created_at": "2026-03-10T13:30:18.579Z"
+  },
+  {
+    "id": "act_00be",
+    "account_id": "acc_00ae",
+    "deal_id": null,
+    "case_id": "cas_00bd",
+    "type": "system",
+    "body": "Case opened: SOC escalation — anomalous traffic from 6 devices",
+    "actor_id": "usr_0004",
+    "created_at": "2026-06-11T13:30:18.580Z"
+  },
+  {
+    "id": "act_00bi",
+    "account_id": "acc_00ae",
+    "deal_id": null,
+    "case_id": "cas_00bh",
+    "type": "system",
+    "body": "Case opened: Request: add geofencing policy for border units",
+    "actor_id": "usr_0004",
+    "created_at": "2026-06-04T13:30:18.580Z"
+  },
+  {
+    "id": "act_00bu",
+    "account_id": "acc_00bl",
+    "deal_id": "deal_00bn",
+    "case_id": null,
+    "type": "note",
+    "body": "Reseller Atea registered the opportunity — field-ops fleet refresh.",
+    "actor_id": "usr_0002",
+    "created_at": "2026-01-16T13:30:18.580Z"
+  },
+  {
+    "id": "act_00bv",
+    "account_id": "acc_00bl",
+    "deal_id": "deal_00bn",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to interest",
+    "actor_id": "usr_0002",
+    "created_at": "2026-01-18T13:30:18.580Z"
+  },
+  {
+    "id": "act_00bw",
+    "account_id": "acc_00bl",
+    "deal_id": "deal_00bn",
+    "case_id": null,
+    "type": "email",
+    "body": "RFI answered via Atea; HMD provided security architecture pack.",
+    "actor_id": "usr_0002",
+    "created_at": "2026-02-13T13:30:18.580Z"
+  },
+  {
+    "id": "act_00bx",
+    "account_id": "acc_00bl",
+    "deal_id": "deal_00bn",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to rfi",
+    "actor_id": "usr_0002",
+    "created_at": "2026-02-17T13:30:18.580Z"
+  },
+  {
+    "id": "act_00by",
+    "account_id": "acc_00bl",
+    "deal_id": "deal_00bn",
+    "case_id": null,
+    "type": "meeting",
+    "body": "Offer presented through Atea; reseller margin agreed.",
+    "actor_id": "usr_0002",
+    "created_at": "2026-04-04T13:30:18.580Z"
+  },
+  {
+    "id": "act_00bz",
+    "account_id": "acc_00bl",
+    "deal_id": "deal_00bn",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to rfp",
+    "actor_id": "usr_0002",
+    "created_at": "2026-04-10T13:30:18.580Z"
+  },
+  {
+    "id": "act_00c0",
+    "account_id": "acc_00bl",
+    "deal_id": "deal_00bn",
+    "case_id": null,
+    "type": "meeting",
+    "body": "Customer test underway — 300-unit pilot with field units.",
+    "actor_id": "usr_0002",
+    "created_at": "2026-05-24T13:30:18.580Z"
+  },
+  {
+    "id": "act_00c1",
+    "account_id": "acc_00bl",
+    "deal_id": "deal_00bn",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to customer_test",
+    "actor_id": "usr_0002",
+    "created_at": "2026-06-01T13:30:18.580Z"
   }
 ]

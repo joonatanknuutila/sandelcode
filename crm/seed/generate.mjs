@@ -186,7 +186,122 @@ for (const c of cases.filter((c) => c.priority === 'urgent' && c.status !== 'clo
   notifications.push({ id: uid('ntf'), user_id: c.tam_id, type: 'sla_warning', body: `Urgent case approaching SLA: ${c.title}`, link_kind: 'case', link_id: c.id, read: false, created_at: iso(daysAgo(0)) });
 }
 
-const seed = { meta: { generated_at: iso(new Date()), win_probability: WINPCT, note: 'win% are assumptions pending HMD confirmation' }, users, accounts, contacts, products, services, deals, deal_forecast, offers, offer_lines, approvals, cases, case_notes, activities, notifications };
+// ---------------------------------------------------------------------------
+// HERO NARRATIVE — deterministic, demo-critical. The randomised data above
+// gives breadth; this gives the *story* the demo script walks through:
+//   (1) one DIRECT account that runs the full lifecycle Interest → Won, with a
+//       real stage-by-stage timeline, an approved offer (Rep→SM→Finance), and a
+//       forecast that becomes committed at Won.
+//   (2) one RESELLER deal (skips contract_negotiation per the model).
+//   (3) a few cases on the hero account — incl. a 3rd-party SOC escalation and
+//       dual-mode notes (internal_sales vs tech_working) — so Stage 4 "cases as
+//       sales-risk" has something concrete.
+// No PRNG here, so the hero is identical across reruns regardless of seed drift.
+// ---------------------------------------------------------------------------
+const at = (d) => iso(daysAgo(d));
+const day = (d) => at(d).slice(0, 10);
+const S30 = products.find((p) => p.sku === 'HMD-S30');
+const svcOf = (sku) => services.find((s) => s.sku === sku);
+const heroRep = reps[0], heroTam = tams[0];
+
+// (1) Direct lifecycle account ------------------------------------------------
+const hAcc = uid('acc');
+accounts.push({ id: hAcc, name: 'Bundespolizei (Federal Police)', domain: 'bundespolizei.de', country: 'DE', sector: 'government', channel: 'direct', owner_rep_id: heroRep, tam_id: heroTam, created_at: at(248) });
+const hC1 = uid('con'), hC2 = uid('con');
+contacts.push({ id: hC1, account_id: hAcc, name: 'Klara Müller', title: 'CISO', email: 'klara.muller@bundespolizei.de', phone: '+49 30 1234567', is_primary: true });
+contacts.push({ id: hC2, account_id: hAcc, name: 'Henrik Berg', title: 'Procurement Lead', email: 'henrik.berg@bundespolizei.de', phone: '+49 30 7654321', is_primary: false });
+
+const hDeal = uid('deal');
+// 3-yr time-phased forecast — pilot then ramp to ~8000 units.
+const HUNITS = [600, 800, 1000, 1200, 1200, 1100, 1000, 1100];
+let hTotal = 0;
+HUNITS.forEach((units, i) => {
+  const deviceRev = units * S30.list_price_eur;
+  const svcRev = units * (6 + 9) * 12 + (i === 0 ? 4500 : 0); // MDM+MON monthly*12 + onboarding in Q1
+  hTotal += deviceRev + svcRev;
+  deal_forecast.push({ id: uid('fc'), deal_id: hDeal, period: QS[i], device_units: units, device_revenue_eur: round2(deviceRev), service_revenue_eur: round2(svcRev) });
+});
+deals.push({ id: hDeal, account_id: hAcc, name: 'HMD Secure S30 rollout — Bundespolizei', channel: 'direct', stage: 'won', owner_rep_id: heroRep, currency: 'EUR', total_value_3yr_eur: round2(hTotal), expected_close: day(6), created_at: at(248), last_activity_at: at(6), lost_reason: null });
+
+// The lifecycle timeline (Interest → Won), every transition + colour around it.
+const tl = [
+  [245, 'note', 'Inbound interest via federal procurement portal — secure handset replacement programme across 3 commands.', heroRep],
+  [244, 'stage_change', 'Deal moved to interest', heroRep],
+  [232, 'call', 'Qualification call with CISO Klara Müller — driver is post-incident hardening + EU data residency.', heroRep],
+  [210, 'email', 'Sent RFI response covering Secure OS, MDM, SOC escalation and compliance attestations.', heroRep],
+  [206, 'stage_change', 'Deal moved to rfi', heroRep],
+  [178, 'meeting', 'RFP scoping workshop with procurement + IT security. Scoped 2,000-unit pilot then ramp.', heroRep],
+  [165, 'stage_change', 'Deal moved to rfp', heroRep],
+  [120, 'meeting', 'Pilot kickoff — 2,000 S30 units provisioned for Command-1.', heroTam],
+  [112, 'stage_change', 'Deal moved to customer_test', heroRep],
+  [58, 'meeting', 'Commercial terms + 3-yr pricing review with Sales Manager and Finance.', heroRep],
+  [46, 'stage_change', 'Deal moved to contract_negotiation', heroRep],
+  [14, 'meeting', 'Final terms agreed; framework signed for 8,000 units over 3 years.', heroRep],
+  [6, 'stage_change', 'Deal moved to won', heroRep],
+];
+for (const [d, type, body, actor] of tl) {
+  activities.push({ id: uid('act'), account_id: hAcc, deal_id: hDeal, case_id: null, type, body, actor_id: actor, created_at: at(d) });
+}
+
+// Offer + approval workflow (Rep → SM → Finance) — the crown-jewel demo.
+const hOff = uid('off');
+const hQty = 2000, hDisc = 12;
+const mdm = svcOf('SVC-MDM');
+const lDev = round2(hQty * S30.list_price_eur * (1 - hDisc / 100));
+const lMdm = round2(hQty * mdm.unit_price_eur * 12 * (1 - hDisc / 100));
+offers.push({ id: hOff, deal_id: hDeal, account_id: hAcc, version: 2, status: 'approved', discount_pct: hDisc, justification: 'Strategic federal logo; competitive displacement of incumbent; 3-yr commitment above 1,000 units.', total_eur: round2(lDev + lMdm), created_by: heroRep, created_at: at(160) });
+offer_lines.push({ id: uid('ol'), offer_id: hOff, product_id: S30.id, service_id: null, qty: hQty, unit_price_eur: S30.list_price_eur, discount_pct: hDisc, line_total_eur: lDev });
+offer_lines.push({ id: uid('ol'), offer_id: hOff, product_id: null, service_id: mdm.id, qty: hQty, unit_price_eur: round2(mdm.unit_price_eur * 12), discount_pct: hDisc, line_total_eur: lMdm });
+approvals.push({ id: uid('apr'), offer_id: hOff, approver_role: 'sales_manager', approver_id: sm, decision: 'approved', comment: 'Strategic; back this.', decided_at: at(150) });
+approvals.push({ id: uid('apr'), offer_id: hOff, approver_role: 'finance', approver_id: fin, decision: 'approved', comment: 'Margin holds at 12%; committed to forecast.', decided_at: at(146) });
+activities.push({ id: uid('act'), account_id: hAcc, deal_id: hDeal, case_id: null, type: 'offer', body: `Offer v2 approved (12% discount) — €${Math.round(lDev + lMdm).toLocaleString()}`, actor_id: heroRep, created_at: at(150) });
+
+// Cases on the hero account (Stage 4 — cases as sales-risk) -------------------
+const mkCase = (svcSku, title, type, status, prio, created, esc, resolved) => {
+  const id = uid('cas');
+  cases.push({ id, account_id: hAcc, service_id: svcOf(svcSku).id, title, type, status, priority: prio, tam_id: heroTam, customer_contact_id: hC1, sla_due_at: iso(new Date(daysAgo(created).getTime() + 3 * 864e5)), escalated_to_3p: esc, created_at: at(created), resolved_at: resolved == null ? null : at(resolved) });
+  activities.push({ id: uid('act'), account_id: hAcc, deal_id: null, case_id: id, type: 'system', body: `Case opened: ${title}`, actor_id: heroTam, created_at: at(created) });
+  return id;
+};
+const ca1 = mkCase('SVC-MDM', 'MDM enrolment failing on S30 batch (Command-2)', 'complaint', 'resolved', 'high', 95, false, 88);
+case_notes.push({ id: uid('cn'), case_id: ca1, author_id: heroTam, body: 'Root cause: APNs token issued on wrong tenant during migration. Re-issued for Command-2; all 40 units re-enrolled.', kind: 'tech_working', created_at: at(90) });
+case_notes.push({ id: uid('cn'), case_id: ca1, author_id: heroRep, body: 'Resolved cleanly before the pilot review — good story for the contract conversation.', kind: 'internal_sales', created_at: at(89) });
+const ca2 = mkCase('SVC-SOC', 'SOC escalation — anomalous traffic from 6 devices', 'complaint', 'escalated', 'urgent', 2, true, null);
+case_notes.push({ id: uid('cn'), case_id: ca2, author_id: heroTam, body: 'Escalated to 3rd-party SOC (ticket #7741). Devices quarantined; awaiting threat-intel confirmation. Vendor SLA 48h.', kind: 'tech_working', created_at: at(1) });
+case_notes.push({ id: uid('cn'), case_id: ca2, author_id: heroRep, body: 'Live account — keep this tight, renewal talks start next quarter.', kind: 'internal_sales', created_at: at(1) });
+const ca3 = mkCase('SVC-MDM', 'Request: add geofencing policy for border units', 'request', 'in_progress', 'medium', 9, false, null);
+case_notes.push({ id: uid('cn'), case_id: ca3, author_id: heroTam, body: 'Drafting geofencing profile; pending customer confirmation of zones.', kind: 'tech_working', created_at: at(7) });
+notifications.push({ id: uid('ntf'), user_id: heroTam, type: 'sla_warning', body: `Urgent case approaching SLA: SOC escalation — anomalous traffic from 6 devices`, link_kind: 'case', link_id: ca2, read: false, created_at: at(0) });
+
+// (2) Reseller deal (skips contract_negotiation) -----------------------------
+const rAcc = uid('acc');
+accounts.push({ id: rAcc, name: 'Forsvaret (Norwegian Armed Forces) — via Atea', domain: 'forsvaret.no', country: 'NO', sector: 'government', channel: 'reseller', owner_rep_id: reps[1], tam_id: tams[1], created_at: at(150) });
+const rC1 = uid('con');
+contacts.push({ id: rC1, account_id: rAcc, name: 'Lars Andersen', title: 'Head of IT', email: 'lars.andersen@forsvaret.no', phone: '+47 23 100200', is_primary: true });
+const rDeal = uid('deal');
+const RUNITS = [300, 450, 600, 700, 700, 650];
+let rTotal = 0;
+RUNITS.forEach((units, i) => {
+  const deviceRev = units * S30.list_price_eur;
+  const svcRev = units * (6 + 9) * 12 + (i === 0 ? 4500 : 0);
+  rTotal += deviceRev + svcRev;
+  deal_forecast.push({ id: uid('fc'), deal_id: rDeal, period: QS[i], device_units: units, device_revenue_eur: round2(deviceRev), service_revenue_eur: round2(svcRev) });
+});
+deals.push({ id: rDeal, account_id: rAcc, name: 'HMD Secure S30 fleet — Forsvaret (reseller: Atea)', channel: 'reseller', stage: 'customer_test', owner_rep_id: reps[1], currency: 'EUR', total_value_3yr_eur: round2(rTotal), expected_close: day(-40), created_at: at(150), last_activity_at: at(9), lost_reason: null });
+for (const [d, type, body] of [
+  [148, 'note', 'Reseller Atea registered the opportunity — field-ops fleet refresh.'],
+  [146, 'stage_change', 'Deal moved to interest'],
+  [120, 'email', 'RFI answered via Atea; HMD provided security architecture pack.'],
+  [116, 'stage_change', 'Deal moved to rfi'],
+  [70, 'meeting', 'Offer presented through Atea; reseller margin agreed.'],
+  [64, 'stage_change', 'Deal moved to rfp'],
+  [20, 'meeting', 'Customer test underway — 300-unit pilot with field units.'],
+  [12, 'stage_change', 'Deal moved to customer_test'],
+]) {
+  activities.push({ id: uid('act'), account_id: rAcc, deal_id: rDeal, case_id: null, type, body, actor_id: reps[1], created_at: at(d) });
+}
+
+const seed = { meta: { generated_at: iso(new Date()), win_probability: WINPCT, note: 'win% are assumptions pending HMD confirmation', hero: { direct_account_id: hAcc, direct_deal_id: hDeal, reseller_deal_id: rDeal } }, users, accounts, contacts, products, services, deals, deal_forecast, offers, offer_lines, approvals, cases, case_notes, activities, notifications };
 
 mkdirSync(OUT, { recursive: true });
 writeFileSync(join(OUT, 'seed.json'), JSON.stringify(seed, null, 2));

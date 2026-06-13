@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-06-13T10:46:00.855Z",
+    "generated_at": "2026-06-13T13:30:18.580Z",
     "win_probability": {
       "interest": 10,
       "rfi": 25,
@@ -10,7 +10,12 @@
       "won": 100,
       "lost": 0
     },
-    "note": "win% are assumptions pending HMD confirmation"
+    "note": "win% are assumptions pending HMD confirmation",
+    "hero": {
+      "direct_account_id": "acc_00ae",
+      "direct_deal_id": "deal_00ah",
+      "reseller_deal_id": "deal_00bn"
+    }
   },
   "users": [
     {
@@ -66,7 +71,7 @@
       "channel": "direct",
       "owner_rep_id": "usr_0002",
       "tam_id": "usr_0004",
-      "created_at": "2025-05-05T10:46:00.853Z"
+      "created_at": "2025-05-05T13:30:18.568Z"
     },
     {
       "id": "acc_000q",
@@ -77,7 +82,7 @@
       "channel": "direct",
       "owner_rep_id": "usr_0003",
       "tam_id": "usr_0005",
-      "created_at": "2025-02-21T10:46:00.854Z"
+      "created_at": "2025-02-21T13:30:18.569Z"
     },
     {
       "id": "acc_000v",
@@ -88,7 +93,7 @@
       "channel": "direct",
       "owner_rep_id": "usr_0003",
       "tam_id": "usr_0004",
-      "created_at": "2025-12-17T10:46:00.854Z"
+      "created_at": "2025-12-17T13:30:18.569Z"
     },
     {
       "id": "acc_0010",
@@ -99,7 +104,7 @@
       "channel": "reseller",
       "owner_rep_id": "usr_0001",
       "tam_id": "usr_0005",
-      "created_at": "2025-03-24T10:46:00.854Z"
+      "created_at": "2025-03-24T13:30:18.569Z"
     },
     {
       "id": "acc_0015",
@@ -110,7 +115,7 @@
       "channel": "direct",
       "owner_rep_id": "usr_0001",
       "tam_id": "usr_0004",
-      "created_at": "2025-07-27T10:46:00.854Z"
+      "created_at": "2025-07-27T13:30:18.569Z"
     },
     {
       "id": "acc_001a",
@@ -121,7 +126,7 @@
       "channel": "direct",
       "owner_rep_id": "usr_0003",
       "tam_id": "usr_0004",
-      "created_at": "2024-12-25T10:46:00.854Z"
+      "created_at": "2024-12-25T13:30:18.569Z"
     },
     {
       "id": "acc_001d",
@@ -132,7 +137,7 @@
       "channel": "direct",
       "owner_rep_id": "usr_0003",
       "tam_id": "usr_0005",
-      "created_at": "2025-09-30T10:46:00.854Z"
+      "created_at": "2025-09-30T13:30:18.569Z"
     },
     {
       "id": "acc_001h",
@@ -143,7 +148,7 @@
       "channel": "reseller",
       "owner_rep_id": "usr_0001",
       "tam_id": "usr_0005",
-      "created_at": "2024-12-30T10:46:00.854Z"
+      "created_at": "2024-12-30T13:30:18.569Z"
     },
     {
       "id": "acc_001m",
@@ -154,7 +159,7 @@
       "channel": "direct",
       "owner_rep_id": "usr_0003",
       "tam_id": "usr_0004",
-      "created_at": "2025-06-14T10:46:00.854Z"
+      "created_at": "2025-06-14T13:30:18.569Z"
     },
     {
       "id": "acc_001p",
@@ -165,7 +170,7 @@
       "channel": "direct",
       "owner_rep_id": "usr_0002",
       "tam_id": "usr_0004",
-      "created_at": "2025-08-06T10:46:00.854Z"
+      "created_at": "2025-08-06T13:30:18.569Z"
     },
     {
       "id": "acc_001t",
@@ -176,7 +181,7 @@
       "channel": "reseller",
       "owner_rep_id": "usr_0001",
       "tam_id": "usr_0005",
-      "created_at": "2025-03-17T10:46:00.854Z"
+      "created_at": "2025-03-17T13:30:18.569Z"
     },
     {
       "id": "acc_001w",
@@ -187,7 +192,7 @@
       "channel": "direct",
       "owner_rep_id": "usr_0001",
       "tam_id": "usr_0004",
-      "created_at": "2025-08-18T10:46:00.854Z"
+      "created_at": "2025-08-18T13:30:18.569Z"
     },
     {
       "id": "acc_0021",
@@ -198,7 +203,7 @@
       "channel": "direct",
       "owner_rep_id": "usr_0001",
       "tam_id": "usr_0004",
-      "created_at": "2025-03-28T10:46:00.854Z"
+      "created_at": "2025-03-28T13:30:18.569Z"
     },
     {
       "id": "acc_0026",
@@ -209,7 +214,29 @@
       "channel": "direct",
       "owner_rep_id": "usr_0002",
       "tam_id": "usr_0004",
-      "created_at": "2025-05-15T10:46:00.854Z"
+      "created_at": "2025-05-15T13:30:18.569Z"
+    },
+    {
+      "id": "acc_00ae",
+      "name": "Bundespolizei (Federal Police)",
+      "domain": "bundespolizei.de",
+      "country": "DE",
+      "sector": "government",
+      "channel": "direct",
+      "owner_rep_id": "usr_0001",
+      "tam_id": "usr_0004",
+      "created_at": "2025-10-08T13:30:18.570Z"
+    },
+    {
+      "id": "acc_00bl",
+      "name": "Forsvaret (Norwegian Armed Forces) — via Atea",
+      "domain": "forsvaret.no",
+      "country": "NO",
+      "sector": "government",
+      "channel": "reseller",
+      "owner_rep_id": "usr_0002",
+      "tam_id": "usr_0005",
+      "created_at": "2026-01-14T13:30:18.580Z"
     }
   ],
   "contacts": [
@@ -626,6 +653,33 @@
       "email": "pekka.dubois@nokia.com",
       "phone": "+48 97 3046074",
       "is_primary": false
+    },
+    {
+      "id": "con_00af",
+      "account_id": "acc_00ae",
+      "name": "Klara Müller",
+      "title": "CISO",
+      "email": "klara.muller@bundespolizei.de",
+      "phone": "+49 30 1234567",
+      "is_primary": true
+    },
+    {
+      "id": "con_00ag",
+      "account_id": "acc_00ae",
+      "name": "Henrik Berg",
+      "title": "Procurement Lead",
+      "email": "henrik.berg@bundespolizei.de",
+      "phone": "+49 30 7654321",
+      "is_primary": false
+    },
+    {
+      "id": "con_00bm",
+      "account_id": "acc_00bl",
+      "name": "Lars Andersen",
+      "title": "Head of IT",
+      "email": "lars.andersen@forsvaret.no",
+      "phone": "+47 23 100200",
+      "is_primary": true
     }
   ],
   "products": [
@@ -753,8 +807,8 @@
       "currency": "EUR",
       "total_value_3yr_eur": 2863721,
       "expected_close": "2026-12-19",
-      "created_at": "2025-10-05T10:46:00.854Z",
-      "last_activity_at": "2026-05-25T10:46:00.854Z",
+      "created_at": "2025-10-05T13:30:18.569Z",
+      "last_activity_at": "2026-05-25T13:30:18.569Z",
       "lost_reason": null
     },
     {
@@ -767,8 +821,8 @@
       "currency": "EUR",
       "total_value_3yr_eur": 1090501,
       "expected_close": "2026-10-12",
-      "created_at": "2026-02-22T10:46:00.854Z",
-      "last_activity_at": "2026-05-26T10:46:00.854Z",
+      "created_at": "2026-02-22T13:30:18.569Z",
+      "last_activity_at": "2026-05-26T13:30:18.569Z",
       "lost_reason": null
     },
     {
@@ -781,8 +835,8 @@
       "currency": "EUR",
       "total_value_3yr_eur": 604424,
       "expected_close": "2027-04-22",
-      "created_at": "2026-01-05T10:46:00.854Z",
-      "last_activity_at": "2026-05-23T10:46:00.854Z",
+      "created_at": "2026-01-05T13:30:18.569Z",
+      "last_activity_at": "2026-05-23T13:30:18.569Z",
       "lost_reason": null
     },
     {
@@ -795,8 +849,8 @@
       "currency": "EUR",
       "total_value_3yr_eur": 534030,
       "expected_close": "2027-06-08",
-      "created_at": "2025-09-28T10:46:00.854Z",
-      "last_activity_at": "2026-05-19T10:46:00.854Z",
+      "created_at": "2025-09-28T13:30:18.569Z",
+      "last_activity_at": "2026-05-19T13:30:18.569Z",
       "lost_reason": null
     },
     {
@@ -809,8 +863,8 @@
       "currency": "EUR",
       "total_value_3yr_eur": 1547470,
       "expected_close": "2027-04-14",
-      "created_at": "2026-01-03T10:46:00.854Z",
-      "last_activity_at": "2026-05-24T10:46:00.854Z",
+      "created_at": "2026-01-03T13:30:18.569Z",
+      "last_activity_at": "2026-05-24T13:30:18.569Z",
       "lost_reason": null
     },
     {
@@ -823,8 +877,8 @@
       "currency": "EUR",
       "total_value_3yr_eur": 4651107,
       "expected_close": "2026-07-30",
-      "created_at": "2025-08-26T10:46:00.854Z",
-      "last_activity_at": "2026-06-09T10:46:00.854Z",
+      "created_at": "2025-08-26T13:30:18.569Z",
+      "last_activity_at": "2026-06-09T13:30:18.569Z",
       "lost_reason": null
     },
     {
@@ -837,8 +891,8 @@
       "currency": "EUR",
       "total_value_3yr_eur": 3888900,
       "expected_close": "2026-08-09",
-      "created_at": "2026-03-10T10:46:00.854Z",
-      "last_activity_at": "2026-05-31T10:46:00.854Z",
+      "created_at": "2026-03-10T13:30:18.569Z",
+      "last_activity_at": "2026-05-31T13:30:18.569Z",
       "lost_reason": null
     },
     {
@@ -851,8 +905,8 @@
       "currency": "EUR",
       "total_value_3yr_eur": 2507886,
       "expected_close": "2027-06-28",
-      "created_at": "2025-12-22T10:46:00.855Z",
-      "last_activity_at": "2026-05-17T10:46:00.855Z",
+      "created_at": "2025-12-22T13:30:18.569Z",
+      "last_activity_at": "2026-05-17T13:30:18.569Z",
       "lost_reason": null
     },
     {
@@ -865,8 +919,8 @@
       "currency": "EUR",
       "total_value_3yr_eur": 1453597,
       "expected_close": "2026-11-13",
-      "created_at": "2025-08-30T10:46:00.855Z",
-      "last_activity_at": "2026-06-08T10:46:00.855Z",
+      "created_at": "2025-08-30T13:30:18.569Z",
+      "last_activity_at": "2026-06-08T13:30:18.569Z",
       "lost_reason": null
     },
     {
@@ -879,8 +933,8 @@
       "currency": "EUR",
       "total_value_3yr_eur": 1058634,
       "expected_close": "2026-09-09",
-      "created_at": "2025-10-11T10:46:00.855Z",
-      "last_activity_at": "2026-04-20T10:46:00.855Z",
+      "created_at": "2025-10-11T13:30:18.569Z",
+      "last_activity_at": "2026-04-20T13:30:18.569Z",
       "lost_reason": "project cancelled"
     },
     {
@@ -893,8 +947,8 @@
       "currency": "EUR",
       "total_value_3yr_eur": 2368589,
       "expected_close": "2027-05-26",
-      "created_at": "2026-05-12T10:46:00.855Z",
-      "last_activity_at": "2026-05-22T10:46:00.855Z",
+      "created_at": "2026-05-12T13:30:18.569Z",
+      "last_activity_at": "2026-05-22T13:30:18.569Z",
       "lost_reason": null
     },
     {
@@ -907,8 +961,8 @@
       "currency": "EUR",
       "total_value_3yr_eur": 3924507,
       "expected_close": "2027-01-15",
-      "created_at": "2025-12-26T10:46:00.855Z",
-      "last_activity_at": "2026-05-30T10:46:00.855Z",
+      "created_at": "2025-12-26T13:30:18.569Z",
+      "last_activity_at": "2026-05-30T13:30:18.569Z",
       "lost_reason": null
     },
     {
@@ -921,8 +975,8 @@
       "currency": "EUR",
       "total_value_3yr_eur": 2331645,
       "expected_close": "2027-07-11",
-      "created_at": "2026-04-05T10:46:00.855Z",
-      "last_activity_at": "2026-06-05T10:46:00.855Z",
+      "created_at": "2026-04-05T13:30:18.569Z",
+      "last_activity_at": "2026-06-05T13:30:18.569Z",
       "lost_reason": null
     },
     {
@@ -935,8 +989,8 @@
       "currency": "EUR",
       "total_value_3yr_eur": 358783,
       "expected_close": "2027-06-13",
-      "created_at": "2026-01-18T10:46:00.855Z",
-      "last_activity_at": "2026-06-05T10:46:00.855Z",
+      "created_at": "2026-01-18T13:30:18.569Z",
+      "last_activity_at": "2026-06-05T13:30:18.569Z",
       "lost_reason": null
     },
     {
@@ -949,8 +1003,8 @@
       "currency": "EUR",
       "total_value_3yr_eur": 2378756,
       "expected_close": "2026-09-17",
-      "created_at": "2026-04-17T10:46:00.855Z",
-      "last_activity_at": "2026-05-29T10:46:00.855Z",
+      "created_at": "2026-04-17T13:30:18.569Z",
+      "last_activity_at": "2026-05-29T13:30:18.569Z",
       "lost_reason": null
     },
     {
@@ -963,8 +1017,8 @@
       "currency": "EUR",
       "total_value_3yr_eur": 2519550,
       "expected_close": "2027-10-06",
-      "created_at": "2026-01-03T10:46:00.855Z",
-      "last_activity_at": "2026-05-17T10:46:00.855Z",
+      "created_at": "2026-01-03T13:30:18.569Z",
+      "last_activity_at": "2026-05-17T13:30:18.569Z",
       "lost_reason": null
     },
     {
@@ -977,8 +1031,8 @@
       "currency": "EUR",
       "total_value_3yr_eur": 701534,
       "expected_close": "2027-06-09",
-      "created_at": "2026-05-14T10:46:00.855Z",
-      "last_activity_at": "2026-06-01T10:46:00.855Z",
+      "created_at": "2026-05-14T13:30:18.569Z",
+      "last_activity_at": "2026-06-01T13:30:18.569Z",
       "lost_reason": null
     },
     {
@@ -991,8 +1045,8 @@
       "currency": "EUR",
       "total_value_3yr_eur": 2027625,
       "expected_close": "2027-09-15",
-      "created_at": "2025-10-19T10:46:00.855Z",
-      "last_activity_at": "2026-05-17T10:46:00.855Z",
+      "created_at": "2025-10-19T13:30:18.569Z",
+      "last_activity_at": "2026-05-17T13:30:18.569Z",
       "lost_reason": null
     },
     {
@@ -1005,8 +1059,8 @@
       "currency": "EUR",
       "total_value_3yr_eur": 1239955,
       "expected_close": "2027-05-20",
-      "created_at": "2026-01-10T10:46:00.855Z",
-      "last_activity_at": "2026-05-28T10:46:00.855Z",
+      "created_at": "2026-01-10T13:30:18.569Z",
+      "last_activity_at": "2026-05-28T13:30:18.569Z",
       "lost_reason": null
     },
     {
@@ -1019,8 +1073,36 @@
       "currency": "EUR",
       "total_value_3yr_eur": 3154739,
       "expected_close": "2026-07-24",
-      "created_at": "2025-12-08T10:46:00.855Z",
-      "last_activity_at": "2026-05-31T10:46:00.855Z",
+      "created_at": "2025-12-08T13:30:18.569Z",
+      "last_activity_at": "2026-05-31T13:30:18.569Z",
+      "lost_reason": null
+    },
+    {
+      "id": "deal_00ah",
+      "account_id": "acc_00ae",
+      "name": "HMD Secure S30 rollout — Bundespolizei",
+      "channel": "direct",
+      "stage": "won",
+      "owner_rep_id": "usr_0001",
+      "currency": "EUR",
+      "total_value_3yr_eur": 7436500,
+      "expected_close": "2026-06-07",
+      "created_at": "2025-10-08T13:30:18.570Z",
+      "last_activity_at": "2026-06-07T13:30:18.570Z",
+      "lost_reason": null
+    },
+    {
+      "id": "deal_00bn",
+      "account_id": "acc_00bl",
+      "name": "HMD Secure S30 fleet — Forsvaret (reseller: Atea)",
+      "channel": "reseller",
+      "stage": "customer_test",
+      "owner_rep_id": "usr_0002",
+      "currency": "EUR",
+      "total_value_3yr_eur": 3163100,
+      "expected_close": "2026-07-23",
+      "created_at": "2026-01-14T13:30:18.580Z",
+      "last_activity_at": "2026-06-04T13:30:18.580Z",
       "lost_reason": null
     }
   ],
@@ -2032,6 +2114,118 @@
       "device_units": 462,
       "device_revenue_eur": 346038,
       "service_revenue_eur": 83160
+    },
+    {
+      "id": "fc_00ai",
+      "deal_id": "deal_00ah",
+      "period": "2026-Q2",
+      "device_units": 600,
+      "device_revenue_eur": 449400,
+      "service_revenue_eur": 112500
+    },
+    {
+      "id": "fc_00aj",
+      "deal_id": "deal_00ah",
+      "period": "2026-Q3",
+      "device_units": 800,
+      "device_revenue_eur": 599200,
+      "service_revenue_eur": 144000
+    },
+    {
+      "id": "fc_00ak",
+      "deal_id": "deal_00ah",
+      "period": "2026-Q4",
+      "device_units": 1000,
+      "device_revenue_eur": 749000,
+      "service_revenue_eur": 180000
+    },
+    {
+      "id": "fc_00al",
+      "deal_id": "deal_00ah",
+      "period": "2027-Q1",
+      "device_units": 1200,
+      "device_revenue_eur": 898800,
+      "service_revenue_eur": 216000
+    },
+    {
+      "id": "fc_00am",
+      "deal_id": "deal_00ah",
+      "period": "2027-Q2",
+      "device_units": 1200,
+      "device_revenue_eur": 898800,
+      "service_revenue_eur": 216000
+    },
+    {
+      "id": "fc_00an",
+      "deal_id": "deal_00ah",
+      "period": "2027-Q3",
+      "device_units": 1100,
+      "device_revenue_eur": 823900,
+      "service_revenue_eur": 198000
+    },
+    {
+      "id": "fc_00ao",
+      "deal_id": "deal_00ah",
+      "period": "2027-Q4",
+      "device_units": 1000,
+      "device_revenue_eur": 749000,
+      "service_revenue_eur": 180000
+    },
+    {
+      "id": "fc_00ap",
+      "deal_id": "deal_00ah",
+      "period": "2028-Q1",
+      "device_units": 1100,
+      "device_revenue_eur": 823900,
+      "service_revenue_eur": 198000
+    },
+    {
+      "id": "fc_00bo",
+      "deal_id": "deal_00bn",
+      "period": "2026-Q2",
+      "device_units": 300,
+      "device_revenue_eur": 224700,
+      "service_revenue_eur": 58500
+    },
+    {
+      "id": "fc_00bp",
+      "deal_id": "deal_00bn",
+      "period": "2026-Q3",
+      "device_units": 450,
+      "device_revenue_eur": 337050,
+      "service_revenue_eur": 81000
+    },
+    {
+      "id": "fc_00bq",
+      "deal_id": "deal_00bn",
+      "period": "2026-Q4",
+      "device_units": 600,
+      "device_revenue_eur": 449400,
+      "service_revenue_eur": 108000
+    },
+    {
+      "id": "fc_00br",
+      "deal_id": "deal_00bn",
+      "period": "2027-Q1",
+      "device_units": 700,
+      "device_revenue_eur": 524300,
+      "service_revenue_eur": 126000
+    },
+    {
+      "id": "fc_00bs",
+      "deal_id": "deal_00bn",
+      "period": "2027-Q2",
+      "device_units": 700,
+      "device_revenue_eur": 524300,
+      "service_revenue_eur": 126000
+    },
+    {
+      "id": "fc_00bt",
+      "deal_id": "deal_00bn",
+      "period": "2027-Q3",
+      "device_units": 650,
+      "device_revenue_eur": 486850,
+      "service_revenue_eur": 117000
     }
   ],
   "offers": [
@@ -2045,7 +2239,7 @@
       "justification": "Competitive pressure from incumbent",
       "total_eur": 768456,
       "created_by": "usr_0003",
-      "created_at": "2026-06-07T10:46:00.855Z"
+      "created_at": "2026-06-07T13:30:18.569Z"
     },
     {
       "id": "off_007k",
@@ -2057,7 +2251,7 @@
       "justification": null,
       "total_eur": 787339,
       "created_by": "usr_0003",
-      "created_at": "2026-06-04T10:46:00.855Z"
+      "created_at": "2026-06-04T13:30:18.569Z"
     },
     {
       "id": "off_007o",
@@ -2069,7 +2263,7 @@
       "justification": null,
       "total_eur": 503949,
       "created_by": "usr_0001",
-      "created_at": "2026-05-28T10:46:00.855Z"
+      "created_at": "2026-05-28T13:30:18.569Z"
     },
     {
       "id": "off_007s",
@@ -2081,7 +2275,7 @@
       "justification": "Strategic logo, multi-year commitment",
       "total_eur": 301473.95,
       "created_by": "usr_0001",
-      "created_at": "2026-06-10T10:46:00.855Z"
+      "created_at": "2026-06-10T13:30:18.569Z"
     },
     {
       "id": "off_007x",
@@ -2093,7 +2287,7 @@
       "justification": null,
       "total_eur": 409762,
       "created_by": "usr_0003",
-      "created_at": "2026-05-14T10:46:00.855Z"
+      "created_at": "2026-05-14T13:30:18.569Z"
     },
     {
       "id": "off_0081",
@@ -2105,7 +2299,7 @@
       "justification": null,
       "total_eur": 1150635,
       "created_by": "usr_0001",
-      "created_at": "2026-05-26T10:46:00.855Z"
+      "created_at": "2026-05-26T13:30:18.569Z"
     },
     {
       "id": "off_0085",
@@ -2117,7 +2311,7 @@
       "justification": null,
       "total_eur": 1014086,
       "created_by": "usr_0003",
-      "created_at": "2026-05-08T10:46:00.855Z"
+      "created_at": "2026-05-08T13:30:18.569Z"
     },
     {
       "id": "off_0089",
@@ -2129,7 +2323,19 @@
       "justification": null,
       "total_eur": 164388,
       "created_by": "usr_0002",
-      "created_at": "2026-06-04T10:46:00.855Z"
+      "created_at": "2026-06-04T13:30:18.569Z"
+    },
+    {
+      "id": "off_00b3",
+      "deal_id": "deal_00ah",
+      "account_id": "acc_00ae",
+      "version": 2,
+      "status": "approved",
+      "discount_pct": 12,
+      "justification": "Strategic federal logo; competitive displacement of incumbent; 3-yr commitment above 1,000 units.",
+      "total_eur": 1444960,
+      "created_by": "usr_0001",
+      "created_at": "2026-01-04T13:30:18.570Z"
     }
   ],
   "offer_lines": [
@@ -2292,6 +2498,26 @@
       "unit_price_eur": 72,
       "discount_pct": 0,
       "line_total_eur": 16416
+    },
+    {
+      "id": "ol_00b4",
+      "offer_id": "off_00b3",
+      "product_id": "prd_0008",
+      "service_id": null,
+      "qty": 2000,
+      "unit_price_eur": 749,
+      "discount_pct": 12,
+      "line_total_eur": 1318240
+    },
+    {
+      "id": "ol_00b5",
+      "offer_id": "off_00b3",
+      "product_id": null,
+      "service_id": "svc_000f",
+      "qty": 2000,
+      "unit_price_eur": 72,
+      "discount_pct": 12,
+      "line_total_eur": 126720
     }
   ],
   "approvals": [
@@ -2302,7 +2528,7 @@
       "approver_id": "usr_0006",
       "decision": "approved",
       "comment": null,
-      "decided_at": "2026-06-10T10:46:00.855Z"
+      "decided_at": "2026-06-10T13:30:18.569Z"
     },
     {
       "id": "apr_007v",
@@ -2311,7 +2537,25 @@
       "approver_id": "usr_0006",
       "decision": "approved",
       "comment": null,
-      "decided_at": "2026-05-30T10:46:00.855Z"
+      "decided_at": "2026-05-30T13:30:18.569Z"
+    },
+    {
+      "id": "apr_00b6",
+      "offer_id": "off_00b3",
+      "approver_role": "sales_manager",
+      "approver_id": "usr_0006",
+      "decision": "approved",
+      "comment": "Strategic; back this.",
+      "decided_at": "2026-01-14T13:30:18.570Z"
+    },
+    {
+      "id": "apr_00b7",
+      "offer_id": "off_00b3",
+      "approver_role": "finance",
+      "approver_id": "usr_0007",
+      "decision": "approved",
+      "comment": "Margin holds at 12%; committed to forecast.",
+      "decided_at": "2026-01-18T13:30:18.570Z"
     }
   ],
   "cases": [
@@ -2325,10 +2569,10 @@
       "priority": "low",
       "tam_id": "usr_0004",
       "customer_contact_id": "con_000m",
-      "sla_due_at": "2026-06-13T10:46:00.855Z",
+      "sla_due_at": "2026-06-13T13:30:18.569Z",
       "escalated_to_3p": false,
-      "created_at": "2026-06-10T10:46:00.855Z",
-      "resolved_at": "2026-06-10T10:46:00.855Z"
+      "created_at": "2026-06-10T13:30:18.569Z",
+      "resolved_at": "2026-06-10T13:30:18.569Z"
     },
     {
       "id": "cas_008h",
@@ -2340,9 +2584,9 @@
       "priority": "medium",
       "tam_id": "usr_0004",
       "customer_contact_id": "con_000o",
-      "sla_due_at": "2026-06-14T10:46:00.855Z",
+      "sla_due_at": "2026-06-14T13:30:18.569Z",
       "escalated_to_3p": false,
-      "created_at": "2026-06-10T10:46:00.855Z",
+      "created_at": "2026-06-10T13:30:18.569Z",
       "resolved_at": null
     },
     {
@@ -2355,9 +2599,9 @@
       "priority": "low",
       "tam_id": "usr_0004",
       "customer_contact_id": "con_000w",
-      "sla_due_at": "2026-06-15T10:46:00.855Z",
+      "sla_due_at": "2026-06-15T13:30:18.569Z",
       "escalated_to_3p": false,
-      "created_at": "2026-06-12T10:46:00.855Z",
+      "created_at": "2026-06-12T13:30:18.569Z",
       "resolved_at": null
     },
     {
@@ -2370,10 +2614,10 @@
       "priority": "high",
       "tam_id": "usr_0004",
       "customer_contact_id": "con_000x",
-      "sla_due_at": "2026-05-22T10:46:00.855Z",
+      "sla_due_at": "2026-05-22T13:30:18.569Z",
       "escalated_to_3p": false,
-      "created_at": "2026-05-17T10:46:00.855Z",
-      "resolved_at": "2026-06-12T10:46:00.855Z"
+      "created_at": "2026-05-17T13:30:18.569Z",
+      "resolved_at": "2026-06-12T13:30:18.569Z"
     },
     {
       "id": "cas_008r",
@@ -2385,9 +2629,9 @@
       "priority": "urgent",
       "tam_id": "usr_0005",
       "customer_contact_id": "con_0013",
-      "sla_due_at": "2026-06-11T10:46:00.855Z",
+      "sla_due_at": "2026-06-11T13:30:18.569Z",
       "escalated_to_3p": true,
-      "created_at": "2026-06-04T10:46:00.855Z",
+      "created_at": "2026-06-04T13:30:18.569Z",
       "resolved_at": null
     },
     {
@@ -2400,10 +2644,10 @@
       "priority": "low",
       "tam_id": "usr_0004",
       "customer_contact_id": "con_0016",
-      "sla_due_at": "2026-06-12T10:46:00.855Z",
+      "sla_due_at": "2026-06-12T13:30:18.569Z",
       "escalated_to_3p": false,
-      "created_at": "2026-06-07T10:46:00.855Z",
-      "resolved_at": "2026-06-12T10:46:00.855Z"
+      "created_at": "2026-06-07T13:30:18.569Z",
+      "resolved_at": "2026-06-12T13:30:18.569Z"
     },
     {
       "id": "cas_008z",
@@ -2415,10 +2659,10 @@
       "priority": "urgent",
       "tam_id": "usr_0004",
       "customer_contact_id": "con_0019",
-      "sla_due_at": "2026-05-30T10:46:00.855Z",
+      "sla_due_at": "2026-05-30T13:30:18.569Z",
       "escalated_to_3p": false,
-      "created_at": "2026-05-24T10:46:00.855Z",
-      "resolved_at": "2026-06-11T10:46:00.855Z"
+      "created_at": "2026-05-24T13:30:18.569Z",
+      "resolved_at": "2026-06-11T13:30:18.569Z"
     },
     {
       "id": "cas_0092",
@@ -2430,9 +2674,9 @@
       "priority": "low",
       "tam_id": "usr_0004",
       "customer_contact_id": "con_0019",
-      "sla_due_at": "2026-06-13T10:46:00.855Z",
+      "sla_due_at": "2026-06-13T13:30:18.569Z",
       "escalated_to_3p": true,
-      "created_at": "2026-06-07T10:46:00.855Z",
+      "created_at": "2026-06-07T13:30:18.569Z",
       "resolved_at": null
     },
     {
@@ -2445,10 +2689,10 @@
       "priority": "medium",
       "tam_id": "usr_0004",
       "customer_contact_id": "con_001c",
-      "sla_due_at": "2026-05-17T10:46:00.855Z",
+      "sla_due_at": "2026-05-17T13:30:18.569Z",
       "escalated_to_3p": false,
-      "created_at": "2026-05-10T10:46:00.855Z",
-      "resolved_at": "2026-06-11T10:46:00.855Z"
+      "created_at": "2026-05-10T13:30:18.569Z",
+      "resolved_at": "2026-06-11T13:30:18.569Z"
     },
     {
       "id": "cas_0099",
@@ -2460,9 +2704,9 @@
       "priority": "low",
       "tam_id": "usr_0004",
       "customer_contact_id": "con_001c",
-      "sla_due_at": "2026-05-25T10:46:00.855Z",
+      "sla_due_at": "2026-05-25T13:30:18.569Z",
       "escalated_to_3p": false,
-      "created_at": "2026-05-21T10:46:00.855Z",
+      "created_at": "2026-05-21T13:30:18.569Z",
       "resolved_at": null
     },
     {
@@ -2475,10 +2719,10 @@
       "priority": "high",
       "tam_id": "usr_0005",
       "customer_contact_id": "con_001f",
-      "sla_due_at": "2026-05-29T10:46:00.855Z",
+      "sla_due_at": "2026-05-29T13:30:18.570Z",
       "escalated_to_3p": false,
-      "created_at": "2026-05-25T10:46:00.855Z",
-      "resolved_at": "2026-06-08T10:46:00.855Z"
+      "created_at": "2026-05-25T13:30:18.570Z",
+      "resolved_at": "2026-06-08T13:30:18.570Z"
     },
     {
       "id": "cas_009h",
@@ -2490,9 +2734,9 @@
       "priority": "medium",
       "tam_id": "usr_0005",
       "customer_contact_id": "con_001g",
-      "sla_due_at": "2026-05-28T10:46:00.855Z",
+      "sla_due_at": "2026-05-28T13:30:18.570Z",
       "escalated_to_3p": false,
-      "created_at": "2026-05-22T10:46:00.855Z",
+      "created_at": "2026-05-22T13:30:18.570Z",
       "resolved_at": null
     },
     {
@@ -2505,10 +2749,10 @@
       "priority": "urgent",
       "tam_id": "usr_0005",
       "customer_contact_id": "con_001e",
-      "sla_due_at": "2026-06-06T10:46:00.855Z",
+      "sla_due_at": "2026-06-06T13:30:18.570Z",
       "escalated_to_3p": false,
-      "created_at": "2026-06-01T10:46:00.855Z",
-      "resolved_at": "2026-06-09T10:46:00.855Z"
+      "created_at": "2026-06-01T13:30:18.570Z",
+      "resolved_at": "2026-06-09T13:30:18.570Z"
     },
     {
       "id": "cas_009o",
@@ -2520,9 +2764,9 @@
       "priority": "medium",
       "tam_id": "usr_0004",
       "customer_contact_id": "con_001n",
-      "sla_due_at": "2026-05-15T10:46:00.855Z",
+      "sla_due_at": "2026-05-15T13:30:18.570Z",
       "escalated_to_3p": false,
-      "created_at": "2026-05-10T10:46:00.855Z",
+      "created_at": "2026-05-10T13:30:18.570Z",
       "resolved_at": null
     },
     {
@@ -2535,10 +2779,10 @@
       "priority": "high",
       "tam_id": "usr_0004",
       "customer_contact_id": "con_001o",
-      "sla_due_at": "2026-05-17T10:46:00.855Z",
+      "sla_due_at": "2026-05-17T13:30:18.570Z",
       "escalated_to_3p": false,
-      "created_at": "2026-05-11T10:46:00.855Z",
-      "resolved_at": "2026-06-08T10:46:00.855Z"
+      "created_at": "2026-05-11T13:30:18.570Z",
+      "resolved_at": "2026-06-08T13:30:18.570Z"
     },
     {
       "id": "cas_009v",
@@ -2550,10 +2794,10 @@
       "priority": "medium",
       "tam_id": "usr_0004",
       "customer_contact_id": "con_001q",
-      "sla_due_at": "2026-06-02T10:46:00.855Z",
+      "sla_due_at": "2026-06-02T13:30:18.570Z",
       "escalated_to_3p": false,
-      "created_at": "2026-05-30T10:46:00.855Z",
-      "resolved_at": "2026-06-11T10:46:00.855Z"
+      "created_at": "2026-05-30T13:30:18.570Z",
+      "resolved_at": "2026-06-11T13:30:18.570Z"
     },
     {
       "id": "cas_009z",
@@ -2565,10 +2809,10 @@
       "priority": "low",
       "tam_id": "usr_0005",
       "customer_contact_id": "con_001v",
-      "sla_due_at": "2026-06-04T10:46:00.855Z",
+      "sla_due_at": "2026-06-04T13:30:18.570Z",
       "escalated_to_3p": false,
-      "created_at": "2026-05-30T10:46:00.855Z",
-      "resolved_at": "2026-06-09T10:46:00.855Z"
+      "created_at": "2026-05-30T13:30:18.570Z",
+      "resolved_at": "2026-06-09T13:30:18.570Z"
     },
     {
       "id": "cas_00a2",
@@ -2580,9 +2824,9 @@
       "priority": "high",
       "tam_id": "usr_0005",
       "customer_contact_id": "con_001u",
-      "sla_due_at": "2026-05-10T10:46:00.855Z",
+      "sla_due_at": "2026-05-10T13:30:18.570Z",
       "escalated_to_3p": false,
-      "created_at": "2026-05-07T10:46:00.855Z",
+      "created_at": "2026-05-07T13:30:18.570Z",
       "resolved_at": null
     },
     {
@@ -2595,10 +2839,10 @@
       "priority": "high",
       "tam_id": "usr_0004",
       "customer_contact_id": "con_0020",
-      "sla_due_at": "2026-05-17T10:46:00.855Z",
+      "sla_due_at": "2026-05-17T13:30:18.570Z",
       "escalated_to_3p": false,
-      "created_at": "2026-05-11T10:46:00.855Z",
-      "resolved_at": "2026-06-13T10:46:00.855Z"
+      "created_at": "2026-05-11T13:30:18.570Z",
+      "resolved_at": "2026-06-13T13:30:18.570Z"
     },
     {
       "id": "cas_00a9",
@@ -2610,10 +2854,55 @@
       "priority": "high",
       "tam_id": "usr_0004",
       "customer_contact_id": "con_001x",
-      "sla_due_at": "2026-06-02T10:46:00.855Z",
+      "sla_due_at": "2026-06-02T13:30:18.570Z",
       "escalated_to_3p": false,
-      "created_at": "2026-05-30T10:46:00.855Z",
-      "resolved_at": "2026-06-13T10:46:00.855Z"
+      "created_at": "2026-05-30T13:30:18.570Z",
+      "resolved_at": "2026-06-13T13:30:18.570Z"
+    },
+    {
+      "id": "cas_00b9",
+      "account_id": "acc_00ae",
+      "service_id": "svc_000f",
+      "title": "MDM enrolment failing on S30 batch (Command-2)",
+      "type": "complaint",
+      "status": "resolved",
+      "priority": "high",
+      "tam_id": "usr_0004",
+      "customer_contact_id": "con_00af",
+      "sla_due_at": "2026-03-13T13:30:18.579Z",
+      "escalated_to_3p": false,
+      "created_at": "2026-03-10T13:30:18.579Z",
+      "resolved_at": "2026-03-17T13:30:18.579Z"
+    },
+    {
+      "id": "cas_00bd",
+      "account_id": "acc_00ae",
+      "service_id": "svc_000k",
+      "title": "SOC escalation — anomalous traffic from 6 devices",
+      "type": "complaint",
+      "status": "escalated",
+      "priority": "urgent",
+      "tam_id": "usr_0004",
+      "customer_contact_id": "con_00af",
+      "sla_due_at": "2026-06-14T13:30:18.580Z",
+      "escalated_to_3p": true,
+      "created_at": "2026-06-11T13:30:18.580Z",
+      "resolved_at": null
+    },
+    {
+      "id": "cas_00bh",
+      "account_id": "acc_00ae",
+      "service_id": "svc_000f",
+      "title": "Request: add geofencing policy for border units",
+      "type": "request",
+      "status": "in_progress",
+      "priority": "medium",
+      "tam_id": "usr_0004",
+      "customer_contact_id": "con_00af",
+      "sla_due_at": "2026-06-07T13:30:18.580Z",
+      "escalated_to_3p": false,
+      "created_at": "2026-06-04T13:30:18.580Z",
+      "resolved_at": null
     }
   ],
   "case_notes": [
@@ -2623,7 +2912,7 @@
       "author_id": "usr_0004",
       "body": "Reproduced on test device, gathering logs",
       "kind": "tech_working",
-      "created_at": "2026-06-13T10:46:00.855Z"
+      "created_at": "2026-06-13T13:30:18.569Z"
     },
     {
       "id": "cn_008f",
@@ -2631,7 +2920,7 @@
       "author_id": "usr_0002",
       "body": "FYI for the account — keep an eye on this before renewal talks.",
       "kind": "internal_sales",
-      "created_at": "2026-06-05T10:46:00.855Z"
+      "created_at": "2026-06-05T13:30:18.569Z"
     },
     {
       "id": "cn_008i",
@@ -2639,7 +2928,7 @@
       "author_id": "usr_0004",
       "body": "Awaiting customer confirmation",
       "kind": "tech_working",
-      "created_at": "2026-06-13T10:46:00.855Z"
+      "created_at": "2026-06-13T13:30:18.569Z"
     },
     {
       "id": "cn_008j",
@@ -2647,7 +2936,7 @@
       "author_id": "usr_0002",
       "body": "FYI for the account — keep an eye on this before renewal talks.",
       "kind": "internal_sales",
-      "created_at": "2026-06-08T10:46:00.855Z"
+      "created_at": "2026-06-08T13:30:18.569Z"
     },
     {
       "id": "cn_008m",
@@ -2655,7 +2944,7 @@
       "author_id": "usr_0004",
       "body": "Reproduced on test device, gathering logs",
       "kind": "tech_working",
-      "created_at": "2026-06-06T10:46:00.855Z"
+      "created_at": "2026-06-06T13:30:18.569Z"
     },
     {
       "id": "cn_008p",
@@ -2663,7 +2952,7 @@
       "author_id": "usr_0004",
       "body": "Awaiting customer confirmation",
       "kind": "tech_working",
-      "created_at": "2026-06-10T10:46:00.855Z"
+      "created_at": "2026-06-10T13:30:18.569Z"
     },
     {
       "id": "cn_008s",
@@ -2671,7 +2960,7 @@
       "author_id": "usr_0005",
       "body": "Awaiting customer confirmation",
       "kind": "tech_working",
-      "created_at": "2026-06-11T10:46:00.855Z"
+      "created_at": "2026-06-11T13:30:18.569Z"
     },
     {
       "id": "cn_008t",
@@ -2679,7 +2968,7 @@
       "author_id": "usr_0001",
       "body": "FYI for the account — keep an eye on this before renewal talks.",
       "kind": "internal_sales",
-      "created_at": "2026-06-08T10:46:00.855Z"
+      "created_at": "2026-06-08T13:30:18.569Z"
     },
     {
       "id": "cn_008w",
@@ -2687,7 +2976,7 @@
       "author_id": "usr_0004",
       "body": "Workaround applied, monitoring",
       "kind": "tech_working",
-      "created_at": "2026-06-12T10:46:00.855Z"
+      "created_at": "2026-06-12T13:30:18.569Z"
     },
     {
       "id": "cn_008x",
@@ -2695,7 +2984,7 @@
       "author_id": "usr_0001",
       "body": "FYI for the account — keep an eye on this before renewal talks.",
       "kind": "internal_sales",
-      "created_at": "2026-06-12T10:46:00.855Z"
+      "created_at": "2026-06-12T13:30:18.569Z"
     },
     {
       "id": "cn_0090",
@@ -2703,7 +2992,7 @@
       "author_id": "usr_0004",
       "body": "Workaround applied, monitoring",
       "kind": "tech_working",
-      "created_at": "2026-06-05T10:46:00.855Z"
+      "created_at": "2026-06-05T13:30:18.569Z"
     },
     {
       "id": "cn_0093",
@@ -2711,7 +3000,7 @@
       "author_id": "usr_0004",
       "body": "Reproduced on test device, gathering logs",
       "kind": "tech_working",
-      "created_at": "2026-06-03T10:46:00.855Z"
+      "created_at": "2026-06-03T13:30:18.569Z"
     },
     {
       "id": "cn_0096",
@@ -2719,7 +3008,7 @@
       "author_id": "usr_0004",
       "body": "Awaiting customer confirmation",
       "kind": "tech_working",
-      "created_at": "2026-06-05T10:46:00.855Z"
+      "created_at": "2026-06-05T13:30:18.569Z"
     },
     {
       "id": "cn_0097",
@@ -2727,7 +3016,7 @@
       "author_id": "usr_0003",
       "body": "FYI for the account — keep an eye on this before renewal talks.",
       "kind": "internal_sales",
-      "created_at": "2026-06-11T10:46:00.855Z"
+      "created_at": "2026-06-11T13:30:18.569Z"
     },
     {
       "id": "cn_009a",
@@ -2735,7 +3024,7 @@
       "author_id": "usr_0004",
       "body": "Escalated to vendor, ticket #3407",
       "kind": "tech_working",
-      "created_at": "2026-06-13T10:46:00.855Z"
+      "created_at": "2026-06-13T13:30:18.569Z"
     },
     {
       "id": "cn_009b",
@@ -2743,7 +3032,7 @@
       "author_id": "usr_0003",
       "body": "FYI for the account — keep an eye on this before renewal talks.",
       "kind": "internal_sales",
-      "created_at": "2026-06-11T10:46:00.855Z"
+      "created_at": "2026-06-11T13:30:18.569Z"
     },
     {
       "id": "cn_009e",
@@ -2751,7 +3040,7 @@
       "author_id": "usr_0005",
       "body": "Awaiting customer confirmation",
       "kind": "tech_working",
-      "created_at": "2026-06-03T10:46:00.855Z"
+      "created_at": "2026-06-03T13:30:18.570Z"
     },
     {
       "id": "cn_009f",
@@ -2759,7 +3048,7 @@
       "author_id": "usr_0003",
       "body": "FYI for the account — keep an eye on this before renewal talks.",
       "kind": "internal_sales",
-      "created_at": "2026-06-06T10:46:00.855Z"
+      "created_at": "2026-06-06T13:30:18.570Z"
     },
     {
       "id": "cn_009i",
@@ -2767,7 +3056,7 @@
       "author_id": "usr_0005",
       "body": "Awaiting customer confirmation",
       "kind": "tech_working",
-      "created_at": "2026-06-09T10:46:00.855Z"
+      "created_at": "2026-06-09T13:30:18.570Z"
     },
     {
       "id": "cn_009j",
@@ -2775,7 +3064,7 @@
       "author_id": "usr_0003",
       "body": "FYI for the account — keep an eye on this before renewal talks.",
       "kind": "internal_sales",
-      "created_at": "2026-06-10T10:46:00.855Z"
+      "created_at": "2026-06-10T13:30:18.570Z"
     },
     {
       "id": "cn_009m",
@@ -2783,7 +3072,7 @@
       "author_id": "usr_0005",
       "body": "Reproduced on test device, gathering logs",
       "kind": "tech_working",
-      "created_at": "2026-06-09T10:46:00.855Z"
+      "created_at": "2026-06-09T13:30:18.570Z"
     },
     {
       "id": "cn_009p",
@@ -2791,7 +3080,7 @@
       "author_id": "usr_0004",
       "body": "Escalated to vendor, ticket #4066",
       "kind": "tech_working",
-      "created_at": "2026-06-13T10:46:00.855Z"
+      "created_at": "2026-06-13T13:30:18.570Z"
     },
     {
       "id": "cn_009s",
@@ -2799,7 +3088,7 @@
       "author_id": "usr_0004",
       "body": "Awaiting customer confirmation",
       "kind": "tech_working",
-      "created_at": "2026-06-03T10:46:00.855Z"
+      "created_at": "2026-06-03T13:30:18.570Z"
     },
     {
       "id": "cn_009t",
@@ -2807,7 +3096,7 @@
       "author_id": "usr_0003",
       "body": "FYI for the account — keep an eye on this before renewal talks.",
       "kind": "internal_sales",
-      "created_at": "2026-06-11T10:46:00.855Z"
+      "created_at": "2026-06-11T13:30:18.570Z"
     },
     {
       "id": "cn_009w",
@@ -2815,7 +3104,7 @@
       "author_id": "usr_0004",
       "body": "Reproduced on test device, gathering logs",
       "kind": "tech_working",
-      "created_at": "2026-06-05T10:46:00.855Z"
+      "created_at": "2026-06-05T13:30:18.570Z"
     },
     {
       "id": "cn_009x",
@@ -2823,7 +3112,7 @@
       "author_id": "usr_0002",
       "body": "FYI for the account — keep an eye on this before renewal talks.",
       "kind": "internal_sales",
-      "created_at": "2026-06-12T10:46:00.855Z"
+      "created_at": "2026-06-12T13:30:18.570Z"
     },
     {
       "id": "cn_00a0",
@@ -2831,7 +3120,7 @@
       "author_id": "usr_0005",
       "body": "Escalated to vendor, ticket #5163",
       "kind": "tech_working",
-      "created_at": "2026-06-05T10:46:00.855Z"
+      "created_at": "2026-06-05T13:30:18.570Z"
     },
     {
       "id": "cn_00a3",
@@ -2839,7 +3128,7 @@
       "author_id": "usr_0005",
       "body": "Escalated to vendor, ticket #5545",
       "kind": "tech_working",
-      "created_at": "2026-06-06T10:46:00.855Z"
+      "created_at": "2026-06-06T13:30:18.570Z"
     },
     {
       "id": "cn_00a6",
@@ -2847,7 +3136,7 @@
       "author_id": "usr_0004",
       "body": "Reproduced on test device, gathering logs",
       "kind": "tech_working",
-      "created_at": "2026-06-13T10:46:00.855Z"
+      "created_at": "2026-06-13T13:30:18.570Z"
     },
     {
       "id": "cn_00a7",
@@ -2855,7 +3144,7 @@
       "author_id": "usr_0001",
       "body": "FYI for the account — keep an eye on this before renewal talks.",
       "kind": "internal_sales",
-      "created_at": "2026-06-06T10:46:00.855Z"
+      "created_at": "2026-06-06T13:30:18.570Z"
     },
     {
       "id": "cn_00aa",
@@ -2863,7 +3152,47 @@
       "author_id": "usr_0004",
       "body": "Awaiting customer confirmation",
       "kind": "tech_working",
-      "created_at": "2026-06-05T10:46:00.855Z"
+      "created_at": "2026-06-05T13:30:18.570Z"
+    },
+    {
+      "id": "cn_00bb",
+      "case_id": "cas_00b9",
+      "author_id": "usr_0004",
+      "body": "Root cause: APNs token issued on wrong tenant during migration. Re-issued for Command-2; all 40 units re-enrolled.",
+      "kind": "tech_working",
+      "created_at": "2026-03-15T13:30:18.579Z"
+    },
+    {
+      "id": "cn_00bc",
+      "case_id": "cas_00b9",
+      "author_id": "usr_0001",
+      "body": "Resolved cleanly before the pilot review — good story for the contract conversation.",
+      "kind": "internal_sales",
+      "created_at": "2026-03-16T13:30:18.579Z"
+    },
+    {
+      "id": "cn_00bf",
+      "case_id": "cas_00bd",
+      "author_id": "usr_0004",
+      "body": "Escalated to 3rd-party SOC (ticket #7741). Devices quarantined; awaiting threat-intel confirmation. Vendor SLA 48h.",
+      "kind": "tech_working",
+      "created_at": "2026-06-12T13:30:18.580Z"
+    },
+    {
+      "id": "cn_00bg",
+      "case_id": "cas_00bd",
+      "author_id": "usr_0001",
+      "body": "Live account — keep this tight, renewal talks start next quarter.",
+      "kind": "internal_sales",
+      "created_at": "2026-06-12T13:30:18.580Z"
+    },
+    {
+      "id": "cn_00bj",
+      "case_id": "cas_00bh",
+      "author_id": "usr_0004",
+      "body": "Drafting geofencing profile; pending customer confirmation of zones.",
+      "kind": "tech_working",
+      "created_at": "2026-06-06T13:30:18.580Z"
     }
   ],
   "activities": [
@@ -2875,7 +3204,7 @@
       "type": "stage_change",
       "body": "Deal moved to interest",
       "actor_id": "usr_0002",
-      "created_at": "2026-05-25T10:46:00.854Z"
+      "created_at": "2026-05-25T13:30:18.569Z"
     },
     {
       "id": "act_002h",
@@ -2885,7 +3214,7 @@
       "type": "email",
       "body": "Pricing discussion",
       "actor_id": "usr_0002",
-      "created_at": "2026-04-22T10:46:00.854Z"
+      "created_at": "2026-04-22T13:30:18.569Z"
     },
     {
       "id": "act_002p",
@@ -2895,7 +3224,7 @@
       "type": "stage_change",
       "body": "Deal moved to contract_negotiation",
       "actor_id": "usr_0003",
-      "created_at": "2026-05-26T10:46:00.854Z"
+      "created_at": "2026-05-26T13:30:18.569Z"
     },
     {
       "id": "act_002q",
@@ -2905,7 +3234,7 @@
       "type": "meeting",
       "body": "Pricing discussion",
       "actor_id": "usr_0003",
-      "created_at": "2026-05-31T10:46:00.854Z"
+      "created_at": "2026-05-31T13:30:18.569Z"
     },
     {
       "id": "act_002y",
@@ -2915,7 +3244,7 @@
       "type": "stage_change",
       "body": "Deal moved to rfi",
       "actor_id": "usr_0003",
-      "created_at": "2026-05-23T10:46:00.854Z"
+      "created_at": "2026-05-23T13:30:18.569Z"
     },
     {
       "id": "act_002z",
@@ -2925,7 +3254,7 @@
       "type": "email",
       "body": "Pricing discussion",
       "actor_id": "usr_0003",
-      "created_at": "2026-06-08T10:46:00.854Z"
+      "created_at": "2026-06-08T13:30:18.569Z"
     },
     {
       "id": "act_0038",
@@ -2935,7 +3264,7 @@
       "type": "stage_change",
       "body": "Deal moved to rfp",
       "actor_id": "usr_0003",
-      "created_at": "2026-05-19T10:46:00.854Z"
+      "created_at": "2026-05-19T13:30:18.569Z"
     },
     {
       "id": "act_0039",
@@ -2945,7 +3274,7 @@
       "type": "meeting",
       "body": "Intro call with procurement",
       "actor_id": "usr_0003",
-      "created_at": "2026-04-16T10:46:00.854Z"
+      "created_at": "2026-04-16T13:30:18.569Z"
     },
     {
       "id": "act_003i",
@@ -2955,7 +3284,7 @@
       "type": "stage_change",
       "body": "Deal moved to rfp",
       "actor_id": "usr_0001",
-      "created_at": "2026-05-24T10:46:00.854Z"
+      "created_at": "2026-05-24T13:30:18.569Z"
     },
     {
       "id": "act_003j",
@@ -2965,7 +3294,7 @@
       "type": "meeting",
       "body": "Pricing discussion",
       "actor_id": "usr_0001",
-      "created_at": "2026-04-28T10:46:00.854Z"
+      "created_at": "2026-04-28T13:30:18.569Z"
     },
     {
       "id": "act_003r",
@@ -2975,7 +3304,7 @@
       "type": "stage_change",
       "body": "Deal moved to contract_negotiation",
       "actor_id": "usr_0001",
-      "created_at": "2026-06-09T10:46:00.854Z"
+      "created_at": "2026-06-09T13:30:18.569Z"
     },
     {
       "id": "act_003s",
@@ -2985,7 +3314,7 @@
       "type": "email",
       "body": "Sent RFI response",
       "actor_id": "usr_0001",
-      "created_at": "2026-05-20T10:46:00.854Z"
+      "created_at": "2026-05-20T13:30:18.569Z"
     },
     {
       "id": "act_003z",
@@ -2995,7 +3324,7 @@
       "type": "stage_change",
       "body": "Deal moved to rfp",
       "actor_id": "usr_0003",
-      "created_at": "2026-05-31T10:46:00.854Z"
+      "created_at": "2026-05-31T13:30:18.569Z"
     },
     {
       "id": "act_0040",
@@ -3005,7 +3334,7 @@
       "type": "email",
       "body": "Sent RFI response",
       "actor_id": "usr_0003",
-      "created_at": "2026-05-29T10:46:00.855Z"
+      "created_at": "2026-05-29T13:30:18.569Z"
     },
     {
       "id": "act_0048",
@@ -3015,7 +3344,7 @@
       "type": "stage_change",
       "body": "Deal moved to rfi",
       "actor_id": "usr_0003",
-      "created_at": "2026-05-17T10:46:00.855Z"
+      "created_at": "2026-05-17T13:30:18.569Z"
     },
     {
       "id": "act_0049",
@@ -3025,7 +3354,7 @@
       "type": "call",
       "body": "Intro call with procurement",
       "actor_id": "usr_0003",
-      "created_at": "2026-05-07T10:46:00.855Z"
+      "created_at": "2026-05-07T13:30:18.569Z"
     },
     {
       "id": "act_004h",
@@ -3035,7 +3364,7 @@
       "type": "stage_change",
       "body": "Deal moved to rfi",
       "actor_id": "usr_0003",
-      "created_at": "2026-06-08T10:46:00.855Z"
+      "created_at": "2026-06-08T13:30:18.569Z"
     },
     {
       "id": "act_004i",
@@ -3045,7 +3374,7 @@
       "type": "meeting",
       "body": "Pilot scoping workshop",
       "actor_id": "usr_0003",
-      "created_at": "2026-04-24T10:46:00.855Z"
+      "created_at": "2026-04-24T13:30:18.569Z"
     },
     {
       "id": "act_004r",
@@ -3055,7 +3384,7 @@
       "type": "stage_change",
       "body": "Deal moved to lost",
       "actor_id": "usr_0003",
-      "created_at": "2026-04-20T10:46:00.855Z"
+      "created_at": "2026-04-20T13:30:18.569Z"
     },
     {
       "id": "act_004s",
@@ -3065,7 +3394,7 @@
       "type": "meeting",
       "body": "Pilot scoping workshop",
       "actor_id": "usr_0003",
-      "created_at": "2026-04-14T10:46:00.855Z"
+      "created_at": "2026-04-14T13:30:18.569Z"
     },
     {
       "id": "act_0051",
@@ -3075,7 +3404,7 @@
       "type": "stage_change",
       "body": "Deal moved to customer_test",
       "actor_id": "usr_0001",
-      "created_at": "2026-05-22T10:46:00.855Z"
+      "created_at": "2026-05-22T13:30:18.569Z"
     },
     {
       "id": "act_0052",
@@ -3085,7 +3414,7 @@
       "type": "email",
       "body": "Intro call with procurement",
       "actor_id": "usr_0001",
-      "created_at": "2026-05-05T10:46:00.855Z"
+      "created_at": "2026-05-05T13:30:18.569Z"
     },
     {
       "id": "act_005b",
@@ -3095,7 +3424,7 @@
       "type": "stage_change",
       "body": "Deal moved to interest",
       "actor_id": "usr_0001",
-      "created_at": "2026-05-30T10:46:00.855Z"
+      "created_at": "2026-05-30T13:30:18.569Z"
     },
     {
       "id": "act_005c",
@@ -3105,7 +3434,7 @@
       "type": "call",
       "body": "Security architecture review",
       "actor_id": "usr_0001",
-      "created_at": "2026-05-10T10:46:00.855Z"
+      "created_at": "2026-05-10T13:30:18.569Z"
     },
     {
       "id": "act_005l",
@@ -3115,7 +3444,7 @@
       "type": "stage_change",
       "body": "Deal moved to rfi",
       "actor_id": "usr_0003",
-      "created_at": "2026-06-05T10:46:00.855Z"
+      "created_at": "2026-06-05T13:30:18.569Z"
     },
     {
       "id": "act_005m",
@@ -3125,7 +3454,7 @@
       "type": "call",
       "body": "Intro call with procurement",
       "actor_id": "usr_0003",
-      "created_at": "2026-05-24T10:46:00.855Z"
+      "created_at": "2026-05-24T13:30:18.569Z"
     },
     {
       "id": "act_005u",
@@ -3135,7 +3464,7 @@
       "type": "stage_change",
       "body": "Deal moved to customer_test",
       "actor_id": "usr_0003",
-      "created_at": "2026-06-05T10:46:00.855Z"
+      "created_at": "2026-06-05T13:30:18.569Z"
     },
     {
       "id": "act_005v",
@@ -3145,7 +3474,7 @@
       "type": "call",
       "body": "Security architecture review",
       "actor_id": "usr_0003",
-      "created_at": "2026-05-14T10:46:00.855Z"
+      "created_at": "2026-05-14T13:30:18.569Z"
     },
     {
       "id": "act_0064",
@@ -3155,7 +3484,7 @@
       "type": "stage_change",
       "body": "Deal moved to rfp",
       "actor_id": "usr_0002",
-      "created_at": "2026-05-29T10:46:00.855Z"
+      "created_at": "2026-05-29T13:30:18.569Z"
     },
     {
       "id": "act_0065",
@@ -3165,7 +3494,7 @@
       "type": "call",
       "body": "Sent RFI response",
       "actor_id": "usr_0002",
-      "created_at": "2026-05-26T10:46:00.855Z"
+      "created_at": "2026-05-26T13:30:18.569Z"
     },
     {
       "id": "act_006e",
@@ -3175,7 +3504,7 @@
       "type": "stage_change",
       "body": "Deal moved to customer_test",
       "actor_id": "usr_0001",
-      "created_at": "2026-05-17T10:46:00.855Z"
+      "created_at": "2026-05-17T13:30:18.569Z"
     },
     {
       "id": "act_006f",
@@ -3185,7 +3514,7 @@
       "type": "email",
       "body": "Sent RFI response",
       "actor_id": "usr_0001",
-      "created_at": "2026-04-27T10:46:00.855Z"
+      "created_at": "2026-04-27T13:30:18.569Z"
     },
     {
       "id": "act_006m",
@@ -3195,7 +3524,7 @@
       "type": "stage_change",
       "body": "Deal moved to rfi",
       "actor_id": "usr_0001",
-      "created_at": "2026-06-01T10:46:00.855Z"
+      "created_at": "2026-06-01T13:30:18.569Z"
     },
     {
       "id": "act_006n",
@@ -3205,7 +3534,7 @@
       "type": "call",
       "body": "Pricing discussion",
       "actor_id": "usr_0001",
-      "created_at": "2026-05-14T10:46:00.855Z"
+      "created_at": "2026-05-14T13:30:18.569Z"
     },
     {
       "id": "act_006v",
@@ -3215,7 +3544,7 @@
       "type": "stage_change",
       "body": "Deal moved to interest",
       "actor_id": "usr_0001",
-      "created_at": "2026-05-17T10:46:00.855Z"
+      "created_at": "2026-05-17T13:30:18.569Z"
     },
     {
       "id": "act_006w",
@@ -3225,7 +3554,7 @@
       "type": "email",
       "body": "Intro call with procurement",
       "actor_id": "usr_0001",
-      "created_at": "2026-05-27T10:46:00.855Z"
+      "created_at": "2026-05-27T13:30:18.569Z"
     },
     {
       "id": "act_0074",
@@ -3235,7 +3564,7 @@
       "type": "stage_change",
       "body": "Deal moved to rfi",
       "actor_id": "usr_0001",
-      "created_at": "2026-05-28T10:46:00.855Z"
+      "created_at": "2026-05-28T13:30:18.569Z"
     },
     {
       "id": "act_0075",
@@ -3245,7 +3574,7 @@
       "type": "meeting",
       "body": "Intro call with procurement",
       "actor_id": "usr_0001",
-      "created_at": "2026-05-31T10:46:00.855Z"
+      "created_at": "2026-05-31T13:30:18.569Z"
     },
     {
       "id": "act_007d",
@@ -3255,7 +3584,7 @@
       "type": "stage_change",
       "body": "Deal moved to customer_test",
       "actor_id": "usr_0002",
-      "created_at": "2026-05-31T10:46:00.855Z"
+      "created_at": "2026-05-31T13:30:18.569Z"
     },
     {
       "id": "act_007e",
@@ -3265,7 +3594,7 @@
       "type": "call",
       "body": "Pilot scoping workshop",
       "actor_id": "usr_0002",
-      "created_at": "2026-05-19T10:46:00.855Z"
+      "created_at": "2026-05-19T13:30:18.569Z"
     },
     {
       "id": "act_007j",
@@ -3275,7 +3604,7 @@
       "type": "offer",
       "body": "Offer v1 created (22% discount, pending_finance)",
       "actor_id": "usr_0003",
-      "created_at": "2026-05-25T10:46:00.855Z"
+      "created_at": "2026-05-25T13:30:18.569Z"
     },
     {
       "id": "act_007n",
@@ -3285,7 +3614,7 @@
       "type": "offer",
       "body": "Offer v1 created (0% discount, approved)",
       "actor_id": "usr_0003",
-      "created_at": "2026-05-22T10:46:00.855Z"
+      "created_at": "2026-05-22T13:30:18.569Z"
     },
     {
       "id": "act_007r",
@@ -3295,7 +3624,7 @@
       "type": "offer",
       "body": "Offer v1 created (0% discount, approved)",
       "actor_id": "usr_0001",
-      "created_at": "2026-06-06T10:46:00.855Z"
+      "created_at": "2026-06-06T13:30:18.569Z"
     },
     {
       "id": "act_007w",
@@ -3305,7 +3634,7 @@
       "type": "offer",
       "body": "Offer v1 created (5% discount, approved)",
       "actor_id": "usr_0001",
-      "created_at": "2026-05-12T10:46:00.855Z"
+      "created_at": "2026-05-12T13:30:18.569Z"
     },
     {
       "id": "act_0080",
@@ -3315,7 +3644,7 @@
       "type": "offer",
       "body": "Offer v1 created (0% discount, approved)",
       "actor_id": "usr_0003",
-      "created_at": "2026-05-04T10:46:00.855Z"
+      "created_at": "2026-05-04T13:30:18.569Z"
     },
     {
       "id": "act_0084",
@@ -3325,7 +3654,7 @@
       "type": "offer",
       "body": "Offer v1 created (0% discount, approved)",
       "actor_id": "usr_0001",
-      "created_at": "2026-05-19T10:46:00.855Z"
+      "created_at": "2026-05-19T13:30:18.569Z"
     },
     {
       "id": "act_0088",
@@ -3335,7 +3664,7 @@
       "type": "offer",
       "body": "Offer v1 created (0% discount, approved)",
       "actor_id": "usr_0003",
-      "created_at": "2026-06-08T10:46:00.855Z"
+      "created_at": "2026-06-08T13:30:18.569Z"
     },
     {
       "id": "act_008c",
@@ -3345,7 +3674,7 @@
       "type": "offer",
       "body": "Offer v1 created (0% discount, approved)",
       "actor_id": "usr_0002",
-      "created_at": "2026-06-04T10:46:00.855Z"
+      "created_at": "2026-06-04T13:30:18.569Z"
     },
     {
       "id": "act_008g",
@@ -3355,7 +3684,7 @@
       "type": "system",
       "body": "Case opened: Threat intel feed latency",
       "actor_id": "usr_0004",
-      "created_at": "2026-06-10T10:46:00.855Z"
+      "created_at": "2026-06-10T13:30:18.569Z"
     },
     {
       "id": "act_008k",
@@ -3365,7 +3694,7 @@
       "type": "system",
       "body": "Case opened: OS update bricked 3 devices",
       "actor_id": "usr_0004",
-      "created_at": "2026-06-10T10:46:00.855Z"
+      "created_at": "2026-06-10T13:30:18.569Z"
     },
     {
       "id": "act_008n",
@@ -3375,7 +3704,7 @@
       "type": "system",
       "body": "Case opened: SOC escalation — suspicious traffic",
       "actor_id": "usr_0004",
-      "created_at": "2026-06-12T10:46:00.855Z"
+      "created_at": "2026-06-12T13:30:18.569Z"
     },
     {
       "id": "act_008q",
@@ -3385,7 +3714,7 @@
       "type": "system",
       "body": "Case opened: Bulk provisioning slow",
       "actor_id": "usr_0004",
-      "created_at": "2026-05-17T10:46:00.855Z"
+      "created_at": "2026-05-17T13:30:18.569Z"
     },
     {
       "id": "act_008u",
@@ -3395,7 +3724,7 @@
       "type": "system",
       "body": "Case opened: Threat intel feed latency",
       "actor_id": "usr_0005",
-      "created_at": "2026-06-04T10:46:00.855Z"
+      "created_at": "2026-06-04T13:30:18.569Z"
     },
     {
       "id": "act_008y",
@@ -3405,7 +3734,7 @@
       "type": "system",
       "body": "Case opened: Request: add geofencing policy",
       "actor_id": "usr_0004",
-      "created_at": "2026-06-07T10:46:00.855Z"
+      "created_at": "2026-06-07T13:30:18.569Z"
     },
     {
       "id": "act_0091",
@@ -3415,7 +3744,7 @@
       "type": "system",
       "body": "Case opened: Request: add geofencing policy",
       "actor_id": "usr_0004",
-      "created_at": "2026-05-24T10:46:00.855Z"
+      "created_at": "2026-05-24T13:30:18.569Z"
     },
     {
       "id": "act_0094",
@@ -3425,7 +3754,7 @@
       "type": "system",
       "body": "Case opened: Threat intel feed latency",
       "actor_id": "usr_0004",
-      "created_at": "2026-06-07T10:46:00.855Z"
+      "created_at": "2026-06-07T13:30:18.569Z"
     },
     {
       "id": "act_0098",
@@ -3435,7 +3764,7 @@
       "type": "system",
       "body": "Case opened: MDM enrolment failing on S30 batch",
       "actor_id": "usr_0004",
-      "created_at": "2026-05-10T10:46:00.855Z"
+      "created_at": "2026-05-10T13:30:18.569Z"
     },
     {
       "id": "act_009c",
@@ -3445,7 +3774,7 @@
       "type": "system",
       "body": "Case opened: Tamper alert false positives",
       "actor_id": "usr_0004",
-      "created_at": "2026-05-21T10:46:00.855Z"
+      "created_at": "2026-05-21T13:30:18.569Z"
     },
     {
       "id": "act_009g",
@@ -3455,7 +3784,7 @@
       "type": "system",
       "body": "Case opened: MDM enrolment failing on S30 batch",
       "actor_id": "usr_0005",
-      "created_at": "2026-05-25T10:46:00.855Z"
+      "created_at": "2026-05-25T13:30:18.570Z"
     },
     {
       "id": "act_009k",
@@ -3465,7 +3794,7 @@
       "type": "system",
       "body": "Case opened: OS update bricked 3 devices",
       "actor_id": "usr_0005",
-      "created_at": "2026-05-22T10:46:00.855Z"
+      "created_at": "2026-05-22T13:30:18.570Z"
     },
     {
       "id": "act_009n",
@@ -3475,7 +3804,7 @@
       "type": "system",
       "body": "Case opened: SOC escalation — suspicious traffic",
       "actor_id": "usr_0005",
-      "created_at": "2026-06-01T10:46:00.855Z"
+      "created_at": "2026-06-01T13:30:18.570Z"
     },
     {
       "id": "act_009q",
@@ -3485,7 +3814,7 @@
       "type": "system",
       "body": "Case opened: Tamper alert false positives",
       "actor_id": "usr_0004",
-      "created_at": "2026-05-10T10:46:00.855Z"
+      "created_at": "2026-05-10T13:30:18.570Z"
     },
     {
       "id": "act_009u",
@@ -3495,7 +3824,7 @@
       "type": "system",
       "body": "Case opened: SOC escalation — suspicious traffic",
       "actor_id": "usr_0004",
-      "created_at": "2026-05-11T10:46:00.855Z"
+      "created_at": "2026-05-11T13:30:18.570Z"
     },
     {
       "id": "act_009y",
@@ -3505,7 +3834,7 @@
       "type": "system",
       "body": "Case opened: Request: add geofencing policy",
       "actor_id": "usr_0004",
-      "created_at": "2026-05-30T10:46:00.855Z"
+      "created_at": "2026-05-30T13:30:18.570Z"
     },
     {
       "id": "act_00a1",
@@ -3515,7 +3844,7 @@
       "type": "system",
       "body": "Case opened: Tamper alert false positives",
       "actor_id": "usr_0005",
-      "created_at": "2026-05-30T10:46:00.855Z"
+      "created_at": "2026-05-30T13:30:18.570Z"
     },
     {
       "id": "act_00a4",
@@ -3525,7 +3854,7 @@
       "type": "system",
       "body": "Case opened: MDM enrolment failing on S30 batch",
       "actor_id": "usr_0005",
-      "created_at": "2026-05-07T10:46:00.855Z"
+      "created_at": "2026-05-07T13:30:18.570Z"
     },
     {
       "id": "act_00a8",
@@ -3535,7 +3864,7 @@
       "type": "system",
       "body": "Case opened: SOC escalation — suspicious traffic",
       "actor_id": "usr_0004",
-      "created_at": "2026-05-11T10:46:00.855Z"
+      "created_at": "2026-05-11T13:30:18.570Z"
     },
     {
       "id": "act_00ab",
@@ -3545,7 +3874,257 @@
       "type": "system",
       "body": "Case opened: Threat intel feed latency",
       "actor_id": "usr_0004",
-      "created_at": "2026-05-30T10:46:00.855Z"
+      "created_at": "2026-05-30T13:30:18.570Z"
+    },
+    {
+      "id": "act_00aq",
+      "account_id": "acc_00ae",
+      "deal_id": "deal_00ah",
+      "case_id": null,
+      "type": "note",
+      "body": "Inbound interest via federal procurement portal — secure handset replacement programme across 3 commands.",
+      "actor_id": "usr_0001",
+      "created_at": "2025-10-11T13:30:18.570Z"
+    },
+    {
+      "id": "act_00ar",
+      "account_id": "acc_00ae",
+      "deal_id": "deal_00ah",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to interest",
+      "actor_id": "usr_0001",
+      "created_at": "2025-10-12T13:30:18.570Z"
+    },
+    {
+      "id": "act_00as",
+      "account_id": "acc_00ae",
+      "deal_id": "deal_00ah",
+      "case_id": null,
+      "type": "call",
+      "body": "Qualification call with CISO Klara Müller — driver is post-incident hardening + EU data residency.",
+      "actor_id": "usr_0001",
+      "created_at": "2025-10-24T13:30:18.570Z"
+    },
+    {
+      "id": "act_00at",
+      "account_id": "acc_00ae",
+      "deal_id": "deal_00ah",
+      "case_id": null,
+      "type": "email",
+      "body": "Sent RFI response covering Secure OS, MDM, SOC escalation and compliance attestations.",
+      "actor_id": "usr_0001",
+      "created_at": "2025-11-15T13:30:18.570Z"
+    },
+    {
+      "id": "act_00au",
+      "account_id": "acc_00ae",
+      "deal_id": "deal_00ah",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to rfi",
+      "actor_id": "usr_0001",
+      "created_at": "2025-11-19T13:30:18.570Z"
+    },
+    {
+      "id": "act_00av",
+      "account_id": "acc_00ae",
+      "deal_id": "deal_00ah",
+      "case_id": null,
+      "type": "meeting",
+      "body": "RFP scoping workshop with procurement + IT security. Scoped 2,000-unit pilot then ramp.",
+      "actor_id": "usr_0001",
+      "created_at": "2025-12-17T13:30:18.570Z"
+    },
+    {
+      "id": "act_00aw",
+      "account_id": "acc_00ae",
+      "deal_id": "deal_00ah",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to rfp",
+      "actor_id": "usr_0001",
+      "created_at": "2025-12-30T13:30:18.570Z"
+    },
+    {
+      "id": "act_00ax",
+      "account_id": "acc_00ae",
+      "deal_id": "deal_00ah",
+      "case_id": null,
+      "type": "meeting",
+      "body": "Pilot kickoff — 2,000 S30 units provisioned for Command-1.",
+      "actor_id": "usr_0004",
+      "created_at": "2026-02-13T13:30:18.570Z"
+    },
+    {
+      "id": "act_00ay",
+      "account_id": "acc_00ae",
+      "deal_id": "deal_00ah",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to customer_test",
+      "actor_id": "usr_0001",
+      "created_at": "2026-02-21T13:30:18.570Z"
+    },
+    {
+      "id": "act_00az",
+      "account_id": "acc_00ae",
+      "deal_id": "deal_00ah",
+      "case_id": null,
+      "type": "meeting",
+      "body": "Commercial terms + 3-yr pricing review with Sales Manager and Finance.",
+      "actor_id": "usr_0001",
+      "created_at": "2026-04-16T13:30:18.570Z"
+    },
+    {
+      "id": "act_00b0",
+      "account_id": "acc_00ae",
+      "deal_id": "deal_00ah",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to contract_negotiation",
+      "actor_id": "usr_0001",
+      "created_at": "2026-04-28T13:30:18.570Z"
+    },
+    {
+      "id": "act_00b1",
+      "account_id": "acc_00ae",
+      "deal_id": "deal_00ah",
+      "case_id": null,
+      "type": "meeting",
+      "body": "Final terms agreed; framework signed for 8,000 units over 3 years.",
+      "actor_id": "usr_0001",
+      "created_at": "2026-05-30T13:30:18.570Z"
+    },
+    {
+      "id": "act_00b2",
+      "account_id": "acc_00ae",
+      "deal_id": "deal_00ah",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to won",
+      "actor_id": "usr_0001",
+      "created_at": "2026-06-07T13:30:18.570Z"
+    },
+    {
+      "id": "act_00b8",
+      "account_id": "acc_00ae",
+      "deal_id": "deal_00ah",
+      "case_id": null,
+      "type": "offer",
+      "body": "Offer v2 approved (12% discount) — €1,444,960",
+      "actor_id": "usr_0001",
+      "created_at": "2026-01-14T13:30:18.579Z"
+    },
+    {
+      "id": "act_00ba",
+      "account_id": "acc_00ae",
+      "deal_id": null,
+      "case_id": "cas_00b9",
+      "type": "system",
+      "body": "Case opened: MDM enrolment failing on S30 batch (Command-2)",
+      "actor_id": "usr_0004",
+      "created_at": "2026-03-10T13:30:18.579Z"
+    },
+    {
+      "id": "act_00be",
+      "account_id": "acc_00ae",
+      "deal_id": null,
+      "case_id": "cas_00bd",
+      "type": "system",
+      "body": "Case opened: SOC escalation — anomalous traffic from 6 devices",
+      "actor_id": "usr_0004",
+      "created_at": "2026-06-11T13:30:18.580Z"
+    },
+    {
+      "id": "act_00bi",
+      "account_id": "acc_00ae",
+      "deal_id": null,
+      "case_id": "cas_00bh",
+      "type": "system",
+      "body": "Case opened: Request: add geofencing policy for border units",
+      "actor_id": "usr_0004",
+      "created_at": "2026-06-04T13:30:18.580Z"
+    },
+    {
+      "id": "act_00bu",
+      "account_id": "acc_00bl",
+      "deal_id": "deal_00bn",
+      "case_id": null,
+      "type": "note",
+      "body": "Reseller Atea registered the opportunity — field-ops fleet refresh.",
+      "actor_id": "usr_0002",
+      "created_at": "2026-01-16T13:30:18.580Z"
+    },
+    {
+      "id": "act_00bv",
+      "account_id": "acc_00bl",
+      "deal_id": "deal_00bn",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to interest",
+      "actor_id": "usr_0002",
+      "created_at": "2026-01-18T13:30:18.580Z"
+    },
+    {
+      "id": "act_00bw",
+      "account_id": "acc_00bl",
+      "deal_id": "deal_00bn",
+      "case_id": null,
+      "type": "email",
+      "body": "RFI answered via Atea; HMD provided security architecture pack.",
+      "actor_id": "usr_0002",
+      "created_at": "2026-02-13T13:30:18.580Z"
+    },
+    {
+      "id": "act_00bx",
+      "account_id": "acc_00bl",
+      "deal_id": "deal_00bn",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to rfi",
+      "actor_id": "usr_0002",
+      "created_at": "2026-02-17T13:30:18.580Z"
+    },
+    {
+      "id": "act_00by",
+      "account_id": "acc_00bl",
+      "deal_id": "deal_00bn",
+      "case_id": null,
+      "type": "meeting",
+      "body": "Offer presented through Atea; reseller margin agreed.",
+      "actor_id": "usr_0002",
+      "created_at": "2026-04-04T13:30:18.580Z"
+    },
+    {
+      "id": "act_00bz",
+      "account_id": "acc_00bl",
+      "deal_id": "deal_00bn",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to rfp",
+      "actor_id": "usr_0002",
+      "created_at": "2026-04-10T13:30:18.580Z"
+    },
+    {
+      "id": "act_00c0",
+      "account_id": "acc_00bl",
+      "deal_id": "deal_00bn",
+      "case_id": null,
+      "type": "meeting",
+      "body": "Customer test underway — 300-unit pilot with field units.",
+      "actor_id": "usr_0002",
+      "created_at": "2026-05-24T13:30:18.580Z"
+    },
+    {
+      "id": "act_00c1",
+      "account_id": "acc_00bl",
+      "deal_id": "deal_00bn",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to customer_test",
+      "actor_id": "usr_0002",
+      "created_at": "2026-06-01T13:30:18.580Z"
     }
   ],
   "notifications": [
@@ -3557,7 +4136,7 @@
       "link_kind": "offer",
       "link_id": "off_007f",
       "read": false,
-      "created_at": "2026-06-07T10:46:00.855Z"
+      "created_at": "2026-06-07T13:30:18.569Z"
     },
     {
       "id": "ntf_00ad",
@@ -3567,7 +4146,17 @@
       "link_kind": "case",
       "link_id": "cas_008r",
       "read": false,
-      "created_at": "2026-06-13T10:46:00.855Z"
+      "created_at": "2026-06-13T13:30:18.570Z"
+    },
+    {
+      "id": "ntf_00bk",
+      "user_id": "usr_0004",
+      "type": "sla_warning",
+      "body": "Urgent case approaching SLA: SOC escalation — anomalous traffic from 6 devices",
+      "link_kind": "case",
+      "link_id": "cas_00bd",
+      "read": false,
+      "created_at": "2026-06-13T13:30:18.580Z"
     }
   ]
 }
