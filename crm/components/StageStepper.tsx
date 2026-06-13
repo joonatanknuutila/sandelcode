@@ -39,7 +39,7 @@ export function StageStepper({
             key={s}
             className={`rounded-full px-3 py-1 text-xs font-medium ${
               current
-                ? "bg-hmd-teal-600 text-white"
+                ? "bg-hmd-teal text-hmd-teal-700"
                 : done
                   ? "bg-hmd-teal/20 text-foreground"
                   : "bg-background text-muted"
@@ -50,7 +50,7 @@ export function StageStepper({
         );
       })}
       {lost && (
-        <div className="rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700">
+        <div className="rounded-full border border-red-400/35 bg-red-400/10 px-3 py-1 text-xs font-medium text-red-200">
           Lost
         </div>
       )}

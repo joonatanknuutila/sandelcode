@@ -192,16 +192,16 @@ export async function InboxScreen({
               <div className="flex-1 space-y-3 overflow-y-auto p-4">
                 {/* Approval request as a special message */}
                 {selected.pendingApproval && (
-                  <div className="rounded-xl border border-amber-300 bg-amber-50 p-3">
+                  <div className="rounded-lg border border-amber-400/35 bg-amber-400/10 p-3">
                     <div className="flex items-center justify-between gap-2">
-                      <p className="text-sm font-semibold text-amber-900">
+                      <p className="text-sm font-semibold text-amber-100">
                         Discount approval — v{selected.pendingApproval.version}
                       </p>
                       <Badge tone="amber">
                         {selected.pendingApproval.discountPct}% off
                       </Badge>
                     </div>
-                    <p className="mt-1 text-xs text-amber-900/80">
+                    <p className="mt-1 text-xs text-amber-100/75">
                       Offer total {eur(selected.pendingApproval.total)}.
                       {selected.pendingApproval.justification
                         ? ` Justification: ${selected.pendingApproval.justification}`

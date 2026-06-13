@@ -36,8 +36,6 @@ import type {
   ContextType,
   Deal,
   InboxMessage,
-  OfferLine,
-  OfferStatus,
   Role,
   Stage,
 } from "@/lib/types";

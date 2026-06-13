@@ -8,8 +8,8 @@ import { SlaInfo, SlaState } from "@/lib/tam";
 const PRIORITY_TONE: Record<CasePriority, string> = {
   urgent: "bg-danger/10 text-danger ring-1 ring-danger/30",
   high: "bg-warning/10 text-warning ring-1 ring-warning/30",
-  medium: "bg-slate-100 text-slate-700",
-  low: "bg-slate-100 text-slate-500",
+  medium: "border border-border bg-background text-muted",
+  low: "border border-border bg-background text-muted",
 };
 
 export function PriorityBadge({ priority }: { priority: CasePriority }) {
@@ -21,10 +21,10 @@ export function PriorityBadge({ priority }: { priority: CasePriority }) {
 }
 
 const STATUS_TONE: Record<CaseStatus, string> = {
-  open: "bg-slate-100 text-slate-700",
-  in_progress: "bg-sky-100 text-sky-700",
-  escalated: "bg-amber-100 text-amber-800",
-  resolved: "bg-green-100 text-green-700",
+  open: "border border-border bg-background text-muted",
+  in_progress: "border border-sky-400/30 bg-sky-400/10 text-sky-200",
+  escalated: "border border-amber-400/35 bg-amber-400/10 text-amber-200",
+  resolved: "border border-green-400/35 bg-green-400/10 text-green-200",
 };
 
 const STATUS_LABEL: Record<CaseStatus, string> = {
@@ -45,9 +45,9 @@ export function CaseStatusBadge({ status }: { status: CaseStatus }) {
 const SLA_TONE: Record<SlaState, string> = {
   breach: "bg-danger/10 text-danger ring-1 ring-danger/30",
   soon: "bg-warning/10 text-warning ring-1 ring-warning/30",
-  ok: "bg-slate-100 text-slate-600",
-  none: "bg-slate-100 text-slate-400",
-  met: "bg-green-100 text-green-700",
+  ok: "border border-border bg-background text-muted",
+  none: "border border-border bg-background text-muted",
+  met: "border border-green-400/35 bg-green-400/10 text-green-200",
 };
 
 export function SlaBadge({ sla }: { sla: SlaInfo }) {
@@ -64,7 +64,7 @@ export function SlaBadge({ sla }: { sla: SlaInfo }) {
 export function ThirdPartyFlag({ case: c }: { case: Case }) {
   if (!c.escalatedToThirdParty) return null;
   return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-800">
+    <span className="inline-flex items-center gap-1 rounded-full border border-amber-400/35 bg-amber-400/10 px-2.5 py-0.5 text-xs font-medium text-amber-200">
       ↗ 3rd-party
     </span>
   );

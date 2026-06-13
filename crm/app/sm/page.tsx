@@ -304,11 +304,11 @@ export default async function SalesManagerView({
                     return (
                       <div
                         key={d.id}
-                        className={`rounded-lg border p-2.5 ${
-                          stalled
-                            ? "border-amber-300 bg-amber-50"
-                            : "border-border"
-                        }`}
+                          className={`rounded-lg border p-2.5 ${
+                            stalled
+                              ? "border-amber-400/45 bg-amber-400/10"
+                              : "border-border"
+                          }`}
                       >
                         <p className="line-clamp-2 text-xs font-medium leading-snug">
                           {account?.name}

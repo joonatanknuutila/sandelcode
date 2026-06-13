@@ -57,7 +57,7 @@ export function AddNote({ caseId }: AddNoteProps) {
           aria-checked={!isInternal}
           onClick={() => setIsInternal((v) => !v)}
           className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus:outline-none focus:ring-2 focus:ring-hmd-teal focus:ring-offset-2 ${
-            isInternal ? "bg-border" : "bg-hmd-teal-600"
+            isInternal ? "bg-border" : "bg-hmd-teal"
           }`}
         >
           <span

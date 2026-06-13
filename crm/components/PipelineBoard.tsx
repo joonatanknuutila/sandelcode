@@ -123,7 +123,7 @@ export function PipelineBoard({
                   <div
                     className={`rounded-lg border p-2.5 ${
                       d.stalled
-                        ? "border-amber-300 bg-amber-50"
+                        ? "border-amber-400/45 bg-amber-400/10"
                         : "border-border bg-surface"
                     } ${capabilities.canDrag ? "cursor-grab active:cursor-grabbing" : ""} ${
                       dragId === d.id ? "opacity-50" : ""

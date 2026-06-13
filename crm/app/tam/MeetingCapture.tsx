@@ -122,7 +122,7 @@ export function MeetingCapture({ accountId }: { accountId: string }) {
       </div>
 
       {saved && (
-        <p className="mt-3 rounded-md bg-green-50 px-3 py-2 text-sm text-green-700">
+        <p className="mt-3 rounded-md border border-green-400/35 bg-green-400/10 px-3 py-2 text-sm text-green-200">
           Saved {saved.count} approved change{saved.count === 1 ? "" : "s"} to the account timeline.
         </p>
       )}
@@ -139,7 +139,7 @@ export function MeetingCapture({ accountId }: { accountId: string }) {
           <button
             onClick={makeDraft}
             disabled={busy || !transcript.trim()}
-            className="mt-2 rounded-lg bg-hmd-teal-600 px-3.5 py-2 text-sm font-medium text-white hover:bg-hmd-teal-700 disabled:opacity-40"
+            className="mt-2 rounded-md bg-hmd-teal px-3.5 py-2 text-sm font-medium text-hmd-teal-700 hover:bg-hmd-teal/90 disabled:opacity-40"
           >
             {busy ? "Drafting…" : "Draft update"}
           </button>
@@ -148,7 +148,7 @@ export function MeetingCapture({ accountId }: { accountId: string }) {
 
       {draft && (
         <div className="mt-3 space-y-4">
-          <p className="rounded-md bg-amber-50 px-3 py-2 text-xs font-medium text-amber-800">
+          <p className="rounded-md border border-amber-400/35 bg-amber-400/10 px-3 py-2 text-xs font-medium text-amber-200">
             Draft only — nothing is saved until you approve.
             {draft.modelUsed === false && <span className="ml-1 font-normal">(model offline — heuristic draft)</span>}
           </p>
@@ -167,7 +167,7 @@ export function MeetingCapture({ accountId }: { accountId: string }) {
                     className="mt-1"
                   />
                   <div className="min-w-0 flex-1">
-                    <span className="inline-block rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-600">
+                    <span className="inline-block rounded-full border border-border bg-background px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted">
                       {TYPE_LABEL[c.type] ?? c.type}
                     </span>
                     <input
@@ -204,7 +204,7 @@ export function MeetingCapture({ accountId }: { accountId: string }) {
             <button
               onClick={approveAndSave}
               disabled={busy || keep.every((v) => !v)}
-              className="rounded-lg bg-hmd-teal-600 px-3.5 py-2 text-sm font-medium text-white hover:bg-hmd-teal-700 disabled:opacity-40"
+              className="rounded-md bg-hmd-teal px-3.5 py-2 text-sm font-medium text-hmd-teal-700 hover:bg-hmd-teal/90 disabled:opacity-40"
             >
               {busy ? "Saving…" : `Approve & save (${keep.filter(Boolean).length})`}
             </button>

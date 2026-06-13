@@ -134,7 +134,6 @@ const offers = [], offer_lines = [], approvals = [];
 for (const deal of deals.filter((d) => ['rfp', 'customer_test', 'contract_negotiation', 'won'].includes(d.stage)).slice(0, 8)) {
   const id = uid('off');
   const discount = pick([0, 0, 5, 10, 15, 22]);
-  const acc = accounts.find((a) => a.id === deal.account_id);
   const status = discount === 0 ? 'approved' : discount > 20 ? 'pending_finance' : pick(['pending_sm', 'approved', 'rejected']);
   const dev = devices.find((p) => deal.name.startsWith(p.name));
   const qty = int(150, 1200);

@@ -13,8 +13,8 @@ import { MeetingCapture } from "../MeetingCapture";
 // everything degrades to grounded fallbacks and is labelled honestly.
 
 const BAND_TONE: Record<ConfidenceBand, string> = {
-  high: "bg-green-100 text-green-700",
-  medium: "bg-amber-100 text-amber-800",
+  high: "border border-green-400/35 bg-green-400/10 text-green-200",
+  medium: "border border-amber-400/35 bg-amber-400/10 text-amber-200",
   low: "bg-danger/10 text-danger ring-1 ring-danger/30",
 };
 

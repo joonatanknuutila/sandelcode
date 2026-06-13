@@ -121,7 +121,7 @@ export function Assistant({
         <button
           type="submit"
           disabled={busy || !input.trim()}
-          className="rounded-lg bg-hmd-teal-600 px-3.5 py-2 text-sm font-medium text-white hover:bg-hmd-teal-700 disabled:opacity-40"
+          className="rounded-md bg-hmd-teal px-3.5 py-2 text-sm font-medium text-hmd-teal-700 hover:bg-hmd-teal/90 disabled:opacity-40"
         >
           Ask
         </button>

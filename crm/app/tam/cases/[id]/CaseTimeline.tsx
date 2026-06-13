@@ -103,9 +103,9 @@ export function CaseTimeline({
             const internal = n.visibility === "internal";
             return (
               <li key={n.id} className="relative">
-                <span className={`absolute -left-[1.45rem] top-1 h-2.5 w-2.5 rounded-full ${internal ? "bg-slate-400" : "bg-hmd-teal-600"} ring-2 ring-surface`} />
+                <span className={`absolute -left-[1.45rem] top-1 h-2.5 w-2.5 rounded-full ${internal ? "bg-muted" : "bg-hmd-teal"} ring-2 ring-surface`} />
                 <div className="flex items-center justify-between">
-                  <span className={`inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${internal ? "bg-slate-100 text-slate-600" : "bg-hmd-teal/30 text-hmd-charcoal"}`}>
+                  <span className={`inline-block rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${internal ? "border-border bg-background text-muted" : "border-hmd-teal/30 bg-hmd-teal/10 text-foreground"}`}>
                     {internal ? "Internal note" : "Working note"}
                   </span>
                   <p className="text-xs text-muted">{new Date(n.createdAt).toLocaleString("en-IE", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}</p>

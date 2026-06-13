@@ -15,3 +15,4 @@ node_modules/
 # logs & OS
 *.log
 .DS_Store
+.vercel

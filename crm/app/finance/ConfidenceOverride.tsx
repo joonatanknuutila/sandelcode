@@ -185,7 +185,7 @@ export function ConfidenceOverride({ deals }: { deals: DealConfidenceVM[] }) {
                 onClick={() =>
                   draftNum != null && save(d, draftNum, reasonStr)
                 }
-                className="rounded-lg bg-hmd-teal-600 px-3.5 py-2 text-sm font-medium text-white transition-colors hover:bg-hmd-teal-700 disabled:cursor-not-allowed disabled:opacity-40"
+                className="rounded-md bg-hmd-teal px-3.5 py-2 text-sm font-medium text-hmd-teal-700 transition-colors hover:bg-hmd-teal/90 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 {isBusy ? "Saving…" : hasStored ? "Update override" : "Save override"}
               </button>
