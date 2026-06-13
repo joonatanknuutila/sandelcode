@@ -127,7 +127,8 @@ Notion access: the integration token (in `.env` as `NOTION_TOKEN`) is shared on 
 
 **Open / decisions pending**
 - **Auto-merge**: blocked on two GitHub limits — (a) branch protection / required checks is paywalled on free *private* repos; (b) an Actions-based workaround needs the repo's **Workflow permissions → "Read and write" + "Allow Actions to create/approve PRs"** toggle (Settings → Actions → General). If that toggle is flipped, add auto-open-PR + auto-merge-on-green workflows. Until then: **merge is manual** (PR + click; CI shows green/red).
-- **Branch history**: `person/*` had *unrelated histories* to `main` (a session re-initialized). They were reset locally to `main`; sessions self-reconciled via `git pull`. A clean force-push of `person/*` to `main` was safety-gated (needs explicit auth) and turned out unnecessary.
+- **Branch history**: ✅ FIXED (2026-06-13). `person/*` previously had *unrelated histories* (a session re-initialized; arttu/nuutti carried a second root `03e9238`), which forced the `git checkout person/X -- path` cherry-pick workaround on merges. All four branches were re-rooted onto main's tip (`reset --hard main` in each clean worktree → `push --force-with-lease`). Every branch now shares the single root `9c6e24a`, so **`git merge person/X` works normally** — no more cherry-picking. Recovery tags `backup/person-<name>-20260613-161726` preserve the old tips.
+- **Merge model**: lanes (disjoint folders per person) keep merges conflict-free by construction; manual merge to main is intentional (no auto-merge needed this close to deadline). Branches were re-rooted (above) so standard merges work.
 - **Supabase schema**: `crm/SCHEMA.md` exists; applying it as real tables + loading `crm/seed/` data into Supabase is Arttu's lane (in progress).
 - **Azure**: brief mandates Azure (Entra ID, EU region) for the *final* product; we demo on Supabase and plan to migrate.
 
