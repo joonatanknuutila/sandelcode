@@ -34,6 +34,8 @@ export interface BoardDeal {
   confidence: number;
   stalled: boolean;
   idleDays: number;
+  /** Past expected close date — the other deal-risk condition. */
+  overdue?: boolean;
 }
 
 export interface RepOption {
@@ -171,6 +173,7 @@ export function PipelineBoard({
                       {d.stalled && (
                         <Badge tone="amber">{d.idleDays}d idle</Badge>
                       )}
+                      {d.overdue && <Badge tone="red">overdue</Badge>}
                     </div>
                     {capabilities.canReassign && reassignAction && (
                       <div className="mt-2">

@@ -4,6 +4,7 @@ import {
   getDealsForRep,
   getUsers,
   isStalled,
+  isOverdue,
 } from "@/lib/db";
 import { dealProbability } from "@/lib/types";
 import { relativeDays } from "@/lib/format";
@@ -34,6 +35,7 @@ export default async function RepPipelinePage() {
     stage: d.stage,
     confidence: Math.round(dealProbability(d) * 100),
     stalled: isStalled(d),
+    overdue: isOverdue(d),
     idleDays: relativeDays(d.updatedAt),
   }));
 

@@ -633,6 +633,20 @@ export function isStalled(deal: Deal): boolean {
   return days >= 14;
 }
 
+/** Open deal past its expected close date — "overdue". The second half of the
+ *  deal-risk signal (brief P1: "flags deals not updated 14+ days, past expected
+ *  close"); isStalled covers idle, this covers slipped close dates. */
+export function isOverdue(deal: Deal): boolean {
+  if (deal.stage === "won" || deal.stage === "lost") return false;
+  if (!deal.expectedCloseDate) return false;
+  return new Date(deal.expectedCloseDate).getTime() < Date.now();
+}
+
+/** Either deal-risk condition: idle 14+ days OR past expected close. */
+export function isAtRisk(deal: Deal): boolean {
+  return isStalled(deal) || isOverdue(deal);
+}
+
 export interface RepSummary {
   openDeals: number;
   totalTcv: number;

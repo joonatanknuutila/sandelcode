@@ -6,6 +6,7 @@ import {
   getNotifications,
   getRepSummary,
   isStalled,
+  isOverdue,
   weightedValue,
 } from "@/lib/db";
 import { STAGE_LABELS, STAGE_ORDER, Stage } from "@/lib/types";
@@ -132,6 +133,7 @@ export default async function RepDashboard() {
                               <Badge>reseller</Badge>
                             )}
                             {isStalled(d) && <Badge tone="amber">stalled</Badge>}
+                            {isOverdue(d) && <Badge tone="red">overdue</Badge>}
                           </div>
                         </div>
                       </Link>

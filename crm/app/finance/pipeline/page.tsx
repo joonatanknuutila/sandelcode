@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getAccounts, getAllDeals, getUsers, isStalled } from "@/lib/db";
+import { getAccounts, getAllDeals, getUsers, isStalled, isOverdue } from "@/lib/db";
 import { dealProbability } from "@/lib/types";
 import { relativeDays } from "@/lib/format";
 import { BoardDeal, PipelineBoard } from "@/components/PipelineBoard";
@@ -26,6 +26,7 @@ export default async function FinancePipelinePage() {
     stage: d.stage,
     confidence: Math.round(dealProbability(d) * 100),
     stalled: isStalled(d),
+    overdue: isOverdue(d),
     idleDays: relativeDays(d.updatedAt),
   }));
 
