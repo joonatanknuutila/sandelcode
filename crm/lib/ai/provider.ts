@@ -137,6 +137,19 @@ async function completeVertex(
           temperature: opts.temperature ?? 0.2,
           maxOutputTokens: opts.maxTokens ?? 700,
           ...(opts.json ? { responseMimeType: "application/json" } : {}),
+          // Gemini 2.5+ "thinks" by default, which eats the output budget (so a
+          // small maxOutputTokens can return NO text) and adds latency. These
+          // grounded CRM tasks don't need it — disable it (override with
+          // GOOGLE_VERTEX_THINKING_BUDGET). Omitted for non-thinking models.
+          ...(/gemini-(2\.5|3)/.test(model)
+            ? {
+                thinkingConfig: {
+                  thinkingBudget: Number(
+                    process.env.GOOGLE_VERTEX_THINKING_BUDGET ?? 0,
+                  ),
+                },
+              }
+            : {}),
         },
       }),
       // Don't let a slow model wedge a request.

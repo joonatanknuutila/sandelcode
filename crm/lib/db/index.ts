@@ -328,6 +328,11 @@ export async function getWonDeals(): Promise<Deal[]> {
   return (await getAllDeals()).filter((d) => d.stage === "won");
 }
 
+/** Lost deals — closed without a win (close-rate denominator). */
+export async function getLostDeals(): Promise<Deal[]> {
+  return (await getAllDeals()).filter((d) => d.stage === "lost");
+}
+
 // --- cases -----------------------------------------------------------------
 
 export async function getCasesForAccount(accountId: string): Promise<Case[]> {

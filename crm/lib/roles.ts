@@ -42,6 +42,7 @@ export const ROLES: Record<Role, RoleConfig> = {
     nav: [
       { label: "Dashboard", href: "/sm" },
       { label: "Team Board", href: "/sm/pipeline" },
+      { label: "Reports", href: "/sm/reports" },
       { label: "Accounts", href: "/sm/accounts" },
       { label: "Inbox", href: "/sm/inbox" },
     ],
@@ -53,6 +54,7 @@ export const ROLES: Record<Role, RoleConfig> = {
     nav: [
       { label: "Forecast", href: "/finance" },
       { label: "Pipeline", href: "/finance/pipeline" },
+      { label: "Reports", href: "/finance/reports" },
       { label: "Accounts", href: "/finance/accounts" },
       { label: "Catalog", href: "/finance/catalog" },
       { label: "Inbox", href: "/finance/inbox" },

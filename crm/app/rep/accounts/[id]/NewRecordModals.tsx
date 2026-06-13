@@ -3,7 +3,12 @@
 import { useState, useTransition } from "react";
 import { Modal, toast } from "@/components/ui-client";
 import { Button, Input, Select, Textarea } from "@/components/ui";
-import { createDealAction, createCaseAction } from "@/app/rep/account-actions";
+import {
+  createDealAction,
+  createCaseAction,
+  createContactAction,
+} from "@/app/rep/account-actions";
+import { EnrichmentPanel } from "./EnrichmentPanel";
 import type { User } from "@/lib/types";
 
 // ---------------------------------------------------------------------------
@@ -247,28 +252,145 @@ export function NewCaseModal({
 }
 
 // ---------------------------------------------------------------------------
+// New Contact modal
+// ---------------------------------------------------------------------------
+
+interface NewContactModalProps {
+  open: boolean;
+  onClose: () => void;
+  accountId: string;
+}
+
+export function NewContactModal({ open, onClose, accountId }: NewContactModalProps) {
+  const [pending, startTransition] = useTransition();
+  const [name, setName] = useState("");
+  const [jobTitle, setJobTitle] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [isPrimary, setIsPrimary] = useState(false);
+
+  function handleClose() {
+    setName("");
+    setJobTitle("");
+    setEmail("");
+    setPhone("");
+    setIsPrimary(false);
+    onClose();
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!name.trim()) return;
+    startTransition(async () => {
+      try {
+        await createContactAction({
+          accountId,
+          name: name.trim(),
+          jobTitle: jobTitle.trim() || undefined,
+          email: email.trim() || undefined,
+          phone: phone.trim() || undefined,
+          isPrimary,
+        });
+        toast("Contact added", { variant: "success" });
+        handleClose();
+      } catch (err) {
+        toast(err instanceof Error ? err.message : "Failed to add contact", {
+          variant: "error",
+        });
+      }
+    });
+  }
+
+  return (
+    <Modal open={open} onClose={handleClose} title="Add contact">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <Input
+          label="Full name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="e.g. Anna Virtanen"
+          required
+        />
+        <Input
+          label="Job title"
+          value={jobTitle}
+          onChange={(e) => setJobTitle(e.target.value)}
+          placeholder="e.g. Head of IT Security"
+        />
+        <Input
+          label="Email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <Input
+          label="Phone"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+        />
+        <label className="flex items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            checked={isPrimary}
+            onChange={(e) => setIsPrimary(e.target.checked)}
+          />
+          Primary decision-maker
+        </label>
+        <div className="flex justify-end gap-2 pt-2">
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={handleClose}
+            disabled={pending}
+          >
+            Cancel
+          </Button>
+          <Button type="submit" disabled={pending || !name.trim()}>
+            {pending ? "Adding…" : "Add contact"}
+          </Button>
+        </div>
+      </form>
+    </Modal>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Trigger bar — client shell that owns modal open state
 // ---------------------------------------------------------------------------
 
 interface AccountActionBarProps {
   accountId: string;
+  accountName: string;
   currentUserId: string;
   tamUsers: User[];
   defaultTamId?: string;
+  /** Defense / government account: enrichment is off until the rep opts in. */
+  sensitive: boolean;
 }
 
 export function AccountActionBar({
   accountId,
+  accountName,
   currentUserId,
   tamUsers,
   defaultTamId,
+  sensitive,
 }: AccountActionBarProps) {
   const [dealOpen, setDealOpen] = useState(false);
   const [caseOpen, setCaseOpen] = useState(false);
+  const [contactOpen, setContactOpen] = useState(false);
 
   return (
     <>
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
+        <EnrichmentPanel
+          accountId={accountId}
+          accountName={accountName}
+          sensitive={sensitive}
+        />
+        <Button variant="secondary" onClick={() => setContactOpen(true)}>
+          + Add contact
+        </Button>
         <Button variant="secondary" onClick={() => setCaseOpen(true)}>
           + Open service case
         </Button>
@@ -287,6 +409,11 @@ export function AccountActionBar({
         accountId={accountId}
         tamUsers={tamUsers}
         defaultTamId={defaultTamId}
+      />
+      <NewContactModal
+        open={contactOpen}
+        onClose={() => setContactOpen(false)}
+        accountId={accountId}
       />
     </>
   );

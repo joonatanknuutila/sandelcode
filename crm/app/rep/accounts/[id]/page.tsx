@@ -10,6 +10,7 @@ import {
   getUsers,
 } from "@/lib/db";
 import { AccountDetailView } from "@/components/AccountDetailView";
+import { isSensitiveIndustry } from "@/lib/ai/enrich";
 import { AccountActionBar } from "./NewRecordModals";
 
 // Account 360 — the rep's editable lens (quick actions in the action slot).
@@ -49,9 +50,11 @@ export default async function AccountDetail({
       actions={
         <AccountActionBar
           accountId={id}
+          accountName={account.name}
           currentUserId={currentUser?.id ?? ""}
           tamUsers={tamUsers}
           defaultTamId={account.tamId}
+          sensitive={isSensitiveIndustry(account.industry)}
         />
       }
     />

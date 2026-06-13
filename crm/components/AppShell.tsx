@@ -9,6 +9,7 @@ import { Logo } from "./Logo";
 import { useRole } from "./RoleProvider";
 import { ROLES, ROLE_ORDER } from "@/lib/roles";
 import { NotificationCenter } from "./NotificationCenter";
+import { SearchCommand } from "./SearchCommand";
 import type { AppNotification, Role } from "@/lib/types";
 
 function roleFromPath(pathname: string): Role | null {
@@ -99,6 +100,7 @@ export function AppShell({
                 ))}
               </select>
             </label>
+            <SearchCommand />
             <NotificationCenter notifications={notifications} />
             <div className="flex items-center gap-2">
               <span className="grid h-8 w-8 place-items-center rounded-full bg-hmd-teal text-xs font-semibold text-hmd-charcoal">
