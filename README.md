@@ -2,6 +2,12 @@
 
 Notion → local Claude session orchestrator for our 4-person team. This repo is **tooling**, not the product. The HMD CRM app lives in a separate repo (→ GitHub → Vercel + Supabase/Azure) built by the sessions this drives.
 
+## Docs
+
+- [`docs/challenge-brief.md`](docs/challenge-brief.md) — the HMD CRM brief (P0/P1/P2, personas, pipeline stages, constraints).
+- [`docs/meeting-notes-2026-06-13.md`](docs/meeting-notes-2026-06-13.md) — planning meeting + client-interview findings.
+- [`docs/SUPABASE.md`](docs/SUPABASE.md) — **Supabase project for the CRM demo** (`hmd-sales-hackathon`, ref `xwsmovmtfymiqvgjicfk`, eu-north-1). Creds in `.env`; MCP points here.
+
 ## How it works
 
 ```
