@@ -7,6 +7,7 @@ watcher/.state.json
 watcher/poll.log
 watcher/poll.out
 watcher/autopush.log
+watcher/integrator.log
 watcher/*.out
 people/*/prompt/*.md
 .DS_Store
