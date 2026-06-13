@@ -5,14 +5,27 @@ import {
   getCurrentUser,
   getDealsForAccount,
   weightedValue,
-} from "@/lib/api";
+} from "@/lib/db";
 import { eur } from "@/lib/format";
 import { Badge, Card, StageBadge } from "@/components/ui";
 
 // Sales Rep — "all my accounts + deal status at a glance".
-export default function AccountsPage() {
-  const user = getCurrentUser();
-  const accounts = getAccountsForRep(user.id);
+export default async function AccountsPage() {
+  const user = await getCurrentUser();
+  if (!user) return <p className="text-sm text-muted">No user signed in.</p>;
+  const accounts = await getAccountsForRep(user.id);
+  const cards = await Promise.all(
+    accounts.map(async (account) => {
+      const [deals, cases] = await Promise.all([
+        getDealsForAccount(account.id),
+        getCasesForAccount(account.id),
+      ]);
+      const openCases = cases.filter((c) => c.status !== "resolved");
+      const tcv = deals.reduce((s, d) => s + d.tcv, 0);
+      const weighted = deals.reduce((s, d) => s + weightedValue(d), 0);
+      return { account, deals, openCases, tcv, weighted };
+    }),
+  );
 
   return (
     <div className="mx-auto max-w-7xl space-y-6">
@@ -24,13 +37,7 @@ export default function AccountsPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
-        {accounts.map((account) => {
-          const deals = getDealsForAccount(account.id);
-          const openCases = getCasesForAccount(account.id).filter(
-            (c) => c.status !== "resolved",
-          );
-          const tcv = deals.reduce((s, d) => s + d.tcv, 0);
-          const weighted = deals.reduce((s, d) => s + weightedValue(d), 0);
+        {cards.map(({ account, deals, openCases, tcv, weighted }) => {
           return (
             <Link key={account.id} href={`/rep/accounts/${account.id}`}>
               <Card className="h-full p-5 transition-colors hover:border-hmd-teal-600 hover:shadow-sm">

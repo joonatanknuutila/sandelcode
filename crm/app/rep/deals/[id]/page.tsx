@@ -5,7 +5,7 @@ import {
   getActivitiesForDeal,
   getDeal,
   getOffersForDeal,
-} from "@/lib/api";
+} from "@/lib/db";
 import { nextBestAction } from "@/lib/ai";
 import { eur, shortDate } from "@/lib/format";
 import {
@@ -33,13 +33,16 @@ export default async function DealDetail({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const deal = getDeal(id);
+  const deal = await getDeal(id);
   if (!deal) notFound();
 
-  const account = getAccount(deal.accountId)!;
-  const activities = getActivitiesForDeal(id);
-  const offers = getOffersForDeal(id);
-  const nba = nextBestAction(deal);
+  const [account, activities, offers] = await Promise.all([
+    getAccount(deal.accountId),
+    getActivitiesForDeal(id),
+    getOffersForDeal(id),
+  ]);
+  if (!account) notFound();
+  const nba = nextBestAction(deal, activities[0]);
 
   // Derive per-unit price + per-quarter service rate from the seeded forecast
   // so inline edits keep the same economics.
