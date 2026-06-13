@@ -63,9 +63,12 @@ merge-integrator.sh: merges person/* → main every 60s, GATED on `crm/` buildin
 Vercel auto-deploys main (root=crm) → live site
 ```
 
-**Bidirectional Notion**: IN = prompt inbox → session (deletes blocks after ingest). OUT = each session
-commit is posted to that person's 📝 Planning page as `🔧 <sha> · <subject> · <N files> · <time>`
-(poll.mjs `reportCommits`; baselines silently on first sight so no backlog dump).
+**Bidirectional Notion**: IN = prompt inbox → session (deletes blocks after ingest). OUT (both posted to
+that person's 📝 Planning page, both baseline silently on first sight so no backlog dump):
+ - `🔧 <sha> · <subject> · <N files> · <time>` — each new commit (poll.mjs `reportCommits`).
+ - `💬 <time>  <text>` — each Claude **narration turn** (assistant text from the session transcript at
+   `~/.claude/projects/<escaped-worktree-cwd>/<id>.jsonl`), so people follow their agent without watching
+   the tmux pane (poll.mjs `reportClaudeOutput`; tracks newest .jsonl + line offset per person in state).
 
 **Auto-merge** is live via `merge-integrator.sh` (local daemon), NOT GitHub Actions — no branch-protection
 paywall / workflow-permission toggle needed. Per-branch build gate: a branch that breaks `crm/` build is
