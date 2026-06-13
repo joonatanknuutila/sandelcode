@@ -1,6 +1,6 @@
 # HMD Secure CRM — Data Model (proposal v0.1)
 
-Owner: Aarni (seed data + AI). **Arttu: this is a starting point — push back / adjust and I'll regenerate seed to match.** Target DB: **Postgres** (Azure Database for PostgreSQL, EU region). Plain SQL, no Supabase.
+Owner: Aarni (seed data + AI). **Arttu: this is a starting point — push back / adjust and I'll regenerate seed to match.** Target DB: **Supabase Postgres** (EU region). Schema + seed applied via migrations; RLS enabled on all tables.
 
 Stages (deal pipeline): `interest → rfi → rfp → customer_test → contract_negotiation → won/lost`.
 `contract_negotiation` is **direct-only**; reseller deals go `customer_test → won/lost`.

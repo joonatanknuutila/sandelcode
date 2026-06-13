@@ -1,8 +1,8 @@
 # Supabase — HMD Sales Hackathon
 
-A dedicated Supabase project for the HMD AI-native CRM demo. Chosen for the demo phase
-(easy auth + Postgres + EU residency); the brief mandates Azure for the *final* solution,
-and the team plans to migrate (see `challenge-brief.md` §06 and `meeting-notes-2026-06-13.md`).
+A dedicated Supabase project for the HMD AI-native CRM. Chosen for easy auth + Postgres +
+EU residency. **Decision: Supabase is the platform for this build — no Azure migration.**
+(The brief originally mandated Azure; see `challenge-brief.md` §06 for that historical context.)
 
 ## Project
 

@@ -144,11 +144,9 @@ Notion access: the integration token (in `.env` as `NOTION_TOKEN`) is shared on 
 - All 4 sessions reseeded with lane-accurate prompts.
 
 **Open / decisions pending**
-- **Auto-merge**: blocked on two GitHub limits — (a) branch protection / required checks is paywalled on free *private* repos; (b) an Actions-based workaround needs the repo's **Workflow permissions → "Read and write" + "Allow Actions to create/approve PRs"** toggle (Settings → Actions → General). If that toggle is flipped, add auto-open-PR + auto-merge-on-green workflows. Until then: **merge is manual** (PR + click; CI shows green/red).
-- **Branch history**: ✅ FIXED (2026-06-13). `person/*` previously had *unrelated histories* (a session re-initialized; arttu/nuutti carried a second root `03e9238`), which forced the `git checkout person/X -- path` cherry-pick workaround on merges. All four branches were re-rooted onto main's tip (`reset --hard main` in each clean worktree → `push --force-with-lease`). Every branch now shares the single root `9c6e24a`, so **`git merge person/X` works normally** — no more cherry-picking. Recovery tags `backup/person-<name>-20260613-161726` preserve the old tips.
-- **Merge model**: lanes (disjoint folders per person) keep merges conflict-free by construction; manual merge to main is intentional (no auto-merge needed this close to deadline). Branches were re-rooted (above) so standard merges work.
-- **Supabase schema**: `crm/SCHEMA.md` exists; applying it as real tables + loading `crm/seed/` data into Supabase is Arttu's lane (in progress).
-- **Azure**: brief mandates Azure (Entra ID, EU region) for the *final* product; we demo on Supabase and plan to migrate.
+- **Branching model**: ✅ SIMPLIFIED (2026-06-13). The per-person worktree/branch model was **retired** — all 4 sessions now run in this single checkout directly on `main`. Worktrees removed; local + remote `person/*`, `integrate/arttu-datalayer`, `experiment/lead-form-enrichment` branches deleted (all were fully merged). Origin now has only `main`. `merge-integrator.sh` is retired (nothing to merge). `autopush.sh` pushes `main`. Discipline is by **lane** (disjoint folders per person), not branch isolation. The poller injects each Notion prompt into that person's tmux pane (matched by pane **title**, set in `start-sessions.sh`); outbound commit + narration feeds are consolidated to one team feed page (`teamFeedPageId` in `watcher/config.json`).
+- **Supabase schema**: ✅ APPLIED (2026-06-13). 4 migrations live (`initial_crm_schema` → `seed_demo_users` → `seed_demo_data` → `demo_open_read_policies`); all 14 tables seeded with RLS enabled. Project ref `xwsmovmtfymiqvgjicfk`. Advisors clean (WARN-only: mutable `search_path` on 3 helper fns, intentional open demo-read policies).
+- **Platform**: Supabase is the platform for this build — **no Azure** (decision 2026-06-13). The brief's Azure/Entra mandate is historical context only (`docs/challenge-brief.md` §06).
 
 ---
 

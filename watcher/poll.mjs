@@ -1,11 +1,16 @@
 #!/usr/bin/env node
-// Notion -> local Claude session poller.
+// Notion -> local Claude session poller (single-repo / main-branch model).
 // Every config.pollSeconds it reads each person's "Prompt inbox" Notion page,
-// detects new content, writes it to people/<name>/prompt/<ts>.md, and runs
-// `claude -p --continue "<prompt>"` inside that person's git worktree.
+// detects new content, writes it to people/<name>/prompt/<ts>.md, and injects
+// it into that person's tmux pane (matched by pane title). All sessions run in
+// the one repo checkout on `main` — no per-person worktrees/branches.
+//
+// Outbound feeds (new commits + Claude narration) are CONSOLIDATED to a single
+// team feed Notion page, since on a shared branch+dir they can't be attributed
+// per person.
 //
 // Requires: NOTION_TOKEN env var (internal integration token, ntn_...).
-// Each Prompt-inbox page must be shared with that integration in Notion.
+// Each Prompt-inbox page (and the team feed page) must be shared with that integration.
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync, appendFileSync, readdirSync, statSync } from "node:fs";
 import { execFileSync } from "node:child_process";
@@ -16,6 +21,9 @@ import { homedir } from "node:os";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const cfg = JSON.parse(readFileSync(resolve(ROOT, "watcher/config.json"), "utf8"));
+const REPO = resolve(ROOT, cfg.repoDir || ".");      // the single git working tree (on `main`)
+const BRANCH = cfg.branch || "main";
+const TEAM = cfg.teamFeedPageId;                     // consolidated output feed
 const STATE_PATH = resolve(ROOT, "watcher/.state.json");
 const LOG_PATH = resolve(ROOT, "watcher/poll.log");
 
@@ -86,41 +94,39 @@ async function appendBlocks(pageId, blocks) {
   await notion(`/blocks/${pageId}/children`, { method: "PATCH", body: { children: blocks } });
 }
 
-// --- session output -> Notion -------------------------------------------------
-// The durable output of each session is the commits it makes in its worktree.
-// We post every new commit on that person's branch to their Notion Planning page
-// as a readable activity feed. First time we see a worktree we baseline silently
-// (record HEAD, post nothing) so we don't dump the whole backlog.
-
-function git(person, args) {
-  return execFileSync("git", ["-C", resolve(ROOT, person.worktree), ...args], { encoding: "utf8" }).trim();
+// --- git on the single repo ---------------------------------------------------
+function git(args) {
+  return execFileSync("git", ["-C", REPO, ...args], { encoding: "utf8" }).trim();
 }
 
-// New commits on this worktree's HEAD since `sinceSha`, oldest-first.
-function newCommits(person, sinceSha) {
-  const range = sinceSha ? `${sinceSha}..HEAD` : "-1";
+// --- session commits -> team feed --------------------------------------------
+// On a shared branch we report NEW commits on `main` to one team feed page.
+// First sight baselines HEAD silently (no backlog dump).
+
+function newCommits(sinceSha) {
+  const range = sinceSha ? `${sinceSha}..${BRANCH}` : "-1";
   let out;
-  try { out = git(person, ["log", "--reverse", "--pretty=format:%H\x1f%h\x1f%s\x1f%cI", range]); }
+  try { out = git(["log", "--reverse", "--pretty=format:%H\x1f%h\x1f%s\x1f%cI\x1f%an", range]); }
   catch { return []; }
   if (!out) return [];
   return out.split("\n").map((l) => {
-    const [hash, short, subject, date] = l.split("\x1f");
+    const [hash, short, subject, date, author] = l.split("\x1f");
     let files = 0;
-    try { files = git(person, ["diff-tree", "--no-commit-id", "--name-only", "-r", hash]).split("\n").filter(Boolean).length; } catch {}
-    return { hash, short, subject, date, files };
+    try { files = git(["diff-tree", "--no-commit-id", "--name-only", "-r", hash]).split("\n").filter(Boolean).length; } catch {}
+    return { hash, short, subject, date, author, files };
   });
 }
 
-async function reportCommits(person) {
+async function reportCommits() {
+  if (!TEAM) return;
   let head;
-  try { head = git(person, ["rev-parse", "HEAD"]); } catch { return; } // worktree not ready
-  state.commits ||= {};
-  const since = state.commits[person.branch];
-  if (!since) { state.commits[person.branch] = head; saveState(); return; } // baseline silently
+  try { head = git(["rev-parse", BRANCH]); } catch { return; }
+  const since = state.mainHead;
+  if (!since) { state.mainHead = head; saveState(); return; } // baseline silently
   if (since === head) return;
 
-  const commits = newCommits(person, since);
-  if (!commits.length) { state.commits[person.branch] = head; saveState(); return; }
+  const commits = newCommits(since);
+  if (!commits.length) { state.mainHead = head; saveState(); return; }
 
   const blocks = commits.map((c) => {
     const t = new Date(c.date).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
@@ -129,41 +135,25 @@ async function reportCommits(person) {
       bulleted_list_item: { rich_text: [{ type: "text", text: { content: txt.slice(0, 1900) } }] } };
   });
   try {
-    // Notion caps 100 children per call; commit batches are tiny but be safe.
-    for (let i = 0; i < blocks.length; i += 100) await appendBlocks(person.planningPageId, blocks.slice(i, i + 100));
-    state.commits[person.branch] = head;
+    for (let i = 0; i < blocks.length; i += 100) await appendBlocks(TEAM, blocks.slice(i, i + 100));
+    state.mainHead = head;
     saveState();
-    log(`reported ${commits.length} commit(s) for ${person.name} -> Notion planning`);
+    log(`reported ${commits.length} commit(s) on ${BRANCH} -> team feed`);
   } catch (e) {
-    log(`WARN: could not post commits for ${person.name}: ${e.message}`); // retry next tick
+    log(`WARN: could not post commits: ${e.message}`); // retry next tick
   }
 }
 
-// --- session NARRATION -> Notion ---------------------------------------------
-// Beyond commits, post each Claude session's running narration (its assistant
-// text turns — "what I'm doing / what I found / next step") to that person's
-// Planning page, so they can follow their agent without watching the tmux pane.
-// Source: Claude Code's own session transcript (~/.claude/projects/<escaped-cwd>/<id>.jsonl).
-// Baselines on first sight (records line count, posts nothing) so no backlog dump.
+// --- session NARRATION -> team feed ------------------------------------------
+// All sessions run in REPO, so they share one Claude transcript dir
+// (~/.claude/projects/<escaped-REPO>/<id>.jsonl). We track every .jsonl there
+// and post new assistant turns from each (prefixed with the short session id)
+// to the team feed. Baselines each file on first sight (no backlog dump).
 
 const PROJECTS = resolve(homedir(), ".claude", "projects");
 
-function transcriptDir(person) {
-  const abs = resolve(ROOT, person.worktree);
-  return resolve(PROJECTS, abs.replace(/[^a-zA-Z0-9]/g, "-"));
-}
-
-// Newest .jsonl in this worktree's transcript dir = the currently active session.
-function activeTranscript(person) {
-  const dir = transcriptDir(person);
-  let files;
-  try { files = readdirSync(dir).filter((f) => f.endsWith(".jsonl")); } catch { return null; }
-  let best = null, bestM = 0;
-  for (const f of files) {
-    const m = statSync(resolve(dir, f)).mtimeMs;
-    if (m > bestM) { bestM = m; best = resolve(dir, f); }
-  }
-  return best;
+function transcriptDir() {
+  return resolve(PROJECTS, REPO.replace(/[^a-zA-Z0-9]/g, "-"));
 }
 
 // Assistant text turns from line `fromLine` onward. Returns {turns, total}.
@@ -182,39 +172,45 @@ function assistantTurns(file, fromLine) {
 }
 
 // Notion: a paragraph block carrying one assistant turn (chunked to the 2000-char limit).
-function narrationBlock(text, ts) {
+function narrationBlock(tag, text, ts) {
   const t = ts ? new Date(ts).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }) : "";
   let s = text.replace(/\r/g, "");
   const chunks = [];
   while (s.length && chunks.length < 4) { chunks.push(s.slice(0, 1900)); s = s.slice(1900); }
   if (s.length) chunks[chunks.length - 1] += " …[truncated]";
-  const rich = chunks.map((c, i) => ({ type: "text", text: { content: (i === 0 ? `💬 ${t}  ` : "") + c } }));
+  const rich = chunks.map((c, i) => ({ type: "text", text: { content: (i === 0 ? `💬 ${tag} ${t}  ` : "") + c } }));
   return { object: "block", type: "paragraph", paragraph: { rich_text: rich } };
 }
 
-async function reportClaudeOutput(person) {
-  const file = activeTranscript(person);
-  if (!file) return;
+async function reportClaudeOutput() {
+  if (!TEAM) return;
+  const dir = transcriptDir();
+  let files;
+  try { files = readdirSync(dir).filter((f) => f.endsWith(".jsonl")); } catch { return; }
   state.transcripts ||= {};
-  const st = state.transcripts[person.name];
-  if (!st || st.file !== file) { // first sight / new session file → baseline, post nothing
-    let total = 0; try { total = readFileSync(file, "utf8").split("\n").length; } catch {}
-    state.transcripts[person.name] = { file, lines: total };
-    saveState();
-    return;
-  }
-  const { turns, total } = assistantTurns(file, st.lines);
-  if (total === st.lines) return;
-  if (!turns.length) { state.transcripts[person.name].lines = total; saveState(); return; }
+  for (const f of files) {
+    const file = resolve(dir, f);
+    const tag = f.slice(0, 8); // short session id
+    const st = state.transcripts[file];
+    if (st === undefined) { // first sight → baseline, post nothing
+      let total = 0; try { total = readFileSync(file, "utf8").split("\n").length; } catch {}
+      state.transcripts[file] = total;
+      saveState();
+      continue;
+    }
+    const { turns, total } = assistantTurns(file, st);
+    if (total === st) continue;
+    if (!turns.length) { state.transcripts[file] = total; saveState(); continue; }
 
-  const blocks = turns.map((tn) => narrationBlock(tn.text, tn.ts));
-  try {
-    for (let i = 0; i < blocks.length; i += 100) await appendBlocks(person.planningPageId, blocks.slice(i, i + 100));
-    state.transcripts[person.name].lines = total;
-    saveState();
-    log(`posted ${turns.length} Claude message(s) for ${person.name} -> Notion planning`);
-  } catch (e) {
-    log(`WARN: could not post Claude output for ${person.name}: ${e.message}`); // retry next tick
+    const blocks = turns.map((tn) => narrationBlock(tag, tn.text, tn.ts));
+    try {
+      for (let i = 0; i < blocks.length; i += 100) await appendBlocks(TEAM, blocks.slice(i, i + 100));
+      state.transcripts[file] = total;
+      saveState();
+      log(`posted ${turns.length} Claude message(s) [${tag}] -> team feed`);
+    } catch (e) {
+      log(`WARN: could not post Claude output [${tag}]: ${e.message}`); // retry next tick
+    }
   }
 }
 
@@ -222,15 +218,14 @@ function tmux(args) {
   return execFileSync("tmux", args, { encoding: "utf8" });
 }
 
-// Find the tmux pane id whose working directory is this person's worktree.
-// Robust to any layout (separate windows OR a 2x2 grid of panes in one window).
+// Find the tmux pane id whose title matches this person (set by start-sessions.sh).
 function findPaneId(person) {
-  const want = resolve(ROOT, person.worktree);
+  const want = person.paneTitle || person.name;
   try {
-    const lines = tmux(["list-panes", "-a", "-F", "#{pane_id}|#{pane_current_path}"]).trim().split("\n");
+    const lines = tmux(["list-panes", "-a", "-F", "#{pane_id}|#{pane_title}"]).trim().split("\n");
     for (const line of lines) {
-      const [id, path] = line.split("|");
-      if (path === want || path?.endsWith(`/worktrees/${person.name}`)) return id;
+      const [id, title] = line.split("|");
+      if (title === want) return id;
     }
   } catch {
     /* tmux server not running */
@@ -238,11 +233,11 @@ function findPaneId(person) {
   return null;
 }
 
-// Paste the prompt into that person's visible claude pane via bracketed paste, then submit.
+// Paste the prompt into that person's claude pane via bracketed paste, then submit.
 function injectToSession(person, prompt) {
   const pane = findPaneId(person);
   if (!pane) {
-    log(`WARN: no tmux pane for ${person.name} (worktree ${person.worktree}) — start sessions with ./start-sessions.sh. Prompt saved to file only.`);
+    log(`WARN: no tmux pane titled "${person.paneTitle || person.name}" — start sessions with ./start-sessions.sh. Prompt saved to file only.`);
     return;
   }
   const buf = `prompt-${person.name}`;
@@ -285,13 +280,13 @@ async function tick() {
   for (const person of cfg.people) {
     try { await checkPerson(person); }          // Notion prompt -> session (in)
     catch (e) { log(`ERROR ${person.name}: ${e.message}`); }
-    try { await reportClaudeOutput(person); }    // session narration -> Notion (out)
-    catch (e) { log(`ERROR narrate ${person.name}: ${e.message}`); }
-    try { await reportCommits(person); }         // session commits -> Notion (out)
-    catch (e) { log(`ERROR report ${person.name}: ${e.message}`); }
   }
+  try { await reportClaudeOutput(); }            // all sessions' narration -> team feed (out)
+  catch (e) { log(`ERROR narrate: ${e.message}`); }
+  try { await reportCommits(); }                 // new main commits -> team feed (out)
+  catch (e) { log(`ERROR report commits: ${e.message}`); }
 }
 
-log(`poller up. watching ${cfg.people.length} inboxes every ${cfg.pollSeconds}s.`);
+log(`poller up. watching ${cfg.people.length} inboxes every ${cfg.pollSeconds}s. repo=${REPO} branch=${BRANCH}.`);
 await tick();
 setInterval(tick, (cfg.pollSeconds || 30) * 1000);

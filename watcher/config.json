@@ -2,38 +2,37 @@
   "pollSeconds": 2,
   "notionVersion": "2022-06-28",
   "tmuxSession": "hmd",
+  "repoDir": ".",
+  "branch": "main",
+  "teamFeedPageId": "37ea330fb64981639560dd3e8407cc5b",
   "people": [
     {
       "name": "joonatan",
+      "paneTitle": "joonatan",
       "promptPageId": "37ea330fb64981dd892ecc4bf5692218",
       "planningPageId": "37ea330fb64981f28debfd961b84ef96",
-      "promptDir": "people/joonatan/prompt",
-      "worktree": "worktrees/joonatan",
-      "branch": "person/joonatan"
+      "promptDir": "people/joonatan/prompt"
     },
     {
       "name": "nuutti",
+      "paneTitle": "nuutti",
       "promptPageId": "37ea330fb64981a79a44c9f074e76523",
       "planningPageId": "37ea330fb649814f8d98f85c2059cff5",
-      "promptDir": "people/nuutti/prompt",
-      "worktree": "worktrees/nuutti",
-      "branch": "person/nuutti"
+      "promptDir": "people/nuutti/prompt"
     },
     {
       "name": "aarni",
+      "paneTitle": "aarni",
       "promptPageId": "37ea330fb6498120bff3c31ce63ebd42",
       "planningPageId": "37ea330fb64981d4886ced857df40da4",
-      "promptDir": "people/aarni/prompt",
-      "worktree": "worktrees/aarni",
-      "branch": "person/aarni"
+      "promptDir": "people/aarni/prompt"
     },
     {
       "name": "arttu",
+      "paneTitle": "arttu",
       "promptPageId": "37ea330fb6498100bd71f2c4b6aa4ae6",
       "planningPageId": "37ea330fb6498147a0a0fc3e9a03d637",
-      "promptDir": "people/arttu/prompt",
-      "worktree": "worktrees/arttu",
-      "branch": "person/arttu"
+      "promptDir": "people/arttu/prompt"
     }
   ]
 }
