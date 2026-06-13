@@ -1,20 +1,17 @@
-# Kickoff — Aarni · AI agents + Seed data
+# Kickoff (REFRESH) — Aarni · TAM view + AI agents + Seed data
 
-You are Aarni's Claude session for the **HMD Secure AI-native CRM** hackathon (deadline **Sun 15:00**, €1k). You run headless and receive prompts from Aarni's Notion "🟢 Prompt inbox". Work in this git worktree on branch `person/aarni`. Commit small and often.
+You are Aarni's session for the **HMD Secure AI-native CRM** (deadline Sun 15:00). Prompts arrive via your Notion 🟢 Prompt inbox. You work in this worktree on branch `person/aarni`. **Commit small & often** — autopush ships to GitHub in 60s; an integrator merges to `main` → live.
 
-## The product (1 paragraph)
-HMD Secure (secured Android devices + services for gov/enterprise) has no CRM. Four roles (Rep, TAM, Sales Manager, Finance). The brief's framing: make it "feel less like data entry and more like having an analyst on the team." **Our differentiator is the AI layer + genuinely persona-tailored help** — most teams will build a plain CRM; we win on this.
+## Current reality
+- The app is **`crm/`** (Next.js 16, App Router). Deployed (Vercel root = `crm/`), Supabase wired.
+- Your earlier work is in `main`: **`crm/ai/personas.md`** (per-persona AI design) and the **`crm/seed/`** generator. Build on them.
+- First: `cd crm`, `git pull`, re-read `ai/personas.md`.
+- **Our differentiator is the AI layer** — most teams ship a plain CRM; we win on genuinely useful, persona-tailored AI.
 
-## Your lane (the AI that makes us win)
-1. **Per-persona assistant chat** — a chat box on every role's view. Ask "what's the status of deal X?" / "what should I do next on this account?" and get an answer grounded in that account's records. Tailor tone + scope per role (Rep vs TAM vs SM vs Finance).
-2. **Meeting → CRM** — drop a transcript/notes; the agent drafts a CRM card update, then **asks the user 3–5 follow-up questions and requires approval before saving** (no silent hallucinated writes). This low-friction capture flow is core to our pitch.
-3. **Next best action** — from an account's timeline + deal stage, suggest the next step (topic or draft email) for the Rep.
-4. **Forecast narrative** — short natural-language pipeline-health summary on the Finance view.
-5. **Realistic seed data** — generate believable accounts, contacts, deals (with 3-yr time-phased forecasts), cases, products + prices. Coordinate the schema with Arttu. An empty DB kills the demo.
+## YOUR lane
+- `crm/app/tam/**` — **Technical Account Manager** view: cases by priority + age, full service history on one timeline, request tracking, 3rd-party escalation flag, internal vs working notes, SLA-deadline awareness. Fixes "CC'd on a 3-day-old thread with no context."
+- `crm/lib/ai/**` + `crm/app/api/**` — the AI agents: per-persona **assistant chat** ("what's the status of deal X?"), **meeting→CRM** (transcript → draft card → asks 3–5 follow-ups → **human approves before save**, no silent writes), **next-best-action**, **forecast narrative** on Finance. Use Azure OpenAI (confirm provisioned) or the available model.
+- `crm/seed/**` — keep the realistic seed data current as the schema evolves (coordinate with Arttu, who loads it into Supabase).
 
-## Hard constraints
-- **Azure OpenAI** is the expected model provider (confirm it's provisioned). **Azure only**, **no Supabase**, **in-app notifications only**.
-- Build agents that read/write through Arttu's API. Coordinate with **Joonatan/Nuutti** for where each agent surfaces in the UI.
-
-## Start by
-Read Notion "Kysymykset HMD:lle" — the "concrete useful AI hint per persona" question is yours to chase. Start with the seed-data generator (unblocks everyone) + the per-persona assistant against Arttu's API. Keep a human-approval gate on any AI write.
+## Rules
+- Import data from **Arttu's** `crm/lib/db` + types; import UI from **Joonatan's** `crm/components`. Don't edit `rep/`, `sm/`, `finance/`, `lib/db`. Keep a **human-approval gate** on any AI write. Keep `crm/` building before you commit.
