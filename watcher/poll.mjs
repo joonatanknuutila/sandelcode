@@ -80,6 +80,64 @@ async function archiveBlocks(ids) {
   return ok;
 }
 
+// Append blocks to the bottom of a Notion page.
+async function appendBlocks(pageId, blocks) {
+  await notion(`/blocks/${pageId}/children`, { method: "PATCH", body: { children: blocks } });
+}
+
+// --- session output -> Notion -------------------------------------------------
+// The durable output of each session is the commits it makes in its worktree.
+// We post every new commit on that person's branch to their Notion Planning page
+// as a readable activity feed. First time we see a worktree we baseline silently
+// (record HEAD, post nothing) so we don't dump the whole backlog.
+
+function git(person, args) {
+  return execFileSync("git", ["-C", resolve(ROOT, person.worktree), ...args], { encoding: "utf8" }).trim();
+}
+
+// New commits on this worktree's HEAD since `sinceSha`, oldest-first.
+function newCommits(person, sinceSha) {
+  const range = sinceSha ? `${sinceSha}..HEAD` : "-1";
+  let out;
+  try { out = git(person, ["log", "--reverse", "--pretty=format:%H\x1f%h\x1f%s\x1f%cI", range]); }
+  catch { return []; }
+  if (!out) return [];
+  return out.split("\n").map((l) => {
+    const [hash, short, subject, date] = l.split("\x1f");
+    let files = 0;
+    try { files = git(person, ["diff-tree", "--no-commit-id", "--name-only", "-r", hash]).split("\n").filter(Boolean).length; } catch {}
+    return { hash, short, subject, date, files };
+  });
+}
+
+async function reportCommits(person) {
+  let head;
+  try { head = git(person, ["rev-parse", "HEAD"]); } catch { return; } // worktree not ready
+  state.commits ||= {};
+  const since = state.commits[person.branch];
+  if (!since) { state.commits[person.branch] = head; saveState(); return; } // baseline silently
+  if (since === head) return;
+
+  const commits = newCommits(person, since);
+  if (!commits.length) { state.commits[person.branch] = head; saveState(); return; }
+
+  const blocks = commits.map((c) => {
+    const t = new Date(c.date).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+    const txt = `🔧 ${c.short} · ${c.subject} · ${c.files} file${c.files === 1 ? "" : "s"} · ${t}`;
+    return { object: "block", type: "bulleted_list_item",
+      bulleted_list_item: { rich_text: [{ type: "text", text: { content: txt.slice(0, 1900) } }] } };
+  });
+  try {
+    // Notion caps 100 children per call; commit batches are tiny but be safe.
+    for (let i = 0; i < blocks.length; i += 100) await appendBlocks(person.planningPageId, blocks.slice(i, i + 100));
+    state.commits[person.branch] = head;
+    saveState();
+    log(`reported ${commits.length} commit(s) for ${person.name} -> Notion planning`);
+  } catch (e) {
+    log(`WARN: could not post commits for ${person.name}: ${e.message}`); // retry next tick
+  }
+}
+
 function tmux(args) {
   return execFileSync("tmux", args, { encoding: "utf8" });
 }
@@ -145,8 +203,10 @@ async function checkPerson(person) {
 
 async function tick() {
   for (const person of cfg.people) {
-    try { await checkPerson(person); }
+    try { await checkPerson(person); }          // Notion prompt -> session (in)
     catch (e) { log(`ERROR ${person.name}: ${e.message}`); }
+    try { await reportCommits(person); }         // session commits -> Notion (out)
+    catch (e) { log(`ERROR report ${person.name}: ${e.message}`); }
   }
 }
 
