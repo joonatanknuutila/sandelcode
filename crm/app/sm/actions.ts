@@ -22,34 +22,34 @@ export async function reassignDealAction(
   const oldOwnerId = before?.ownerId;
   if (oldOwnerId === newOwnerId) return;
 
-  const deal = await mutations.reassignDeal(dealId, newOwnerId);
-
-  const me = await getCurrentUser();
-  const from = me?.name ? `${me.name} (Sales Manager)` : "Sales Manager";
-  const [newOwner, oldOwner] = await Promise.all([
+  // The write and the lookups it doesn't depend on run together.
+  const [deal, me, newOwner, oldOwner] = await Promise.all([
+    mutations.reassignDeal(dealId, newOwnerId),
+    getCurrentUser(),
     getUser(newOwnerId),
     oldOwnerId ? getUser(oldOwnerId) : Promise.resolve(null),
   ]);
+  const from = me?.name ? `${me.name} (Sales Manager)` : "Sales Manager";
 
-  // Notify the new owner — they now own it.
-  await mutations.createNotification({
-    userId: newOwnerId,
-    title: `You've been assigned "${deal.name}"`,
-    body: `${from} reassigned this deal to you${oldOwner ? ` from ${oldOwner.name}` : ""}. Pick it up and move it forward.`,
-    entityType: "deal",
-    entityId: deal.id,
-  });
-
-  // Notify the old owner — it's no longer theirs.
-  if (oldOwnerId && oldOwnerId !== newOwnerId) {
-    await mutations.createNotification({
-      userId: oldOwnerId,
-      title: `"${deal.name}" was reassigned`,
-      body: `${from} moved this deal${newOwner ? ` to ${newOwner.name}` : " to another rep"}.`,
+  // Notify both reps in parallel.
+  await Promise.all([
+    mutations.createNotification({
+      userId: newOwnerId,
+      title: `You've been assigned "${deal.name}"`,
+      body: `${from} reassigned this deal to you${oldOwner ? ` from ${oldOwner.name}` : ""}. Pick it up and move it forward.`,
       entityType: "deal",
       entityId: deal.id,
-    });
-  }
+    }),
+    oldOwnerId && oldOwnerId !== newOwnerId
+      ? mutations.createNotification({
+          userId: oldOwnerId,
+          title: `"${deal.name}" was reassigned`,
+          body: `${from} moved this deal${newOwner ? ` to ${newOwner.name}` : " to another rep"}.`,
+          entityType: "deal",
+          entityId: deal.id,
+        })
+      : Promise.resolve(),
+  ]);
 
   revalidatePath("/sm");
   revalidatePath("/sm/pipeline");

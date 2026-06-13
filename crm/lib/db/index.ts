@@ -11,6 +11,7 @@
 // Auth target: Supabase Auth for the demo; Azure Entra ID is the production
 // target (swap the client in lib/supabase/* — query layer is unaffected).
 import "server-only";
+import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
 import {
   mapAccount,
@@ -37,7 +38,6 @@ import {
   dealProbability,
   Offer,
   OfferStatus,
-  Stage,
   User,
 } from "@/lib/types";
 import type { Tables } from "@/lib/types.db";
@@ -47,7 +47,7 @@ import type { CaseNote, Service, ServiceEvent } from "@/lib/tam";
 
 /** The signed-in user's profile. Falls back to the first rep so the demo
  *  renders before a login page exists. */
-export async function getCurrentUser(): Promise<User | null> {
+export const getCurrentUser = cache(async (): Promise<User | null> => {
   const supabase = await createClient();
   const {
     data: { user: authUser },
@@ -71,7 +71,7 @@ export async function getCurrentUser(): Promise<User | null> {
     .limit(1)
     .maybeSingle();
   return data ? mapUser(data) : null;
-}
+});
 
 export async function getUser(id: string): Promise<User | null> {
   const supabase = await createClient();
@@ -83,11 +83,11 @@ export async function getUser(id: string): Promise<User | null> {
   return data ? mapUser(data) : null;
 }
 
-export async function getUsers(): Promise<User[]> {
+export const getUsers = cache(async (): Promise<User[]> => {
   const supabase = await createClient();
   const { data } = await supabase.from("profiles").select("*").order("full_name");
   return (data ?? []).map(mapUser);
-}
+});
 
 // --- accounts & contacts ---------------------------------------------------
 
@@ -136,7 +136,7 @@ export async function getAccount(id: string): Promise<Account | null> {
 }
 
 /** Every account (Sales Manager / Finance lenses build id->account maps). */
-export async function getAccounts(): Promise<Account[]> {
+export const getAccounts = cache(async (): Promise<Account[]> => {
   const supabase = await createClient();
   const { data } = await supabase.from("accounts").select("*").order("name");
   const accounts = data ?? [];
@@ -145,7 +145,7 @@ export async function getAccounts(): Promise<Account[]> {
     accounts.map((a) => a.id),
   );
   return accounts.map((a) => mapAccount(a, channels.get(a.id) ?? "direct"));
-}
+});
 
 /** Accounts a TAM is connected to — i.e. where they have at least one case
  *  (brief Block 2: "tam sees accounts where they have cases"). */
@@ -161,22 +161,47 @@ export async function getAccountsForTam(tamId: string): Promise<Account[]> {
 export async function getAccountCards(
   accounts: Account[],
 ): Promise<AccountCard[]> {
-  return Promise.all(
-    accounts.map(async (account) => {
-      const [deals, cases] = await Promise.all([
-        getDealsForAccount(account.id),
-        getCasesForAccount(account.id),
-      ]);
-      return {
-        account,
-        dealsCount: deals.length,
-        openCases: cases.filter((c) => c.status !== "resolved").length,
-        tcv: deals.reduce((s, d) => s + d.tcv, 0),
-        weighted: deals.reduce((s, d) => s + weightedValue(d), 0),
-        stages: deals.slice(0, 3).map((d) => d.stage as Stage),
-      };
-    }),
-  );
+  if (accounts.length === 0) return [];
+  const supabase = await createClient();
+  const ids = accounts.map((a) => a.id);
+  // Two batched queries (+ one for phases inside assembleDeals) instead of ~3
+  // per account — keeps the list at O(1) round-trips regardless of N.
+  const [dealsRes, casesRes] = await Promise.all([
+    supabase
+      .from("deals")
+      .select("*")
+      .in("account_id", ids)
+      .order("last_activity_at", { ascending: false }),
+    supabase.from("cases").select("*").in("account_id", ids),
+  ]);
+  const deals = await assembleDeals(supabase, dealsRes.data ?? []);
+  const cases = (casesRes.data ?? []).map(mapCase);
+
+  const dealsByAccount = new Map<string, Deal[]>();
+  for (const d of deals) {
+    const arr = dealsByAccount.get(d.accountId) ?? [];
+    arr.push(d);
+    dealsByAccount.set(d.accountId, arr);
+  }
+  const casesByAccount = new Map<string, Case[]>();
+  for (const c of cases) {
+    const arr = casesByAccount.get(c.accountId) ?? [];
+    arr.push(c);
+    casesByAccount.set(c.accountId, arr);
+  }
+
+  return accounts.map((account) => {
+    const accDeals = dealsByAccount.get(account.id) ?? [];
+    const accCases = casesByAccount.get(account.id) ?? [];
+    return {
+      account,
+      dealsCount: accDeals.length,
+      openCases: accCases.filter((c) => c.status !== "resolved").length,
+      tcv: accDeals.reduce((s, d) => s + d.tcv, 0),
+      weighted: accDeals.reduce((s, d) => s + weightedValue(d), 0),
+      stages: accDeals.slice(0, 3).map((d) => d.stage),
+    };
+  });
 }
 
 export interface AccountDetailData {
@@ -282,14 +307,14 @@ export async function getDeal(id: string): Promise<Deal | null> {
 }
 
 /** Whole pipeline (Sales Manager / Finance views). */
-export async function getAllDeals(): Promise<Deal[]> {
+export const getAllDeals = cache(async (): Promise<Deal[]> => {
   const supabase = await createClient();
   const { data } = await supabase
     .from("deals")
     .select("*")
     .order("last_activity_at", { ascending: false });
   return assembleDeals(supabase, data ?? []);
-}
+});
 
 /** Open (non-terminal) deals across the whole team. */
 export async function getOpenDeals(): Promise<Deal[]> {
