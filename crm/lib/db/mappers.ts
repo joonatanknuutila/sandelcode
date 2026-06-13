@@ -33,6 +33,13 @@ import type {
   Stage,
   User,
 } from "@/lib/types";
+import type {
+  CaseNote,
+  Service,
+  ServiceCategory,
+  ServiceEvent,
+  ServiceEventKind,
+} from "@/lib/tam";
 
 // --- enums -----------------------------------------------------------------
 
@@ -291,5 +298,74 @@ export function mapNotification(n: Tables<"notifications">): AppNotification {
     href,
     read: n.is_read,
     createdAt: n.created_at,
+  };
+}
+
+// --- TAM mappers -----------------------------------------------------------
+// The TAM view (lib/tam) augments the base model with case notes, a service
+// inventory and a unified service-history timeline. The DB has no per-account
+// service inventory — `services` is the global catalog a case's service_id
+// points at — so `accountId`/`since`/`status` are derived from what we have.
+
+/** notes row (entity_type='case') -> TAM CaseNote. is_internal => visibility. */
+export function mapCaseNote(n: Tables<"notes">): CaseNote {
+  return {
+    id: n.id,
+    caseId: n.entity_id,
+    authorId: n.author_id ?? "",
+    visibility: n.is_internal ? "internal" : "working",
+    body: n.content,
+    createdAt: n.created_at,
+  };
+}
+
+/** Catalog service -> TAM Service. The catalog is global, so accountId is "". */
+export function mapTamService(s: Tables<"services">): Service {
+  const category: ServiceCategory =
+    s.service_type === "third_party" ? "support" : "mdm";
+  return {
+    id: s.id,
+    accountId: "",
+    name: s.name,
+    category,
+    status: s.is_active ? "active" : "retired",
+    since: s.created_at.slice(0, 10),
+  };
+}
+
+const SERVICE_EVENT_KINDS = new Set<ServiceEventKind>([
+  "deployed",
+  "upgrade",
+  "maintenance",
+  "incident",
+  "config",
+  "case_opened",
+  "case_resolved",
+  "escalation",
+  "stage_change",
+  "offer_sent",
+  "call",
+  "email",
+  "meeting",
+  "note",
+]);
+
+function toServiceEventKind(eventType: string): ServiceEventKind {
+  const e = eventType.toLowerCase();
+  return SERVICE_EVENT_KINDS.has(e as ServiceEventKind)
+    ? (e as ServiceEventKind)
+    : "note";
+}
+
+/** activity_timeline row -> ServiceEvent (the account's unified history). */
+export function mapServiceEvent(a: Tables<"activity_timeline">): ServiceEvent {
+  return {
+    id: a.id,
+    accountId: a.account_id,
+    serviceId: undefined,
+    caseId: a.entity_type === "case" ? (a.entity_id ?? undefined) : undefined,
+    kind: toServiceEventKind(a.event_type),
+    body: a.body ?? a.title,
+    createdAt: a.created_at,
   };
 }

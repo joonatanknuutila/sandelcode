@@ -16,10 +16,13 @@ import {
   mapAccount,
   mapActivity,
   mapCase,
+  mapCaseNote,
   mapContact,
   mapDeal,
   mapNotification,
   mapOffer,
+  mapServiceEvent,
+  mapTamService,
   mapUser,
 } from "./mappers";
 import {
@@ -36,6 +39,7 @@ import {
   User,
 } from "@/lib/types";
 import type { Tables } from "@/lib/types.db";
+import type { CaseNote, Service, ServiceEvent } from "@/lib/tam";
 
 // --- users -----------------------------------------------------------------
 
@@ -270,6 +274,30 @@ export async function getAllCases(): Promise<Case[]> {
   return (data ?? []).map(mapCase);
 }
 
+export async function getCase(id: string): Promise<Case | null> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("cases")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+  return data ? mapCase(data) : null;
+}
+
+// --- case notes (TAM internal/working timeline) ----------------------------
+
+/** A case's notes, newest-first. is_internal => internal vs working note. */
+export async function getNotesForCase(caseId: string): Promise<CaseNote[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("notes")
+    .select("*")
+    .eq("entity_type", "case")
+    .eq("entity_id", caseId)
+    .order("created_at", { ascending: false });
+  return (data ?? []).map(mapCaseNote);
+}
+
 // --- activity timeline -----------------------------------------------------
 
 export async function getActivitiesForAccount(
@@ -293,6 +321,19 @@ export async function getActivitiesForDeal(dealId: string): Promise<Activity[]> 
     .eq("entity_id", dealId)
     .order("created_at", { ascending: false });
   return (data ?? []).map(mapActivity);
+}
+
+/** The account's whole history as one timeline (TAM case view), newest-first. */
+export async function getServiceHistory(
+  accountId: string,
+): Promise<ServiceEvent[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("activity_timeline")
+    .select("*")
+    .eq("account_id", accountId)
+    .order("created_at", { ascending: false });
+  return (data ?? []).map(mapServiceEvent);
 }
 
 // --- offers ----------------------------------------------------------------
@@ -397,6 +438,17 @@ export async function getServices(): Promise<Tables<"services">[]> {
     .eq("is_active", true)
     .order("name");
   return data ?? [];
+}
+
+/** A single catalog service mapped to the TAM Service shape (case detail). */
+export async function getService(id: string): Promise<Service | null> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("services")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+  return data ? mapTamService(data) : null;
 }
 
 // --- notifications ---------------------------------------------------------

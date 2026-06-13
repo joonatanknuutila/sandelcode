@@ -1,12 +1,15 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getAccount, getUser } from "@/lib/api";
 import {
-  caseAgeDays,
+  getAccount,
   getCase,
   getNotesForCase,
   getService,
   getServiceHistory,
+  getUsers,
+} from "@/lib/db";
+import {
+  caseAgeDays,
   requestStatus,
   slaInfo,
   summariseCase,
@@ -27,17 +30,26 @@ export default async function CaseDetail({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const c = getCase(id);
+  const c = await getCase(id);
   if (!c) notFound();
 
-  const account = getAccount(c.accountId)!;
-  const service = getService(c.serviceId);
-  const assignee = c.assigneeId ? getUser(c.assigneeId) : undefined;
+  const [account, service, notes, events, users] = await Promise.all([
+    getAccount(c.accountId),
+    c.serviceId ? getService(c.serviceId) : Promise.resolve(null),
+    getNotesForCase(c.id),
+    getServiceHistory(c.accountId),
+    getUsers(),
+  ]);
+  if (!account) notFound();
+
+  const userById = new Map(users.map((u) => [u.id, u]));
+  const authorNames: Record<string, string> = {};
+  for (const u of users) authorNames[u.id] = u.name;
+
+  const assignee = c.assigneeId ? userById.get(c.assigneeId) : undefined;
   const sla = slaInfo(c);
-  const req = requestStatus(c);
-  const summary = summariseCase(c);
-  const notes = getNotesForCase(c.id);
-  const events = getServiceHistory(c.accountId);
+  const req = requestStatus(c, notes);
+  const summary = summariseCase(c, notes, events);
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
@@ -106,7 +118,7 @@ export default async function CaseDetail({
       {/* Unified timeline */}
       <section>
         <SectionTitle>Service history &amp; notes</SectionTitle>
-        <CaseTimeline events={events} notes={notes} />
+        <CaseTimeline events={events} notes={notes} authorNames={authorNames} />
       </section>
 
       {/* Account-scoped assistant */}

@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { CaseNote, ServiceEvent, ServiceEventKind } from "@/lib/tam";
-import { getUser } from "@/lib/api";
 import { Card } from "@/components/ui";
 
 // Unified case timeline: service-history events + case notes on ONE thread,
@@ -19,6 +18,12 @@ const EVENT_DOT: Record<ServiceEventKind, string> = {
   case_opened: "bg-warning",
   case_resolved: "bg-success",
   escalation: "bg-warning",
+  stage_change: "bg-hmd-teal-600",
+  offer_sent: "bg-hmd-teal-600",
+  call: "bg-hmd-gray",
+  email: "bg-hmd-gray",
+  meeting: "bg-hmd-gray",
+  note: "bg-hmd-gray",
 };
 
 const EVENT_LABEL: Record<ServiceEventKind, string> = {
@@ -30,6 +35,12 @@ const EVENT_LABEL: Record<ServiceEventKind, string> = {
   case_opened: "Case opened",
   case_resolved: "Case resolved",
   escalation: "Escalated",
+  stage_change: "Stage change",
+  offer_sent: "Offer sent",
+  call: "Call",
+  email: "Email",
+  meeting: "Meeting",
+  note: "Activity",
 };
 
 type Item =
@@ -39,9 +50,12 @@ type Item =
 export function CaseTimeline({
   events,
   notes,
+  authorNames,
 }: {
   events: ServiceEvent[];
   notes: CaseNote[];
+  /** Note author id -> display name, resolved server-side. */
+  authorNames: Record<string, string>;
 }) {
   const [showInternal, setShowInternal] = useState(true);
 
@@ -85,7 +99,7 @@ export function CaseTimeline({
               );
             }
             const n = item.data;
-            const author = getUser(n.authorId);
+            const authorName = authorNames[n.authorId];
             const internal = n.visibility === "internal";
             return (
               <li key={n.id} className="relative">
@@ -97,7 +111,7 @@ export function CaseTimeline({
                   <p className="text-xs text-muted">{new Date(n.createdAt).toLocaleString("en-IE", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}</p>
                 </div>
                 <p className={`mt-1 text-sm ${internal ? "" : "rounded-md bg-hmd-teal/10 px-2.5 py-1.5"}`}>{n.body}</p>
-                {author && <p className="mt-0.5 text-xs text-muted">{author.name}</p>}
+                {authorName && <p className="mt-0.5 text-xs text-muted">{authorName}</p>}
               </li>
             );
           })}

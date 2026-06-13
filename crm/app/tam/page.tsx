@@ -1,12 +1,6 @@
 import Link from "next/link";
-import { getAccount, getUser } from "@/lib/api";
-import {
-  caseAgeDays,
-  getAllCases,
-  getTamSummary,
-  slaInfo,
-  triageSort,
-} from "@/lib/tam";
+import { getAccounts, getAllCases, getUsers } from "@/lib/db";
+import { caseAgeDays, getTamSummary, slaInfo, triageSort } from "@/lib/tam";
 import { Card, SectionTitle, StatTile } from "@/components/ui";
 import { CaseStatusBadge, PriorityBadge, SlaBadge, ThirdPartyFlag } from "./ui";
 import { Assistant } from "./Assistant";
@@ -15,10 +9,18 @@ import { Assistant } from "./Assistant";
 // Triage order = SLA pressure → priority → age, so the row that needs eyes
 // first is at the top. Fixes "CC'd on a 3-day-old thread with no context": one
 // click into a case shows the whole service history + notes on one timeline.
-export default function TamView() {
-  const summary = getTamSummary();
-  const open = triageSort(getAllCases().filter((c) => c.status !== "resolved"));
-  const resolved = getAllCases().filter((c) => c.status === "resolved");
+export default async function TamView() {
+  const [all, accounts, users] = await Promise.all([
+    getAllCases(),
+    getAccounts(),
+    getUsers(),
+  ]);
+  const accountById = new Map(accounts.map((a) => [a.id, a]));
+  const userById = new Map(users.map((u) => [u.id, u]));
+
+  const summary = getTamSummary(all);
+  const open = triageSort(all.filter((c) => c.status !== "resolved"));
+  const resolved = all.filter((c) => c.status === "resolved");
 
   return (
     <div className="mx-auto max-w-7xl space-y-8">
@@ -60,9 +62,9 @@ export default function TamView() {
         <SectionTitle>Open cases — triaged</SectionTitle>
         <div className="space-y-2">
           {open.map((c) => {
-            const account = getAccount(c.accountId);
+            const account = accountById.get(c.accountId);
             const sla = slaInfo(c);
-            const assignee = c.assigneeId ? getUser(c.assigneeId) : undefined;
+            const assignee = c.assigneeId ? userById.get(c.assigneeId) : undefined;
             return (
               <Link key={c.id} href={`/tam/cases/${c.id}`}>
                 <Card
@@ -96,7 +98,7 @@ export default function TamView() {
           <SectionTitle>Recently resolved</SectionTitle>
           <div className="space-y-2">
             {resolved.map((c) => {
-              const account = getAccount(c.accountId);
+              const account = accountById.get(c.accountId);
               return (
                 <Link key={c.id} href={`/tam/cases/${c.id}`}>
                   <Card className="flex items-center gap-4 p-3 opacity-70 transition-opacity hover:opacity-100">

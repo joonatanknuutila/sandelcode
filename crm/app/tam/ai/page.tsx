@@ -1,5 +1,4 @@
-import { deals, accounts } from "@/lib/mock-data";
-import { getAccount } from "@/lib/api";
+import { getAccounts, getOpenDeals } from "@/lib/db";
 import { confidence, ConfidenceBand } from "@/lib/ai/confidence";
 import { forecastNarrative } from "@/lib/ai/forecast";
 import { eur } from "@/lib/format";
@@ -20,17 +19,21 @@ const BAND_TONE: Record<ConfidenceBand, string> = {
 };
 
 export default async function AiWorkspace() {
-  const forecast = await forecastNarrative();
+  const [forecast, openDeals, accounts] = await Promise.all([
+    forecastNarrative(),
+    getOpenDeals(),
+    getAccounts(),
+  ]);
   const f = forecast.figures;
+  const accountById = new Map(accounts.map((a) => [a.id, a]));
 
   // Riskiest-first: open deals scored by confidence.
-  const scored = deals
-    .filter((d) => d.stage !== "won" && d.stage !== "lost")
+  const scored = openDeals
     .map((d) => ({ deal: d, c: confidence(d) }))
     .sort((a, b) => a.c.score - b.c.score);
 
   // Account to demo meeting-capture against (first with a deal).
-  const captureAccountId = deals[0]?.accountId ?? accounts[0]?.id;
+  const captureAccountId = openDeals[0]?.accountId ?? accounts[0]?.id;
 
   return (
     <div className="mx-auto max-w-5xl space-y-8">
@@ -83,7 +86,7 @@ export default async function AiWorkspace() {
             </thead>
             <tbody>
               {scored.map(({ deal, c }) => {
-                const account = getAccount(deal.accountId);
+                const account = accountById.get(deal.accountId);
                 return (
                   <tr key={deal.id} className="border-t border-border align-top">
                     <td className="px-4 py-2.5">
@@ -114,7 +117,7 @@ export default async function AiWorkspace() {
       {/* Meeting capture — the human-approval gate */}
       {captureAccountId && (
         <section>
-          <SectionTitle>Meeting → CRM ({getAccount(captureAccountId)?.name})</SectionTitle>
+          <SectionTitle>Meeting → CRM ({accountById.get(captureAccountId)?.name})</SectionTitle>
           <MeetingCapture accountId={captureAccountId} />
         </section>
       )}
