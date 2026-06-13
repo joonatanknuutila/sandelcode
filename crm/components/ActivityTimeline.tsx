@@ -1,5 +1,5 @@
 import { Activity, ActivityType } from "@/lib/types";
-import { getUser } from "@/lib/api";
+import { getUsers } from "@/lib/db";
 import { shortDate } from "@/lib/format";
 import { Card } from "./ui";
 
@@ -23,15 +23,21 @@ const TYPE_DOT: Record<ActivityType, string> = {
   case_opened: "bg-danger",
 };
 
-export function ActivityTimeline({ activities }: { activities: Activity[] }) {
+export async function ActivityTimeline({
+  activities,
+}: {
+  activities: Activity[];
+}) {
   if (activities.length === 0) {
     return <p className="text-sm text-muted">No activity recorded yet.</p>;
   }
+  const users = await getUsers();
+  const nameById = new Map(users.map((u) => [u.id, u.name]));
   return (
     <Card className="p-4">
       <ol className="relative space-y-5 border-l border-border pl-5">
         {activities.map((a) => {
-          const author = getUser(a.authorId);
+          const author = nameById.get(a.authorId);
           return (
             <li key={a.id} className="relative">
               <span
@@ -45,7 +51,7 @@ export function ActivityTimeline({ activities }: { activities: Activity[] }) {
               </div>
               <p className="mt-0.5 text-sm">{a.body}</p>
               {author && (
-                <p className="mt-0.5 text-xs text-muted">{author.name}</p>
+                <p className="mt-0.5 text-xs text-muted">{author}</p>
               )}
             </li>
           );
