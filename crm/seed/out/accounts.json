@@ -1,0 +1,156 @@
+[
+  {
+    "id": "acc_000l",
+    "name": "Bundesdruckerei GmbH",
+    "domain": "bundesdruckerei.de",
+    "country": "DE",
+    "sector": "government",
+    "channel": "direct",
+    "owner_rep_id": "usr_0002",
+    "tam_id": "usr_0004",
+    "created_at": "2025-05-05T10:46:00.853Z"
+  },
+  {
+    "id": "acc_000q",
+    "name": "Finnish Defence Forces",
+    "domain": "puolustusvoimat.fi",
+    "country": "FI",
+    "sector": "government",
+    "channel": "direct",
+    "owner_rep_id": "usr_0003",
+    "tam_id": "usr_0005",
+    "created_at": "2025-02-21T10:46:00.854Z"
+  },
+  {
+    "id": "acc_000v",
+    "name": "Gendarmerie Nationale",
+    "domain": "gendarmerie.fr",
+    "country": "FR",
+    "sector": "government",
+    "channel": "direct",
+    "owner_rep_id": "usr_0003",
+    "tam_id": "usr_0004",
+    "created_at": "2025-12-17T10:46:00.854Z"
+  },
+  {
+    "id": "acc_0010",
+    "name": "Politiet",
+    "domain": "politiet.no",
+    "country": "NO",
+    "sector": "government",
+    "channel": "reseller",
+    "owner_rep_id": "usr_0001",
+    "tam_id": "usr_0005",
+    "created_at": "2025-03-24T10:46:00.854Z"
+  },
+  {
+    "id": "acc_0015",
+    "name": "Belgian Federal Police",
+    "domain": "police.be",
+    "country": "BE",
+    "sector": "government",
+    "channel": "direct",
+    "owner_rep_id": "usr_0001",
+    "tam_id": "usr_0004",
+    "created_at": "2025-07-27T10:46:00.854Z"
+  },
+  {
+    "id": "acc_001a",
+    "name": "Stadtwerke München",
+    "domain": "swm.de",
+    "country": "DE",
+    "sector": "enterprise",
+    "channel": "direct",
+    "owner_rep_id": "usr_0003",
+    "tam_id": "usr_0004",
+    "created_at": "2024-12-25T10:46:00.854Z"
+  },
+  {
+    "id": "acc_001d",
+    "name": "Airbus Defence and Space",
+    "domain": "airbus.com",
+    "country": "FR",
+    "sector": "enterprise",
+    "channel": "direct",
+    "owner_rep_id": "usr_0003",
+    "tam_id": "usr_0005",
+    "created_at": "2025-09-30T10:46:00.854Z"
+  },
+  {
+    "id": "acc_001h",
+    "name": "Thales Group",
+    "domain": "thalesgroup.com",
+    "country": "FR",
+    "sector": "enterprise",
+    "channel": "reseller",
+    "owner_rep_id": "usr_0001",
+    "tam_id": "usr_0005",
+    "created_at": "2024-12-30T10:46:00.854Z"
+  },
+  {
+    "id": "acc_001m",
+    "name": "A.P. Moller - Maersk",
+    "domain": "maersk.com",
+    "country": "DK",
+    "sector": "enterprise",
+    "channel": "direct",
+    "owner_rep_id": "usr_0003",
+    "tam_id": "usr_0004",
+    "created_at": "2025-06-14T10:46:00.854Z"
+  },
+  {
+    "id": "acc_001p",
+    "name": "Vattenfall AB",
+    "domain": "vattenfall.com",
+    "country": "SE",
+    "sector": "enterprise",
+    "channel": "direct",
+    "owner_rep_id": "usr_0002",
+    "tam_id": "usr_0004",
+    "created_at": "2025-08-06T10:46:00.854Z"
+  },
+  {
+    "id": "acc_001t",
+    "name": "Deutsche Bahn AG",
+    "domain": "deutschebahn.com",
+    "country": "DE",
+    "sector": "enterprise",
+    "channel": "reseller",
+    "owner_rep_id": "usr_0001",
+    "tam_id": "usr_0005",
+    "created_at": "2025-03-17T10:46:00.854Z"
+  },
+  {
+    "id": "acc_001w",
+    "name": "City of Helsinki",
+    "domain": "hel.fi",
+    "country": "FI",
+    "sector": "government",
+    "channel": "direct",
+    "owner_rep_id": "usr_0001",
+    "tam_id": "usr_0004",
+    "created_at": "2025-08-18T10:46:00.854Z"
+  },
+  {
+    "id": "acc_0021",
+    "name": "Rijkswaterstaat",
+    "domain": "rws.nl",
+    "country": "NL",
+    "sector": "government",
+    "channel": "direct",
+    "owner_rep_id": "usr_0001",
+    "tam_id": "usr_0004",
+    "created_at": "2025-03-28T10:46:00.854Z"
+  },
+  {
+    "id": "acc_0026",
+    "name": "Nokia Solutions",
+    "domain": "nokia.com",
+    "country": "FI",
+    "sector": "enterprise",
+    "channel": "direct",
+    "owner_rep_id": "usr_0002",
+    "tam_id": "usr_0004",
+    "created_at": "2025-05-15T10:46:00.854Z"
+  }
+]

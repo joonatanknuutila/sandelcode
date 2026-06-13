@@ -1,0 +1,20 @@
+[
+  {
+    "id": "apr_007i",
+    "offer_id": "off_007f",
+    "approver_role": "sales_manager",
+    "approver_id": "usr_0006",
+    "decision": "approved",
+    "comment": null,
+    "decided_at": "2026-06-10T10:46:00.855Z"
+  },
+  {
+    "id": "apr_007v",
+    "offer_id": "off_007s",
+    "approver_role": "sales_manager",
+    "approver_id": "usr_0006",
+    "decision": "approved",
+    "comment": null,
+    "decided_at": "2026-05-30T10:46:00.855Z"
+  }
+]

@@ -1,0 +1,3573 @@
+{
+  "meta": {
+    "generated_at": "2026-06-13T10:46:00.855Z",
+    "win_probability": {
+      "interest": 10,
+      "rfi": 25,
+      "rfp": 40,
+      "customer_test": 60,
+      "contract_negotiation": 80,
+      "won": 100,
+      "lost": 0
+    },
+    "note": "win% are assumptions pending HMD confirmation"
+  },
+  "users": [
+    {
+      "id": "usr_0001",
+      "name": "Aino Mäkinen",
+      "email": "aino.m.kinen@hmd-secure.com",
+      "role": "rep"
+    },
+    {
+      "id": "usr_0002",
+      "name": "David Kraus",
+      "email": "david.kraus@hmd-secure.com",
+      "role": "rep"
+    },
+    {
+      "id": "usr_0003",
+      "name": "Camille Roy",
+      "email": "camille.roy@hmd-secure.com",
+      "role": "rep"
+    },
+    {
+      "id": "usr_0004",
+      "name": "Niklas Holm",
+      "email": "niklas.holm@hmd-secure.com",
+      "role": "tam"
+    },
+    {
+      "id": "usr_0005",
+      "name": "Petra Vogel",
+      "email": "petra.vogel@hmd-secure.com",
+      "role": "tam"
+    },
+    {
+      "id": "usr_0006",
+      "name": "Markus Lindqvist",
+      "email": "markus.lindqvist@hmd-secure.com",
+      "role": "sales_manager"
+    },
+    {
+      "id": "usr_0007",
+      "name": "Riikka Salo",
+      "email": "riikka.salo@hmd-secure.com",
+      "role": "finance"
+    }
+  ],
+  "accounts": [
+    {
+      "id": "acc_000l",
+      "name": "Bundesdruckerei GmbH",
+      "domain": "bundesdruckerei.de",
+      "country": "DE",
+      "sector": "government",
+      "channel": "direct",
+      "owner_rep_id": "usr_0002",
+      "tam_id": "usr_0004",
+      "created_at": "2025-05-05T10:46:00.853Z"
+    },
+    {
+      "id": "acc_000q",
+      "name": "Finnish Defence Forces",
+      "domain": "puolustusvoimat.fi",
+      "country": "FI",
+      "sector": "government",
+      "channel": "direct",
+      "owner_rep_id": "usr_0003",
+      "tam_id": "usr_0005",
+      "created_at": "2025-02-21T10:46:00.854Z"
+    },
+    {
+      "id": "acc_000v",
+      "name": "Gendarmerie Nationale",
+      "domain": "gendarmerie.fr",
+      "country": "FR",
+      "sector": "government",
+      "channel": "direct",
+      "owner_rep_id": "usr_0003",
+      "tam_id": "usr_0004",
+      "created_at": "2025-12-17T10:46:00.854Z"
+    },
+    {
+      "id": "acc_0010",
+      "name": "Politiet",
+      "domain": "politiet.no",
+      "country": "NO",
+      "sector": "government",
+      "channel": "reseller",
+      "owner_rep_id": "usr_0001",
+      "tam_id": "usr_0005",
+      "created_at": "2025-03-24T10:46:00.854Z"
+    },
+    {
+      "id": "acc_0015",
+      "name": "Belgian Federal Police",
+      "domain": "police.be",
+      "country": "BE",
+      "sector": "government",
+      "channel": "direct",
+      "owner_rep_id": "usr_0001",
+      "tam_id": "usr_0004",
+      "created_at": "2025-07-27T10:46:00.854Z"
+    },
+    {
+      "id": "acc_001a",
+      "name": "Stadtwerke München",
+      "domain": "swm.de",
+      "country": "DE",
+      "sector": "enterprise",
+      "channel": "direct",
+      "owner_rep_id": "usr_0003",
+      "tam_id": "usr_0004",
+      "created_at": "2024-12-25T10:46:00.854Z"
+    },
+    {
+      "id": "acc_001d",
+      "name": "Airbus Defence and Space",
+      "domain": "airbus.com",
+      "country": "FR",
+      "sector": "enterprise",
+      "channel": "direct",
+      "owner_rep_id": "usr_0003",
+      "tam_id": "usr_0005",
+      "created_at": "2025-09-30T10:46:00.854Z"
+    },
+    {
+      "id": "acc_001h",
+      "name": "Thales Group",
+      "domain": "thalesgroup.com",
+      "country": "FR",
+      "sector": "enterprise",
+      "channel": "reseller",
+      "owner_rep_id": "usr_0001",
+      "tam_id": "usr_0005",
+      "created_at": "2024-12-30T10:46:00.854Z"
+    },
+    {
+      "id": "acc_001m",
+      "name": "A.P. Moller - Maersk",
+      "domain": "maersk.com",
+      "country": "DK",
+      "sector": "enterprise",
+      "channel": "direct",
+      "owner_rep_id": "usr_0003",
+      "tam_id": "usr_0004",
+      "created_at": "2025-06-14T10:46:00.854Z"
+    },
+    {
+      "id": "acc_001p",
+      "name": "Vattenfall AB",
+      "domain": "vattenfall.com",
+      "country": "SE",
+      "sector": "enterprise",
+      "channel": "direct",
+      "owner_rep_id": "usr_0002",
+      "tam_id": "usr_0004",
+      "created_at": "2025-08-06T10:46:00.854Z"
+    },
+    {
+      "id": "acc_001t",
+      "name": "Deutsche Bahn AG",
+      "domain": "deutschebahn.com",
+      "country": "DE",
+      "sector": "enterprise",
+      "channel": "reseller",
+      "owner_rep_id": "usr_0001",
+      "tam_id": "usr_0005",
+      "created_at": "2025-03-17T10:46:00.854Z"
+    },
+    {
+      "id": "acc_001w",
+      "name": "City of Helsinki",
+      "domain": "hel.fi",
+      "country": "FI",
+      "sector": "government",
+      "channel": "direct",
+      "owner_rep_id": "usr_0001",
+      "tam_id": "usr_0004",
+      "created_at": "2025-08-18T10:46:00.854Z"
+    },
+    {
+      "id": "acc_0021",
+      "name": "Rijkswaterstaat",
+      "domain": "rws.nl",
+      "country": "NL",
+      "sector": "government",
+      "channel": "direct",
+      "owner_rep_id": "usr_0001",
+      "tam_id": "usr_0004",
+      "created_at": "2025-03-28T10:46:00.854Z"
+    },
+    {
+      "id": "acc_0026",
+      "name": "Nokia Solutions",
+      "domain": "nokia.com",
+      "country": "FI",
+      "sector": "enterprise",
+      "channel": "direct",
+      "owner_rep_id": "usr_0002",
+      "tam_id": "usr_0004",
+      "created_at": "2025-05-15T10:46:00.854Z"
+    }
+  ],
+  "contacts": [
+    {
+      "id": "con_000m",
+      "account_id": "acc_000l",
+      "name": "Mikael Rossi",
+      "title": "CISO",
+      "email": "mikael.rossi@bundesdruckerei.de",
+      "phone": "+39 48 5927409",
+      "is_primary": true
+    },
+    {
+      "id": "con_000n",
+      "account_id": "acc_000l",
+      "name": "Pekka Rossi",
+      "title": "Mobility Lead",
+      "email": "pekka.rossi@bundesdruckerei.de",
+      "phone": "+36 19 3232590",
+      "is_primary": false
+    },
+    {
+      "id": "con_000o",
+      "account_id": "acc_000l",
+      "name": "Lars Nielsen",
+      "title": "Head of IT",
+      "email": "lars.nielsen@bundesdruckerei.de",
+      "phone": "+43 96 7829580",
+      "is_primary": false
+    },
+    {
+      "id": "con_000p",
+      "account_id": "acc_000l",
+      "name": "Ingrid Novak",
+      "title": "Mobility Lead",
+      "email": "ingrid.novak@bundesdruckerei.de",
+      "phone": "+40 32 3895057",
+      "is_primary": false
+    },
+    {
+      "id": "con_000r",
+      "account_id": "acc_000q",
+      "name": "Marie Dubois",
+      "title": "IT Director",
+      "email": "marie.dubois@puolustusvoimat.fi",
+      "phone": "+30 41 8390223",
+      "is_primary": true
+    },
+    {
+      "id": "con_000s",
+      "account_id": "acc_000q",
+      "name": "Saara Nielsen",
+      "title": "CISO",
+      "email": "saara.nielsen@puolustusvoimat.fi",
+      "phone": "+37 33 6684918",
+      "is_primary": false
+    },
+    {
+      "id": "con_000t",
+      "account_id": "acc_000q",
+      "name": "Anna Aaltonen",
+      "title": "Procurement Lead",
+      "email": "anna.aaltonen@puolustusvoimat.fi",
+      "phone": "+33 64 7071650",
+      "is_primary": false
+    },
+    {
+      "id": "con_000u",
+      "account_id": "acc_000q",
+      "name": "Henrik Dubois",
+      "title": "IT Director",
+      "email": "henrik.dubois@puolustusvoimat.fi",
+      "phone": "+40 24 5296923",
+      "is_primary": false
+    },
+    {
+      "id": "con_000w",
+      "account_id": "acc_000v",
+      "name": "Ingrid Aaltonen",
+      "title": "Head of IT",
+      "email": "ingrid.aaltonen@gendarmerie.fr",
+      "phone": "+39 21 6283806",
+      "is_primary": true
+    },
+    {
+      "id": "con_000x",
+      "account_id": "acc_000v",
+      "name": "Tomas Dubois",
+      "title": "Head of IT",
+      "email": "tomas.dubois@gendarmerie.fr",
+      "phone": "+34 93 5422767",
+      "is_primary": false
+    },
+    {
+      "id": "con_000y",
+      "account_id": "acc_000v",
+      "name": "Ingrid Schmidt",
+      "title": "Head of IT",
+      "email": "ingrid.schmidt@gendarmerie.fr",
+      "phone": "+34 46 1994646",
+      "is_primary": false
+    },
+    {
+      "id": "con_000z",
+      "account_id": "acc_000v",
+      "name": "Elena Larsson",
+      "title": "Security Architect",
+      "email": "elena.larsson@gendarmerie.fr",
+      "phone": "+37 65 1020679",
+      "is_primary": false
+    },
+    {
+      "id": "con_0011",
+      "account_id": "acc_0010",
+      "name": "Marie Andersen",
+      "title": "Procurement Lead",
+      "email": "marie.andersen@politiet.no",
+      "phone": "+43 63 9192473",
+      "is_primary": true
+    },
+    {
+      "id": "con_0012",
+      "account_id": "acc_0010",
+      "name": "Clara Nielsen",
+      "title": "Head of IT",
+      "email": "clara.nielsen@politiet.no",
+      "phone": "+37 31 8415433",
+      "is_primary": false
+    },
+    {
+      "id": "con_0013",
+      "account_id": "acc_0010",
+      "name": "Ingrid Rossi",
+      "title": "Head of IT",
+      "email": "ingrid.rossi@politiet.no",
+      "phone": "+44 58 8470557",
+      "is_primary": false
+    },
+    {
+      "id": "con_0014",
+      "account_id": "acc_0010",
+      "name": "Marie Janssen",
+      "title": "CISO",
+      "email": "marie.janssen@politiet.no",
+      "phone": "+41 15 4372965",
+      "is_primary": false
+    },
+    {
+      "id": "con_0016",
+      "account_id": "acc_0015",
+      "name": "Pekka Novak",
+      "title": "Head of IT",
+      "email": "pekka.novak@police.be",
+      "phone": "+41 72 3476169",
+      "is_primary": true
+    },
+    {
+      "id": "con_0017",
+      "account_id": "acc_0015",
+      "name": "Henrik Schmidt",
+      "title": "Fleet Manager",
+      "email": "henrik.schmidt@police.be",
+      "phone": "+35 19 4760950",
+      "is_primary": false
+    },
+    {
+      "id": "con_0018",
+      "account_id": "acc_0015",
+      "name": "Marie Berg",
+      "title": "CISO",
+      "email": "marie.berg@police.be",
+      "phone": "+37 79 1033137",
+      "is_primary": false
+    },
+    {
+      "id": "con_0019",
+      "account_id": "acc_0015",
+      "name": "Henrik Aaltonen",
+      "title": "CISO",
+      "email": "henrik.aaltonen@police.be",
+      "phone": "+45 30 8069340",
+      "is_primary": false
+    },
+    {
+      "id": "con_001b",
+      "account_id": "acc_001a",
+      "name": "Johan Laurent",
+      "title": "Head of IT",
+      "email": "johan.laurent@swm.de",
+      "phone": "+48 64 2909324",
+      "is_primary": true
+    },
+    {
+      "id": "con_001c",
+      "account_id": "acc_001a",
+      "name": "Anna Andersen",
+      "title": "Security Architect",
+      "email": "anna.andersen@swm.de",
+      "phone": "+37 48 6443432",
+      "is_primary": false
+    },
+    {
+      "id": "con_001e",
+      "account_id": "acc_001d",
+      "name": "Ingrid Müller",
+      "title": "Security Architect",
+      "email": "ingrid.müller@airbus.com",
+      "phone": "+44 85 8777145",
+      "is_primary": true
+    },
+    {
+      "id": "con_001f",
+      "account_id": "acc_001d",
+      "name": "Lars Virtanen",
+      "title": "Mobility Lead",
+      "email": "lars.virtanen@airbus.com",
+      "phone": "+37 60 6225158",
+      "is_primary": false
+    },
+    {
+      "id": "con_001g",
+      "account_id": "acc_001d",
+      "name": "Marie Virtanen",
+      "title": "Head of IT",
+      "email": "marie.virtanen@airbus.com",
+      "phone": "+46 81 1873604",
+      "is_primary": false
+    },
+    {
+      "id": "con_001i",
+      "account_id": "acc_001h",
+      "name": "Henrik Dubois",
+      "title": "Security Architect",
+      "email": "henrik.dubois@thalesgroup.com",
+      "phone": "+31 75 6448736",
+      "is_primary": true
+    },
+    {
+      "id": "con_001j",
+      "account_id": "acc_001h",
+      "name": "Mikael Dubois",
+      "title": "Mobility Lead",
+      "email": "mikael.dubois@thalesgroup.com",
+      "phone": "+43 15 5280436",
+      "is_primary": false
+    },
+    {
+      "id": "con_001k",
+      "account_id": "acc_001h",
+      "name": "Lars Nielsen",
+      "title": "Mobility Lead",
+      "email": "lars.nielsen@thalesgroup.com",
+      "phone": "+35 61 5733796",
+      "is_primary": false
+    },
+    {
+      "id": "con_001l",
+      "account_id": "acc_001h",
+      "name": "Mikael Janssen",
+      "title": "Procurement Lead",
+      "email": "mikael.janssen@thalesgroup.com",
+      "phone": "+33 61 2761064",
+      "is_primary": false
+    },
+    {
+      "id": "con_001n",
+      "account_id": "acc_001m",
+      "name": "Johan Andersen",
+      "title": "Head of IT",
+      "email": "johan.andersen@maersk.com",
+      "phone": "+32 52 5240893",
+      "is_primary": true
+    },
+    {
+      "id": "con_001o",
+      "account_id": "acc_001m",
+      "name": "Tomas Virtanen",
+      "title": "Procurement Lead",
+      "email": "tomas.virtanen@maersk.com",
+      "phone": "+42 65 3920959",
+      "is_primary": false
+    },
+    {
+      "id": "con_001q",
+      "account_id": "acc_001p",
+      "name": "Henrik Berg",
+      "title": "Fleet Manager",
+      "email": "henrik.berg@vattenfall.com",
+      "phone": "+44 95 4097394",
+      "is_primary": true
+    },
+    {
+      "id": "con_001r",
+      "account_id": "acc_001p",
+      "name": "Pierre Virtanen",
+      "title": "Head of IT",
+      "email": "pierre.virtanen@vattenfall.com",
+      "phone": "+41 60 9598848",
+      "is_primary": false
+    },
+    {
+      "id": "con_001s",
+      "account_id": "acc_001p",
+      "name": "Marie Novak",
+      "title": "Mobility Lead",
+      "email": "marie.novak@vattenfall.com",
+      "phone": "+43 71 9486847",
+      "is_primary": false
+    },
+    {
+      "id": "con_001u",
+      "account_id": "acc_001t",
+      "name": "Pierre Nielsen",
+      "title": "Head of IT",
+      "email": "pierre.nielsen@deutschebahn.com",
+      "phone": "+39 47 4295978",
+      "is_primary": true
+    },
+    {
+      "id": "con_001v",
+      "account_id": "acc_001t",
+      "name": "Henrik Aaltonen",
+      "title": "Head of IT",
+      "email": "henrik.aaltonen@deutschebahn.com",
+      "phone": "+36 72 2874982",
+      "is_primary": false
+    },
+    {
+      "id": "con_001x",
+      "account_id": "acc_001w",
+      "name": "Tomas Janssen",
+      "title": "Security Architect",
+      "email": "tomas.janssen@hel.fi",
+      "phone": "+44 98 7433450",
+      "is_primary": true
+    },
+    {
+      "id": "con_001y",
+      "account_id": "acc_001w",
+      "name": "Lars Schmidt",
+      "title": "Mobility Lead",
+      "email": "lars.schmidt@hel.fi",
+      "phone": "+40 31 1881442",
+      "is_primary": false
+    },
+    {
+      "id": "con_001z",
+      "account_id": "acc_001w",
+      "name": "Anna Rossi",
+      "title": "IT Director",
+      "email": "anna.rossi@hel.fi",
+      "phone": "+32 79 9185736",
+      "is_primary": false
+    },
+    {
+      "id": "con_0020",
+      "account_id": "acc_001w",
+      "name": "Clara Nielsen",
+      "title": "Head of IT",
+      "email": "clara.nielsen@hel.fi",
+      "phone": "+44 36 1447000",
+      "is_primary": false
+    },
+    {
+      "id": "con_0022",
+      "account_id": "acc_0021",
+      "name": "Johan Novak",
+      "title": "Procurement Lead",
+      "email": "johan.novak@rws.nl",
+      "phone": "+32 73 8693854",
+      "is_primary": true
+    },
+    {
+      "id": "con_0023",
+      "account_id": "acc_0021",
+      "name": "Lars Aaltonen",
+      "title": "Head of IT",
+      "email": "lars.aaltonen@rws.nl",
+      "phone": "+40 84 5223542",
+      "is_primary": false
+    },
+    {
+      "id": "con_0024",
+      "account_id": "acc_0021",
+      "name": "Sophie Nielsen",
+      "title": "Head of IT",
+      "email": "sophie.nielsen@rws.nl",
+      "phone": "+43 70 7367155",
+      "is_primary": false
+    },
+    {
+      "id": "con_0025",
+      "account_id": "acc_0021",
+      "name": "Anna Novak",
+      "title": "IT Director",
+      "email": "anna.novak@rws.nl",
+      "phone": "+32 28 8283170",
+      "is_primary": false
+    },
+    {
+      "id": "con_0027",
+      "account_id": "acc_0026",
+      "name": "Mikael Schmidt",
+      "title": "Security Architect",
+      "email": "mikael.schmidt@nokia.com",
+      "phone": "+48 32 4299805",
+      "is_primary": true
+    },
+    {
+      "id": "con_0028",
+      "account_id": "acc_0026",
+      "name": "Pekka Dubois",
+      "title": "Procurement Lead",
+      "email": "pekka.dubois@nokia.com",
+      "phone": "+48 97 3046074",
+      "is_primary": false
+    }
+  ],
+  "products": [
+    {
+      "id": "prd_0008",
+      "sku": "HMD-S30",
+      "name": "HMD Secure S30",
+      "category": "device",
+      "list_price_eur": 749,
+      "active": true
+    },
+    {
+      "id": "prd_0009",
+      "sku": "HMD-X20",
+      "name": "HMD Secure X20",
+      "category": "device",
+      "list_price_eur": 549,
+      "active": true
+    },
+    {
+      "id": "prd_000a",
+      "sku": "HMD-PPS",
+      "name": "HMD Pulse Pro Secure",
+      "category": "device",
+      "list_price_eur": 899,
+      "active": true
+    },
+    {
+      "id": "prd_000b",
+      "sku": "HMD-T11",
+      "name": "HMD Secure Tab 11",
+      "category": "device",
+      "list_price_eur": 649,
+      "active": true
+    },
+    {
+      "id": "prd_000c",
+      "sku": "HMD-RG2",
+      "name": "HMD Rugged G2 Secure",
+      "category": "device",
+      "list_price_eur": 1099,
+      "active": true
+    },
+    {
+      "id": "prd_000d",
+      "sku": "ACC-DOCK",
+      "name": "Secure Charging Dock",
+      "category": "accessory",
+      "list_price_eur": 89,
+      "active": true
+    },
+    {
+      "id": "prd_000e",
+      "sku": "ACC-CASE",
+      "name": "Tamper-evident Case",
+      "category": "accessory",
+      "list_price_eur": 49,
+      "active": true
+    }
+  ],
+  "services": [
+    {
+      "id": "svc_000f",
+      "sku": "SVC-MDM",
+      "name": "HMD Mobile Device Management",
+      "type": "internal",
+      "invoicing_model": "monthly_recurring",
+      "unit_price_eur": 6,
+      "active": true
+    },
+    {
+      "id": "svc_000g",
+      "sku": "SVC-OSU",
+      "name": "Secure OS Update Subscription",
+      "type": "internal",
+      "invoicing_model": "fixed_term",
+      "unit_price_eur": 120,
+      "active": true
+    },
+    {
+      "id": "svc_000h",
+      "sku": "SVC-MON",
+      "name": "Security Monitoring (per device)",
+      "type": "internal",
+      "invoicing_model": "monthly_recurring",
+      "unit_price_eur": 9,
+      "active": true
+    },
+    {
+      "id": "svc_000i",
+      "sku": "SVC-ONB",
+      "name": "Fleet Onboarding & Provisioning",
+      "type": "internal",
+      "invoicing_model": "one_off",
+      "unit_price_eur": 4500,
+      "active": true
+    },
+    {
+      "id": "svc_000j",
+      "sku": "SVC-TI",
+      "name": "3rd-party Threat Intelligence Feed",
+      "type": "third_party",
+      "invoicing_model": "fixed_term",
+      "unit_price_eur": 18000,
+      "active": true
+    },
+    {
+      "id": "svc_000k",
+      "sku": "SVC-SOC",
+      "name": "3rd-party SOC Escalation",
+      "type": "third_party",
+      "invoicing_model": "monthly_recurring",
+      "unit_price_eur": 14,
+      "active": true
+    }
+  ],
+  "deals": [
+    {
+      "id": "deal_0029",
+      "account_id": "acc_000l",
+      "name": "HMD Secure Tab 11 rollout — Bundesdruckerei GmbH",
+      "channel": "direct",
+      "stage": "interest",
+      "owner_rep_id": "usr_0002",
+      "currency": "EUR",
+      "total_value_3yr_eur": 2863721,
+      "expected_close": "2026-12-19",
+      "created_at": "2025-10-05T10:46:00.854Z",
+      "last_activity_at": "2026-05-25T10:46:00.854Z",
+      "lost_reason": null
+    },
+    {
+      "id": "deal_002i",
+      "account_id": "acc_000q",
+      "name": "HMD Secure S30 rollout — Finnish Defence Forces",
+      "channel": "direct",
+      "stage": "contract_negotiation",
+      "owner_rep_id": "usr_0003",
+      "currency": "EUR",
+      "total_value_3yr_eur": 1090501,
+      "expected_close": "2026-10-12",
+      "created_at": "2026-02-22T10:46:00.854Z",
+      "last_activity_at": "2026-05-26T10:46:00.854Z",
+      "lost_reason": null
+    },
+    {
+      "id": "deal_002r",
+      "account_id": "acc_000v",
+      "name": "HMD Pulse Pro Secure rollout — Gendarmerie Nationale",
+      "channel": "direct",
+      "stage": "rfi",
+      "owner_rep_id": "usr_0003",
+      "currency": "EUR",
+      "total_value_3yr_eur": 604424,
+      "expected_close": "2027-04-22",
+      "created_at": "2026-01-05T10:46:00.854Z",
+      "last_activity_at": "2026-05-23T10:46:00.854Z",
+      "lost_reason": null
+    },
+    {
+      "id": "deal_0030",
+      "account_id": "acc_000v",
+      "name": "HMD Secure S30 rollout — Gendarmerie Nationale",
+      "channel": "direct",
+      "stage": "rfp",
+      "owner_rep_id": "usr_0003",
+      "currency": "EUR",
+      "total_value_3yr_eur": 534030,
+      "expected_close": "2027-06-08",
+      "created_at": "2025-09-28T10:46:00.854Z",
+      "last_activity_at": "2026-05-19T10:46:00.854Z",
+      "lost_reason": null
+    },
+    {
+      "id": "deal_003a",
+      "account_id": "acc_0010",
+      "name": "HMD Pulse Pro Secure rollout — Politiet",
+      "channel": "reseller",
+      "stage": "rfp",
+      "owner_rep_id": "usr_0001",
+      "currency": "EUR",
+      "total_value_3yr_eur": 1547470,
+      "expected_close": "2027-04-14",
+      "created_at": "2026-01-03T10:46:00.854Z",
+      "last_activity_at": "2026-05-24T10:46:00.854Z",
+      "lost_reason": null
+    },
+    {
+      "id": "deal_003k",
+      "account_id": "acc_0015",
+      "name": "HMD Rugged G2 Secure rollout — Belgian Federal Police",
+      "channel": "direct",
+      "stage": "contract_negotiation",
+      "owner_rep_id": "usr_0001",
+      "currency": "EUR",
+      "total_value_3yr_eur": 4651107,
+      "expected_close": "2026-07-30",
+      "created_at": "2025-08-26T10:46:00.854Z",
+      "last_activity_at": "2026-06-09T10:46:00.854Z",
+      "lost_reason": null
+    },
+    {
+      "id": "deal_003t",
+      "account_id": "acc_001a",
+      "name": "HMD Pulse Pro Secure rollout — Stadtwerke München",
+      "channel": "direct",
+      "stage": "rfp",
+      "owner_rep_id": "usr_0003",
+      "currency": "EUR",
+      "total_value_3yr_eur": 3888900,
+      "expected_close": "2026-08-09",
+      "created_at": "2026-03-10T10:46:00.854Z",
+      "last_activity_at": "2026-05-31T10:46:00.854Z",
+      "lost_reason": null
+    },
+    {
+      "id": "deal_0041",
+      "account_id": "acc_001a",
+      "name": "HMD Secure X20 rollout — Stadtwerke München",
+      "channel": "direct",
+      "stage": "rfi",
+      "owner_rep_id": "usr_0003",
+      "currency": "EUR",
+      "total_value_3yr_eur": 2507886,
+      "expected_close": "2027-06-28",
+      "created_at": "2025-12-22T10:46:00.855Z",
+      "last_activity_at": "2026-05-17T10:46:00.855Z",
+      "lost_reason": null
+    },
+    {
+      "id": "deal_004a",
+      "account_id": "acc_001d",
+      "name": "HMD Pulse Pro Secure rollout — Airbus Defence and Space",
+      "channel": "direct",
+      "stage": "rfi",
+      "owner_rep_id": "usr_0003",
+      "currency": "EUR",
+      "total_value_3yr_eur": 1453597,
+      "expected_close": "2026-11-13",
+      "created_at": "2025-08-30T10:46:00.855Z",
+      "last_activity_at": "2026-06-08T10:46:00.855Z",
+      "lost_reason": null
+    },
+    {
+      "id": "deal_004j",
+      "account_id": "acc_001d",
+      "name": "HMD Secure X20 rollout — Airbus Defence and Space",
+      "channel": "direct",
+      "stage": "lost",
+      "owner_rep_id": "usr_0003",
+      "currency": "EUR",
+      "total_value_3yr_eur": 1058634,
+      "expected_close": "2026-09-09",
+      "created_at": "2025-10-11T10:46:00.855Z",
+      "last_activity_at": "2026-04-20T10:46:00.855Z",
+      "lost_reason": "project cancelled"
+    },
+    {
+      "id": "deal_004t",
+      "account_id": "acc_001h",
+      "name": "HMD Pulse Pro Secure rollout — Thales Group",
+      "channel": "reseller",
+      "stage": "customer_test",
+      "owner_rep_id": "usr_0001",
+      "currency": "EUR",
+      "total_value_3yr_eur": 2368589,
+      "expected_close": "2027-05-26",
+      "created_at": "2026-05-12T10:46:00.855Z",
+      "last_activity_at": "2026-05-22T10:46:00.855Z",
+      "lost_reason": null
+    },
+    {
+      "id": "deal_0053",
+      "account_id": "acc_001h",
+      "name": "HMD Pulse Pro Secure rollout — Thales Group",
+      "channel": "reseller",
+      "stage": "interest",
+      "owner_rep_id": "usr_0001",
+      "currency": "EUR",
+      "total_value_3yr_eur": 3924507,
+      "expected_close": "2027-01-15",
+      "created_at": "2025-12-26T10:46:00.855Z",
+      "last_activity_at": "2026-05-30T10:46:00.855Z",
+      "lost_reason": null
+    },
+    {
+      "id": "deal_005d",
+      "account_id": "acc_001m",
+      "name": "HMD Secure S30 rollout — A.P. Moller - Maersk",
+      "channel": "direct",
+      "stage": "rfi",
+      "owner_rep_id": "usr_0003",
+      "currency": "EUR",
+      "total_value_3yr_eur": 2331645,
+      "expected_close": "2027-07-11",
+      "created_at": "2026-04-05T10:46:00.855Z",
+      "last_activity_at": "2026-06-05T10:46:00.855Z",
+      "lost_reason": null
+    },
+    {
+      "id": "deal_005n",
+      "account_id": "acc_001m",
+      "name": "HMD Rugged G2 Secure rollout — A.P. Moller - Maersk",
+      "channel": "direct",
+      "stage": "customer_test",
+      "owner_rep_id": "usr_0003",
+      "currency": "EUR",
+      "total_value_3yr_eur": 358783,
+      "expected_close": "2027-06-13",
+      "created_at": "2026-01-18T10:46:00.855Z",
+      "last_activity_at": "2026-06-05T10:46:00.855Z",
+      "lost_reason": null
+    },
+    {
+      "id": "deal_005w",
+      "account_id": "acc_001p",
+      "name": "HMD Secure Tab 11 rollout — Vattenfall AB",
+      "channel": "direct",
+      "stage": "rfp",
+      "owner_rep_id": "usr_0002",
+      "currency": "EUR",
+      "total_value_3yr_eur": 2378756,
+      "expected_close": "2026-09-17",
+      "created_at": "2026-04-17T10:46:00.855Z",
+      "last_activity_at": "2026-05-29T10:46:00.855Z",
+      "lost_reason": null
+    },
+    {
+      "id": "deal_0066",
+      "account_id": "acc_001t",
+      "name": "HMD Secure X20 rollout — Deutsche Bahn AG",
+      "channel": "reseller",
+      "stage": "customer_test",
+      "owner_rep_id": "usr_0001",
+      "currency": "EUR",
+      "total_value_3yr_eur": 2519550,
+      "expected_close": "2027-10-06",
+      "created_at": "2026-01-03T10:46:00.855Z",
+      "last_activity_at": "2026-05-17T10:46:00.855Z",
+      "lost_reason": null
+    },
+    {
+      "id": "deal_006g",
+      "account_id": "acc_001w",
+      "name": "HMD Pulse Pro Secure rollout — City of Helsinki",
+      "channel": "direct",
+      "stage": "rfi",
+      "owner_rep_id": "usr_0001",
+      "currency": "EUR",
+      "total_value_3yr_eur": 701534,
+      "expected_close": "2027-06-09",
+      "created_at": "2026-05-14T10:46:00.855Z",
+      "last_activity_at": "2026-06-01T10:46:00.855Z",
+      "lost_reason": null
+    },
+    {
+      "id": "deal_006o",
+      "account_id": "acc_0021",
+      "name": "HMD Pulse Pro Secure rollout — Rijkswaterstaat",
+      "channel": "direct",
+      "stage": "interest",
+      "owner_rep_id": "usr_0001",
+      "currency": "EUR",
+      "total_value_3yr_eur": 2027625,
+      "expected_close": "2027-09-15",
+      "created_at": "2025-10-19T10:46:00.855Z",
+      "last_activity_at": "2026-05-17T10:46:00.855Z",
+      "lost_reason": null
+    },
+    {
+      "id": "deal_006x",
+      "account_id": "acc_0021",
+      "name": "HMD Pulse Pro Secure rollout — Rijkswaterstaat",
+      "channel": "direct",
+      "stage": "rfi",
+      "owner_rep_id": "usr_0001",
+      "currency": "EUR",
+      "total_value_3yr_eur": 1239955,
+      "expected_close": "2027-05-20",
+      "created_at": "2026-01-10T10:46:00.855Z",
+      "last_activity_at": "2026-05-28T10:46:00.855Z",
+      "lost_reason": null
+    },
+    {
+      "id": "deal_0076",
+      "account_id": "acc_0026",
+      "name": "HMD Secure S30 rollout — Nokia Solutions",
+      "channel": "direct",
+      "stage": "customer_test",
+      "owner_rep_id": "usr_0002",
+      "currency": "EUR",
+      "total_value_3yr_eur": 3154739,
+      "expected_close": "2026-07-24",
+      "created_at": "2025-12-08T10:46:00.855Z",
+      "last_activity_at": "2026-05-31T10:46:00.855Z",
+      "lost_reason": null
+    }
+  ],
+  "deal_forecast": [
+    {
+      "id": "fc_002a",
+      "deal_id": "deal_0029",
+      "period": "2026-Q2",
+      "device_units": 414,
+      "device_revenue_eur": 268686,
+      "service_revenue_eur": 79020
+    },
+    {
+      "id": "fc_002b",
+      "deal_id": "deal_0029",
+      "period": "2026-Q3",
+      "device_units": 670,
+      "device_revenue_eur": 434830,
+      "service_revenue_eur": 120600
+    },
+    {
+      "id": "fc_002c",
+      "deal_id": "deal_0029",
+      "period": "2026-Q4",
+      "device_units": 378,
+      "device_revenue_eur": 245322,
+      "service_revenue_eur": 68040
+    },
+    {
+      "id": "fc_002d",
+      "deal_id": "deal_0029",
+      "period": "2027-Q1",
+      "device_units": 353,
+      "device_revenue_eur": 229097,
+      "service_revenue_eur": 63540
+    },
+    {
+      "id": "fc_002e",
+      "deal_id": "deal_0029",
+      "period": "2027-Q2",
+      "device_units": 841,
+      "device_revenue_eur": 545809,
+      "service_revenue_eur": 151380
+    },
+    {
+      "id": "fc_002f",
+      "deal_id": "deal_0029",
+      "period": "2027-Q3",
+      "device_units": 793,
+      "device_revenue_eur": 514657,
+      "service_revenue_eur": 142740
+    },
+    {
+      "id": "fc_002j",
+      "deal_id": "deal_002i",
+      "period": "2026-Q2",
+      "device_units": 140,
+      "device_revenue_eur": 104860,
+      "service_revenue_eur": 29700
+    },
+    {
+      "id": "fc_002k",
+      "deal_id": "deal_002i",
+      "period": "2026-Q3",
+      "device_units": 202,
+      "device_revenue_eur": 151298,
+      "service_revenue_eur": 36360
+    },
+    {
+      "id": "fc_002l",
+      "deal_id": "deal_002i",
+      "period": "2026-Q4",
+      "device_units": 196,
+      "device_revenue_eur": 146804,
+      "service_revenue_eur": 35280
+    },
+    {
+      "id": "fc_002m",
+      "deal_id": "deal_002i",
+      "period": "2027-Q1",
+      "device_units": 254,
+      "device_revenue_eur": 190246,
+      "service_revenue_eur": 45720
+    },
+    {
+      "id": "fc_002n",
+      "deal_id": "deal_002i",
+      "period": "2027-Q2",
+      "device_units": 163,
+      "device_revenue_eur": 122087,
+      "service_revenue_eur": 29340
+    },
+    {
+      "id": "fc_002o",
+      "deal_id": "deal_002i",
+      "period": "2027-Q3",
+      "device_units": 214,
+      "device_revenue_eur": 160286,
+      "service_revenue_eur": 38520
+    },
+    {
+      "id": "fc_002s",
+      "deal_id": "deal_002r",
+      "period": "2026-Q2",
+      "device_units": 67,
+      "device_revenue_eur": 60233,
+      "service_revenue_eur": 16560
+    },
+    {
+      "id": "fc_002t",
+      "deal_id": "deal_002r",
+      "period": "2026-Q3",
+      "device_units": 128,
+      "device_revenue_eur": 115072,
+      "service_revenue_eur": 23040
+    },
+    {
+      "id": "fc_002u",
+      "deal_id": "deal_002r",
+      "period": "2026-Q4",
+      "device_units": 57,
+      "device_revenue_eur": 51243,
+      "service_revenue_eur": 10260
+    },
+    {
+      "id": "fc_002v",
+      "deal_id": "deal_002r",
+      "period": "2027-Q1",
+      "device_units": 130,
+      "device_revenue_eur": 116870,
+      "service_revenue_eur": 23400
+    },
+    {
+      "id": "fc_002w",
+      "deal_id": "deal_002r",
+      "period": "2027-Q2",
+      "device_units": 95,
+      "device_revenue_eur": 85405,
+      "service_revenue_eur": 17100
+    },
+    {
+      "id": "fc_002x",
+      "deal_id": "deal_002r",
+      "period": "2027-Q3",
+      "device_units": 79,
+      "device_revenue_eur": 71021,
+      "service_revenue_eur": 14220
+    },
+    {
+      "id": "fc_0031",
+      "deal_id": "deal_0030",
+      "period": "2026-Q2",
+      "device_units": 68,
+      "device_revenue_eur": 50932,
+      "service_revenue_eur": 16740
+    },
+    {
+      "id": "fc_0032",
+      "deal_id": "deal_0030",
+      "period": "2026-Q3",
+      "device_units": 58,
+      "device_revenue_eur": 43442,
+      "service_revenue_eur": 10440
+    },
+    {
+      "id": "fc_0033",
+      "deal_id": "deal_0030",
+      "period": "2026-Q4",
+      "device_units": 89,
+      "device_revenue_eur": 66661,
+      "service_revenue_eur": 16020
+    },
+    {
+      "id": "fc_0034",
+      "deal_id": "deal_0030",
+      "period": "2027-Q1",
+      "device_units": 83,
+      "device_revenue_eur": 62167,
+      "service_revenue_eur": 14940
+    },
+    {
+      "id": "fc_0035",
+      "deal_id": "deal_0030",
+      "period": "2027-Q2",
+      "device_units": 64,
+      "device_revenue_eur": 47936,
+      "service_revenue_eur": 11520
+    },
+    {
+      "id": "fc_0036",
+      "deal_id": "deal_0030",
+      "period": "2027-Q3",
+      "device_units": 145,
+      "device_revenue_eur": 108605,
+      "service_revenue_eur": 26100
+    },
+    {
+      "id": "fc_0037",
+      "deal_id": "deal_0030",
+      "period": "2027-Q4",
+      "device_units": 63,
+      "device_revenue_eur": 47187,
+      "service_revenue_eur": 11340
+    },
+    {
+      "id": "fc_003b",
+      "deal_id": "deal_003a",
+      "period": "2026-Q2",
+      "device_units": 172,
+      "device_revenue_eur": 154628,
+      "service_revenue_eur": 35460
+    },
+    {
+      "id": "fc_003c",
+      "deal_id": "deal_003a",
+      "period": "2026-Q3",
+      "device_units": 163,
+      "device_revenue_eur": 146537,
+      "service_revenue_eur": 29340
+    },
+    {
+      "id": "fc_003d",
+      "deal_id": "deal_003a",
+      "period": "2026-Q4",
+      "device_units": 146,
+      "device_revenue_eur": 131254,
+      "service_revenue_eur": 26280
+    },
+    {
+      "id": "fc_003e",
+      "deal_id": "deal_003a",
+      "period": "2027-Q1",
+      "device_units": 183,
+      "device_revenue_eur": 164517,
+      "service_revenue_eur": 32940
+    },
+    {
+      "id": "fc_003f",
+      "deal_id": "deal_003a",
+      "period": "2027-Q2",
+      "device_units": 302,
+      "device_revenue_eur": 271498,
+      "service_revenue_eur": 54360
+    },
+    {
+      "id": "fc_003g",
+      "deal_id": "deal_003a",
+      "period": "2027-Q3",
+      "device_units": 324,
+      "device_revenue_eur": 291276,
+      "service_revenue_eur": 58320
+    },
+    {
+      "id": "fc_003h",
+      "deal_id": "deal_003a",
+      "period": "2027-Q4",
+      "device_units": 140,
+      "device_revenue_eur": 125860,
+      "service_revenue_eur": 25200
+    },
+    {
+      "id": "fc_003l",
+      "deal_id": "deal_003k",
+      "period": "2026-Q2",
+      "device_units": 436,
+      "device_revenue_eur": 479164,
+      "service_revenue_eur": 82980
+    },
+    {
+      "id": "fc_003m",
+      "deal_id": "deal_003k",
+      "period": "2026-Q3",
+      "device_units": 423,
+      "device_revenue_eur": 464877,
+      "service_revenue_eur": 76140
+    },
+    {
+      "id": "fc_003n",
+      "deal_id": "deal_003k",
+      "period": "2026-Q4",
+      "device_units": 789,
+      "device_revenue_eur": 867111,
+      "service_revenue_eur": 142020
+    },
+    {
+      "id": "fc_003o",
+      "deal_id": "deal_003k",
+      "period": "2027-Q1",
+      "device_units": 819,
+      "device_revenue_eur": 900081,
+      "service_revenue_eur": 147420
+    },
+    {
+      "id": "fc_003p",
+      "deal_id": "deal_003k",
+      "period": "2027-Q2",
+      "device_units": 618,
+      "device_revenue_eur": 679182,
+      "service_revenue_eur": 111240
+    },
+    {
+      "id": "fc_003q",
+      "deal_id": "deal_003k",
+      "period": "2027-Q3",
+      "device_units": 548,
+      "device_revenue_eur": 602252,
+      "service_revenue_eur": 98640
+    },
+    {
+      "id": "fc_003u",
+      "deal_id": "deal_003t",
+      "period": "2026-Q2",
+      "device_units": 432,
+      "device_revenue_eur": 388368,
+      "service_revenue_eur": 82260
+    },
+    {
+      "id": "fc_003v",
+      "deal_id": "deal_003t",
+      "period": "2026-Q3",
+      "device_units": 870,
+      "device_revenue_eur": 782130,
+      "service_revenue_eur": 156600
+    },
+    {
+      "id": "fc_003w",
+      "deal_id": "deal_003t",
+      "period": "2026-Q4",
+      "device_units": 907,
+      "device_revenue_eur": 815393,
+      "service_revenue_eur": 163260
+    },
+    {
+      "id": "fc_003x",
+      "deal_id": "deal_003t",
+      "period": "2027-Q1",
+      "device_units": 709,
+      "device_revenue_eur": 637391,
+      "service_revenue_eur": 127620
+    },
+    {
+      "id": "fc_003y",
+      "deal_id": "deal_003t",
+      "period": "2027-Q2",
+      "device_units": 682,
+      "device_revenue_eur": 613118,
+      "service_revenue_eur": 122760
+    },
+    {
+      "id": "fc_0042",
+      "deal_id": "deal_0041",
+      "period": "2026-Q2",
+      "device_units": 412,
+      "device_revenue_eur": 226188,
+      "service_revenue_eur": 78660
+    },
+    {
+      "id": "fc_0043",
+      "deal_id": "deal_0041",
+      "period": "2026-Q3",
+      "device_units": 836,
+      "device_revenue_eur": 458964,
+      "service_revenue_eur": 150480
+    },
+    {
+      "id": "fc_0044",
+      "deal_id": "deal_0041",
+      "period": "2026-Q4",
+      "device_units": 415,
+      "device_revenue_eur": 227835,
+      "service_revenue_eur": 74700
+    },
+    {
+      "id": "fc_0045",
+      "deal_id": "deal_0041",
+      "period": "2027-Q1",
+      "device_units": 490,
+      "device_revenue_eur": 269010,
+      "service_revenue_eur": 88200
+    },
+    {
+      "id": "fc_0046",
+      "deal_id": "deal_0041",
+      "period": "2027-Q2",
+      "device_units": 730,
+      "device_revenue_eur": 400770,
+      "service_revenue_eur": 131400
+    },
+    {
+      "id": "fc_0047",
+      "deal_id": "deal_0041",
+      "period": "2027-Q3",
+      "device_units": 551,
+      "device_revenue_eur": 302499,
+      "service_revenue_eur": 99180
+    },
+    {
+      "id": "fc_004b",
+      "deal_id": "deal_004a",
+      "period": "2026-Q2",
+      "device_units": 161,
+      "device_revenue_eur": 144739,
+      "service_revenue_eur": 33480
+    },
+    {
+      "id": "fc_004c",
+      "deal_id": "deal_004a",
+      "period": "2026-Q3",
+      "device_units": 336,
+      "device_revenue_eur": 302064,
+      "service_revenue_eur": 60480
+    },
+    {
+      "id": "fc_004d",
+      "deal_id": "deal_004a",
+      "period": "2026-Q4",
+      "device_units": 153,
+      "device_revenue_eur": 137547,
+      "service_revenue_eur": 27540
+    },
+    {
+      "id": "fc_004e",
+      "deal_id": "deal_004a",
+      "period": "2027-Q1",
+      "device_units": 295,
+      "device_revenue_eur": 265205,
+      "service_revenue_eur": 53100
+    },
+    {
+      "id": "fc_004f",
+      "deal_id": "deal_004a",
+      "period": "2027-Q2",
+      "device_units": 307,
+      "device_revenue_eur": 275993,
+      "service_revenue_eur": 55260
+    },
+    {
+      "id": "fc_004g",
+      "deal_id": "deal_004a",
+      "period": "2027-Q3",
+      "device_units": 91,
+      "device_revenue_eur": 81809,
+      "service_revenue_eur": 16380
+    },
+    {
+      "id": "fc_004k",
+      "deal_id": "deal_004j",
+      "period": "2026-Q2",
+      "device_units": 174,
+      "device_revenue_eur": 95526,
+      "service_revenue_eur": 35820
+    },
+    {
+      "id": "fc_004l",
+      "deal_id": "deal_004j",
+      "period": "2026-Q3",
+      "device_units": 304,
+      "device_revenue_eur": 166896,
+      "service_revenue_eur": 54720
+    },
+    {
+      "id": "fc_004m",
+      "deal_id": "deal_004j",
+      "period": "2026-Q4",
+      "device_units": 196,
+      "device_revenue_eur": 107604,
+      "service_revenue_eur": 35280
+    },
+    {
+      "id": "fc_004n",
+      "deal_id": "deal_004j",
+      "period": "2027-Q1",
+      "device_units": 152,
+      "device_revenue_eur": 83448,
+      "service_revenue_eur": 27360
+    },
+    {
+      "id": "fc_004o",
+      "deal_id": "deal_004j",
+      "period": "2027-Q2",
+      "device_units": 236,
+      "device_revenue_eur": 129564,
+      "service_revenue_eur": 42480
+    },
+    {
+      "id": "fc_004p",
+      "deal_id": "deal_004j",
+      "period": "2027-Q3",
+      "device_units": 312,
+      "device_revenue_eur": 171288,
+      "service_revenue_eur": 56160
+    },
+    {
+      "id": "fc_004q",
+      "deal_id": "deal_004j",
+      "period": "2027-Q4",
+      "device_units": 72,
+      "device_revenue_eur": 39528,
+      "service_revenue_eur": 12960
+    },
+    {
+      "id": "fc_004u",
+      "deal_id": "deal_004t",
+      "period": "2026-Q2",
+      "device_units": 263,
+      "device_revenue_eur": 236437,
+      "service_revenue_eur": 51840
+    },
+    {
+      "id": "fc_004v",
+      "deal_id": "deal_004t",
+      "period": "2026-Q3",
+      "device_units": 313,
+      "device_revenue_eur": 281387,
+      "service_revenue_eur": 56340
+    },
+    {
+      "id": "fc_004w",
+      "deal_id": "deal_004t",
+      "period": "2026-Q4",
+      "device_units": 470,
+      "device_revenue_eur": 422530,
+      "service_revenue_eur": 84600
+    },
+    {
+      "id": "fc_004x",
+      "deal_id": "deal_004t",
+      "period": "2027-Q1",
+      "device_units": 368,
+      "device_revenue_eur": 330832,
+      "service_revenue_eur": 66240
+    },
+    {
+      "id": "fc_004y",
+      "deal_id": "deal_004t",
+      "period": "2027-Q2",
+      "device_units": 225,
+      "device_revenue_eur": 202275,
+      "service_revenue_eur": 40500
+    },
+    {
+      "id": "fc_004z",
+      "deal_id": "deal_004t",
+      "period": "2027-Q3",
+      "device_units": 462,
+      "device_revenue_eur": 415338,
+      "service_revenue_eur": 83160
+    },
+    {
+      "id": "fc_0050",
+      "deal_id": "deal_004t",
+      "period": "2027-Q4",
+      "device_units": 90,
+      "device_revenue_eur": 80910,
+      "service_revenue_eur": 16200
+    },
+    {
+      "id": "fc_0054",
+      "deal_id": "deal_0053",
+      "period": "2026-Q2",
+      "device_units": 436,
+      "device_revenue_eur": 391964,
+      "service_revenue_eur": 82980
+    },
+    {
+      "id": "fc_0055",
+      "deal_id": "deal_0053",
+      "period": "2026-Q3",
+      "device_units": 605,
+      "device_revenue_eur": 543895,
+      "service_revenue_eur": 108900
+    },
+    {
+      "id": "fc_0056",
+      "deal_id": "deal_0053",
+      "period": "2026-Q4",
+      "device_units": 535,
+      "device_revenue_eur": 480965,
+      "service_revenue_eur": 96300
+    },
+    {
+      "id": "fc_0057",
+      "deal_id": "deal_0053",
+      "period": "2027-Q1",
+      "device_units": 516,
+      "device_revenue_eur": 463884,
+      "service_revenue_eur": 92880
+    },
+    {
+      "id": "fc_0058",
+      "deal_id": "deal_0053",
+      "period": "2027-Q2",
+      "device_units": 526,
+      "device_revenue_eur": 472874,
+      "service_revenue_eur": 94680
+    },
+    {
+      "id": "fc_0059",
+      "deal_id": "deal_0053",
+      "period": "2027-Q3",
+      "device_units": 520,
+      "device_revenue_eur": 467480,
+      "service_revenue_eur": 93600
+    },
+    {
+      "id": "fc_005a",
+      "deal_id": "deal_0053",
+      "period": "2027-Q4",
+      "device_units": 495,
+      "device_revenue_eur": 445005,
+      "service_revenue_eur": 89100
+    },
+    {
+      "id": "fc_005e",
+      "deal_id": "deal_005d",
+      "period": "2026-Q2",
+      "device_units": 301,
+      "device_revenue_eur": 225449,
+      "service_revenue_eur": 58680
+    },
+    {
+      "id": "fc_005f",
+      "deal_id": "deal_005d",
+      "period": "2026-Q3",
+      "device_units": 318,
+      "device_revenue_eur": 238182,
+      "service_revenue_eur": 57240
+    },
+    {
+      "id": "fc_005g",
+      "deal_id": "deal_005d",
+      "period": "2026-Q4",
+      "device_units": 406,
+      "device_revenue_eur": 304094,
+      "service_revenue_eur": 73080
+    },
+    {
+      "id": "fc_005h",
+      "deal_id": "deal_005d",
+      "period": "2027-Q1",
+      "device_units": 359,
+      "device_revenue_eur": 268891,
+      "service_revenue_eur": 64620
+    },
+    {
+      "id": "fc_005i",
+      "deal_id": "deal_005d",
+      "period": "2027-Q2",
+      "device_units": 448,
+      "device_revenue_eur": 335552,
+      "service_revenue_eur": 80640
+    },
+    {
+      "id": "fc_005j",
+      "deal_id": "deal_005d",
+      "period": "2027-Q3",
+      "device_units": 615,
+      "device_revenue_eur": 460635,
+      "service_revenue_eur": 110700
+    },
+    {
+      "id": "fc_005k",
+      "deal_id": "deal_005d",
+      "period": "2027-Q4",
+      "device_units": 58,
+      "device_revenue_eur": 43442,
+      "service_revenue_eur": 10440
+    },
+    {
+      "id": "fc_005o",
+      "deal_id": "deal_005n",
+      "period": "2026-Q2",
+      "device_units": 33,
+      "device_revenue_eur": 36267,
+      "service_revenue_eur": 10440
+    },
+    {
+      "id": "fc_005p",
+      "deal_id": "deal_005n",
+      "period": "2026-Q3",
+      "device_units": 52,
+      "device_revenue_eur": 57148,
+      "service_revenue_eur": 9360
+    },
+    {
+      "id": "fc_005q",
+      "deal_id": "deal_005n",
+      "period": "2026-Q4",
+      "device_units": 54,
+      "device_revenue_eur": 59346,
+      "service_revenue_eur": 9720
+    },
+    {
+      "id": "fc_005r",
+      "deal_id": "deal_005n",
+      "period": "2027-Q1",
+      "device_units": 31,
+      "device_revenue_eur": 34069,
+      "service_revenue_eur": 5580
+    },
+    {
+      "id": "fc_005s",
+      "deal_id": "deal_005n",
+      "period": "2027-Q2",
+      "device_units": 40,
+      "device_revenue_eur": 43960,
+      "service_revenue_eur": 7200
+    },
+    {
+      "id": "fc_005t",
+      "deal_id": "deal_005n",
+      "period": "2027-Q3",
+      "device_units": 67,
+      "device_revenue_eur": 73633,
+      "service_revenue_eur": 12060
+    },
+    {
+      "id": "fc_005x",
+      "deal_id": "deal_005w",
+      "period": "2026-Q2",
+      "device_units": 344,
+      "device_revenue_eur": 223256,
+      "service_revenue_eur": 66420
+    },
+    {
+      "id": "fc_005y",
+      "deal_id": "deal_005w",
+      "period": "2026-Q3",
+      "device_units": 418,
+      "device_revenue_eur": 271282,
+      "service_revenue_eur": 75240
+    },
+    {
+      "id": "fc_005z",
+      "deal_id": "deal_005w",
+      "period": "2026-Q4",
+      "device_units": 649,
+      "device_revenue_eur": 421201,
+      "service_revenue_eur": 116820
+    },
+    {
+      "id": "fc_0060",
+      "deal_id": "deal_005w",
+      "period": "2027-Q1",
+      "device_units": 456,
+      "device_revenue_eur": 295944,
+      "service_revenue_eur": 82080
+    },
+    {
+      "id": "fc_0061",
+      "deal_id": "deal_005w",
+      "period": "2027-Q2",
+      "device_units": 403,
+      "device_revenue_eur": 261547,
+      "service_revenue_eur": 72540
+    },
+    {
+      "id": "fc_0062",
+      "deal_id": "deal_005w",
+      "period": "2027-Q3",
+      "device_units": 349,
+      "device_revenue_eur": 226501,
+      "service_revenue_eur": 62820
+    },
+    {
+      "id": "fc_0063",
+      "deal_id": "deal_005w",
+      "period": "2027-Q4",
+      "device_units": 245,
+      "device_revenue_eur": 159005,
+      "service_revenue_eur": 44100
+    },
+    {
+      "id": "fc_0067",
+      "deal_id": "deal_0066",
+      "period": "2026-Q2",
+      "device_units": 414,
+      "device_revenue_eur": 227286,
+      "service_revenue_eur": 79020
+    },
+    {
+      "id": "fc_0068",
+      "deal_id": "deal_0066",
+      "period": "2026-Q3",
+      "device_units": 403,
+      "device_revenue_eur": 221247,
+      "service_revenue_eur": 72540
+    },
+    {
+      "id": "fc_0069",
+      "deal_id": "deal_0066",
+      "period": "2026-Q4",
+      "device_units": 346,
+      "device_revenue_eur": 189954,
+      "service_revenue_eur": 62280
+    },
+    {
+      "id": "fc_006a",
+      "deal_id": "deal_0066",
+      "period": "2027-Q1",
+      "device_units": 876,
+      "device_revenue_eur": 480924,
+      "service_revenue_eur": 157680
+    },
+    {
+      "id": "fc_006b",
+      "deal_id": "deal_0066",
+      "period": "2027-Q2",
+      "device_units": 348,
+      "device_revenue_eur": 191052,
+      "service_revenue_eur": 62640
+    },
+    {
+      "id": "fc_006c",
+      "deal_id": "deal_0066",
+      "period": "2027-Q3",
+      "device_units": 655,
+      "device_revenue_eur": 359595,
+      "service_revenue_eur": 117900
+    },
+    {
+      "id": "fc_006d",
+      "deal_id": "deal_0066",
+      "period": "2027-Q4",
+      "device_units": 408,
+      "device_revenue_eur": 223992,
+      "service_revenue_eur": 73440
+    },
+    {
+      "id": "fc_006h",
+      "deal_id": "deal_006g",
+      "period": "2026-Q2",
+      "device_units": 78,
+      "device_revenue_eur": 70122,
+      "service_revenue_eur": 18540
+    },
+    {
+      "id": "fc_006i",
+      "deal_id": "deal_006g",
+      "period": "2026-Q3",
+      "device_units": 136,
+      "device_revenue_eur": 122264,
+      "service_revenue_eur": 24480
+    },
+    {
+      "id": "fc_006j",
+      "deal_id": "deal_006g",
+      "period": "2026-Q4",
+      "device_units": 163,
+      "device_revenue_eur": 146537,
+      "service_revenue_eur": 29340
+    },
+    {
+      "id": "fc_006k",
+      "deal_id": "deal_006g",
+      "period": "2027-Q1",
+      "device_units": 137,
+      "device_revenue_eur": 123163,
+      "service_revenue_eur": 24660
+    },
+    {
+      "id": "fc_006l",
+      "deal_id": "deal_006g",
+      "period": "2027-Q2",
+      "device_units": 132,
+      "device_revenue_eur": 118668,
+      "service_revenue_eur": 23760
+    },
+    {
+      "id": "fc_006p",
+      "deal_id": "deal_006o",
+      "period": "2026-Q2",
+      "device_units": 225,
+      "device_revenue_eur": 202275,
+      "service_revenue_eur": 45000
+    },
+    {
+      "id": "fc_006q",
+      "deal_id": "deal_006o",
+      "period": "2026-Q3",
+      "device_units": 417,
+      "device_revenue_eur": 374883,
+      "service_revenue_eur": 75060
+    },
+    {
+      "id": "fc_006r",
+      "deal_id": "deal_006o",
+      "period": "2026-Q4",
+      "device_units": 415,
+      "device_revenue_eur": 373085,
+      "service_revenue_eur": 74700
+    },
+    {
+      "id": "fc_006s",
+      "deal_id": "deal_006o",
+      "period": "2027-Q1",
+      "device_units": 448,
+      "device_revenue_eur": 402752,
+      "service_revenue_eur": 80640
+    },
+    {
+      "id": "fc_006t",
+      "deal_id": "deal_006o",
+      "period": "2027-Q2",
+      "device_units": 345,
+      "device_revenue_eur": 310155,
+      "service_revenue_eur": 62100
+    },
+    {
+      "id": "fc_006u",
+      "deal_id": "deal_006o",
+      "period": "2027-Q3",
+      "device_units": 25,
+      "device_revenue_eur": 22475,
+      "service_revenue_eur": 4500
+    },
+    {
+      "id": "fc_006y",
+      "deal_id": "deal_006x",
+      "period": "2026-Q2",
+      "device_units": 137,
+      "device_revenue_eur": 123163,
+      "service_revenue_eur": 29160
+    },
+    {
+      "id": "fc_006z",
+      "deal_id": "deal_006x",
+      "period": "2026-Q3",
+      "device_units": 151,
+      "device_revenue_eur": 135749,
+      "service_revenue_eur": 27180
+    },
+    {
+      "id": "fc_0070",
+      "deal_id": "deal_006x",
+      "period": "2026-Q4",
+      "device_units": 275,
+      "device_revenue_eur": 247225,
+      "service_revenue_eur": 49500
+    },
+    {
+      "id": "fc_0071",
+      "deal_id": "deal_006x",
+      "period": "2027-Q1",
+      "device_units": 195,
+      "device_revenue_eur": 175305,
+      "service_revenue_eur": 35100
+    },
+    {
+      "id": "fc_0072",
+      "deal_id": "deal_006x",
+      "period": "2027-Q2",
+      "device_units": 213,
+      "device_revenue_eur": 191487,
+      "service_revenue_eur": 38340
+    },
+    {
+      "id": "fc_0073",
+      "deal_id": "deal_006x",
+      "period": "2027-Q3",
+      "device_units": 174,
+      "device_revenue_eur": 156426,
+      "service_revenue_eur": 31320
+    },
+    {
+      "id": "fc_0077",
+      "deal_id": "deal_0076",
+      "period": "2026-Q2",
+      "device_units": 407,
+      "device_revenue_eur": 304843,
+      "service_revenue_eur": 77760
+    },
+    {
+      "id": "fc_0078",
+      "deal_id": "deal_0076",
+      "period": "2026-Q3",
+      "device_units": 434,
+      "device_revenue_eur": 325066,
+      "service_revenue_eur": 78120
+    },
+    {
+      "id": "fc_0079",
+      "deal_id": "deal_0076",
+      "period": "2026-Q4",
+      "device_units": 833,
+      "device_revenue_eur": 623917,
+      "service_revenue_eur": 149940
+    },
+    {
+      "id": "fc_007a",
+      "deal_id": "deal_0076",
+      "period": "2027-Q1",
+      "device_units": 777,
+      "device_revenue_eur": 581973,
+      "service_revenue_eur": 139860
+    },
+    {
+      "id": "fc_007b",
+      "deal_id": "deal_0076",
+      "period": "2027-Q2",
+      "device_units": 478,
+      "device_revenue_eur": 358022,
+      "service_revenue_eur": 86040
+    },
+    {
+      "id": "fc_007c",
+      "deal_id": "deal_0076",
+      "period": "2027-Q3",
+      "device_units": 462,
+      "device_revenue_eur": 346038,
+      "service_revenue_eur": 83160
+    }
+  ],
+  "offers": [
+    {
+      "id": "off_007f",
+      "deal_id": "deal_002i",
+      "account_id": "acc_000q",
+      "version": 1,
+      "status": "pending_finance",
+      "discount_pct": 22,
+      "justification": "Competitive pressure from incumbent",
+      "total_eur": 768456,
+      "created_by": "usr_0003",
+      "created_at": "2026-06-07T10:46:00.855Z"
+    },
+    {
+      "id": "off_007k",
+      "deal_id": "deal_0030",
+      "account_id": "acc_000v",
+      "version": 1,
+      "status": "approved",
+      "discount_pct": 0,
+      "justification": null,
+      "total_eur": 787339,
+      "created_by": "usr_0003",
+      "created_at": "2026-06-04T10:46:00.855Z"
+    },
+    {
+      "id": "off_007o",
+      "deal_id": "deal_003a",
+      "account_id": "acc_0010",
+      "version": 1,
+      "status": "approved",
+      "discount_pct": 0,
+      "justification": null,
+      "total_eur": 503949,
+      "created_by": "usr_0001",
+      "created_at": "2026-05-28T10:46:00.855Z"
+    },
+    {
+      "id": "off_007s",
+      "deal_id": "deal_003k",
+      "account_id": "acc_0015",
+      "version": 1,
+      "status": "approved",
+      "discount_pct": 5,
+      "justification": "Strategic logo, multi-year commitment",
+      "total_eur": 301473.95,
+      "created_by": "usr_0001",
+      "created_at": "2026-06-10T10:46:00.855Z"
+    },
+    {
+      "id": "off_007x",
+      "deal_id": "deal_003t",
+      "account_id": "acc_001a",
+      "version": 1,
+      "status": "approved",
+      "discount_pct": 0,
+      "justification": null,
+      "total_eur": 409762,
+      "created_by": "usr_0003",
+      "created_at": "2026-05-14T10:46:00.855Z"
+    },
+    {
+      "id": "off_0081",
+      "deal_id": "deal_004t",
+      "account_id": "acc_001h",
+      "version": 1,
+      "status": "approved",
+      "discount_pct": 0,
+      "justification": null,
+      "total_eur": 1150635,
+      "created_by": "usr_0001",
+      "created_at": "2026-05-26T10:46:00.855Z"
+    },
+    {
+      "id": "off_0085",
+      "deal_id": "deal_005n",
+      "account_id": "acc_001m",
+      "version": 1,
+      "status": "approved",
+      "discount_pct": 0,
+      "justification": null,
+      "total_eur": 1014086,
+      "created_by": "usr_0003",
+      "created_at": "2026-05-08T10:46:00.855Z"
+    },
+    {
+      "id": "off_0089",
+      "deal_id": "deal_005w",
+      "account_id": "acc_001p",
+      "version": 1,
+      "status": "approved",
+      "discount_pct": 0,
+      "justification": null,
+      "total_eur": 164388,
+      "created_by": "usr_0002",
+      "created_at": "2026-06-04T10:46:00.855Z"
+    }
+  ],
+  "offer_lines": [
+    {
+      "id": "ol_007g",
+      "offer_id": "off_007f",
+      "product_id": "prd_0008",
+      "service_id": null,
+      "qty": 1200,
+      "unit_price_eur": 749,
+      "discount_pct": 22,
+      "line_total_eur": 701064
+    },
+    {
+      "id": "ol_007h",
+      "offer_id": "off_007f",
+      "product_id": null,
+      "service_id": "svc_000f",
+      "qty": 1200,
+      "unit_price_eur": 72,
+      "discount_pct": 22,
+      "line_total_eur": 67392
+    },
+    {
+      "id": "ol_007l",
+      "offer_id": "off_007k",
+      "product_id": "prd_0008",
+      "service_id": null,
+      "qty": 959,
+      "unit_price_eur": 749,
+      "discount_pct": 0,
+      "line_total_eur": 718291
+    },
+    {
+      "id": "ol_007m",
+      "offer_id": "off_007k",
+      "product_id": null,
+      "service_id": "svc_000f",
+      "qty": 959,
+      "unit_price_eur": 72,
+      "discount_pct": 0,
+      "line_total_eur": 69048
+    },
+    {
+      "id": "ol_007p",
+      "offer_id": "off_007o",
+      "product_id": "prd_000a",
+      "service_id": null,
+      "qty": 519,
+      "unit_price_eur": 899,
+      "discount_pct": 0,
+      "line_total_eur": 466581
+    },
+    {
+      "id": "ol_007q",
+      "offer_id": "off_007o",
+      "product_id": null,
+      "service_id": "svc_000f",
+      "qty": 519,
+      "unit_price_eur": 72,
+      "discount_pct": 0,
+      "line_total_eur": 37368
+    },
+    {
+      "id": "ol_007t",
+      "offer_id": "off_007s",
+      "product_id": "prd_000c",
+      "service_id": null,
+      "qty": 271,
+      "unit_price_eur": 1099,
+      "discount_pct": 5,
+      "line_total_eur": 282937.55
+    },
+    {
+      "id": "ol_007u",
+      "offer_id": "off_007s",
+      "product_id": null,
+      "service_id": "svc_000f",
+      "qty": 271,
+      "unit_price_eur": 72,
+      "discount_pct": 5,
+      "line_total_eur": 18536.4
+    },
+    {
+      "id": "ol_007y",
+      "offer_id": "off_007x",
+      "product_id": "prd_000a",
+      "service_id": null,
+      "qty": 422,
+      "unit_price_eur": 899,
+      "discount_pct": 0,
+      "line_total_eur": 379378
+    },
+    {
+      "id": "ol_007z",
+      "offer_id": "off_007x",
+      "product_id": null,
+      "service_id": "svc_000f",
+      "qty": 422,
+      "unit_price_eur": 72,
+      "discount_pct": 0,
+      "line_total_eur": 30384
+    },
+    {
+      "id": "ol_0082",
+      "offer_id": "off_0081",
+      "product_id": "prd_000a",
+      "service_id": null,
+      "qty": 1185,
+      "unit_price_eur": 899,
+      "discount_pct": 0,
+      "line_total_eur": 1065315
+    },
+    {
+      "id": "ol_0083",
+      "offer_id": "off_0081",
+      "product_id": null,
+      "service_id": "svc_000f",
+      "qty": 1185,
+      "unit_price_eur": 72,
+      "discount_pct": 0,
+      "line_total_eur": 85320
+    },
+    {
+      "id": "ol_0086",
+      "offer_id": "off_0085",
+      "product_id": "prd_000c",
+      "service_id": null,
+      "qty": 866,
+      "unit_price_eur": 1099,
+      "discount_pct": 0,
+      "line_total_eur": 951734
+    },
+    {
+      "id": "ol_0087",
+      "offer_id": "off_0085",
+      "product_id": null,
+      "service_id": "svc_000f",
+      "qty": 866,
+      "unit_price_eur": 72,
+      "discount_pct": 0,
+      "line_total_eur": 62352
+    },
+    {
+      "id": "ol_008a",
+      "offer_id": "off_0089",
+      "product_id": "prd_000b",
+      "service_id": null,
+      "qty": 228,
+      "unit_price_eur": 649,
+      "discount_pct": 0,
+      "line_total_eur": 147972
+    },
+    {
+      "id": "ol_008b",
+      "offer_id": "off_0089",
+      "product_id": null,
+      "service_id": "svc_000f",
+      "qty": 228,
+      "unit_price_eur": 72,
+      "discount_pct": 0,
+      "line_total_eur": 16416
+    }
+  ],
+  "approvals": [
+    {
+      "id": "apr_007i",
+      "offer_id": "off_007f",
+      "approver_role": "sales_manager",
+      "approver_id": "usr_0006",
+      "decision": "approved",
+      "comment": null,
+      "decided_at": "2026-06-10T10:46:00.855Z"
+    },
+    {
+      "id": "apr_007v",
+      "offer_id": "off_007s",
+      "approver_role": "sales_manager",
+      "approver_id": "usr_0006",
+      "decision": "approved",
+      "comment": null,
+      "decided_at": "2026-05-30T10:46:00.855Z"
+    }
+  ],
+  "cases": [
+    {
+      "id": "cas_008d",
+      "account_id": "acc_000l",
+      "service_id": "svc_000k",
+      "title": "Threat intel feed latency",
+      "type": "complaint",
+      "status": "closed",
+      "priority": "low",
+      "tam_id": "usr_0004",
+      "customer_contact_id": "con_000m",
+      "sla_due_at": "2026-06-13T10:46:00.855Z",
+      "escalated_to_3p": false,
+      "created_at": "2026-06-10T10:46:00.855Z",
+      "resolved_at": "2026-06-10T10:46:00.855Z"
+    },
+    {
+      "id": "cas_008h",
+      "account_id": "acc_000l",
+      "service_id": "svc_000i",
+      "title": "OS update bricked 3 devices",
+      "type": "complaint",
+      "status": "in_progress",
+      "priority": "medium",
+      "tam_id": "usr_0004",
+      "customer_contact_id": "con_000o",
+      "sla_due_at": "2026-06-14T10:46:00.855Z",
+      "escalated_to_3p": false,
+      "created_at": "2026-06-10T10:46:00.855Z",
+      "resolved_at": null
+    },
+    {
+      "id": "cas_008l",
+      "account_id": "acc_000v",
+      "service_id": "svc_000k",
+      "title": "SOC escalation — suspicious traffic",
+      "type": "request",
+      "status": "open",
+      "priority": "low",
+      "tam_id": "usr_0004",
+      "customer_contact_id": "con_000w",
+      "sla_due_at": "2026-06-15T10:46:00.855Z",
+      "escalated_to_3p": false,
+      "created_at": "2026-06-12T10:46:00.855Z",
+      "resolved_at": null
+    },
+    {
+      "id": "cas_008o",
+      "account_id": "acc_000v",
+      "service_id": "svc_000h",
+      "title": "Bulk provisioning slow",
+      "type": "complaint",
+      "status": "closed",
+      "priority": "high",
+      "tam_id": "usr_0004",
+      "customer_contact_id": "con_000x",
+      "sla_due_at": "2026-05-22T10:46:00.855Z",
+      "escalated_to_3p": false,
+      "created_at": "2026-05-17T10:46:00.855Z",
+      "resolved_at": "2026-06-12T10:46:00.855Z"
+    },
+    {
+      "id": "cas_008r",
+      "account_id": "acc_0010",
+      "service_id": "svc_000k",
+      "title": "Threat intel feed latency",
+      "type": "complaint",
+      "status": "escalated",
+      "priority": "urgent",
+      "tam_id": "usr_0005",
+      "customer_contact_id": "con_0013",
+      "sla_due_at": "2026-06-11T10:46:00.855Z",
+      "escalated_to_3p": true,
+      "created_at": "2026-06-04T10:46:00.855Z",
+      "resolved_at": null
+    },
+    {
+      "id": "cas_008v",
+      "account_id": "acc_0015",
+      "service_id": "svc_000h",
+      "title": "Request: add geofencing policy",
+      "type": "request",
+      "status": "closed",
+      "priority": "low",
+      "tam_id": "usr_0004",
+      "customer_contact_id": "con_0016",
+      "sla_due_at": "2026-06-12T10:46:00.855Z",
+      "escalated_to_3p": false,
+      "created_at": "2026-06-07T10:46:00.855Z",
+      "resolved_at": "2026-06-12T10:46:00.855Z"
+    },
+    {
+      "id": "cas_008z",
+      "account_id": "acc_0015",
+      "service_id": "svc_000j",
+      "title": "Request: add geofencing policy",
+      "type": "request",
+      "status": "closed",
+      "priority": "urgent",
+      "tam_id": "usr_0004",
+      "customer_contact_id": "con_0019",
+      "sla_due_at": "2026-05-30T10:46:00.855Z",
+      "escalated_to_3p": false,
+      "created_at": "2026-05-24T10:46:00.855Z",
+      "resolved_at": "2026-06-11T10:46:00.855Z"
+    },
+    {
+      "id": "cas_0092",
+      "account_id": "acc_0015",
+      "service_id": "svc_000j",
+      "title": "Threat intel feed latency",
+      "type": "complaint",
+      "status": "escalated",
+      "priority": "low",
+      "tam_id": "usr_0004",
+      "customer_contact_id": "con_0019",
+      "sla_due_at": "2026-06-13T10:46:00.855Z",
+      "escalated_to_3p": true,
+      "created_at": "2026-06-07T10:46:00.855Z",
+      "resolved_at": null
+    },
+    {
+      "id": "cas_0095",
+      "account_id": "acc_001a",
+      "service_id": "svc_000f",
+      "title": "MDM enrolment failing on S30 batch",
+      "type": "request",
+      "status": "resolved",
+      "priority": "medium",
+      "tam_id": "usr_0004",
+      "customer_contact_id": "con_001c",
+      "sla_due_at": "2026-05-17T10:46:00.855Z",
+      "escalated_to_3p": false,
+      "created_at": "2026-05-10T10:46:00.855Z",
+      "resolved_at": "2026-06-11T10:46:00.855Z"
+    },
+    {
+      "id": "cas_0099",
+      "account_id": "acc_001a",
+      "service_id": "svc_000g",
+      "title": "Tamper alert false positives",
+      "type": "request",
+      "status": "open",
+      "priority": "low",
+      "tam_id": "usr_0004",
+      "customer_contact_id": "con_001c",
+      "sla_due_at": "2026-05-25T10:46:00.855Z",
+      "escalated_to_3p": false,
+      "created_at": "2026-05-21T10:46:00.855Z",
+      "resolved_at": null
+    },
+    {
+      "id": "cas_009d",
+      "account_id": "acc_001d",
+      "service_id": "svc_000h",
+      "title": "MDM enrolment failing on S30 batch",
+      "type": "request",
+      "status": "resolved",
+      "priority": "high",
+      "tam_id": "usr_0005",
+      "customer_contact_id": "con_001f",
+      "sla_due_at": "2026-05-29T10:46:00.855Z",
+      "escalated_to_3p": false,
+      "created_at": "2026-05-25T10:46:00.855Z",
+      "resolved_at": "2026-06-08T10:46:00.855Z"
+    },
+    {
+      "id": "cas_009h",
+      "account_id": "acc_001d",
+      "service_id": "svc_000g",
+      "title": "OS update bricked 3 devices",
+      "type": "complaint",
+      "status": "in_progress",
+      "priority": "medium",
+      "tam_id": "usr_0005",
+      "customer_contact_id": "con_001g",
+      "sla_due_at": "2026-05-28T10:46:00.855Z",
+      "escalated_to_3p": false,
+      "created_at": "2026-05-22T10:46:00.855Z",
+      "resolved_at": null
+    },
+    {
+      "id": "cas_009l",
+      "account_id": "acc_001d",
+      "service_id": "svc_000j",
+      "title": "SOC escalation — suspicious traffic",
+      "type": "complaint",
+      "status": "closed",
+      "priority": "urgent",
+      "tam_id": "usr_0005",
+      "customer_contact_id": "con_001e",
+      "sla_due_at": "2026-06-06T10:46:00.855Z",
+      "escalated_to_3p": false,
+      "created_at": "2026-06-01T10:46:00.855Z",
+      "resolved_at": "2026-06-09T10:46:00.855Z"
+    },
+    {
+      "id": "cas_009o",
+      "account_id": "acc_001m",
+      "service_id": "svc_000j",
+      "title": "Tamper alert false positives",
+      "type": "request",
+      "status": "in_progress",
+      "priority": "medium",
+      "tam_id": "usr_0004",
+      "customer_contact_id": "con_001n",
+      "sla_due_at": "2026-05-15T10:46:00.855Z",
+      "escalated_to_3p": false,
+      "created_at": "2026-05-10T10:46:00.855Z",
+      "resolved_at": null
+    },
+    {
+      "id": "cas_009r",
+      "account_id": "acc_001m",
+      "service_id": "svc_000i",
+      "title": "SOC escalation — suspicious traffic",
+      "type": "complaint",
+      "status": "closed",
+      "priority": "high",
+      "tam_id": "usr_0004",
+      "customer_contact_id": "con_001o",
+      "sla_due_at": "2026-05-17T10:46:00.855Z",
+      "escalated_to_3p": false,
+      "created_at": "2026-05-11T10:46:00.855Z",
+      "resolved_at": "2026-06-08T10:46:00.855Z"
+    },
+    {
+      "id": "cas_009v",
+      "account_id": "acc_001p",
+      "service_id": "svc_000k",
+      "title": "Request: add geofencing policy",
+      "type": "request",
+      "status": "closed",
+      "priority": "medium",
+      "tam_id": "usr_0004",
+      "customer_contact_id": "con_001q",
+      "sla_due_at": "2026-06-02T10:46:00.855Z",
+      "escalated_to_3p": false,
+      "created_at": "2026-05-30T10:46:00.855Z",
+      "resolved_at": "2026-06-11T10:46:00.855Z"
+    },
+    {
+      "id": "cas_009z",
+      "account_id": "acc_001t",
+      "service_id": "svc_000h",
+      "title": "Tamper alert false positives",
+      "type": "complaint",
+      "status": "closed",
+      "priority": "low",
+      "tam_id": "usr_0005",
+      "customer_contact_id": "con_001v",
+      "sla_due_at": "2026-06-04T10:46:00.855Z",
+      "escalated_to_3p": false,
+      "created_at": "2026-05-30T10:46:00.855Z",
+      "resolved_at": "2026-06-09T10:46:00.855Z"
+    },
+    {
+      "id": "cas_00a2",
+      "account_id": "acc_001t",
+      "service_id": "svc_000h",
+      "title": "MDM enrolment failing on S30 batch",
+      "type": "complaint",
+      "status": "open",
+      "priority": "high",
+      "tam_id": "usr_0005",
+      "customer_contact_id": "con_001u",
+      "sla_due_at": "2026-05-10T10:46:00.855Z",
+      "escalated_to_3p": false,
+      "created_at": "2026-05-07T10:46:00.855Z",
+      "resolved_at": null
+    },
+    {
+      "id": "cas_00a5",
+      "account_id": "acc_001w",
+      "service_id": "svc_000j",
+      "title": "SOC escalation — suspicious traffic",
+      "type": "request",
+      "status": "closed",
+      "priority": "high",
+      "tam_id": "usr_0004",
+      "customer_contact_id": "con_0020",
+      "sla_due_at": "2026-05-17T10:46:00.855Z",
+      "escalated_to_3p": false,
+      "created_at": "2026-05-11T10:46:00.855Z",
+      "resolved_at": "2026-06-13T10:46:00.855Z"
+    },
+    {
+      "id": "cas_00a9",
+      "account_id": "acc_001w",
+      "service_id": "svc_000i",
+      "title": "Threat intel feed latency",
+      "type": "request",
+      "status": "resolved",
+      "priority": "high",
+      "tam_id": "usr_0004",
+      "customer_contact_id": "con_001x",
+      "sla_due_at": "2026-06-02T10:46:00.855Z",
+      "escalated_to_3p": false,
+      "created_at": "2026-05-30T10:46:00.855Z",
+      "resolved_at": "2026-06-13T10:46:00.855Z"
+    }
+  ],
+  "case_notes": [
+    {
+      "id": "cn_008e",
+      "case_id": "cas_008d",
+      "author_id": "usr_0004",
+      "body": "Reproduced on test device, gathering logs",
+      "kind": "tech_working",
+      "created_at": "2026-06-13T10:46:00.855Z"
+    },
+    {
+      "id": "cn_008f",
+      "case_id": "cas_008d",
+      "author_id": "usr_0002",
+      "body": "FYI for the account — keep an eye on this before renewal talks.",
+      "kind": "internal_sales",
+      "created_at": "2026-06-05T10:46:00.855Z"
+    },
+    {
+      "id": "cn_008i",
+      "case_id": "cas_008h",
+      "author_id": "usr_0004",
+      "body": "Awaiting customer confirmation",
+      "kind": "tech_working",
+      "created_at": "2026-06-13T10:46:00.855Z"
+    },
+    {
+      "id": "cn_008j",
+      "case_id": "cas_008h",
+      "author_id": "usr_0002",
+      "body": "FYI for the account — keep an eye on this before renewal talks.",
+      "kind": "internal_sales",
+      "created_at": "2026-06-08T10:46:00.855Z"
+    },
+    {
+      "id": "cn_008m",
+      "case_id": "cas_008l",
+      "author_id": "usr_0004",
+      "body": "Reproduced on test device, gathering logs",
+      "kind": "tech_working",
+      "created_at": "2026-06-06T10:46:00.855Z"
+    },
+    {
+      "id": "cn_008p",
+      "case_id": "cas_008o",
+      "author_id": "usr_0004",
+      "body": "Awaiting customer confirmation",
+      "kind": "tech_working",
+      "created_at": "2026-06-10T10:46:00.855Z"
+    },
+    {
+      "id": "cn_008s",
+      "case_id": "cas_008r",
+      "author_id": "usr_0005",
+      "body": "Awaiting customer confirmation",
+      "kind": "tech_working",
+      "created_at": "2026-06-11T10:46:00.855Z"
+    },
+    {
+      "id": "cn_008t",
+      "case_id": "cas_008r",
+      "author_id": "usr_0001",
+      "body": "FYI for the account — keep an eye on this before renewal talks.",
+      "kind": "internal_sales",
+      "created_at": "2026-06-08T10:46:00.855Z"
+    },
+    {
+      "id": "cn_008w",
+      "case_id": "cas_008v",
+      "author_id": "usr_0004",
+      "body": "Workaround applied, monitoring",
+      "kind": "tech_working",
+      "created_at": "2026-06-12T10:46:00.855Z"
+    },
+    {
+      "id": "cn_008x",
+      "case_id": "cas_008v",
+      "author_id": "usr_0001",
+      "body": "FYI for the account — keep an eye on this before renewal talks.",
+      "kind": "internal_sales",
+      "created_at": "2026-06-12T10:46:00.855Z"
+    },
+    {
+      "id": "cn_0090",
+      "case_id": "cas_008z",
+      "author_id": "usr_0004",
+      "body": "Workaround applied, monitoring",
+      "kind": "tech_working",
+      "created_at": "2026-06-05T10:46:00.855Z"
+    },
+    {
+      "id": "cn_0093",
+      "case_id": "cas_0092",
+      "author_id": "usr_0004",
+      "body": "Reproduced on test device, gathering logs",
+      "kind": "tech_working",
+      "created_at": "2026-06-03T10:46:00.855Z"
+    },
+    {
+      "id": "cn_0096",
+      "case_id": "cas_0095",
+      "author_id": "usr_0004",
+      "body": "Awaiting customer confirmation",
+      "kind": "tech_working",
+      "created_at": "2026-06-05T10:46:00.855Z"
+    },
+    {
+      "id": "cn_0097",
+      "case_id": "cas_0095",
+      "author_id": "usr_0003",
+      "body": "FYI for the account — keep an eye on this before renewal talks.",
+      "kind": "internal_sales",
+      "created_at": "2026-06-11T10:46:00.855Z"
+    },
+    {
+      "id": "cn_009a",
+      "case_id": "cas_0099",
+      "author_id": "usr_0004",
+      "body": "Escalated to vendor, ticket #3407",
+      "kind": "tech_working",
+      "created_at": "2026-06-13T10:46:00.855Z"
+    },
+    {
+      "id": "cn_009b",
+      "case_id": "cas_0099",
+      "author_id": "usr_0003",
+      "body": "FYI for the account — keep an eye on this before renewal talks.",
+      "kind": "internal_sales",
+      "created_at": "2026-06-11T10:46:00.855Z"
+    },
+    {
+      "id": "cn_009e",
+      "case_id": "cas_009d",
+      "author_id": "usr_0005",
+      "body": "Awaiting customer confirmation",
+      "kind": "tech_working",
+      "created_at": "2026-06-03T10:46:00.855Z"
+    },
+    {
+      "id": "cn_009f",
+      "case_id": "cas_009d",
+      "author_id": "usr_0003",
+      "body": "FYI for the account — keep an eye on this before renewal talks.",
+      "kind": "internal_sales",
+      "created_at": "2026-06-06T10:46:00.855Z"
+    },
+    {
+      "id": "cn_009i",
+      "case_id": "cas_009h",
+      "author_id": "usr_0005",
+      "body": "Awaiting customer confirmation",
+      "kind": "tech_working",
+      "created_at": "2026-06-09T10:46:00.855Z"
+    },
+    {
+      "id": "cn_009j",
+      "case_id": "cas_009h",
+      "author_id": "usr_0003",
+      "body": "FYI for the account — keep an eye on this before renewal talks.",
+      "kind": "internal_sales",
+      "created_at": "2026-06-10T10:46:00.855Z"
+    },
+    {
+      "id": "cn_009m",
+      "case_id": "cas_009l",
+      "author_id": "usr_0005",
+      "body": "Reproduced on test device, gathering logs",
+      "kind": "tech_working",
+      "created_at": "2026-06-09T10:46:00.855Z"
+    },
+    {
+      "id": "cn_009p",
+      "case_id": "cas_009o",
+      "author_id": "usr_0004",
+      "body": "Escalated to vendor, ticket #4066",
+      "kind": "tech_working",
+      "created_at": "2026-06-13T10:46:00.855Z"
+    },
+    {
+      "id": "cn_009s",
+      "case_id": "cas_009r",
+      "author_id": "usr_0004",
+      "body": "Awaiting customer confirmation",
+      "kind": "tech_working",
+      "created_at": "2026-06-03T10:46:00.855Z"
+    },
+    {
+      "id": "cn_009t",
+      "case_id": "cas_009r",
+      "author_id": "usr_0003",
+      "body": "FYI for the account — keep an eye on this before renewal talks.",
+      "kind": "internal_sales",
+      "created_at": "2026-06-11T10:46:00.855Z"
+    },
+    {
+      "id": "cn_009w",
+      "case_id": "cas_009v",
+      "author_id": "usr_0004",
+      "body": "Reproduced on test device, gathering logs",
+      "kind": "tech_working",
+      "created_at": "2026-06-05T10:46:00.855Z"
+    },
+    {
+      "id": "cn_009x",
+      "case_id": "cas_009v",
+      "author_id": "usr_0002",
+      "body": "FYI for the account — keep an eye on this before renewal talks.",
+      "kind": "internal_sales",
+      "created_at": "2026-06-12T10:46:00.855Z"
+    },
+    {
+      "id": "cn_00a0",
+      "case_id": "cas_009z",
+      "author_id": "usr_0005",
+      "body": "Escalated to vendor, ticket #5163",
+      "kind": "tech_working",
+      "created_at": "2026-06-05T10:46:00.855Z"
+    },
+    {
+      "id": "cn_00a3",
+      "case_id": "cas_00a2",
+      "author_id": "usr_0005",
+      "body": "Escalated to vendor, ticket #5545",
+      "kind": "tech_working",
+      "created_at": "2026-06-06T10:46:00.855Z"
+    },
+    {
+      "id": "cn_00a6",
+      "case_id": "cas_00a5",
+      "author_id": "usr_0004",
+      "body": "Reproduced on test device, gathering logs",
+      "kind": "tech_working",
+      "created_at": "2026-06-13T10:46:00.855Z"
+    },
+    {
+      "id": "cn_00a7",
+      "case_id": "cas_00a5",
+      "author_id": "usr_0001",
+      "body": "FYI for the account — keep an eye on this before renewal talks.",
+      "kind": "internal_sales",
+      "created_at": "2026-06-06T10:46:00.855Z"
+    },
+    {
+      "id": "cn_00aa",
+      "case_id": "cas_00a9",
+      "author_id": "usr_0004",
+      "body": "Awaiting customer confirmation",
+      "kind": "tech_working",
+      "created_at": "2026-06-05T10:46:00.855Z"
+    }
+  ],
+  "activities": [
+    {
+      "id": "act_002g",
+      "account_id": "acc_000l",
+      "deal_id": "deal_0029",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to interest",
+      "actor_id": "usr_0002",
+      "created_at": "2026-05-25T10:46:00.854Z"
+    },
+    {
+      "id": "act_002h",
+      "account_id": "acc_000l",
+      "deal_id": "deal_0029",
+      "case_id": null,
+      "type": "email",
+      "body": "Pricing discussion",
+      "actor_id": "usr_0002",
+      "created_at": "2026-04-22T10:46:00.854Z"
+    },
+    {
+      "id": "act_002p",
+      "account_id": "acc_000q",
+      "deal_id": "deal_002i",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to contract_negotiation",
+      "actor_id": "usr_0003",
+      "created_at": "2026-05-26T10:46:00.854Z"
+    },
+    {
+      "id": "act_002q",
+      "account_id": "acc_000q",
+      "deal_id": "deal_002i",
+      "case_id": null,
+      "type": "meeting",
+      "body": "Pricing discussion",
+      "actor_id": "usr_0003",
+      "created_at": "2026-05-31T10:46:00.854Z"
+    },
+    {
+      "id": "act_002y",
+      "account_id": "acc_000v",
+      "deal_id": "deal_002r",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to rfi",
+      "actor_id": "usr_0003",
+      "created_at": "2026-05-23T10:46:00.854Z"
+    },
+    {
+      "id": "act_002z",
+      "account_id": "acc_000v",
+      "deal_id": "deal_002r",
+      "case_id": null,
+      "type": "email",
+      "body": "Pricing discussion",
+      "actor_id": "usr_0003",
+      "created_at": "2026-06-08T10:46:00.854Z"
+    },
+    {
+      "id": "act_0038",
+      "account_id": "acc_000v",
+      "deal_id": "deal_0030",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to rfp",
+      "actor_id": "usr_0003",
+      "created_at": "2026-05-19T10:46:00.854Z"
+    },
+    {
+      "id": "act_0039",
+      "account_id": "acc_000v",
+      "deal_id": "deal_0030",
+      "case_id": null,
+      "type": "meeting",
+      "body": "Intro call with procurement",
+      "actor_id": "usr_0003",
+      "created_at": "2026-04-16T10:46:00.854Z"
+    },
+    {
+      "id": "act_003i",
+      "account_id": "acc_0010",
+      "deal_id": "deal_003a",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to rfp",
+      "actor_id": "usr_0001",
+      "created_at": "2026-05-24T10:46:00.854Z"
+    },
+    {
+      "id": "act_003j",
+      "account_id": "acc_0010",
+      "deal_id": "deal_003a",
+      "case_id": null,
+      "type": "meeting",
+      "body": "Pricing discussion",
+      "actor_id": "usr_0001",
+      "created_at": "2026-04-28T10:46:00.854Z"
+    },
+    {
+      "id": "act_003r",
+      "account_id": "acc_0015",
+      "deal_id": "deal_003k",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to contract_negotiation",
+      "actor_id": "usr_0001",
+      "created_at": "2026-06-09T10:46:00.854Z"
+    },
+    {
+      "id": "act_003s",
+      "account_id": "acc_0015",
+      "deal_id": "deal_003k",
+      "case_id": null,
+      "type": "email",
+      "body": "Sent RFI response",
+      "actor_id": "usr_0001",
+      "created_at": "2026-05-20T10:46:00.854Z"
+    },
+    {
+      "id": "act_003z",
+      "account_id": "acc_001a",
+      "deal_id": "deal_003t",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to rfp",
+      "actor_id": "usr_0003",
+      "created_at": "2026-05-31T10:46:00.854Z"
+    },
+    {
+      "id": "act_0040",
+      "account_id": "acc_001a",
+      "deal_id": "deal_003t",
+      "case_id": null,
+      "type": "email",
+      "body": "Sent RFI response",
+      "actor_id": "usr_0003",
+      "created_at": "2026-05-29T10:46:00.855Z"
+    },
+    {
+      "id": "act_0048",
+      "account_id": "acc_001a",
+      "deal_id": "deal_0041",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to rfi",
+      "actor_id": "usr_0003",
+      "created_at": "2026-05-17T10:46:00.855Z"
+    },
+    {
+      "id": "act_0049",
+      "account_id": "acc_001a",
+      "deal_id": "deal_0041",
+      "case_id": null,
+      "type": "call",
+      "body": "Intro call with procurement",
+      "actor_id": "usr_0003",
+      "created_at": "2026-05-07T10:46:00.855Z"
+    },
+    {
+      "id": "act_004h",
+      "account_id": "acc_001d",
+      "deal_id": "deal_004a",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to rfi",
+      "actor_id": "usr_0003",
+      "created_at": "2026-06-08T10:46:00.855Z"
+    },
+    {
+      "id": "act_004i",
+      "account_id": "acc_001d",
+      "deal_id": "deal_004a",
+      "case_id": null,
+      "type": "meeting",
+      "body": "Pilot scoping workshop",
+      "actor_id": "usr_0003",
+      "created_at": "2026-04-24T10:46:00.855Z"
+    },
+    {
+      "id": "act_004r",
+      "account_id": "acc_001d",
+      "deal_id": "deal_004j",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to lost",
+      "actor_id": "usr_0003",
+      "created_at": "2026-04-20T10:46:00.855Z"
+    },
+    {
+      "id": "act_004s",
+      "account_id": "acc_001d",
+      "deal_id": "deal_004j",
+      "case_id": null,
+      "type": "meeting",
+      "body": "Pilot scoping workshop",
+      "actor_id": "usr_0003",
+      "created_at": "2026-04-14T10:46:00.855Z"
+    },
+    {
+      "id": "act_0051",
+      "account_id": "acc_001h",
+      "deal_id": "deal_004t",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to customer_test",
+      "actor_id": "usr_0001",
+      "created_at": "2026-05-22T10:46:00.855Z"
+    },
+    {
+      "id": "act_0052",
+      "account_id": "acc_001h",
+      "deal_id": "deal_004t",
+      "case_id": null,
+      "type": "email",
+      "body": "Intro call with procurement",
+      "actor_id": "usr_0001",
+      "created_at": "2026-05-05T10:46:00.855Z"
+    },
+    {
+      "id": "act_005b",
+      "account_id": "acc_001h",
+      "deal_id": "deal_0053",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to interest",
+      "actor_id": "usr_0001",
+      "created_at": "2026-05-30T10:46:00.855Z"
+    },
+    {
+      "id": "act_005c",
+      "account_id": "acc_001h",
+      "deal_id": "deal_0053",
+      "case_id": null,
+      "type": "call",
+      "body": "Security architecture review",
+      "actor_id": "usr_0001",
+      "created_at": "2026-05-10T10:46:00.855Z"
+    },
+    {
+      "id": "act_005l",
+      "account_id": "acc_001m",
+      "deal_id": "deal_005d",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to rfi",
+      "actor_id": "usr_0003",
+      "created_at": "2026-06-05T10:46:00.855Z"
+    },
+    {
+      "id": "act_005m",
+      "account_id": "acc_001m",
+      "deal_id": "deal_005d",
+      "case_id": null,
+      "type": "call",
+      "body": "Intro call with procurement",
+      "actor_id": "usr_0003",
+      "created_at": "2026-05-24T10:46:00.855Z"
+    },
+    {
+      "id": "act_005u",
+      "account_id": "acc_001m",
+      "deal_id": "deal_005n",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to customer_test",
+      "actor_id": "usr_0003",
+      "created_at": "2026-06-05T10:46:00.855Z"
+    },
+    {
+      "id": "act_005v",
+      "account_id": "acc_001m",
+      "deal_id": "deal_005n",
+      "case_id": null,
+      "type": "call",
+      "body": "Security architecture review",
+      "actor_id": "usr_0003",
+      "created_at": "2026-05-14T10:46:00.855Z"
+    },
+    {
+      "id": "act_0064",
+      "account_id": "acc_001p",
+      "deal_id": "deal_005w",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to rfp",
+      "actor_id": "usr_0002",
+      "created_at": "2026-05-29T10:46:00.855Z"
+    },
+    {
+      "id": "act_0065",
+      "account_id": "acc_001p",
+      "deal_id": "deal_005w",
+      "case_id": null,
+      "type": "call",
+      "body": "Sent RFI response",
+      "actor_id": "usr_0002",
+      "created_at": "2026-05-26T10:46:00.855Z"
+    },
+    {
+      "id": "act_006e",
+      "account_id": "acc_001t",
+      "deal_id": "deal_0066",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to customer_test",
+      "actor_id": "usr_0001",
+      "created_at": "2026-05-17T10:46:00.855Z"
+    },
+    {
+      "id": "act_006f",
+      "account_id": "acc_001t",
+      "deal_id": "deal_0066",
+      "case_id": null,
+      "type": "email",
+      "body": "Sent RFI response",
+      "actor_id": "usr_0001",
+      "created_at": "2026-04-27T10:46:00.855Z"
+    },
+    {
+      "id": "act_006m",
+      "account_id": "acc_001w",
+      "deal_id": "deal_006g",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to rfi",
+      "actor_id": "usr_0001",
+      "created_at": "2026-06-01T10:46:00.855Z"
+    },
+    {
+      "id": "act_006n",
+      "account_id": "acc_001w",
+      "deal_id": "deal_006g",
+      "case_id": null,
+      "type": "call",
+      "body": "Pricing discussion",
+      "actor_id": "usr_0001",
+      "created_at": "2026-05-14T10:46:00.855Z"
+    },
+    {
+      "id": "act_006v",
+      "account_id": "acc_0021",
+      "deal_id": "deal_006o",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to interest",
+      "actor_id": "usr_0001",
+      "created_at": "2026-05-17T10:46:00.855Z"
+    },
+    {
+      "id": "act_006w",
+      "account_id": "acc_0021",
+      "deal_id": "deal_006o",
+      "case_id": null,
+      "type": "email",
+      "body": "Intro call with procurement",
+      "actor_id": "usr_0001",
+      "created_at": "2026-05-27T10:46:00.855Z"
+    },
+    {
+      "id": "act_0074",
+      "account_id": "acc_0021",
+      "deal_id": "deal_006x",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to rfi",
+      "actor_id": "usr_0001",
+      "created_at": "2026-05-28T10:46:00.855Z"
+    },
+    {
+      "id": "act_0075",
+      "account_id": "acc_0021",
+      "deal_id": "deal_006x",
+      "case_id": null,
+      "type": "meeting",
+      "body": "Intro call with procurement",
+      "actor_id": "usr_0001",
+      "created_at": "2026-05-31T10:46:00.855Z"
+    },
+    {
+      "id": "act_007d",
+      "account_id": "acc_0026",
+      "deal_id": "deal_0076",
+      "case_id": null,
+      "type": "stage_change",
+      "body": "Deal moved to customer_test",
+      "actor_id": "usr_0002",
+      "created_at": "2026-05-31T10:46:00.855Z"
+    },
+    {
+      "id": "act_007e",
+      "account_id": "acc_0026",
+      "deal_id": "deal_0076",
+      "case_id": null,
+      "type": "call",
+      "body": "Pilot scoping workshop",
+      "actor_id": "usr_0002",
+      "created_at": "2026-05-19T10:46:00.855Z"
+    },
+    {
+      "id": "act_007j",
+      "account_id": "acc_000q",
+      "deal_id": "deal_002i",
+      "case_id": null,
+      "type": "offer",
+      "body": "Offer v1 created (22% discount, pending_finance)",
+      "actor_id": "usr_0003",
+      "created_at": "2026-05-25T10:46:00.855Z"
+    },
+    {
+      "id": "act_007n",
+      "account_id": "acc_000v",
+      "deal_id": "deal_0030",
+      "case_id": null,
+      "type": "offer",
+      "body": "Offer v1 created (0% discount, approved)",
+      "actor_id": "usr_0003",
+      "created_at": "2026-05-22T10:46:00.855Z"
+    },
+    {
+      "id": "act_007r",
+      "account_id": "acc_0010",
+      "deal_id": "deal_003a",
+      "case_id": null,
+      "type": "offer",
+      "body": "Offer v1 created (0% discount, approved)",
+      "actor_id": "usr_0001",
+      "created_at": "2026-06-06T10:46:00.855Z"
+    },
+    {
+      "id": "act_007w",
+      "account_id": "acc_0015",
+      "deal_id": "deal_003k",
+      "case_id": null,
+      "type": "offer",
+      "body": "Offer v1 created (5% discount, approved)",
+      "actor_id": "usr_0001",
+      "created_at": "2026-05-12T10:46:00.855Z"
+    },
+    {
+      "id": "act_0080",
+      "account_id": "acc_001a",
+      "deal_id": "deal_003t",
+      "case_id": null,
+      "type": "offer",
+      "body": "Offer v1 created (0% discount, approved)",
+      "actor_id": "usr_0003",
+      "created_at": "2026-05-04T10:46:00.855Z"
+    },
+    {
+      "id": "act_0084",
+      "account_id": "acc_001h",
+      "deal_id": "deal_004t",
+      "case_id": null,
+      "type": "offer",
+      "body": "Offer v1 created (0% discount, approved)",
+      "actor_id": "usr_0001",
+      "created_at": "2026-05-19T10:46:00.855Z"
+    },
+    {
+      "id": "act_0088",
+      "account_id": "acc_001m",
+      "deal_id": "deal_005n",
+      "case_id": null,
+      "type": "offer",
+      "body": "Offer v1 created (0% discount, approved)",
+      "actor_id": "usr_0003",
+      "created_at": "2026-06-08T10:46:00.855Z"
+    },
+    {
+      "id": "act_008c",
+      "account_id": "acc_001p",
+      "deal_id": "deal_005w",
+      "case_id": null,
+      "type": "offer",
+      "body": "Offer v1 created (0% discount, approved)",
+      "actor_id": "usr_0002",
+      "created_at": "2026-06-04T10:46:00.855Z"
+    },
+    {
+      "id": "act_008g",
+      "account_id": "acc_000l",
+      "deal_id": null,
+      "case_id": "cas_008d",
+      "type": "system",
+      "body": "Case opened: Threat intel feed latency",
+      "actor_id": "usr_0004",
+      "created_at": "2026-06-10T10:46:00.855Z"
+    },
+    {
+      "id": "act_008k",
+      "account_id": "acc_000l",
+      "deal_id": null,
+      "case_id": "cas_008h",
+      "type": "system",
+      "body": "Case opened: OS update bricked 3 devices",
+      "actor_id": "usr_0004",
+      "created_at": "2026-06-10T10:46:00.855Z"
+    },
+    {
+      "id": "act_008n",
+      "account_id": "acc_000v",
+      "deal_id": null,
+      "case_id": "cas_008l",
+      "type": "system",
+      "body": "Case opened: SOC escalation — suspicious traffic",
+      "actor_id": "usr_0004",
+      "created_at": "2026-06-12T10:46:00.855Z"
+    },
+    {
+      "id": "act_008q",
+      "account_id": "acc_000v",
+      "deal_id": null,
+      "case_id": "cas_008o",
+      "type": "system",
+      "body": "Case opened: Bulk provisioning slow",
+      "actor_id": "usr_0004",
+      "created_at": "2026-05-17T10:46:00.855Z"
+    },
+    {
+      "id": "act_008u",
+      "account_id": "acc_0010",
+      "deal_id": null,
+      "case_id": "cas_008r",
+      "type": "system",
+      "body": "Case opened: Threat intel feed latency",
+      "actor_id": "usr_0005",
+      "created_at": "2026-06-04T10:46:00.855Z"
+    },
+    {
+      "id": "act_008y",
+      "account_id": "acc_0015",
+      "deal_id": null,
+      "case_id": "cas_008v",
+      "type": "system",
+      "body": "Case opened: Request: add geofencing policy",
+      "actor_id": "usr_0004",
+      "created_at": "2026-06-07T10:46:00.855Z"
+    },
+    {
+      "id": "act_0091",
+      "account_id": "acc_0015",
+      "deal_id": null,
+      "case_id": "cas_008z",
+      "type": "system",
+      "body": "Case opened: Request: add geofencing policy",
+      "actor_id": "usr_0004",
+      "created_at": "2026-05-24T10:46:00.855Z"
+    },
+    {
+      "id": "act_0094",
+      "account_id": "acc_0015",
+      "deal_id": null,
+      "case_id": "cas_0092",
+      "type": "system",
+      "body": "Case opened: Threat intel feed latency",
+      "actor_id": "usr_0004",
+      "created_at": "2026-06-07T10:46:00.855Z"
+    },
+    {
+      "id": "act_0098",
+      "account_id": "acc_001a",
+      "deal_id": null,
+      "case_id": "cas_0095",
+      "type": "system",
+      "body": "Case opened: MDM enrolment failing on S30 batch",
+      "actor_id": "usr_0004",
+      "created_at": "2026-05-10T10:46:00.855Z"
+    },
+    {
+      "id": "act_009c",
+      "account_id": "acc_001a",
+      "deal_id": null,
+      "case_id": "cas_0099",
+      "type": "system",
+      "body": "Case opened: Tamper alert false positives",
+      "actor_id": "usr_0004",
+      "created_at": "2026-05-21T10:46:00.855Z"
+    },
+    {
+      "id": "act_009g",
+      "account_id": "acc_001d",
+      "deal_id": null,
+      "case_id": "cas_009d",
+      "type": "system",
+      "body": "Case opened: MDM enrolment failing on S30 batch",
+      "actor_id": "usr_0005",
+      "created_at": "2026-05-25T10:46:00.855Z"
+    },
+    {
+      "id": "act_009k",
+      "account_id": "acc_001d",
+      "deal_id": null,
+      "case_id": "cas_009h",
+      "type": "system",
+      "body": "Case opened: OS update bricked 3 devices",
+      "actor_id": "usr_0005",
+      "created_at": "2026-05-22T10:46:00.855Z"
+    },
+    {
+      "id": "act_009n",
+      "account_id": "acc_001d",
+      "deal_id": null,
+      "case_id": "cas_009l",
+      "type": "system",
+      "body": "Case opened: SOC escalation — suspicious traffic",
+      "actor_id": "usr_0005",
+      "created_at": "2026-06-01T10:46:00.855Z"
+    },
+    {
+      "id": "act_009q",
+      "account_id": "acc_001m",
+      "deal_id": null,
+      "case_id": "cas_009o",
+      "type": "system",
+      "body": "Case opened: Tamper alert false positives",
+      "actor_id": "usr_0004",
+      "created_at": "2026-05-10T10:46:00.855Z"
+    },
+    {
+      "id": "act_009u",
+      "account_id": "acc_001m",
+      "deal_id": null,
+      "case_id": "cas_009r",
+      "type": "system",
+      "body": "Case opened: SOC escalation — suspicious traffic",
+      "actor_id": "usr_0004",
+      "created_at": "2026-05-11T10:46:00.855Z"
+    },
+    {
+      "id": "act_009y",
+      "account_id": "acc_001p",
+      "deal_id": null,
+      "case_id": "cas_009v",
+      "type": "system",
+      "body": "Case opened: Request: add geofencing policy",
+      "actor_id": "usr_0004",
+      "created_at": "2026-05-30T10:46:00.855Z"
+    },
+    {
+      "id": "act_00a1",
+      "account_id": "acc_001t",
+      "deal_id": null,
+      "case_id": "cas_009z",
+      "type": "system",
+      "body": "Case opened: Tamper alert false positives",
+      "actor_id": "usr_0005",
+      "created_at": "2026-05-30T10:46:00.855Z"
+    },
+    {
+      "id": "act_00a4",
+      "account_id": "acc_001t",
+      "deal_id": null,
+      "case_id": "cas_00a2",
+      "type": "system",
+      "body": "Case opened: MDM enrolment failing on S30 batch",
+      "actor_id": "usr_0005",
+      "created_at": "2026-05-07T10:46:00.855Z"
+    },
+    {
+      "id": "act_00a8",
+      "account_id": "acc_001w",
+      "deal_id": null,
+      "case_id": "cas_00a5",
+      "type": "system",
+      "body": "Case opened: SOC escalation — suspicious traffic",
+      "actor_id": "usr_0004",
+      "created_at": "2026-05-11T10:46:00.855Z"
+    },
+    {
+      "id": "act_00ab",
+      "account_id": "acc_001w",
+      "deal_id": null,
+      "case_id": "cas_00a9",
+      "type": "system",
+      "body": "Case opened: Threat intel feed latency",
+      "actor_id": "usr_0004",
+      "created_at": "2026-05-30T10:46:00.855Z"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "ntf_00ac",
+      "user_id": "usr_0007",
+      "type": "approval_request",
+      "body": "Offer needs approval: 22% discount",
+      "link_kind": "offer",
+      "link_id": "off_007f",
+      "read": false,
+      "created_at": "2026-06-07T10:46:00.855Z"
+    },
+    {
+      "id": "ntf_00ad",
+      "user_id": "usr_0005",
+      "type": "sla_warning",
+      "body": "Urgent case approaching SLA: Threat intel feed latency",
+      "link_kind": "case",
+      "link_id": "cas_008r",
+      "read": false,
+      "created_at": "2026-06-13T10:46:00.855Z"
+    }
+  ]
+}

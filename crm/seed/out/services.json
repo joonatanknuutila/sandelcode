@@ -1,0 +1,56 @@
+[
+  {
+    "id": "svc_000f",
+    "sku": "SVC-MDM",
+    "name": "HMD Mobile Device Management",
+    "type": "internal",
+    "invoicing_model": "monthly_recurring",
+    "unit_price_eur": 6,
+    "active": true
+  },
+  {
+    "id": "svc_000g",
+    "sku": "SVC-OSU",
+    "name": "Secure OS Update Subscription",
+    "type": "internal",
+    "invoicing_model": "fixed_term",
+    "unit_price_eur": 120,
+    "active": true
+  },
+  {
+    "id": "svc_000h",
+    "sku": "SVC-MON",
+    "name": "Security Monitoring (per device)",
+    "type": "internal",
+    "invoicing_model": "monthly_recurring",
+    "unit_price_eur": 9,
+    "active": true
+  },
+  {
+    "id": "svc_000i",
+    "sku": "SVC-ONB",
+    "name": "Fleet Onboarding & Provisioning",
+    "type": "internal",
+    "invoicing_model": "one_off",
+    "unit_price_eur": 4500,
+    "active": true
+  },
+  {
+    "id": "svc_000j",
+    "sku": "SVC-TI",
+    "name": "3rd-party Threat Intelligence Feed",
+    "type": "third_party",
+    "invoicing_model": "fixed_term",
+    "unit_price_eur": 18000,
+    "active": true
+  },
+  {
+    "id": "svc_000k",
+    "sku": "SVC-SOC",
+    "name": "3rd-party SOC Escalation",
+    "type": "third_party",
+    "invoicing_model": "monthly_recurring",
+    "unit_price_eur": 14,
+    "active": true
+  }
+]

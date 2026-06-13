@@ -1,0 +1,98 @@
+[
+  {
+    "id": "off_007f",
+    "deal_id": "deal_002i",
+    "account_id": "acc_000q",
+    "version": 1,
+    "status": "pending_finance",
+    "discount_pct": 22,
+    "justification": "Competitive pressure from incumbent",
+    "total_eur": 768456,
+    "created_by": "usr_0003",
+    "created_at": "2026-06-07T10:46:00.855Z"
+  },
+  {
+    "id": "off_007k",
+    "deal_id": "deal_0030",
+    "account_id": "acc_000v",
+    "version": 1,
+    "status": "approved",
+    "discount_pct": 0,
+    "justification": null,
+    "total_eur": 787339,
+    "created_by": "usr_0003",
+    "created_at": "2026-06-04T10:46:00.855Z"
+  },
+  {
+    "id": "off_007o",
+    "deal_id": "deal_003a",
+    "account_id": "acc_0010",
+    "version": 1,
+    "status": "approved",
+    "discount_pct": 0,
+    "justification": null,
+    "total_eur": 503949,
+    "created_by": "usr_0001",
+    "created_at": "2026-05-28T10:46:00.855Z"
+  },
+  {
+    "id": "off_007s",
+    "deal_id": "deal_003k",
+    "account_id": "acc_0015",
+    "version": 1,
+    "status": "approved",
+    "discount_pct": 5,
+    "justification": "Strategic logo, multi-year commitment",
+    "total_eur": 301473.95,
+    "created_by": "usr_0001",
+    "created_at": "2026-06-10T10:46:00.855Z"
+  },
+  {
+    "id": "off_007x",
+    "deal_id": "deal_003t",
+    "account_id": "acc_001a",
+    "version": 1,
+    "status": "approved",
+    "discount_pct": 0,
+    "justification": null,
+    "total_eur": 409762,
+    "created_by": "usr_0003",
+    "created_at": "2026-05-14T10:46:00.855Z"
+  },
+  {
+    "id": "off_0081",
+    "deal_id": "deal_004t",
+    "account_id": "acc_001h",
+    "version": 1,
+    "status": "approved",
+    "discount_pct": 0,
+    "justification": null,
+    "total_eur": 1150635,
+    "created_by": "usr_0001",
+    "created_at": "2026-05-26T10:46:00.855Z"
+  },
+  {
+    "id": "off_0085",
+    "deal_id": "deal_005n",
+    "account_id": "acc_001m",
+    "version": 1,
+    "status": "approved",
+    "discount_pct": 0,
+    "justification": null,
+    "total_eur": 1014086,
+    "created_by": "usr_0003",
+    "created_at": "2026-05-08T10:46:00.855Z"
+  },
+  {
+    "id": "off_0089",
+    "deal_id": "deal_005w",
+    "account_id": "acc_001p",
+    "version": 1,
+    "status": "approved",
+    "discount_pct": 0,
+    "justification": null,
+    "total_eur": 164388,
+    "created_by": "usr_0002",
+    "created_at": "2026-06-04T10:46:00.855Z"
+  }
+]

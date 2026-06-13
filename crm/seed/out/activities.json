@@ -1,0 +1,682 @@
+[
+  {
+    "id": "act_002g",
+    "account_id": "acc_000l",
+    "deal_id": "deal_0029",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to interest",
+    "actor_id": "usr_0002",
+    "created_at": "2026-05-25T10:46:00.854Z"
+  },
+  {
+    "id": "act_002h",
+    "account_id": "acc_000l",
+    "deal_id": "deal_0029",
+    "case_id": null,
+    "type": "email",
+    "body": "Pricing discussion",
+    "actor_id": "usr_0002",
+    "created_at": "2026-04-22T10:46:00.854Z"
+  },
+  {
+    "id": "act_002p",
+    "account_id": "acc_000q",
+    "deal_id": "deal_002i",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to contract_negotiation",
+    "actor_id": "usr_0003",
+    "created_at": "2026-05-26T10:46:00.854Z"
+  },
+  {
+    "id": "act_002q",
+    "account_id": "acc_000q",
+    "deal_id": "deal_002i",
+    "case_id": null,
+    "type": "meeting",
+    "body": "Pricing discussion",
+    "actor_id": "usr_0003",
+    "created_at": "2026-05-31T10:46:00.854Z"
+  },
+  {
+    "id": "act_002y",
+    "account_id": "acc_000v",
+    "deal_id": "deal_002r",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to rfi",
+    "actor_id": "usr_0003",
+    "created_at": "2026-05-23T10:46:00.854Z"
+  },
+  {
+    "id": "act_002z",
+    "account_id": "acc_000v",
+    "deal_id": "deal_002r",
+    "case_id": null,
+    "type": "email",
+    "body": "Pricing discussion",
+    "actor_id": "usr_0003",
+    "created_at": "2026-06-08T10:46:00.854Z"
+  },
+  {
+    "id": "act_0038",
+    "account_id": "acc_000v",
+    "deal_id": "deal_0030",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to rfp",
+    "actor_id": "usr_0003",
+    "created_at": "2026-05-19T10:46:00.854Z"
+  },
+  {
+    "id": "act_0039",
+    "account_id": "acc_000v",
+    "deal_id": "deal_0030",
+    "case_id": null,
+    "type": "meeting",
+    "body": "Intro call with procurement",
+    "actor_id": "usr_0003",
+    "created_at": "2026-04-16T10:46:00.854Z"
+  },
+  {
+    "id": "act_003i",
+    "account_id": "acc_0010",
+    "deal_id": "deal_003a",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to rfp",
+    "actor_id": "usr_0001",
+    "created_at": "2026-05-24T10:46:00.854Z"
+  },
+  {
+    "id": "act_003j",
+    "account_id": "acc_0010",
+    "deal_id": "deal_003a",
+    "case_id": null,
+    "type": "meeting",
+    "body": "Pricing discussion",
+    "actor_id": "usr_0001",
+    "created_at": "2026-04-28T10:46:00.854Z"
+  },
+  {
+    "id": "act_003r",
+    "account_id": "acc_0015",
+    "deal_id": "deal_003k",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to contract_negotiation",
+    "actor_id": "usr_0001",
+    "created_at": "2026-06-09T10:46:00.854Z"
+  },
+  {
+    "id": "act_003s",
+    "account_id": "acc_0015",
+    "deal_id": "deal_003k",
+    "case_id": null,
+    "type": "email",
+    "body": "Sent RFI response",
+    "actor_id": "usr_0001",
+    "created_at": "2026-05-20T10:46:00.854Z"
+  },
+  {
+    "id": "act_003z",
+    "account_id": "acc_001a",
+    "deal_id": "deal_003t",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to rfp",
+    "actor_id": "usr_0003",
+    "created_at": "2026-05-31T10:46:00.854Z"
+  },
+  {
+    "id": "act_0040",
+    "account_id": "acc_001a",
+    "deal_id": "deal_003t",
+    "case_id": null,
+    "type": "email",
+    "body": "Sent RFI response",
+    "actor_id": "usr_0003",
+    "created_at": "2026-05-29T10:46:00.855Z"
+  },
+  {
+    "id": "act_0048",
+    "account_id": "acc_001a",
+    "deal_id": "deal_0041",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to rfi",
+    "actor_id": "usr_0003",
+    "created_at": "2026-05-17T10:46:00.855Z"
+  },
+  {
+    "id": "act_0049",
+    "account_id": "acc_001a",
+    "deal_id": "deal_0041",
+    "case_id": null,
+    "type": "call",
+    "body": "Intro call with procurement",
+    "actor_id": "usr_0003",
+    "created_at": "2026-05-07T10:46:00.855Z"
+  },
+  {
+    "id": "act_004h",
+    "account_id": "acc_001d",
+    "deal_id": "deal_004a",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to rfi",
+    "actor_id": "usr_0003",
+    "created_at": "2026-06-08T10:46:00.855Z"
+  },
+  {
+    "id": "act_004i",
+    "account_id": "acc_001d",
+    "deal_id": "deal_004a",
+    "case_id": null,
+    "type": "meeting",
+    "body": "Pilot scoping workshop",
+    "actor_id": "usr_0003",
+    "created_at": "2026-04-24T10:46:00.855Z"
+  },
+  {
+    "id": "act_004r",
+    "account_id": "acc_001d",
+    "deal_id": "deal_004j",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to lost",
+    "actor_id": "usr_0003",
+    "created_at": "2026-04-20T10:46:00.855Z"
+  },
+  {
+    "id": "act_004s",
+    "account_id": "acc_001d",
+    "deal_id": "deal_004j",
+    "case_id": null,
+    "type": "meeting",
+    "body": "Pilot scoping workshop",
+    "actor_id": "usr_0003",
+    "created_at": "2026-04-14T10:46:00.855Z"
+  },
+  {
+    "id": "act_0051",
+    "account_id": "acc_001h",
+    "deal_id": "deal_004t",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to customer_test",
+    "actor_id": "usr_0001",
+    "created_at": "2026-05-22T10:46:00.855Z"
+  },
+  {
+    "id": "act_0052",
+    "account_id": "acc_001h",
+    "deal_id": "deal_004t",
+    "case_id": null,
+    "type": "email",
+    "body": "Intro call with procurement",
+    "actor_id": "usr_0001",
+    "created_at": "2026-05-05T10:46:00.855Z"
+  },
+  {
+    "id": "act_005b",
+    "account_id": "acc_001h",
+    "deal_id": "deal_0053",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to interest",
+    "actor_id": "usr_0001",
+    "created_at": "2026-05-30T10:46:00.855Z"
+  },
+  {
+    "id": "act_005c",
+    "account_id": "acc_001h",
+    "deal_id": "deal_0053",
+    "case_id": null,
+    "type": "call",
+    "body": "Security architecture review",
+    "actor_id": "usr_0001",
+    "created_at": "2026-05-10T10:46:00.855Z"
+  },
+  {
+    "id": "act_005l",
+    "account_id": "acc_001m",
+    "deal_id": "deal_005d",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to rfi",
+    "actor_id": "usr_0003",
+    "created_at": "2026-06-05T10:46:00.855Z"
+  },
+  {
+    "id": "act_005m",
+    "account_id": "acc_001m",
+    "deal_id": "deal_005d",
+    "case_id": null,
+    "type": "call",
+    "body": "Intro call with procurement",
+    "actor_id": "usr_0003",
+    "created_at": "2026-05-24T10:46:00.855Z"
+  },
+  {
+    "id": "act_005u",
+    "account_id": "acc_001m",
+    "deal_id": "deal_005n",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to customer_test",
+    "actor_id": "usr_0003",
+    "created_at": "2026-06-05T10:46:00.855Z"
+  },
+  {
+    "id": "act_005v",
+    "account_id": "acc_001m",
+    "deal_id": "deal_005n",
+    "case_id": null,
+    "type": "call",
+    "body": "Security architecture review",
+    "actor_id": "usr_0003",
+    "created_at": "2026-05-14T10:46:00.855Z"
+  },
+  {
+    "id": "act_0064",
+    "account_id": "acc_001p",
+    "deal_id": "deal_005w",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to rfp",
+    "actor_id": "usr_0002",
+    "created_at": "2026-05-29T10:46:00.855Z"
+  },
+  {
+    "id": "act_0065",
+    "account_id": "acc_001p",
+    "deal_id": "deal_005w",
+    "case_id": null,
+    "type": "call",
+    "body": "Sent RFI response",
+    "actor_id": "usr_0002",
+    "created_at": "2026-05-26T10:46:00.855Z"
+  },
+  {
+    "id": "act_006e",
+    "account_id": "acc_001t",
+    "deal_id": "deal_0066",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to customer_test",
+    "actor_id": "usr_0001",
+    "created_at": "2026-05-17T10:46:00.855Z"
+  },
+  {
+    "id": "act_006f",
+    "account_id": "acc_001t",
+    "deal_id": "deal_0066",
+    "case_id": null,
+    "type": "email",
+    "body": "Sent RFI response",
+    "actor_id": "usr_0001",
+    "created_at": "2026-04-27T10:46:00.855Z"
+  },
+  {
+    "id": "act_006m",
+    "account_id": "acc_001w",
+    "deal_id": "deal_006g",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to rfi",
+    "actor_id": "usr_0001",
+    "created_at": "2026-06-01T10:46:00.855Z"
+  },
+  {
+    "id": "act_006n",
+    "account_id": "acc_001w",
+    "deal_id": "deal_006g",
+    "case_id": null,
+    "type": "call",
+    "body": "Pricing discussion",
+    "actor_id": "usr_0001",
+    "created_at": "2026-05-14T10:46:00.855Z"
+  },
+  {
+    "id": "act_006v",
+    "account_id": "acc_0021",
+    "deal_id": "deal_006o",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to interest",
+    "actor_id": "usr_0001",
+    "created_at": "2026-05-17T10:46:00.855Z"
+  },
+  {
+    "id": "act_006w",
+    "account_id": "acc_0021",
+    "deal_id": "deal_006o",
+    "case_id": null,
+    "type": "email",
+    "body": "Intro call with procurement",
+    "actor_id": "usr_0001",
+    "created_at": "2026-05-27T10:46:00.855Z"
+  },
+  {
+    "id": "act_0074",
+    "account_id": "acc_0021",
+    "deal_id": "deal_006x",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to rfi",
+    "actor_id": "usr_0001",
+    "created_at": "2026-05-28T10:46:00.855Z"
+  },
+  {
+    "id": "act_0075",
+    "account_id": "acc_0021",
+    "deal_id": "deal_006x",
+    "case_id": null,
+    "type": "meeting",
+    "body": "Intro call with procurement",
+    "actor_id": "usr_0001",
+    "created_at": "2026-05-31T10:46:00.855Z"
+  },
+  {
+    "id": "act_007d",
+    "account_id": "acc_0026",
+    "deal_id": "deal_0076",
+    "case_id": null,
+    "type": "stage_change",
+    "body": "Deal moved to customer_test",
+    "actor_id": "usr_0002",
+    "created_at": "2026-05-31T10:46:00.855Z"
+  },
+  {
+    "id": "act_007e",
+    "account_id": "acc_0026",
+    "deal_id": "deal_0076",
+    "case_id": null,
+    "type": "call",
+    "body": "Pilot scoping workshop",
+    "actor_id": "usr_0002",
+    "created_at": "2026-05-19T10:46:00.855Z"
+  },
+  {
+    "id": "act_007j",
+    "account_id": "acc_000q",
+    "deal_id": "deal_002i",
+    "case_id": null,
+    "type": "offer",
+    "body": "Offer v1 created (22% discount, pending_finance)",
+    "actor_id": "usr_0003",
+    "created_at": "2026-05-25T10:46:00.855Z"
+  },
+  {
+    "id": "act_007n",
+    "account_id": "acc_000v",
+    "deal_id": "deal_0030",
+    "case_id": null,
+    "type": "offer",
+    "body": "Offer v1 created (0% discount, approved)",
+    "actor_id": "usr_0003",
+    "created_at": "2026-05-22T10:46:00.855Z"
+  },
+  {
+    "id": "act_007r",
+    "account_id": "acc_0010",
+    "deal_id": "deal_003a",
+    "case_id": null,
+    "type": "offer",
+    "body": "Offer v1 created (0% discount, approved)",
+    "actor_id": "usr_0001",
+    "created_at": "2026-06-06T10:46:00.855Z"
+  },
+  {
+    "id": "act_007w",
+    "account_id": "acc_0015",
+    "deal_id": "deal_003k",
+    "case_id": null,
+    "type": "offer",
+    "body": "Offer v1 created (5% discount, approved)",
+    "actor_id": "usr_0001",
+    "created_at": "2026-05-12T10:46:00.855Z"
+  },
+  {
+    "id": "act_0080",
+    "account_id": "acc_001a",
+    "deal_id": "deal_003t",
+    "case_id": null,
+    "type": "offer",
+    "body": "Offer v1 created (0% discount, approved)",
+    "actor_id": "usr_0003",
+    "created_at": "2026-05-04T10:46:00.855Z"
+  },
+  {
+    "id": "act_0084",
+    "account_id": "acc_001h",
+    "deal_id": "deal_004t",
+    "case_id": null,
+    "type": "offer",
+    "body": "Offer v1 created (0% discount, approved)",
+    "actor_id": "usr_0001",
+    "created_at": "2026-05-19T10:46:00.855Z"
+  },
+  {
+    "id": "act_0088",
+    "account_id": "acc_001m",
+    "deal_id": "deal_005n",
+    "case_id": null,
+    "type": "offer",
+    "body": "Offer v1 created (0% discount, approved)",
+    "actor_id": "usr_0003",
+    "created_at": "2026-06-08T10:46:00.855Z"
+  },
+  {
+    "id": "act_008c",
+    "account_id": "acc_001p",
+    "deal_id": "deal_005w",
+    "case_id": null,
+    "type": "offer",
+    "body": "Offer v1 created (0% discount, approved)",
+    "actor_id": "usr_0002",
+    "created_at": "2026-06-04T10:46:00.855Z"
+  },
+  {
+    "id": "act_008g",
+    "account_id": "acc_000l",
+    "deal_id": null,
+    "case_id": "cas_008d",
+    "type": "system",
+    "body": "Case opened: Threat intel feed latency",
+    "actor_id": "usr_0004",
+    "created_at": "2026-06-10T10:46:00.855Z"
+  },
+  {
+    "id": "act_008k",
+    "account_id": "acc_000l",
+    "deal_id": null,
+    "case_id": "cas_008h",
+    "type": "system",
+    "body": "Case opened: OS update bricked 3 devices",
+    "actor_id": "usr_0004",
+    "created_at": "2026-06-10T10:46:00.855Z"
+  },
+  {
+    "id": "act_008n",
+    "account_id": "acc_000v",
+    "deal_id": null,
+    "case_id": "cas_008l",
+    "type": "system",
+    "body": "Case opened: SOC escalation — suspicious traffic",
+    "actor_id": "usr_0004",
+    "created_at": "2026-06-12T10:46:00.855Z"
+  },
+  {
+    "id": "act_008q",
+    "account_id": "acc_000v",
+    "deal_id": null,
+    "case_id": "cas_008o",
+    "type": "system",
+    "body": "Case opened: Bulk provisioning slow",
+    "actor_id": "usr_0004",
+    "created_at": "2026-05-17T10:46:00.855Z"
+  },
+  {
+    "id": "act_008u",
+    "account_id": "acc_0010",
+    "deal_id": null,
+    "case_id": "cas_008r",
+    "type": "system",
+    "body": "Case opened: Threat intel feed latency",
+    "actor_id": "usr_0005",
+    "created_at": "2026-06-04T10:46:00.855Z"
+  },
+  {
+    "id": "act_008y",
+    "account_id": "acc_0015",
+    "deal_id": null,
+    "case_id": "cas_008v",
+    "type": "system",
+    "body": "Case opened: Request: add geofencing policy",
+    "actor_id": "usr_0004",
+    "created_at": "2026-06-07T10:46:00.855Z"
+  },
+  {
+    "id": "act_0091",
+    "account_id": "acc_0015",
+    "deal_id": null,
+    "case_id": "cas_008z",
+    "type": "system",
+    "body": "Case opened: Request: add geofencing policy",
+    "actor_id": "usr_0004",
+    "created_at": "2026-05-24T10:46:00.855Z"
+  },
+  {
+    "id": "act_0094",
+    "account_id": "acc_0015",
+    "deal_id": null,
+    "case_id": "cas_0092",
+    "type": "system",
+    "body": "Case opened: Threat intel feed latency",
+    "actor_id": "usr_0004",
+    "created_at": "2026-06-07T10:46:00.855Z"
+  },
+  {
+    "id": "act_0098",
+    "account_id": "acc_001a",
+    "deal_id": null,
+    "case_id": "cas_0095",
+    "type": "system",
+    "body": "Case opened: MDM enrolment failing on S30 batch",
+    "actor_id": "usr_0004",
+    "created_at": "2026-05-10T10:46:00.855Z"
+  },
+  {
+    "id": "act_009c",
+    "account_id": "acc_001a",
+    "deal_id": null,
+    "case_id": "cas_0099",
+    "type": "system",
+    "body": "Case opened: Tamper alert false positives",
+    "actor_id": "usr_0004",
+    "created_at": "2026-05-21T10:46:00.855Z"
+  },
+  {
+    "id": "act_009g",
+    "account_id": "acc_001d",
+    "deal_id": null,
+    "case_id": "cas_009d",
+    "type": "system",
+    "body": "Case opened: MDM enrolment failing on S30 batch",
+    "actor_id": "usr_0005",
+    "created_at": "2026-05-25T10:46:00.855Z"
+  },
+  {
+    "id": "act_009k",
+    "account_id": "acc_001d",
+    "deal_id": null,
+    "case_id": "cas_009h",
+    "type": "system",
+    "body": "Case opened: OS update bricked 3 devices",
+    "actor_id": "usr_0005",
+    "created_at": "2026-05-22T10:46:00.855Z"
+  },
+  {
+    "id": "act_009n",
+    "account_id": "acc_001d",
+    "deal_id": null,
+    "case_id": "cas_009l",
+    "type": "system",
+    "body": "Case opened: SOC escalation — suspicious traffic",
+    "actor_id": "usr_0005",
+    "created_at": "2026-06-01T10:46:00.855Z"
+  },
+  {
+    "id": "act_009q",
+    "account_id": "acc_001m",
+    "deal_id": null,
+    "case_id": "cas_009o",
+    "type": "system",
+    "body": "Case opened: Tamper alert false positives",
+    "actor_id": "usr_0004",
+    "created_at": "2026-05-10T10:46:00.855Z"
+  },
+  {
+    "id": "act_009u",
+    "account_id": "acc_001m",
+    "deal_id": null,
+    "case_id": "cas_009r",
+    "type": "system",
+    "body": "Case opened: SOC escalation — suspicious traffic",
+    "actor_id": "usr_0004",
+    "created_at": "2026-05-11T10:46:00.855Z"
+  },
+  {
+    "id": "act_009y",
+    "account_id": "acc_001p",
+    "deal_id": null,
+    "case_id": "cas_009v",
+    "type": "system",
+    "body": "Case opened: Request: add geofencing policy",
+    "actor_id": "usr_0004",
+    "created_at": "2026-05-30T10:46:00.855Z"
+  },
+  {
+    "id": "act_00a1",
+    "account_id": "acc_001t",
+    "deal_id": null,
+    "case_id": "cas_009z",
+    "type": "system",
+    "body": "Case opened: Tamper alert false positives",
+    "actor_id": "usr_0005",
+    "created_at": "2026-05-30T10:46:00.855Z"
+  },
+  {
+    "id": "act_00a4",
+    "account_id": "acc_001t",
+    "deal_id": null,
+    "case_id": "cas_00a2",
+    "type": "system",
+    "body": "Case opened: MDM enrolment failing on S30 batch",
+    "actor_id": "usr_0005",
+    "created_at": "2026-05-07T10:46:00.855Z"
+  },
+  {
+    "id": "act_00a8",
+    "account_id": "acc_001w",
+    "deal_id": null,
+    "case_id": "cas_00a5",
+    "type": "system",
+    "body": "Case opened: SOC escalation — suspicious traffic",
+    "actor_id": "usr_0004",
+    "created_at": "2026-05-11T10:46:00.855Z"
+  },
+  {
+    "id": "act_00ab",
+    "account_id": "acc_001w",
+    "deal_id": null,
+    "case_id": "cas_00a9",
+    "type": "system",
+    "body": "Case opened: Threat intel feed latency",
+    "actor_id": "usr_0004",
+    "created_at": "2026-05-30T10:46:00.855Z"
+  }
+]

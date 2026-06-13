@@ -1,0 +1,162 @@
+[
+  {
+    "id": "ol_007g",
+    "offer_id": "off_007f",
+    "product_id": "prd_0008",
+    "service_id": null,
+    "qty": 1200,
+    "unit_price_eur": 749,
+    "discount_pct": 22,
+    "line_total_eur": 701064
+  },
+  {
+    "id": "ol_007h",
+    "offer_id": "off_007f",
+    "product_id": null,
+    "service_id": "svc_000f",
+    "qty": 1200,
+    "unit_price_eur": 72,
+    "discount_pct": 22,
+    "line_total_eur": 67392
+  },
+  {
+    "id": "ol_007l",
+    "offer_id": "off_007k",
+    "product_id": "prd_0008",
+    "service_id": null,
+    "qty": 959,
+    "unit_price_eur": 749,
+    "discount_pct": 0,
+    "line_total_eur": 718291
+  },
+  {
+    "id": "ol_007m",
+    "offer_id": "off_007k",
+    "product_id": null,
+    "service_id": "svc_000f",
+    "qty": 959,
+    "unit_price_eur": 72,
+    "discount_pct": 0,
+    "line_total_eur": 69048
+  },
+  {
+    "id": "ol_007p",
+    "offer_id": "off_007o",
+    "product_id": "prd_000a",
+    "service_id": null,
+    "qty": 519,
+    "unit_price_eur": 899,
+    "discount_pct": 0,
+    "line_total_eur": 466581
+  },
+  {
+    "id": "ol_007q",
+    "offer_id": "off_007o",
+    "product_id": null,
+    "service_id": "svc_000f",
+    "qty": 519,
+    "unit_price_eur": 72,
+    "discount_pct": 0,
+    "line_total_eur": 37368
+  },
+  {
+    "id": "ol_007t",
+    "offer_id": "off_007s",
+    "product_id": "prd_000c",
+    "service_id": null,
+    "qty": 271,
+    "unit_price_eur": 1099,
+    "discount_pct": 5,
+    "line_total_eur": 282937.55
+  },
+  {
+    "id": "ol_007u",
+    "offer_id": "off_007s",
+    "product_id": null,
+    "service_id": "svc_000f",
+    "qty": 271,
+    "unit_price_eur": 72,
+    "discount_pct": 5,
+    "line_total_eur": 18536.4
+  },
+  {
+    "id": "ol_007y",
+    "offer_id": "off_007x",
+    "product_id": "prd_000a",
+    "service_id": null,
+    "qty": 422,
+    "unit_price_eur": 899,
+    "discount_pct": 0,
+    "line_total_eur": 379378
+  },
+  {
+    "id": "ol_007z",
+    "offer_id": "off_007x",
+    "product_id": null,
+    "service_id": "svc_000f",
+    "qty": 422,
+    "unit_price_eur": 72,
+    "discount_pct": 0,
+    "line_total_eur": 30384
+  },
+  {
+    "id": "ol_0082",
+    "offer_id": "off_0081",
+    "product_id": "prd_000a",
+    "service_id": null,
+    "qty": 1185,
+    "unit_price_eur": 899,
+    "discount_pct": 0,
+    "line_total_eur": 1065315
+  },
+  {
+    "id": "ol_0083",
+    "offer_id": "off_0081",
+    "product_id": null,
+    "service_id": "svc_000f",
+    "qty": 1185,
+    "unit_price_eur": 72,
+    "discount_pct": 0,
+    "line_total_eur": 85320
+  },
+  {
+    "id": "ol_0086",
+    "offer_id": "off_0085",
+    "product_id": "prd_000c",
+    "service_id": null,
+    "qty": 866,
+    "unit_price_eur": 1099,
+    "discount_pct": 0,
+    "line_total_eur": 951734
+  },
+  {
+    "id": "ol_0087",
+    "offer_id": "off_0085",
+    "product_id": null,
+    "service_id": "svc_000f",
+    "qty": 866,
+    "unit_price_eur": 72,
+    "discount_pct": 0,
+    "line_total_eur": 62352
+  },
+  {
+    "id": "ol_008a",
+    "offer_id": "off_0089",
+    "product_id": "prd_000b",
+    "service_id": null,
+    "qty": 228,
+    "unit_price_eur": 649,
+    "discount_pct": 0,
+    "line_total_eur": 147972
+  },
+  {
+    "id": "ol_008b",
+    "offer_id": "off_0089",
+    "product_id": null,
+    "service_id": "svc_000f",
+    "qty": 228,
+    "unit_price_eur": 72,
+    "discount_pct": 0,
+    "line_total_eur": 16416
+  }
+]

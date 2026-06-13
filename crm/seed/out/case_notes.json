@@ -1,0 +1,250 @@
+[
+  {
+    "id": "cn_008e",
+    "case_id": "cas_008d",
+    "author_id": "usr_0004",
+    "body": "Reproduced on test device, gathering logs",
+    "kind": "tech_working",
+    "created_at": "2026-06-13T10:46:00.855Z"
+  },
+  {
+    "id": "cn_008f",
+    "case_id": "cas_008d",
+    "author_id": "usr_0002",
+    "body": "FYI for the account — keep an eye on this before renewal talks.",
+    "kind": "internal_sales",
+    "created_at": "2026-06-05T10:46:00.855Z"
+  },
+  {
+    "id": "cn_008i",
+    "case_id": "cas_008h",
+    "author_id": "usr_0004",
+    "body": "Awaiting customer confirmation",
+    "kind": "tech_working",
+    "created_at": "2026-06-13T10:46:00.855Z"
+  },
+  {
+    "id": "cn_008j",
+    "case_id": "cas_008h",
+    "author_id": "usr_0002",
+    "body": "FYI for the account — keep an eye on this before renewal talks.",
+    "kind": "internal_sales",
+    "created_at": "2026-06-08T10:46:00.855Z"
+  },
+  {
+    "id": "cn_008m",
+    "case_id": "cas_008l",
+    "author_id": "usr_0004",
+    "body": "Reproduced on test device, gathering logs",
+    "kind": "tech_working",
+    "created_at": "2026-06-06T10:46:00.855Z"
+  },
+  {
+    "id": "cn_008p",
+    "case_id": "cas_008o",
+    "author_id": "usr_0004",
+    "body": "Awaiting customer confirmation",
+    "kind": "tech_working",
+    "created_at": "2026-06-10T10:46:00.855Z"
+  },
+  {
+    "id": "cn_008s",
+    "case_id": "cas_008r",
+    "author_id": "usr_0005",
+    "body": "Awaiting customer confirmation",
+    "kind": "tech_working",
+    "created_at": "2026-06-11T10:46:00.855Z"
+  },
+  {
+    "id": "cn_008t",
+    "case_id": "cas_008r",
+    "author_id": "usr_0001",
+    "body": "FYI for the account — keep an eye on this before renewal talks.",
+    "kind": "internal_sales",
+    "created_at": "2026-06-08T10:46:00.855Z"
+  },
+  {
+    "id": "cn_008w",
+    "case_id": "cas_008v",
+    "author_id": "usr_0004",
+    "body": "Workaround applied, monitoring",
+    "kind": "tech_working",
+    "created_at": "2026-06-12T10:46:00.855Z"
+  },
+  {
+    "id": "cn_008x",
+    "case_id": "cas_008v",
+    "author_id": "usr_0001",
+    "body": "FYI for the account — keep an eye on this before renewal talks.",
+    "kind": "internal_sales",
+    "created_at": "2026-06-12T10:46:00.855Z"
+  },
+  {
+    "id": "cn_0090",
+    "case_id": "cas_008z",
+    "author_id": "usr_0004",
+    "body": "Workaround applied, monitoring",
+    "kind": "tech_working",
+    "created_at": "2026-06-05T10:46:00.855Z"
+  },
+  {
+    "id": "cn_0093",
+    "case_id": "cas_0092",
+    "author_id": "usr_0004",
+    "body": "Reproduced on test device, gathering logs",
+    "kind": "tech_working",
+    "created_at": "2026-06-03T10:46:00.855Z"
+  },
+  {
+    "id": "cn_0096",
+    "case_id": "cas_0095",
+    "author_id": "usr_0004",
+    "body": "Awaiting customer confirmation",
+    "kind": "tech_working",
+    "created_at": "2026-06-05T10:46:00.855Z"
+  },
+  {
+    "id": "cn_0097",
+    "case_id": "cas_0095",
+    "author_id": "usr_0003",
+    "body": "FYI for the account — keep an eye on this before renewal talks.",
+    "kind": "internal_sales",
+    "created_at": "2026-06-11T10:46:00.855Z"
+  },
+  {
+    "id": "cn_009a",
+    "case_id": "cas_0099",
+    "author_id": "usr_0004",
+    "body": "Escalated to vendor, ticket #3407",
+    "kind": "tech_working",
+    "created_at": "2026-06-13T10:46:00.855Z"
+  },
+  {
+    "id": "cn_009b",
+    "case_id": "cas_0099",
+    "author_id": "usr_0003",
+    "body": "FYI for the account — keep an eye on this before renewal talks.",
+    "kind": "internal_sales",
+    "created_at": "2026-06-11T10:46:00.855Z"
+  },
+  {
+    "id": "cn_009e",
+    "case_id": "cas_009d",
+    "author_id": "usr_0005",
+    "body": "Awaiting customer confirmation",
+    "kind": "tech_working",
+    "created_at": "2026-06-03T10:46:00.855Z"
+  },
+  {
+    "id": "cn_009f",
+    "case_id": "cas_009d",
+    "author_id": "usr_0003",
+    "body": "FYI for the account — keep an eye on this before renewal talks.",
+    "kind": "internal_sales",
+    "created_at": "2026-06-06T10:46:00.855Z"
+  },
+  {
+    "id": "cn_009i",
+    "case_id": "cas_009h",
+    "author_id": "usr_0005",
+    "body": "Awaiting customer confirmation",
+    "kind": "tech_working",
+    "created_at": "2026-06-09T10:46:00.855Z"
+  },
+  {
+    "id": "cn_009j",
+    "case_id": "cas_009h",
+    "author_id": "usr_0003",
+    "body": "FYI for the account — keep an eye on this before renewal talks.",
+    "kind": "internal_sales",
+    "created_at": "2026-06-10T10:46:00.855Z"
+  },
+  {
+    "id": "cn_009m",
+    "case_id": "cas_009l",
+    "author_id": "usr_0005",
+    "body": "Reproduced on test device, gathering logs",
+    "kind": "tech_working",
+    "created_at": "2026-06-09T10:46:00.855Z"
+  },
+  {
+    "id": "cn_009p",
+    "case_id": "cas_009o",
+    "author_id": "usr_0004",
+    "body": "Escalated to vendor, ticket #4066",
+    "kind": "tech_working",
+    "created_at": "2026-06-13T10:46:00.855Z"
+  },
+  {
+    "id": "cn_009s",
+    "case_id": "cas_009r",
+    "author_id": "usr_0004",
+    "body": "Awaiting customer confirmation",
+    "kind": "tech_working",
+    "created_at": "2026-06-03T10:46:00.855Z"
+  },
+  {
+    "id": "cn_009t",
+    "case_id": "cas_009r",
+    "author_id": "usr_0003",
+    "body": "FYI for the account — keep an eye on this before renewal talks.",
+    "kind": "internal_sales",
+    "created_at": "2026-06-11T10:46:00.855Z"
+  },
+  {
+    "id": "cn_009w",
+    "case_id": "cas_009v",
+    "author_id": "usr_0004",
+    "body": "Reproduced on test device, gathering logs",
+    "kind": "tech_working",
+    "created_at": "2026-06-05T10:46:00.855Z"
+  },
+  {
+    "id": "cn_009x",
+    "case_id": "cas_009v",
+    "author_id": "usr_0002",
+    "body": "FYI for the account — keep an eye on this before renewal talks.",
+    "kind": "internal_sales",
+    "created_at": "2026-06-12T10:46:00.855Z"
+  },
+  {
+    "id": "cn_00a0",
+    "case_id": "cas_009z",
+    "author_id": "usr_0005",
+    "body": "Escalated to vendor, ticket #5163",
+    "kind": "tech_working",
+    "created_at": "2026-06-05T10:46:00.855Z"
+  },
+  {
+    "id": "cn_00a3",
+    "case_id": "cas_00a2",
+    "author_id": "usr_0005",
+    "body": "Escalated to vendor, ticket #5545",
+    "kind": "tech_working",
+    "created_at": "2026-06-06T10:46:00.855Z"
+  },
+  {
+    "id": "cn_00a6",
+    "case_id": "cas_00a5",
+    "author_id": "usr_0004",
+    "body": "Reproduced on test device, gathering logs",
+    "kind": "tech_working",
+    "created_at": "2026-06-13T10:46:00.855Z"
+  },
+  {
+    "id": "cn_00a7",
+    "case_id": "cas_00a5",
+    "author_id": "usr_0001",
+    "body": "FYI for the account — keep an eye on this before renewal talks.",
+    "kind": "internal_sales",
+    "created_at": "2026-06-06T10:46:00.855Z"
+  },
+  {
+    "id": "cn_00aa",
+    "case_id": "cas_00a9",
+    "author_id": "usr_0004",
+    "body": "Awaiting customer confirmation",
+    "kind": "tech_working",
+    "created_at": "2026-06-05T10:46:00.855Z"
+  }
+]

@@ -1,0 +1,58 @@
+[
+  {
+    "id": "prd_0008",
+    "sku": "HMD-S30",
+    "name": "HMD Secure S30",
+    "category": "device",
+    "list_price_eur": 749,
+    "active": true
+  },
+  {
+    "id": "prd_0009",
+    "sku": "HMD-X20",
+    "name": "HMD Secure X20",
+    "category": "device",
+    "list_price_eur": 549,
+    "active": true
+  },
+  {
+    "id": "prd_000a",
+    "sku": "HMD-PPS",
+    "name": "HMD Pulse Pro Secure",
+    "category": "device",
+    "list_price_eur": 899,
+    "active": true
+  },
+  {
+    "id": "prd_000b",
+    "sku": "HMD-T11",
+    "name": "HMD Secure Tab 11",
+    "category": "device",
+    "list_price_eur": 649,
+    "active": true
+  },
+  {
+    "id": "prd_000c",
+    "sku": "HMD-RG2",
+    "name": "HMD Rugged G2 Secure",
+    "category": "device",
+    "list_price_eur": 1099,
+    "active": true
+  },
+  {
+    "id": "prd_000d",
+    "sku": "ACC-DOCK",
+    "name": "Secure Charging Dock",
+    "category": "accessory",
+    "list_price_eur": 89,
+    "active": true
+  },
+  {
+    "id": "prd_000e",
+    "sku": "ACC-CASE",
+    "name": "Tamper-evident Case",
+    "category": "accessory",
+    "list_price_eur": 49,
+    "active": true
+  }
+]

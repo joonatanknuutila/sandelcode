@@ -1,0 +1,22 @@
+[
+  {
+    "id": "ntf_00ac",
+    "user_id": "usr_0007",
+    "type": "approval_request",
+    "body": "Offer needs approval: 22% discount",
+    "link_kind": "offer",
+    "link_id": "off_007f",
+    "read": false,
+    "created_at": "2026-06-07T10:46:00.855Z"
+  },
+  {
+    "id": "ntf_00ad",
+    "user_id": "usr_0005",
+    "type": "sla_warning",
+    "body": "Urgent case approaching SLA: Threat intel feed latency",
+    "link_kind": "case",
+    "link_id": "cas_008r",
+    "read": false,
+    "created_at": "2026-06-13T10:46:00.855Z"
+  }
+]

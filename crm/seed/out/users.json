@@ -1,0 +1,44 @@
+[
+  {
+    "id": "usr_0001",
+    "name": "Aino Mäkinen",
+    "email": "aino.m.kinen@hmd-secure.com",
+    "role": "rep"
+  },
+  {
+    "id": "usr_0002",
+    "name": "David Kraus",
+    "email": "david.kraus@hmd-secure.com",
+    "role": "rep"
+  },
+  {
+    "id": "usr_0003",
+    "name": "Camille Roy",
+    "email": "camille.roy@hmd-secure.com",
+    "role": "rep"
+  },
+  {
+    "id": "usr_0004",
+    "name": "Niklas Holm",
+    "email": "niklas.holm@hmd-secure.com",
+    "role": "tam"
+  },
+  {
+    "id": "usr_0005",
+    "name": "Petra Vogel",
+    "email": "petra.vogel@hmd-secure.com",
+    "role": "tam"
+  },
+  {
+    "id": "usr_0006",
+    "name": "Markus Lindqvist",
+    "email": "markus.lindqvist@hmd-secure.com",
+    "role": "sales_manager"
+  },
+  {
+    "id": "usr_0007",
+    "name": "Riikka Salo",
+    "email": "riikka.salo@hmd-secure.com",
+    "role": "finance"
+  }
+]
