@@ -19,6 +19,8 @@ import { CaseStatusBadge, PriorityBadge, SlaBadge, ThirdPartyFlag } from "../../
 import { CaseTimeline } from "./CaseTimeline";
 import { Assistant } from "../../Assistant";
 import { MeetingCapture } from "../../MeetingCapture";
+import { AddNote } from "./AddNote";
+import { CaseActions } from "./CaseActions";
 
 // Single-case view — "no surprises on cases". One timeline (service history +
 // notes), the SLA + 3rd-party state up top, an AI summary so a TAM landing on a
@@ -58,21 +60,30 @@ export default async function CaseDetail({
       </Link>
 
       {/* Header */}
-      <div>
-        <div className="flex flex-wrap items-center gap-2">
-          <PriorityBadge priority={c.priority} />
-          <CaseStatusBadge status={c.status} />
-          <SlaBadge sla={sla} />
-          <ThirdPartyFlag case={c} />
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <div className="flex flex-wrap items-center gap-2">
+            <PriorityBadge priority={c.priority} />
+            <CaseStatusBadge status={c.status} />
+            <SlaBadge sla={sla} />
+            <ThirdPartyFlag case={c} />
+          </div>
+          <h1 className="mt-2 text-2xl font-semibold tracking-tight">{c.title}</h1>
+          <p className="mt-1 text-sm text-muted">
+            <Link href={`/rep/accounts/${account.id}`} className="hover:text-foreground">
+              {account.name}
+            </Link>
+            {service ? ` · ${service.name}` : ""} · opened {caseAgeDays(c)}d ago
+            {assignee ? ` · ${assignee.name}` : ""}
+          </p>
         </div>
-        <h1 className="mt-2 text-2xl font-semibold tracking-tight">{c.title}</h1>
-        <p className="mt-1 text-sm text-muted">
-          <Link href={`/rep/accounts/${account.id}`} className="hover:text-foreground">
-            {account.name}
-          </Link>
-          {service ? ` · ${service.name}` : ""} · opened {caseAgeDays(c)}d ago
-          {assignee ? ` · ${assignee.name}` : ""}
-        </p>
+        {/* Inline actions: resolve / escalate / reassign */}
+        <CaseActions
+          caseId={c.id}
+          accountId={c.accountId}
+          caseStatus={c.status}
+          tamUsers={users.filter((u) => u.role === "tam")}
+        />
       </div>
 
       {/* AI case summary */}
@@ -114,6 +125,16 @@ export default async function CaseDetail({
 
       {/* Meeting capture (human-approval gate) */}
       <MeetingCapture accountId={account.id} />
+
+      {/* Add note composer */}
+      {c.status !== "resolved" && (
+        <section>
+          <SectionTitle>Add note</SectionTitle>
+          <Card className="p-4">
+            <AddNote caseId={c.id} />
+          </Card>
+        </section>
+      )}
 
       {/* Unified timeline */}
       <section>

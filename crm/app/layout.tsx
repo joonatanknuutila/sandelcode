@@ -3,7 +3,7 @@ import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { RoleProvider } from "@/components/RoleProvider";
 import { AppShell } from "@/components/AppShell";
-import { getCurrentUser } from "@/lib/db";
+import { getCurrentUser, getNotifications } from "@/lib/db";
 
 // HMD Secure uses Inter as its brand face (see BRAND.md).
 const inter = Inter({
@@ -31,6 +31,7 @@ export default async function RootLayout({
     name: me?.name ?? "Guest",
     initials: me?.initials ?? "—",
   };
+  const notifications = me ? await getNotifications(me.id) : [];
   return (
     <html
       lang="en"
@@ -38,7 +39,7 @@ export default async function RootLayout({
     >
       <body className="min-h-full">
         <RoleProvider>
-          <AppShell user={user}>{children}</AppShell>
+          <AppShell user={user} notifications={notifications}>{children}</AppShell>
         </RoleProvider>
       </body>
     </html>

@@ -8,12 +8,15 @@
 //      ONLY when approved === true. This is the single write path.
 //
 // The two steps are separate functions AND separate API routes, so a draft can
-// never accidentally mutate state. Because the base mock data is read-only here,
-// commits append to a session-local store (appliedActivities) that the getters
-// could later merge — the point is the gate, not the persistence backend.
+// never accidentally mutate state. Approved changes go straight to Supabase via
+// lib/db/mutations — durable, survives refresh, no session state.
 
 import { ChatMessage, complete } from "./provider";
 import { getAccount, getDealsForAccount } from "@/lib/db";
+import {
+  commitMeeting as dbCommitMeeting,
+  type CommitMeetingResult,
+} from "@/lib/db/mutations";
 import { Stage, STAGE_LABELS, STAGE_ORDER } from "@/lib/types";
 
 export type ChangeType = "note" | "follow_up" | "contact" | "stage_move" | "case";
@@ -120,16 +123,6 @@ function deterministicDraft(accountId: string, transcript: string): MeetingDraft
 
 // --- The single write path -------------------------------------------------
 
-export interface AppliedActivity {
-  id: string;
-  accountId: string;
-  body: string;
-  createdAt: string;
-}
-
-// Session-local store of what got committed (stands in for a DB write).
-const appliedActivities: AppliedActivity[] = [];
-
 export interface CommitRequest {
   accountId: string;
   /** MUST be true — the explicit human approval. */
@@ -138,37 +131,36 @@ export interface CommitRequest {
   changes: ProposedChange[];
   /** The human's answers to the follow-up questions, for the audit note. */
   answers?: string[];
+  /** Optional deal to attach activity entries to. */
+  dealId?: string;
 }
 
 export interface CommitResult {
   ok: boolean;
-  applied: AppliedActivity[];
+  /** Activities written to the account timeline. */
+  activities: CommitMeetingResult["activities"];
+  /** Case notes written (populated when a 'case' change is committed). */
+  notes: CommitMeetingResult["notes"];
   error?: string;
 }
 
 export async function commitMeeting(req: CommitRequest): Promise<CommitResult> {
   // The gate. No approval, no write — full stop.
   if (req.approved !== true) {
-    return { ok: false, applied: [], error: "Not approved — nothing written." };
+    return { ok: false, activities: [], notes: [], error: "Not approved — nothing written." };
   }
   if (!(await getAccount(req.accountId))) {
-    return { ok: false, applied: [], error: "Unknown account." };
+    return { ok: false, activities: [], notes: [], error: "Unknown account." };
   }
   if (!req.changes?.length) {
-    return { ok: false, applied: [], error: "No changes to apply." };
+    return { ok: false, activities: [], notes: [], error: "No changes to apply." };
   }
 
-  const now = new Date().toISOString();
-  const applied: AppliedActivity[] = req.changes.map((c, i) => ({
-    id: `mtg-${Date.now()}-${i}`,
+  const result = await dbCommitMeeting({
     accountId: req.accountId,
-    body: `[${c.type}] ${c.label}: ${c.detail}`,
-    createdAt: now,
-  }));
-  appliedActivities.push(...applied);
-  return { ok: true, applied };
-}
+    changes: req.changes,
+    dealId: req.dealId,
+  });
 
-export function getAppliedActivities(accountId: string): AppliedActivity[] {
-  return appliedActivities.filter((a) => a.accountId === accountId);
+  return { ok: true, activities: result.activities, notes: result.notes };
 }

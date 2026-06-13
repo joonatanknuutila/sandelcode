@@ -4,6 +4,7 @@ import { caseAgeDays, getTamSummary, slaInfo, triageSort } from "@/lib/tam";
 import { Card, SectionTitle, StatTile } from "@/components/ui";
 import { CaseStatusBadge, PriorityBadge, SlaBadge, ThirdPartyFlag } from "./ui";
 import { Assistant } from "./Assistant";
+import { QueueResolveButton } from "./QueueResolveButton";
 
 // Technical Account Manager dashboard — the case queue, triaged.
 // Triage order = SLA pressure → priority → age, so the row that needs eyes
@@ -66,27 +67,31 @@ export default async function TamView() {
             const sla = slaInfo(c);
             const assignee = c.assigneeId ? userById.get(c.assigneeId) : undefined;
             return (
-              <Link key={c.id} href={`/tam/cases/${c.id}`}>
-                <Card
-                  className={`flex items-center gap-4 p-3.5 transition-colors hover:border-hmd-teal-600 ${
-                    sla.state === "breach" ? "border-l-2 border-l-danger" : ""
-                  }`}
-                >
-                  <PriorityBadge priority={c.priority} />
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium">{c.title}</p>
-                    <p className="mt-0.5 text-xs text-muted">
-                      {account?.name} · opened {caseAgeDays(c)}d ago
-                      {assignee ? ` · ${assignee.name}` : ""}
-                    </p>
-                  </div>
-                  <div className="flex shrink-0 items-center gap-2">
-                    <ThirdPartyFlag case={c} />
-                    <CaseStatusBadge status={c.status} />
-                    <SlaBadge sla={sla} />
-                  </div>
-                </Card>
-              </Link>
+              <div key={c.id} className="relative flex items-center gap-2">
+                <Link href={`/tam/cases/${c.id}`} className="min-w-0 flex-1">
+                  <Card
+                    className={`flex items-center gap-4 p-3.5 transition-colors hover:border-hmd-teal-600 ${
+                      sla.state === "breach" ? "border-l-2 border-l-danger" : ""
+                    }`}
+                  >
+                    <PriorityBadge priority={c.priority} />
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium">{c.title}</p>
+                      <p className="mt-0.5 text-xs text-muted">
+                        {account?.name} · opened {caseAgeDays(c)}d ago
+                        {assignee ? ` · ${assignee.name}` : ""}
+                      </p>
+                    </div>
+                    <div className="flex shrink-0 items-center gap-2">
+                      <ThirdPartyFlag case={c} />
+                      <CaseStatusBadge status={c.status} />
+                      <SlaBadge sla={sla} />
+                    </div>
+                  </Card>
+                </Link>
+                {/* Quick resolve — stops the click propagating to the Link */}
+                <QueueResolveButton caseId={c.id} />
+              </div>
             );
           })}
         </div>

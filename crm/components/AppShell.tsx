@@ -8,13 +8,17 @@ import { usePathname, useRouter } from "next/navigation";
 import { Logo } from "./Logo";
 import { useRole } from "./RoleProvider";
 import { ROLES, ROLE_ORDER } from "@/lib/roles";
+import { NotificationCenter } from "./NotificationCenter";
+import type { AppNotification } from "@/lib/types";
 
 export function AppShell({
   children,
   user,
+  notifications = [],
 }: {
   children: React.ReactNode;
   user: { name: string; initials: string };
+  notifications?: AppNotification[];
 }) {
   const { role, setRole } = useRole();
   const pathname = usePathname();
@@ -84,6 +88,7 @@ export function AppShell({
                 ))}
               </select>
             </label>
+            <NotificationCenter notifications={notifications} />
             <div className="flex items-center gap-2">
               <span className="grid h-8 w-8 place-items-center rounded-full bg-hmd-teal-600/10 text-xs font-semibold text-hmd-teal-700">
                 {user.initials}

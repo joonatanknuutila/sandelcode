@@ -334,7 +334,9 @@ export function mapNotification(n: Tables<"notifications">): AppNotification {
         ? `/rep/deals/${n.entity_id}`
         : n.entity_type === "account"
           ? `/rep/accounts/${n.entity_id}`
-          : undefined
+          : n.entity_type === "case"
+            ? `/tam/cases/${n.entity_id}`
+            : undefined
       : undefined;
   return {
     id: n.id,

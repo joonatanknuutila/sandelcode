@@ -11,6 +11,9 @@ import { ChatMessage, complete } from "./provider";
 import { getAllDeals } from "@/lib/db";
 import { Deal, dealProbability } from "@/lib/types";
 import { eur } from "@/lib/format";
+import type { ForecastSummaryFigures } from "@/components/ForecastSummary";
+import type { Horizon } from "@/components/ForecastSummary";
+import { HORIZON_LABELS } from "@/components/ForecastSummary";
 
 export interface ForecastFigures {
   /** Weighted 3-yr pipeline (Σ TCV × winProb), open deals. */
@@ -104,4 +107,78 @@ export async function forecastNarrative(): Promise<ForecastNarrative> {
     `Near term, plan for ~${f.nearTermDevices} device units; hardware must be ordered ahead of software.`;
 
   return { figures: f, text, modelUsed: false };
+}
+
+// ---------------------------------------------------------------------------
+// Sales Manager pipeline-health narrative (SM M4)
+// ---------------------------------------------------------------------------
+//
+// The story the SM opens the forecast meeting with. It reads the SAME band
+// figures the board shows (passed in, computed by computeForecastSummary) plus
+// the stalled count and the count of deals that have slipped past their close
+// date — so the narrative can never drift from the numbers on screen. The model
+// only phrases the supplied facts; falls back to a deterministic template with
+// an honest "model offline" label, exactly like the Finance narrative above.
+
+export interface PipelineNarrativeInput {
+  /** Shared band figures (committed / at-risk / upside / target / gap). */
+  figures: ForecastSummaryFigures;
+  /** Open deals untouched for 14+ days (isStalled). */
+  stalledCount: number;
+  /** Open deals whose expected close date is already in the past. */
+  slippedCount: number;
+  /** Open deals in scope for this horizon (context only). */
+  openCount: number;
+  /** The selected horizon — phrases the window in the narrative. */
+  horizon: Horizon;
+}
+
+export interface PipelineNarrative {
+  text: string;
+  modelUsed: boolean;
+}
+
+export async function pipelineNarrative(
+  input: PipelineNarrativeInput,
+): Promise<PipelineNarrative> {
+  const { figures, stalledCount, slippedCount, openCount, horizon } = input;
+  const window = HORIZON_LABELS[horizon].toLowerCase();
+  const covered = figures.gap <= 0;
+  const gapPhrase = covered
+    ? `committed already covers the target by ${eur(-figures.gap, false)}`
+    : `a ${eur(figures.gap, false)} gap to target`;
+
+  const facts =
+    `Window: ${window}. ` +
+    `Committed ${eur(figures.committed, false)} against target ${eur(figures.target, false)} — ${gapPhrase}. ` +
+    `At-risk ${eur(figures.atRisk, false)} (mid-stage), upside ${eur(figures.upside, false)} (early). ` +
+    `${openCount} open deals in scope. ` +
+    `${stalledCount} stalled 14+ days. ` +
+    `${slippedCount} slipped past their expected close date.`;
+
+  const messages: ChatMessage[] = [
+    {
+      role: "system",
+      content:
+        "You are a sharp sales manager opening the team's forecast meeting. Write a 2-3 sentence plain-English pipeline-health story from the FACTS. Lead with committed vs target and the gap, then call out what needs intervention (stalled and slipped deals). Use ONLY these numbers; do not invent. Be direct, no bullet points.",
+    },
+    { role: "user", content: facts },
+  ];
+
+  const out = await complete(messages, { temperature: 0.3, maxTokens: 180 });
+  if (out) return { text: out.trim(), modelUsed: true };
+
+  // Deterministic fallback.
+  const lead = covered
+    ? `Committed ${eur(figures.committed, false)} for ${window} — on target, with ${eur(-figures.gap, false)} of headroom.`
+    : `Committed ${eur(figures.committed, false)} for ${window} leaves a ${eur(figures.gap, false)} gap to target; ${eur(figures.atRisk, false)} at-risk in mid-stage deals could close it.`;
+  const risk =
+    stalledCount === 0 && slippedCount === 0
+      ? "Nothing stalled and nothing slipped — the pipeline is moving."
+      : `${stalledCount} ${stalledCount === 1 ? "deal is" : "deals are"} stalled 14+ days` +
+        (slippedCount > 0
+          ? ` and ${slippedCount} ${slippedCount === 1 ? "has" : "have"} slipped past close — both need intervention now.`
+          : " and need intervention now.");
+
+  return { text: `${lead} ${risk}`, modelUsed: false };
 }
