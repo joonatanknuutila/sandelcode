@@ -51,3 +51,5 @@ not literal colours. Tokens: `lib/brand.ts` (TS) + `app/globals.css` (CSS vars /
 2. **Lime is the single sharp accent.** Used sparingly, always black-on-lime.
 3. **Security-grade restraint.** Government/enterprise buyers — precise, high-contrast,
    no decorative colour. Strong type hierarchy, generous whitespace.
+
+<!-- session output feed smoke test 2026-06-13T13:24:09Z -->
