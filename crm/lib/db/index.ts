@@ -31,6 +31,7 @@ import {
   Contact,
   Deal,
   Offer,
+  OfferStatus,
   STAGE_PROBABILITY,
   User,
 } from "@/lib/types";
@@ -128,6 +129,18 @@ export async function getAccount(id: string): Promise<Account | null> {
   return mapAccount(data, channels.get(id) ?? "direct");
 }
 
+/** Every account (Sales Manager / Finance lenses build id->account maps). */
+export async function getAccounts(): Promise<Account[]> {
+  const supabase = await createClient();
+  const { data } = await supabase.from("accounts").select("*").order("name");
+  const accounts = data ?? [];
+  const channels = await channelByAccount(
+    supabase,
+    accounts.map((a) => a.id),
+  );
+  return accounts.map((a) => mapAccount(a, channels.get(a.id) ?? "direct"));
+}
+
 export async function getContactsForAccount(
   accountId: string,
 ): Promise<Contact[]> {
@@ -212,6 +225,18 @@ export async function getAllDeals(): Promise<Deal[]> {
     .select("*")
     .order("last_activity_at", { ascending: false });
   return assembleDeals(supabase, data ?? []);
+}
+
+/** Open (non-terminal) deals across the whole team. */
+export async function getOpenDeals(): Promise<Deal[]> {
+  return (await getAllDeals()).filter(
+    (d) => d.stage !== "won" && d.stage !== "lost",
+  );
+}
+
+/** Won deals — committed, no longer probability-weighted. */
+export async function getWonDeals(): Promise<Deal[]> {
+  return (await getAllDeals()).filter((d) => d.stage === "won");
 }
 
 // --- cases -----------------------------------------------------------------
@@ -321,6 +346,37 @@ export async function getOffersForAccount(accountId: string): Promise<Offer[]> {
   return offers.map((o) => mapOffer(o, byOffer.get(o.id) ?? []));
 }
 
+/** Every offer across all accounts, with line items (approval queues). */
+export async function getAllOffers(): Promise<Offer[]> {
+  const supabase = await createClient();
+  const { data: offers } = await supabase
+    .from("offers")
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (!offers || offers.length === 0) return [];
+  const { data: items } = await supabase
+    .from("offer_line_items")
+    .select("*")
+    .in(
+      "offer_id",
+      offers.map((o) => o.id),
+    );
+  const byOffer = new Map<string, Tables<"offer_line_items">[]>();
+  for (const li of items ?? []) {
+    const arr = byOffer.get(li.offer_id) ?? [];
+    arr.push(li);
+    byOffer.set(li.offer_id, arr);
+  }
+  return offers.map((o) => mapOffer(o, byOffer.get(o.id) ?? []));
+}
+
+/** Offers sitting at a given approval gate (e.g. pending_sm, pending_finance). */
+export async function getOffersByStatus(
+  status: OfferStatus,
+): Promise<Offer[]> {
+  return (await getAllOffers()).filter((o) => o.status === status);
+}
+
 // --- catalog ---------------------------------------------------------------
 
 export async function getProducts(): Promise<Tables<"products">[]> {
@@ -382,6 +438,17 @@ export async function getRepSummary(repId: string): Promise<RepSummary> {
   const open = (await getDealsForRep(repId)).filter(
     (d) => d.stage !== "won" && d.stage !== "lost",
   );
+  return {
+    openDeals: open.length,
+    totalTcv: open.reduce((s, d) => s + d.tcv, 0),
+    weightedPipeline: open.reduce((s, d) => s + weightedValue(d), 0),
+    stalled: open.filter(isStalled).length,
+  };
+}
+
+/** Team-wide rollup of the open pipeline (Sales Manager dashboard). */
+export async function getTeamSummary(): Promise<RepSummary> {
+  const open = await getOpenDeals();
   return {
     openDeals: open.length,
     totalTcv: open.reduce((s, d) => s + d.tcv, 0),

@@ -1,14 +1,13 @@
 import {
-  getAccount,
+  getAccounts,
   getAllDeals,
-  getDeal,
   getOffersByStatus,
   getOpenDeals,
   getWonDeals,
   weightedValue,
-} from "@/lib/api";
+} from "@/lib/db";
 import { confidence } from "@/lib/ai/confidence";
-import { STAGE_PROBABILITY } from "@/lib/types";
+import { Deal, STAGE_PROBABILITY } from "@/lib/types";
 import { eur, quarterLabel } from "@/lib/format";
 import { SectionTitle, StatTile } from "@/components/ui";
 import { OfferApproval, OfferVM } from "@/components/OfferApproval";
@@ -27,9 +26,7 @@ interface QuarterRow {
   weighted: number;
 }
 
-function buildForecast(): QuarterRow[] {
-  const open = getOpenDeals();
-  const won = getWonDeals();
+function buildForecast(open: Deal[], won: Deal[]): QuarterRow[] {
   const rows: QuarterRow[] = [];
   for (const year of YEARS) {
     for (const quarter of QUARTERS) {
@@ -54,10 +51,31 @@ function buildForecast(): QuarterRow[] {
   return rows;
 }
 
-function pendingFinanceOffers(): OfferVM[] {
-  return getOffersByStatus("pending_finance").map((o) => {
-    const account = getAccount(o.accountId);
-    const deal = getDeal(o.dealId);
+export default async function FinanceView() {
+  const [allDeals, open, won, pendingOffers, accounts] = await Promise.all([
+    getAllDeals(),
+    getOpenDeals(),
+    getWonDeals(),
+    getOffersByStatus("pending_finance"),
+    getAccounts(),
+  ]);
+  const accountById = new Map(accounts.map((a) => [a.id, a]));
+  const dealById = new Map(allDeals.map((d) => [d.id, d]));
+
+  const committed = won.reduce((s, d) => s + d.tcv, 0);
+  const weighted = open.reduce((s, d) => s + weightedValue(d), 0);
+  const rows = buildForecast(open, won);
+  const totals = rows.reduce(
+    (acc, r) => ({
+      committed: acc.committed + r.committed,
+      weighted: acc.weighted + r.weighted,
+    }),
+    { committed: 0, weighted: 0 },
+  );
+
+  const pendingApprovals: OfferVM[] = pendingOffers.map((o) => {
+    const account = accountById.get(o.accountId);
+    const deal = dealById.get(o.dealId);
     return {
       id: o.id,
       accountName: account?.name ?? "Unknown account",
@@ -68,12 +86,10 @@ function pendingFinanceOffers(): OfferVM[] {
       justification: o.justification,
     };
   });
-}
 
-function confidenceVMs(): DealConfidenceVM[] {
-  return getOpenDeals().map((d) => {
+  const confidenceVMs: DealConfidenceVM[] = open.map((d) => {
     const c = confidence(d);
-    const account = getAccount(d.accountId);
+    const account = accountById.get(d.accountId);
     return {
       dealId: d.id,
       dealName: d.name,
@@ -85,27 +101,13 @@ function confidenceVMs(): DealConfidenceVM[] {
       reasons: c.reasons,
     };
   });
-}
-
-export default function FinanceView() {
-  const deals = getAllDeals();
-  const committed = getWonDeals().reduce((s, d) => s + d.tcv, 0);
-  const weighted = getOpenDeals().reduce((s, d) => s + weightedValue(d), 0);
-  const rows = buildForecast();
-  const totals = rows.reduce(
-    (acc, r) => ({
-      committed: acc.committed + r.committed,
-      weighted: acc.weighted + r.weighted,
-    }),
-    { committed: 0, weighted: 0 },
-  );
 
   return (
     <div className="mx-auto max-w-7xl space-y-8">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Forecast</h1>
         <p className="mt-1 text-sm text-muted">
-          Weighted vs committed revenue across {deals.length} deals — time-phased
+          Weighted vs committed revenue across {allDeals.length} deals — time-phased
           over 3 years, no need to ask sales.
         </p>
       </div>
@@ -176,7 +178,7 @@ export default function FinanceView() {
       </section>
 
       {/* Discount approvals — second gate (locks the offer) */}
-      <OfferApproval offers={pendingFinanceOffers()} gate="finance" />
+      <OfferApproval offers={pendingApprovals} gate="finance" />
 
       {/* Confidence override — drives hardware ordering */}
       <section>
@@ -185,7 +187,7 @@ export default function FinanceView() {
           Rules compute the score; you adjust the realistic number. The override
           is what feeds gap-to-target and ordering.
         </p>
-        <ConfidenceOverride deals={confidenceVMs()} />
+        <ConfidenceOverride deals={confidenceVMs} />
       </section>
     </div>
   );

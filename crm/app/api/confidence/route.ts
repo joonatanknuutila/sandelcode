@@ -1,5 +1,5 @@
 import { withOverride } from "@/lib/ai/confidence";
-import { getDeal } from "@/lib/api";
+import { getDeal } from "@/lib/db";
 
 // GET /api/confidence?dealId=d-1[&override=85]
 // Per-opportunity confidence + reasoning. Optional Finance override (Stage 5)
@@ -9,7 +9,7 @@ export async function GET(req: Request) {
   const dealId = url.searchParams.get("dealId");
   if (!dealId) return Response.json({ error: "dealId is required" }, { status: 400 });
 
-  const deal = getDeal(dealId);
+  const deal = await getDeal(dealId);
   if (!deal) return Response.json({ error: "Unknown deal" }, { status: 404 });
 
   const overrideRaw = url.searchParams.get("override");

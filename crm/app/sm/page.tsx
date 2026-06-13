@@ -1,13 +1,12 @@
 import {
-  getAccount,
+  getAccounts,
   getAllDeals,
-  getDeal,
   getOffersByStatus,
   getTeamSummary,
-  getUser,
+  getUsers,
   isStalled,
   weightedValue,
-} from "@/lib/api";
+} from "@/lib/db";
 import { STAGE_LABELS, STAGE_ORDER, Stage } from "@/lib/types";
 import { eur, relativeDays } from "@/lib/format";
 import { Badge, SectionTitle, StatTile } from "@/components/ui";
@@ -20,10 +19,21 @@ const ACTIVE_STAGES: Stage[] = STAGE_ORDER.filter(
   (s) => s !== "won" && s !== "lost",
 );
 
-function pendingSmOffers(): OfferVM[] {
-  return getOffersByStatus("pending_sm").map((o) => {
-    const account = getAccount(o.accountId);
-    const deal = getDeal(o.dealId);
+export default async function SalesManagerView() {
+  const [summary, deals, pendingOffers, accounts, users] = await Promise.all([
+    getTeamSummary(),
+    getAllDeals(),
+    getOffersByStatus("pending_sm"),
+    getAccounts(),
+    getUsers(),
+  ]);
+  const accountById = new Map(accounts.map((a) => [a.id, a]));
+  const userById = new Map(users.map((u) => [u.id, u]));
+  const dealById = new Map(deals.map((d) => [d.id, d]));
+
+  const pendingApprovals: OfferVM[] = pendingOffers.map((o) => {
+    const account = accountById.get(o.accountId);
+    const deal = dealById.get(o.dealId);
     return {
       id: o.id,
       accountName: account?.name ?? "Unknown account",
@@ -34,12 +44,6 @@ function pendingSmOffers(): OfferVM[] {
       justification: o.justification,
     };
   });
-}
-
-export default function SalesManagerView() {
-  const summary = getTeamSummary();
-  const deals = getAllDeals();
-  const pendingApprovals = pendingSmOffers();
 
   const byStage = (stage: Stage) =>
     deals
@@ -108,8 +112,8 @@ export default function SalesManagerView() {
                     <p className="px-1 py-3 text-xs text-muted">—</p>
                   )}
                   {stageDeals.map((d) => {
-                    const account = getAccount(d.accountId);
-                    const owner = getUser(d.ownerId);
+                    const account = accountById.get(d.accountId);
+                    const owner = userById.get(d.ownerId);
                     const stalled = isStalled(d);
                     return (
                       <div
