@@ -2,8 +2,7 @@
 // Azure OpenAI agent (brief P1). Same signature; the UI doesn't change when the
 // real model lands. Picks a sensible next step from the deal's stage + timeline.
 
-import { getActivitiesForDeal } from "../api";
-import { Deal, STAGE_LABELS } from "../types";
+import { Activity, Deal, STAGE_LABELS } from "../types";
 import { relativeDays } from "../format";
 
 export interface NextBestAction {
@@ -13,9 +12,15 @@ export interface NextBestAction {
   cta: string;
 }
 
-export function nextBestAction(deal: Deal): NextBestAction {
-  const last = getActivitiesForDeal(deal.id)[0];
-  const staleDays = last ? relativeDays(last.createdAt) : 99;
+// Pure + synchronous: the caller passes the deal's most recent activity (the
+// page already fetches the timeline from the data layer), so this stub stays
+// decoupled from where data comes from. Aarni's Azure OpenAI agent will keep
+// the same signature.
+export function nextBestAction(
+  deal: Deal,
+  lastActivity?: Activity,
+): NextBestAction {
+  const staleDays = lastActivity ? relativeDays(lastActivity.createdAt) : 99;
 
   if (staleDays >= 14) {
     return {

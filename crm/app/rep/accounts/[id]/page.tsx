@@ -8,7 +8,7 @@ import {
   getDealsForAccount,
   getUser,
   weightedValue,
-} from "@/lib/api";
+} from "@/lib/db";
 import { eur, shortDate } from "@/lib/format";
 import { Badge, Button, Card, SectionTitle, StageBadge } from "@/components/ui";
 import { ActivityTimeline } from "@/components/ActivityTimeline";
@@ -21,14 +21,16 @@ export default async function AccountDetail({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const account = getAccount(id);
+  const account = await getAccount(id);
   if (!account) notFound();
 
-  const contacts = getContactsForAccount(id);
-  const deals = getDealsForAccount(id);
-  const cases = getCasesForAccount(id);
-  const activities = getActivitiesForAccount(id);
-  const tam = account.tamId ? getUser(account.tamId) : undefined;
+  const [contacts, deals, cases, activities, tam] = await Promise.all([
+    getContactsForAccount(id),
+    getDealsForAccount(id),
+    getCasesForAccount(id),
+    getActivitiesForAccount(id),
+    account.tamId ? getUser(account.tamId) : Promise.resolve(null),
+  ]);
 
   return (
     <div className="mx-auto max-w-7xl space-y-6">

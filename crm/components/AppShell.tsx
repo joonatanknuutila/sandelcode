@@ -8,14 +8,18 @@ import { usePathname, useRouter } from "next/navigation";
 import { Logo } from "./Logo";
 import { useRole } from "./RoleProvider";
 import { ROLES, ROLE_ORDER } from "@/lib/roles";
-import { getCurrentUser } from "@/lib/api";
 
-export function AppShell({ children }: { children: React.ReactNode }) {
+export function AppShell({
+  children,
+  user,
+}: {
+  children: React.ReactNode;
+  user: { name: string; initials: string };
+}) {
   const { role, setRole } = useRole();
   const pathname = usePathname();
   const router = useRouter();
   const config = ROLES[role];
-  const user = getCurrentUser();
 
   function switchRole(next: typeof role) {
     setRole(next);

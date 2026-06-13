@@ -1,13 +1,13 @@
 import Link from "next/link";
 import {
-  getAccount,
+  getAccountsForRep,
   getCurrentUser,
   getDealsForRep,
   getNotifications,
   getRepSummary,
   isStalled,
   weightedValue,
-} from "@/lib/api";
+} from "@/lib/db";
 import { STAGE_LABELS, STAGE_ORDER, Stage } from "@/lib/types";
 import { eur, relativeDays, shortDate } from "@/lib/format";
 import { Badge, Card, SectionTitle, StageBadge, StatTile } from "@/components/ui";
@@ -18,11 +18,17 @@ const ACTIVE_STAGES: Stage[] = STAGE_ORDER.filter(
   (s) => s !== "won" && s !== "lost",
 );
 
-export default function RepDashboard() {
-  const user = getCurrentUser();
-  const summary = getRepSummary(user.id);
-  const deals = getDealsForRep(user.id);
-  const notifications = getNotifications(user.id).filter((n) => !n.read);
+export default async function RepDashboard() {
+  const user = await getCurrentUser();
+  if (!user) return <p className="text-sm text-muted">No user signed in.</p>;
+  const [summary, deals, allNotes, accounts] = await Promise.all([
+    getRepSummary(user.id),
+    getDealsForRep(user.id),
+    getNotifications(user.id),
+    getAccountsForRep(user.id),
+  ]);
+  const notifications = allNotes.filter((n) => !n.read);
+  const accountsById = new Map(accounts.map((a) => [a.id, a]));
 
   const byStage = (stage: Stage) => deals.filter((d) => d.stage === stage);
 
@@ -111,7 +117,7 @@ export default function RepDashboard() {
                     <p className="px-1 py-3 text-xs text-muted">—</p>
                   )}
                   {stageDeals.map((d) => {
-                    const account = getAccount(d.accountId);
+                    const account = accountsById.get(d.accountId);
                     return (
                       <Link key={d.id} href={`/rep/deals/${d.id}`}>
                         <div className="rounded-lg border border-border p-2.5 transition-colors hover:border-hmd-teal-600 hover:shadow-sm">
@@ -155,7 +161,7 @@ export default function RepDashboard() {
             </thead>
             <tbody>
               {deals.map((d) => {
-                const account = getAccount(d.accountId);
+                const account = accountsById.get(d.accountId);
                 return (
                   <tr
                     key={d.id}
