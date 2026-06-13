@@ -28,9 +28,11 @@ export default async function AiWorkspace() {
   const accountById = new Map(accounts.map((a) => [a.id, a]));
 
   // Riskiest-first: open deals scored by confidence.
-  const scored = openDeals
-    .map((d) => ({ deal: d, c: confidence(d) }))
-    .sort((a, b) => a.c.score - b.c.score);
+  const scored = (
+    await Promise.all(
+      openDeals.map(async (d) => ({ deal: d, c: await confidence(d) })),
+    )
+  ).sort((a, b) => a.c.score - b.c.score);
 
   // Account to demo meeting-capture against (first with a deal).
   const captureAccountId = openDeals[0]?.accountId ?? accounts[0]?.id;

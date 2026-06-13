@@ -221,6 +221,7 @@ export function mapDeal(
     channel: d.channel,
     tcv,
     forecast,
+    winProbability: d.win_probability != null ? d.win_probability / 100 : undefined,
     serviceModel,
     expectedCloseDate: d.expected_close_date ?? "",
     createdAt: d.created_at,

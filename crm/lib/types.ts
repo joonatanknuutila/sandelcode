@@ -91,12 +91,19 @@ export const STAGE_LABELS: Record<Stage, string> = {
 export const STAGE_PROBABILITY: Record<Stage, number> = {
   interest: 0.1,
   rfi: 0.25,
-  rfp: 0.45,
-  customer_test: 0.7,
-  contract_negotiation: 0.9,
+  rfp: 0.4,
+  customer_test: 0.6,
+  contract_negotiation: 0.8,
   won: 1,
   lost: 0,
 };
+
+/** The win probability to weight a deal by: the deal's own number when set,
+ *  otherwise the stage default. Single source of truth for all weighting so the
+ *  forecast, confidence and pipeline figures agree with the per-deal number. */
+export function dealProbability(deal: Deal): number {
+  return deal.winProbability ?? STAGE_PROBABILITY[deal.stage];
+}
 
 // A single quarter of the 3-year time-phased forecast.
 export interface ForecastPoint {
@@ -125,6 +132,9 @@ export interface Deal {
   tcv: number;
   /** Per-quarter time-phased forecast over 3 years. */
   forecast: ForecastPoint[];
+  /** Deal-specific win probability (0-1), when the rep has set one. Overrides
+   *  the stage default for all weighting. Falls back to STAGE_PROBABILITY. */
+  winProbability?: number;
   /** Service invoicing model in play on this deal. */
   serviceModel: ServiceModel;
   expectedCloseDate: string; // ISO date

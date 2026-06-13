@@ -33,9 +33,9 @@ import {
   Channel,
   Contact,
   Deal,
+  dealProbability,
   Offer,
   OfferStatus,
-  STAGE_PROBABILITY,
   User,
 } from "@/lib/types";
 import type { Tables } from "@/lib/types.db";
@@ -467,9 +467,9 @@ export async function getNotifications(
 
 // --- derived analytics (pure; mirror lib/api.ts) ---------------------------
 
-/** Weighted value of a deal = TCV x stage win-probability. */
+/** Weighted value of a deal = TCV x win-probability (deal's own, else stage). */
 export function weightedValue(deal: Deal): number {
-  return Math.round(deal.tcv * STAGE_PROBABILITY[deal.stage]);
+  return Math.round(deal.tcv * dealProbability(deal));
 }
 
 /** A deal is "stalled" if open and untouched for 14+ days. */

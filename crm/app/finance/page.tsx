@@ -7,7 +7,7 @@ import {
   weightedValue,
 } from "@/lib/db";
 import { confidence } from "@/lib/ai/confidence";
-import { Deal, STAGE_PROBABILITY } from "@/lib/types";
+import { Deal, dealProbability } from "@/lib/types";
 import { eur, quarterLabel } from "@/lib/format";
 import { SectionTitle, StatTile } from "@/components/ui";
 import { OfferApproval, OfferVM } from "@/components/OfferApproval";
@@ -39,7 +39,7 @@ function buildForecast(open: Deal[], won: Deal[]): QuarterRow[] {
       const weighted = open.reduce((s, d) => {
         const p = d.forecast.find(at);
         const q = p ? p.deviceRevenue + p.serviceRevenue : 0;
-        return s + q * STAGE_PROBABILITY[d.stage];
+        return s + q * dealProbability(d);
       }, 0);
       rows.push({
         label: quarterLabel(year, quarter),
@@ -87,20 +87,22 @@ export default async function FinanceView() {
     };
   });
 
-  const confidenceVMs: DealConfidenceVM[] = open.map((d) => {
-    const c = confidence(d);
-    const account = accountById.get(d.accountId);
-    return {
-      dealId: d.id,
-      dealName: d.name,
-      accountName: account?.name ?? "Unknown account",
-      tcv: d.tcv,
-      base: c.base,
-      score: c.score,
-      band: c.band,
-      reasons: c.reasons,
-    };
-  });
+  const confidenceVMs: DealConfidenceVM[] = await Promise.all(
+    open.map(async (d) => {
+      const c = await confidence(d);
+      const account = accountById.get(d.accountId);
+      return {
+        dealId: d.id,
+        dealName: d.name,
+        accountName: account?.name ?? "Unknown account",
+        tcv: d.tcv,
+        base: c.base,
+        score: c.score,
+        band: c.band,
+        reasons: c.reasons,
+      };
+    }),
+  );
 
   return (
     <div className="mx-auto max-w-7xl space-y-8">

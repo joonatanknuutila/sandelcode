@@ -13,7 +13,7 @@
 // could later merge — the point is the gate, not the persistence backend.
 
 import { ChatMessage, complete } from "./provider";
-import { getAccount, getDealsForAccount } from "@/lib/api";
+import { getAccount, getDealsForAccount } from "@/lib/db";
 import { Stage, STAGE_LABELS, STAGE_ORDER } from "@/lib/types";
 
 export type ChangeType = "note" | "follow_up" | "contact" | "stage_move" | "case";
@@ -39,8 +39,8 @@ export async function draftFromTranscript(
   accountId: string,
   transcript: string,
 ): Promise<MeetingDraft> {
-  const account = getAccount(accountId);
-  const deals = getDealsForAccount(accountId);
+  const account = await getAccount(accountId);
+  const deals = await getDealsForAccount(accountId);
   const stageList = STAGE_ORDER.filter((s) => s !== "won" && s !== "lost")
     .map((s) => STAGE_LABELS[s])
     .join(", ");
@@ -146,12 +146,12 @@ export interface CommitResult {
   error?: string;
 }
 
-export function commitMeeting(req: CommitRequest): CommitResult {
+export async function commitMeeting(req: CommitRequest): Promise<CommitResult> {
   // The gate. No approval, no write — full stop.
   if (req.approved !== true) {
     return { ok: false, applied: [], error: "Not approved — nothing written." };
   }
-  if (!getAccount(req.accountId)) {
+  if (!(await getAccount(req.accountId))) {
     return { ok: false, applied: [], error: "Unknown account." };
   }
   if (!req.changes?.length) {

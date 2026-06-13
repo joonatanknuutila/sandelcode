@@ -8,8 +8,8 @@
 // narrative when no model is configured.
 
 import { ChatMessage, complete } from "./provider";
-import { deals } from "@/lib/mock-data";
-import { Deal, STAGE_PROBABILITY } from "@/lib/types";
+import { getAllDeals } from "@/lib/db";
+import { Deal, dealProbability } from "@/lib/types";
 import { eur } from "@/lib/format";
 
 export interface ForecastFigures {
@@ -32,8 +32,8 @@ function isOpen(d: Deal): boolean {
   return d.stage !== "lost";
 }
 
-export function computeForecast(): ForecastFigures {
-  const open = deals.filter(isOpen);
+export async function computeForecast(): Promise<ForecastFigures> {
+  const open = (await getAllDeals()).filter(isOpen);
 
   let committed = 0;
   let atRisk = 0;
@@ -44,7 +44,7 @@ export function computeForecast(): ForecastFigures {
   let weightedPipeline = 0;
 
   for (const d of open) {
-    const p = STAGE_PROBABILITY[d.stage];
+    const p = dealProbability(d);
     const tcv = d.forecast.reduce((s, f) => s + f.deviceRevenue + f.serviceRevenue, 0);
     weightedPipeline += tcv * p;
 
@@ -75,7 +75,7 @@ export interface ForecastNarrative {
 }
 
 export async function forecastNarrative(): Promise<ForecastNarrative> {
-  const f = computeForecast();
+  const f = await computeForecast();
 
   const facts =
     `Weighted 3-yr pipeline ${eur(f.weightedPipeline, false)}. ` +

@@ -4,8 +4,8 @@
 // sees *why*. Finance can override the realistic number (Stage 5) — the
 // override is what should feed gap-to-target.
 
-import { Deal, STAGE_PROBABILITY } from "@/lib/types";
-import { getActivitiesForDeal, getOffersForDeal } from "@/lib/api";
+import { Deal, dealProbability } from "@/lib/types";
+import { getActivitiesForDeal, getOffersForDeal } from "@/lib/db";
 import { relativeDays } from "@/lib/format";
 
 export type ConfidenceBand = "low" | "medium" | "high";
@@ -25,8 +25,8 @@ function band(score: number): ConfidenceBand {
   return "high";
 }
 
-export function confidence(deal: Deal): Confidence {
-  const base = Math.round(STAGE_PROBABILITY[deal.stage] * 100);
+export async function confidence(deal: Deal): Promise<Confidence> {
+  const base = Math.round(dealProbability(deal) * 100);
   const reasons: string[] = [`Stage "${deal.stage}" baseline ${base}%.`];
 
   // Terminal stages are certain — no adjustment, no noise.
@@ -37,7 +37,7 @@ export function confidence(deal: Deal): Confidence {
   let score = base;
 
   // Staleness — the single strongest live signal.
-  const last = getActivitiesForDeal(deal.id)[0];
+  const last = (await getActivitiesForDeal(deal.id))[0];
   const staleDays = last ? relativeDays(last.createdAt) : relativeDays(deal.updatedAt);
   if (staleDays >= 21) {
     score -= 15;
@@ -63,7 +63,7 @@ export function confidence(deal: Deal): Confidence {
   }
 
   // An approved offer on the table is real commercial momentum.
-  if (getOffersForDeal(deal.id).some((o) => o.status === "approved")) {
+  if ((await getOffersForDeal(deal.id)).some((o) => o.status === "approved")) {
     score += 8;
     reasons.push("Approved offer on the table (+8).");
   }
@@ -81,8 +81,8 @@ export interface EffectiveConfidence extends Confidence {
 }
 
 /** Apply a Finance override (Stage 5). The override is what feeds gap-to-target. */
-export function withOverride(deal: Deal, override?: number): EffectiveConfidence {
-  const c = confidence(deal);
+export async function withOverride(deal: Deal, override?: number): Promise<EffectiveConfidence> {
+  const c = await confidence(deal);
   const has = typeof override === "number" && override >= 0 && override <= 100;
   return {
     ...c,

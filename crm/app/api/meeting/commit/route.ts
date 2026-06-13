@@ -14,6 +14,6 @@ export async function POST(req: Request) {
     return Response.json({ error: "accountId is required" }, { status: 400 });
   }
 
-  const result = commitMeeting(body);
+  const result = await commitMeeting(body);
   return Response.json(result, { status: result.ok ? 200 : 422 });
 }

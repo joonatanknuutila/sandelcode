@@ -15,5 +15,5 @@ export async function GET(req: Request) {
   const overrideRaw = url.searchParams.get("override");
   const override = overrideRaw == null ? undefined : Number(overrideRaw);
 
-  return Response.json({ dealId, ...withOverride(deal, override) });
+  return Response.json({ dealId, ...(await withOverride(deal, override)) });
 }
