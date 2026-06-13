@@ -3,6 +3,7 @@ import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { RoleProvider } from "@/components/RoleProvider";
 import { AppShell } from "@/components/AppShell";
+import { getCurrentUser } from "@/lib/db";
 
 // HMD Secure uses Inter as its brand face (see BRAND.md).
 const inter = Inter({
@@ -20,11 +21,16 @@ export const metadata: Metadata = {
   description: "Internal CRM for HMD Secure — accounts, deals, cases, forecast.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const me = await getCurrentUser();
+  const user = {
+    name: me?.name ?? "Guest",
+    initials: me?.initials ?? "—",
+  };
   return (
     <html
       lang="en"
@@ -32,7 +38,7 @@ export default function RootLayout({
     >
       <body className="min-h-full">
         <RoleProvider>
-          <AppShell>{children}</AppShell>
+          <AppShell user={user}>{children}</AppShell>
         </RoleProvider>
       </body>
     </html>
