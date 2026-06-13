@@ -5,5 +5,13 @@ node_modules/
 worktrees/
 watcher/.state.json
 watcher/poll.log
+watcher/poll.out
+watcher/autopush.log
+watcher/*.out
 people/*/prompt/*.md
 .DS_Store
+
+# dead scaffold (replaced by crm/) and stray build/runtime noise
+web/
+*.log
+.vercel/
