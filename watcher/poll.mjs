@@ -7,11 +7,12 @@
 // Requires: NOTION_TOKEN env var (internal integration token, ntn_...).
 // Each Prompt-inbox page must be shared with that integration in Notion.
 
-import { readFileSync, writeFileSync, existsSync, mkdirSync, appendFileSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync, mkdirSync, appendFileSync, readdirSync, statSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { homedir } from "node:os";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const cfg = JSON.parse(readFileSync(resolve(ROOT, "watcher/config.json"), "utf8"));
@@ -138,6 +139,85 @@ async function reportCommits(person) {
   }
 }
 
+// --- session NARRATION -> Notion ---------------------------------------------
+// Beyond commits, post each Claude session's running narration (its assistant
+// text turns — "what I'm doing / what I found / next step") to that person's
+// Planning page, so they can follow their agent without watching the tmux pane.
+// Source: Claude Code's own session transcript (~/.claude/projects/<escaped-cwd>/<id>.jsonl).
+// Baselines on first sight (records line count, posts nothing) so no backlog dump.
+
+const PROJECTS = resolve(homedir(), ".claude", "projects");
+
+function transcriptDir(person) {
+  const abs = resolve(ROOT, person.worktree);
+  return resolve(PROJECTS, abs.replace(/[^a-zA-Z0-9]/g, "-"));
+}
+
+// Newest .jsonl in this worktree's transcript dir = the currently active session.
+function activeTranscript(person) {
+  const dir = transcriptDir(person);
+  let files;
+  try { files = readdirSync(dir).filter((f) => f.endsWith(".jsonl")); } catch { return null; }
+  let best = null, bestM = 0;
+  for (const f of files) {
+    const m = statSync(resolve(dir, f)).mtimeMs;
+    if (m > bestM) { bestM = m; best = resolve(dir, f); }
+  }
+  return best;
+}
+
+// Assistant text turns from line `fromLine` onward. Returns {turns, total}.
+function assistantTurns(file, fromLine) {
+  const lines = readFileSync(file, "utf8").split("\n");
+  const turns = [];
+  for (let i = fromLine; i < lines.length; i++) {
+    if (!lines[i].trim()) continue;
+    let o; try { o = JSON.parse(lines[i]); } catch { continue; }
+    if (o.type !== "assistant") continue;
+    const text = (o.message?.content || [])
+      .filter((b) => b.type === "text").map((b) => b.text).join("\n").trim();
+    if (text) turns.push({ text, ts: o.timestamp });
+  }
+  return { turns, total: lines.length };
+}
+
+// Notion: a paragraph block carrying one assistant turn (chunked to the 2000-char limit).
+function narrationBlock(text, ts) {
+  const t = ts ? new Date(ts).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }) : "";
+  let s = text.replace(/\r/g, "");
+  const chunks = [];
+  while (s.length && chunks.length < 4) { chunks.push(s.slice(0, 1900)); s = s.slice(1900); }
+  if (s.length) chunks[chunks.length - 1] += " …[truncated]";
+  const rich = chunks.map((c, i) => ({ type: "text", text: { content: (i === 0 ? `💬 ${t}  ` : "") + c } }));
+  return { object: "block", type: "paragraph", paragraph: { rich_text: rich } };
+}
+
+async function reportClaudeOutput(person) {
+  const file = activeTranscript(person);
+  if (!file) return;
+  state.transcripts ||= {};
+  const st = state.transcripts[person.name];
+  if (!st || st.file !== file) { // first sight / new session file → baseline, post nothing
+    let total = 0; try { total = readFileSync(file, "utf8").split("\n").length; } catch {}
+    state.transcripts[person.name] = { file, lines: total };
+    saveState();
+    return;
+  }
+  const { turns, total } = assistantTurns(file, st.lines);
+  if (total === st.lines) return;
+  if (!turns.length) { state.transcripts[person.name].lines = total; saveState(); return; }
+
+  const blocks = turns.map((tn) => narrationBlock(tn.text, tn.ts));
+  try {
+    for (let i = 0; i < blocks.length; i += 100) await appendBlocks(person.planningPageId, blocks.slice(i, i + 100));
+    state.transcripts[person.name].lines = total;
+    saveState();
+    log(`posted ${turns.length} Claude message(s) for ${person.name} -> Notion planning`);
+  } catch (e) {
+    log(`WARN: could not post Claude output for ${person.name}: ${e.message}`); // retry next tick
+  }
+}
+
 function tmux(args) {
   return execFileSync("tmux", args, { encoding: "utf8" });
 }
@@ -205,6 +285,8 @@ async function tick() {
   for (const person of cfg.people) {
     try { await checkPerson(person); }          // Notion prompt -> session (in)
     catch (e) { log(`ERROR ${person.name}: ${e.message}`); }
+    try { await reportClaudeOutput(person); }    // session narration -> Notion (out)
+    catch (e) { log(`ERROR narrate ${person.name}: ${e.message}`); }
     try { await reportCommits(person); }         // session commits -> Notion (out)
     catch (e) { log(`ERROR report ${person.name}: ${e.message}`); }
   }
