@@ -41,7 +41,10 @@ export const ROLES: Record<Role, RoleConfig> = {
     role: "finance",
     label: "Finance",
     home: "/finance",
-    nav: [{ label: "Forecast", href: "/finance" }],
+    nav: [
+      { label: "Forecast", href: "/finance" },
+      { label: "Catalog", href: "/finance/catalog" },
+    ],
   },
 };
 

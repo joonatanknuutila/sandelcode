@@ -430,6 +430,16 @@ export async function getProducts(): Promise<Tables<"products">[]> {
   return data ?? [];
 }
 
+/** All products including retired — for the catalog editor. */
+export async function getAllProducts(): Promise<Tables<"products">[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("products")
+    .select("*")
+    .order("unit_price", { ascending: false });
+  return data ?? [];
+}
+
 export async function getServices(): Promise<Tables<"services">[]> {
   const supabase = await createClient();
   const { data } = await supabase
@@ -437,6 +447,13 @@ export async function getServices(): Promise<Tables<"services">[]> {
     .select("*")
     .eq("is_active", true)
     .order("name");
+  return data ?? [];
+}
+
+/** All services including retired — for the catalog editor. */
+export async function getAllServices(): Promise<Tables<"services">[]> {
+  const supabase = await createClient();
+  const { data } = await supabase.from("services").select("*").order("name");
   return data ?? [];
 }
 
