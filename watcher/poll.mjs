@@ -34,32 +34,50 @@ function log(msg) {
 }
 function saveState() { writeFileSync(STATE_PATH, JSON.stringify(state, null, 2)); }
 
-async function notion(path) {
+async function notion(path, opts = {}) {
   const res = await fetch(`https://api.notion.com/v1${path}`, {
+    method: opts.method || "GET",
     headers: {
       Authorization: `Bearer ${TOKEN}`,
       "Notion-Version": NOTION_VERSION,
+      ...(opts.body ? { "Content-Type": "application/json" } : {}),
     },
+    ...(opts.body ? { body: JSON.stringify(opts.body) } : {}),
   });
   if (!res.ok) throw new Error(`Notion ${res.status} on ${path}: ${await res.text()}`);
   return res.json();
 }
 
-// Pull plain text from a page's child blocks, skipping the quote header + dividers.
-async function readPromptBody(pageId) {
-  const out = [];
+// Read a page's prompt content: plain text + the block ids that hold it,
+// skipping the quote header + dividers (those stay on the page).
+async function readPrompt(pageId) {
+  const texts = [], ids = [];
   let cursor;
   do {
     const q = cursor ? `?start_cursor=${cursor}&page_size=100` : `?page_size=100`;
     const data = await notion(`/blocks/${pageId}/children${q}`);
     for (const b of data.results) {
-      if (b.type === "quote" || b.type === "divider") continue; // header / separators
+      if (b.type === "quote" || b.type === "divider") continue; // header / separators stay
       const rich = b[b.type]?.rich_text;
-      if (Array.isArray(rich) && rich.length) out.push(rich.map((r) => r.plain_text).join(""));
+      if (Array.isArray(rich) && rich.length) {
+        texts.push(rich.map((r) => r.plain_text).join(""));
+        ids.push(b.id);
+      }
     }
     cursor = data.has_more ? data.next_cursor : undefined;
   } while (cursor);
-  return out.join("\n").trim();
+  return { text: texts.join("\n").trim(), ids };
+}
+
+// Delete (archive) the given blocks so the same prompt can't be re-ingested.
+// Returns true only if every block was removed.
+async function archiveBlocks(ids) {
+  let ok = true;
+  for (const id of ids) {
+    try { await notion(`/blocks/${id}`, { method: "DELETE" }); }
+    catch (e) { ok = false; log(`WARN: could not delete block ${id}: ${e.message}`); }
+  }
+  return ok;
 }
 
 function tmux(args) {
@@ -97,11 +115,11 @@ function injectToSession(person, prompt) {
 }
 
 async function checkPerson(person) {
-  const body = await readPromptBody(person.promptPageId);
+  const { text: body, ids } = await readPrompt(person.promptPageId);
   if (!body) return;
   const hash = createHash("sha1").update(body).digest("hex");
   const prev = state[person.promptPageId];
-  if (prev?.hash === hash) return; // unchanged since last fire
+  if (prev?.hash === hash) return; // guard against re-firing the same content before deletion lands
 
   const ts = new Date().toISOString().replace(/[:.]/g, "-");
   const dir = resolve(ROOT, person.promptDir);
@@ -110,9 +128,19 @@ async function checkPerson(person) {
   writeFileSync(file, body + "\n");
   log(`NEW prompt for ${person.name} -> ${person.promptDir}/${ts}.md`);
 
+  // mark seen (dedup guard) BEFORE injecting, then inject + clear the inbox.
   state[person.promptPageId] = { hash, at: ts };
   saveState();
   injectToSession(person, body);
+
+  // Delete the ingested blocks so the same message isn't sent again. If the page
+  // is now empty, drop the dedup hash so an identical future prompt still fires.
+  const cleared = await archiveBlocks(ids);
+  if (cleared) {
+    delete state[person.promptPageId];
+    saveState();
+    log(`cleared ${ids.length} block(s) from ${person.name} inbox`);
+  }
 }
 
 async function tick() {
