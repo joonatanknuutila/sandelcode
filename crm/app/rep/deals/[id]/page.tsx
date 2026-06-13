@@ -139,7 +139,7 @@ export default async function DealDetail({
                       <span>
                         {l.name} × {l.quantity}
                         {l.discountPct > 0 && (
-                          <span className="text-hmd-orange">
+                          <span className="font-medium text-warning">
                             {" "}
                             −{l.discountPct}%
                           </span>

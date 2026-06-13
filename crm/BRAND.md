@@ -1,58 +1,53 @@
 # HMD Secure — Brand reference (for this CRM)
 
-Local, working brand guide compiled from HMD's live site (hmd.com) and public
-brand references (logotyp.us). HMD's official guidelines are partner-gated; this
-captures the verifiable, public brand elements so the CRM looks like HMD's own
-internal tool. Trademarked assets (the real wordmark/logo) are **not** bundled —
-we render a typographic lockup in HMD's colours instead.
+Brand guide derived from the **real HMD Secure site** (hmdsecure.com). The CRM is
+themed to look like HMD Secure's own internal tool. Trademarked logo files are **not**
+bundled — we render a typographic lockup in HMD Secure's colours instead.
+
+Full design rationale + token mapping: `../docs/brand-hmd-secure.md`.
 
 ## Identity in one line
-HMD = "Human Mobile Devices", the largest European phone maker (Finland).
-A **typographic wordmark** brand — the lettering is the logo, no symbol/icon.
-The product line we serve, **HMD Secure**, targets government & enterprise, so
-the CRM leans on the calmer, more professional end of the palette.
+HMD Secure (secured Android devices + services for government/enterprise) presents a
+**dark, high-contrast, security-grade** look: anthracite/black chrome, an off-white
+content canvas, and a single sharp **electric-lime** accent. Typeface: **Inter**.
 
-## Colour palette
+## Colour palette (from hmdsecure.com)
 
-| Token            | Hex        | Role in HMD brand                  | Use in CRM |
-|------------------|------------|------------------------------------|------------|
-| HMD Teal         | `#47d7ac`  | Primary brand colour (wordmark)    | Brand accent, highlights, active nav, focus |
-| Teal 600         | `#1f9e7a`  | Darker teal (derived for contrast) | Buttons, links, primary actions on white |
-| Teal 700         | `#177a5f`  | Deeper teal (derived)              | Button hover, emphasis text |
-| HMD Orange       | `#ff7f41`  | Accent ("enthusiasm, confidence")  | Sparingly: alerts, CTAs that need pop, warnings |
-| HMD Gray         | `#788890`  | Secondary ("professionalism")      | Muted text, secondary UI |
-| Charcoal         | `#161d23`  | Derived dark neutral               | Sidebar / app chrome (lets teal pop, reads "secure") |
-| Charcoal soft    | `#1f2830`  | Derived                            | Sidebar surfaces, borders on dark |
+| Token | Hex | Role |
+|-------|-----|------|
+| Lime | `#e4ff00` | Signature accent — active nav, focus, highlights, CTA fills |
+| Anthracite | `#242426` | App chrome / sidebar, ink (body text), primary buttons |
+| Black | `#0a0a0a` | Hover / emphasis |
+| Dirty white | `#fafafa` | Background canvas |
+| Surface | `#ffffff` | Cards / surfaces |
+| Low gray | `#5e5e5e` | Muted / secondary text |
+| Border | `#e6e6e6` | Hairlines |
 
-Supporting neutrals (UI scaffolding, not HMD-specific): background `#f5f7f7`,
-surface `#ffffff`, border `#e3e8e8`, ink `#0f1719`.
+Semantic (kept for status): success `#16a34a`, warning `#d97706`, danger `#dc2626`.
 
-Semantic: success `#16a34a`, warning `#d97706`, danger `#dc2626`.
+### ⚠️ Lime is a *light* colour
+`#e4ff00` is near-fluorescent. Use it **only** as a fill/accent with **black/anthracite
+text on top** (active nav pill, badges, the logo tile, progress fills, focus rings).
+**Never** use lime as text on white, and never put white text on lime. For primary
+buttons/links on a light background use **anthracite** (white text); for hover use black.
 
-### Contrast note
-HMD Teal `#47d7ac` is a *light* mint — great as a fill/accent, but too low-
-contrast for text or small buttons on white. For interactive elements use
-**Teal 600/700**; reserve `#47d7ac` for fills, the wordmark mark, active states
-on dark, and large blocks.
+## Token names are legacy aliases
+To avoid churning ~60 call sites, the existing Tailwind/CSS names are kept but repointed:
+`hmd-teal` → lime, `hmd-teal-600` → anthracite, `hmd-teal-700` → black, `hmd-orange`
+→ lime, `hmd-charcoal` → anthracite. New code should read these as HMD Secure roles,
+not literal colours. Tokens: `lib/brand.ts` (TS) + `app/globals.css` (CSS vars / `@theme`).
 
 ## Typography
-HMD's wordmark uses a refined, clean **sans-serif**. We don't have the licensed
-face, so the CRM uses **Geist** (Next default) / system sans — a neutral,
-modern grotesque that matches HMD's clarity-first character. Headings: semibold,
-tight tracking. Body: regular. No serifs anywhere.
+**Inter** (via `next/font/google` in `app/layout.tsx`, exposed as `--font-inter` →
+`--font-sans`). Headings: semibold, tight tracking. Body: regular. No serifs.
 
-## Logo usage in this app
-- We render `H` in a teal rounded tile + "HMD Secure" wordmark (`components/Logo.tsx`).
-- "HMD" is solid/strong; "Secure" is lighter weight to read as the product line.
-- Do **not** hotlink or embed HMD's trademarked logo files — colours + type only.
+## Logo
+`components/Logo.tsx` — lime rounded tile with an anthracite "H", then "HMD" (strong) +
+"Secure" (lighter, the product line). Typographic only; no trademarked assets.
 
-## Design principles for HMD Secure CRM
-1. **Quiet confidence.** Government/enterprise buyers — restrained, precise,
-   not playful. Teal as accent on a clean neutral canvas; orange only when
-   something genuinely needs attention.
-2. **Typographic-first**, matching HMD's wordmark identity. Strong type
-   hierarchy, generous whitespace.
-3. **Dark chrome, light content.** Charcoal sidebar (security/serious tone) with
-   bright, scannable white content area.
-
-Source: tokens live in `lib/brand.ts`; CSS variables in `app/globals.css`.
+## Design principles
+1. **Dark chrome, light content.** Anthracite sidebar / app chrome; bright, scannable
+   off-white + white content area.
+2. **Lime is the single sharp accent.** Used sparingly, always black-on-lime.
+3. **Security-grade restraint.** Government/enterprise buyers — precise, high-contrast,
+   no decorative colour. Strong type hierarchy, generous whitespace.
