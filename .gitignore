@@ -1,0 +1,9 @@
+.env
+.supabase-newproject.json
+*.secret.json
+node_modules/
+worktrees/
+watcher/.state.json
+watcher/poll.log
+people/*/prompt/*.md
+.DS_Store
