@@ -30,7 +30,7 @@ export function Input({
       )}
       <input
         id={inputId}
-        className={`rounded-lg border border-border bg-surface px-3 py-2 text-sm text-foreground placeholder:text-muted outline-none transition-colors focus:border-hmd-teal focus:ring-2 focus:ring-hmd-teal/40 disabled:opacity-50 ${error ? "border-danger" : ""} ${className}`}
+        className={`rounded-md border border-border bg-surface px-3 py-2 text-sm text-foreground placeholder:text-muted outline-none transition-colors focus:border-hmd-teal focus:ring-2 focus:ring-hmd-teal/30 disabled:opacity-50 ${error ? "border-danger" : ""} ${className}`}
         {...props}
       />
       {error && <p className="text-xs text-danger">{error}</p>}
@@ -66,7 +66,7 @@ export function Textarea({
       <textarea
         id={inputId}
         rows={4}
-        className={`rounded-lg border border-border bg-surface px-3 py-2 text-sm text-foreground placeholder:text-muted outline-none transition-colors focus:border-hmd-teal focus:ring-2 focus:ring-hmd-teal/40 disabled:opacity-50 resize-y ${error ? "border-danger" : ""} ${className}`}
+        className={`resize-y rounded-md border border-border bg-surface px-3 py-2 text-sm text-foreground placeholder:text-muted outline-none transition-colors focus:border-hmd-teal focus:ring-2 focus:ring-hmd-teal/30 disabled:opacity-50 ${error ? "border-danger" : ""} ${className}`}
         {...props}
       />
       {error && <p className="text-xs text-danger">{error}</p>}
@@ -105,7 +105,7 @@ export function Select({
       )}
       <select
         id={inputId}
-        className={`rounded-lg border border-border bg-surface px-3 py-2 text-sm text-foreground outline-none transition-colors focus:border-hmd-teal focus:ring-2 focus:ring-hmd-teal/40 disabled:opacity-50 appearance-none cursor-pointer ${error ? "border-danger" : ""} ${className}`}
+        className={`cursor-pointer appearance-none rounded-md border border-border bg-surface px-3 py-2 text-sm text-foreground outline-none transition-colors focus:border-hmd-teal focus:ring-2 focus:ring-hmd-teal/30 disabled:opacity-50 ${error ? "border-danger" : ""} ${className}`}
         {...props}
       >
         {placeholder && (
@@ -178,7 +178,7 @@ export function Card({
 }) {
   return (
     <div
-      className={`rounded-xl border border-border bg-surface ${className}`}
+      className={`rounded-lg border border-border bg-surface ${className}`}
     >
       {children}
     </div>
@@ -222,19 +222,19 @@ export function StatTile({
 }
 
 const STAGE_TONE: Record<Stage, string> = {
-  interest: "bg-slate-100 text-slate-700",
-  rfi: "bg-sky-100 text-sky-700",
-  rfp: "bg-indigo-100 text-indigo-700",
-  customer_test: "bg-violet-100 text-violet-700",
-  contract_negotiation: "bg-amber-100 text-amber-800",
-  won: "bg-green-100 text-green-700",
-  lost: "bg-red-100 text-red-700",
+  interest: "border-border bg-background text-muted",
+  rfi: "border-sky-400/30 bg-sky-400/10 text-sky-200",
+  rfp: "border-indigo-400/30 bg-indigo-400/10 text-indigo-200",
+  customer_test: "border-violet-400/30 bg-violet-400/10 text-violet-200",
+  contract_negotiation: "border-amber-400/35 bg-amber-400/10 text-amber-200",
+  won: "border-green-400/35 bg-green-400/10 text-green-200",
+  lost: "border-red-400/35 bg-red-400/10 text-red-200",
 };
 
 export function StageBadge({ stage }: { stage: Stage }) {
   return (
     <span
-      className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${STAGE_TONE[stage]}`}
+      className={`inline-block rounded-full border px-2.5 py-0.5 text-xs font-medium ${STAGE_TONE[stage]}`}
     >
       {STAGE_LABELS[stage]}
     </span>
@@ -249,14 +249,14 @@ export function Badge({
   tone?: "default" | "blue" | "amber" | "red" | "green";
 }) {
   const tones = {
-    default: "bg-slate-100 text-slate-700",
-    blue: "bg-hmd-teal-600/10 text-hmd-teal-700",
-    amber: "bg-amber-100 text-amber-800",
-    red: "bg-red-100 text-red-700",
-    green: "bg-green-100 text-green-700",
+    default: "border-border bg-background text-muted",
+    blue: "border-hmd-teal/30 bg-hmd-teal/10 text-foreground",
+    amber: "border-amber-400/35 bg-amber-400/10 text-amber-200",
+    red: "border-red-400/35 bg-red-400/10 text-red-200",
+    green: "border-green-400/35 bg-green-400/10 text-green-200",
   };
   return (
-    <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${tones[tone]}`}>
+    <span className={`inline-block rounded-full border px-2.5 py-0.5 text-xs font-medium ${tones[tone]}`}>
       {children}
     </span>
   );
@@ -265,18 +265,19 @@ export function Badge({
 export function Button({
   children,
   variant = "primary",
+  className = "",
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "primary" | "secondary";
 }) {
   const base =
-    "inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-medium transition-colors";
+    "inline-flex items-center justify-center gap-1.5 rounded-md px-3.5 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50";
   const styles =
     variant === "primary"
-      ? "bg-hmd-teal-600 text-white hover:bg-hmd-teal-700"
+      ? "bg-hmd-teal text-hmd-teal-700 hover:bg-hmd-teal/90"
       : "border border-border bg-surface text-foreground hover:bg-background";
   return (
-    <button className={`${base} ${styles}`} {...props}>
+    <button className={`${base} ${styles} ${className}`} {...props}>
       {children}
     </button>
   );

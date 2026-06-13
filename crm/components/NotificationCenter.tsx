@@ -66,17 +66,17 @@ export function NotificationCenter({
 }: {
   notifications: AppNotification[];
 }) {
-  const [notifications, setNotifications] =
-    useState<AppNotification[]>(initialNotifications);
+  const [optimisticReadIds, setOptimisticReadIds] = useState<Set<string>>(
+    () => new Set(),
+  );
   const [open, setOpen] = useState(false);
   const [, startTransition] = useTransition();
   const panelRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
-  // Keep in sync when server re-renders (e.g. after revalidatePath)
-  useEffect(() => {
-    setNotifications(initialNotifications);
-  }, [initialNotifications]);
+  const notifications = initialNotifications.map((n) =>
+    optimisticReadIds.has(n.id) ? { ...n, read: true } : n,
+  );
 
   // Close on outside click
   useEffect(() => {
@@ -104,18 +104,22 @@ export function NotificationCenter({
 
   function handleNotificationClick(n: AppNotification) {
     // Optimistically mark read in local state
-    setNotifications((prev) =>
-      prev.map((x) => (x.id === n.id ? { ...x, read: true } : x)),
-    );
+    setOptimisticReadIds((prev) => {
+      const next = new Set(prev);
+      next.add(n.id);
+      return next;
+    });
     setOpen(false);
 
     // Persist via server action (fire-and-forget; revalidatePath updates server)
     startTransition(() => {
       markReadAction(n.id).catch(() => {
         // Roll back optimistic update on failure
-        setNotifications((prev) =>
-          prev.map((x) => (x.id === n.id ? { ...x, read: false } : x)),
-        );
+        setOptimisticReadIds((prev) => {
+          const next = new Set(prev);
+          next.delete(n.id);
+          return next;
+        });
       });
     });
 
@@ -214,7 +218,7 @@ export function NotificationCenter({
                               {relativeTime(n.createdAt)}
                             </span>
                             {href && (
-                              <span className="text-xs text-hmd-teal-700">
+                              <span className="text-xs font-medium text-foreground">
                                 View →
                               </span>
                             )}

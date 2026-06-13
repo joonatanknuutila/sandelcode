@@ -33,7 +33,9 @@ import type {
   CasePriority,
   CaseStatus,
   Channel,
+  ContextType,
   Deal,
+  InboxMessage,
   OfferLine,
   OfferStatus,
   Role,
@@ -320,6 +322,45 @@ export async function addCaseNote(input: AddCaseNoteInput): Promise<CaseNote> {
   const { data, error } = await admin.from("notes").insert(row).select().single();
   if (error || !data) throw new Error(error?.message ?? "Failed to add note");
   return mapCaseNote(data);
+}
+
+// --- inbox messages ---------------------------------------------------------
+// An internal message is a `notes` row keyed to its context (account/deal/case).
+// Same storage as case notes — the Inbox is just a context-grouped lens on them.
+
+export interface PostMessageInput {
+  contextType: ContextType;
+  contextId: string;
+  body: string;
+  authorId?: string;
+}
+
+export async function postInboxMessage(
+  input: PostMessageInput,
+): Promise<InboxMessage> {
+  const admin = createAdminClient();
+  const author = await actorId(input.authorId);
+  const row: TablesInsert<"notes"> = {
+    entity_type: input.contextType,
+    entity_id: input.contextId,
+    content: input.body,
+    is_internal: true,
+    author_id: author ?? null,
+  };
+  const { data, error } = await admin
+    .from("notes")
+    .insert(row)
+    .select()
+    .single();
+  if (error || !data) throw new Error(error?.message ?? "Failed to post message");
+  return {
+    id: data.id,
+    contextType: input.contextType,
+    contextId: input.contextId,
+    authorId: data.author_id ?? "",
+    body: data.content,
+    createdAt: data.created_at,
+  };
 }
 
 // --- offers -----------------------------------------------------------------

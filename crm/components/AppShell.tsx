@@ -9,7 +9,17 @@ import { Logo } from "./Logo";
 import { useRole } from "./RoleProvider";
 import { ROLES, ROLE_ORDER } from "@/lib/roles";
 import { NotificationCenter } from "./NotificationCenter";
-import type { AppNotification } from "@/lib/types";
+import type { AppNotification, Role } from "@/lib/types";
+
+function roleFromPath(pathname: string): Role | null {
+  if (pathname === "/tam" || pathname.startsWith("/tam/")) return "tam";
+  if (pathname === "/sm" || pathname.startsWith("/sm/")) return "sm";
+  if (pathname === "/finance" || pathname.startsWith("/finance/")) {
+    return "finance";
+  }
+  if (pathname === "/rep" || pathname.startsWith("/rep/")) return "rep";
+  return null;
+}
 
 export function AppShell({
   children,
@@ -23,7 +33,8 @@ export function AppShell({
   const { role, setRole } = useRole();
   const pathname = usePathname();
   const router = useRouter();
-  const config = ROLES[role];
+  const activeRole = roleFromPath(pathname) ?? role;
+  const config = ROLES[activeRole];
 
   function switchRole(next: typeof role) {
     setRole(next);
@@ -77,8 +88,8 @@ export function AppShell({
             <label className="flex items-center gap-2 text-xs text-muted">
               View as
               <select
-                value={role}
-                onChange={(e) => switchRole(e.target.value as typeof role)}
+                value={activeRole}
+                onChange={(e) => switchRole(e.target.value as Role)}
                 className="rounded-md border border-border bg-background px-2 py-1 text-xs font-medium text-foreground"
               >
                 {ROLE_ORDER.map((r) => (
@@ -90,7 +101,7 @@ export function AppShell({
             </label>
             <NotificationCenter notifications={notifications} />
             <div className="flex items-center gap-2">
-              <span className="grid h-8 w-8 place-items-center rounded-full bg-hmd-teal-600/10 text-xs font-semibold text-hmd-teal-700">
+              <span className="grid h-8 w-8 place-items-center rounded-full bg-hmd-teal text-xs font-semibold text-hmd-charcoal">
                 {user.initials}
               </span>
             </div>

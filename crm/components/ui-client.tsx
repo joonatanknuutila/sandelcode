@@ -49,7 +49,7 @@ export function Modal({
   className?: string;
 }) {
   const dialogRef = useRef<HTMLDivElement>(null);
-  const close = useCallback(onClose, [onClose]);
+  const close = useCallback(() => onClose(), [onClose]);
 
   useBodyScrollLock(open);
   useEscapeKey(close, open);
@@ -80,7 +80,7 @@ export function Modal({
       <div
         ref={dialogRef}
         tabIndex={-1}
-        className={`relative z-10 w-full max-w-lg rounded-2xl border border-border bg-surface p-6 shadow-2xl outline-none ${className}`}
+        className={`relative z-10 w-full max-w-lg rounded-lg border border-border bg-surface p-6 shadow-2xl outline-none ${className}`}
       >
         {title && (
           <div className="mb-4 flex items-center justify-between">
@@ -130,7 +130,7 @@ export function Drawer({
   width?: string;
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
-  const close = useCallback(onClose, [onClose]);
+  const close = useCallback(() => onClose(), [onClose]);
 
   useBodyScrollLock(open);
   useEscapeKey(close, open);
@@ -208,13 +208,6 @@ interface ToastOptions {
   duration?: number;
 }
 
-const TOAST_VARIANT_CLASSES: Record<ToastVariant, string> = {
-  default: "bg-hmd-teal-600 text-white",
-  success: "bg-success text-white",
-  warning: "bg-warning text-white",
-  error: "bg-danger text-white",
-};
-
 function getOrCreateToastContainer(): HTMLElement {
   const id = "__hmd-toast-container";
   let el = document.getElementById(id);
@@ -246,7 +239,6 @@ export function toast(message: string, options: ToastOptions = {}): void {
   const container = getOrCreateToastContainer();
 
   const item = document.createElement("div");
-  const variantCls = TOAST_VARIANT_CLASSES[variant];
 
   // Build class list manually (no Tailwind runtime — just inline styles + CSS vars)
   item.setAttribute(

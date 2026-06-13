@@ -41,7 +41,7 @@ export function StageStepper({
               current
                 ? "bg-hmd-teal-600 text-white"
                 : done
-                  ? "bg-hmd-teal/20 text-hmd-teal-700"
+                  ? "bg-hmd-teal/20 text-foreground"
                   : "bg-background text-muted"
             }`}
           >

@@ -20,6 +20,8 @@ export const ROLES: Record<Role, RoleConfig> = {
     nav: [
       { label: "Dashboard", href: "/rep" },
       { label: "My Accounts", href: "/rep/accounts" },
+      { label: "Pipeline", href: "/rep/pipeline" },
+      { label: "Inbox", href: "/rep/inbox" },
     ],
   },
   tam: {
@@ -28,6 +30,8 @@ export const ROLES: Record<Role, RoleConfig> = {
     home: "/tam",
     nav: [
       { label: "My Cases", href: "/tam" },
+      { label: "Accounts", href: "/tam/accounts" },
+      { label: "Inbox", href: "/tam/inbox" },
       { label: "AI Assistant", href: "/tam/ai" },
     ],
   },
@@ -35,7 +39,12 @@ export const ROLES: Record<Role, RoleConfig> = {
     role: "sm",
     label: "Sales Manager",
     home: "/sm",
-    nav: [{ label: "Team Pipeline", href: "/sm" }],
+    nav: [
+      { label: "Dashboard", href: "/sm" },
+      { label: "Team Board", href: "/sm/pipeline" },
+      { label: "Accounts", href: "/sm/accounts" },
+      { label: "Inbox", href: "/sm/inbox" },
+    ],
   },
   finance: {
     role: "finance",
@@ -43,7 +52,10 @@ export const ROLES: Record<Role, RoleConfig> = {
     home: "/finance",
     nav: [
       { label: "Forecast", href: "/finance" },
+      { label: "Pipeline", href: "/finance/pipeline" },
+      { label: "Accounts", href: "/finance/accounts" },
       { label: "Catalog", href: "/finance/catalog" },
+      { label: "Inbox", href: "/finance/inbox" },
     ],
   },
 };

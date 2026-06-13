@@ -9,7 +9,7 @@ import {
   reassignCase,
   updateCaseStatus,
 } from "@/lib/db/mutations";
-import { getCase, getCurrentUser } from "@/lib/db";
+import { getCase } from "@/lib/db";
 
 // ---------------------------------------------------------------------------
 // Add note

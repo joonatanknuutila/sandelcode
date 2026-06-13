@@ -54,6 +54,17 @@ export interface Contact {
   primary?: boolean;
 }
 
+// A summarised account row for the AccountList (any role's lens).
+export interface AccountCard {
+  account: Account;
+  dealsCount: number;
+  openCases: number;
+  tcv: number;
+  weighted: number;
+  /** First few deal stages, for the badges on the card. */
+  stages: Stage[];
+}
+
 // --- Deals & forecast ------------------------------------------------------
 
 // HMD pipeline stages. Reseller deals skip "contract_negotiation".
@@ -212,6 +223,49 @@ export interface Offer {
   /** Required when a discount is applied. */
   justification?: string;
   createdAt: string;
+}
+
+// --- Inbox (internal messaging, always context-attached) -------------------
+
+// An internal message is NEVER standalone — it hangs off an account, deal or
+// case (brief Block 4). Backed by the existing `notes` table (note_entity_type
+// is exactly these three), so no new storage is needed.
+export type ContextType = "account" | "deal" | "case";
+
+export interface InboxMessage {
+  id: string;
+  contextType: ContextType;
+  contextId: string;
+  authorId: string;
+  body: string;
+  createdAt: string;
+}
+
+// One conversation = one context (account/deal/case) plus everything said on it.
+// A conversation may also carry a pending discount approval, which renders as a
+// special message with approve/reject + a "SM → Finance → Locked" status bar.
+export interface Conversation {
+  contextType: ContextType;
+  contextId: string;
+  /** The account this conversation rolls up to (for filtering + the panel). */
+  accountId: string;
+  title: string;
+  subtitle: string;
+  lastMessageAt: string;
+  lastSnippet: string;
+  messageCount: number;
+  participantIds: string[];
+  pendingApproval?: {
+    offerId: string;
+    /** Which gate the offer is waiting on right now. */
+    gate: "sm" | "finance";
+    status: OfferStatus;
+    discountPct: number;
+    total: number;
+    version: number;
+    justification?: string;
+    dealId: string;
+  };
 }
 
 // --- Notifications (in-app only) -------------------------------------------

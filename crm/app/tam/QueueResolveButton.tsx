@@ -36,7 +36,7 @@ export function QueueResolveButton({ caseId }: Props) {
       disabled={isPending}
       title="Resolve case"
       aria-label="Resolve case"
-      className="shrink-0 rounded-lg border border-border bg-surface px-2.5 py-2 text-xs font-medium text-foreground transition-colors hover:border-hmd-teal-600 hover:text-hmd-teal-700 disabled:opacity-50"
+      className="shrink-0 rounded-lg border border-border bg-surface px-2.5 py-2 text-xs font-medium text-foreground transition-colors hover:border-hmd-teal-600 hover:text-foreground disabled:opacity-50"
     >
       {isPending ? "…" : "✓"}
     </button>

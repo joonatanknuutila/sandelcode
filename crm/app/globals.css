@@ -1,29 +1,31 @@
 @import "tailwindcss";
 
 /* HMD Secure brand palette — sourced from hmdsecure.com (see BRAND.md and
-   ../docs/brand-hmd-secure.md). Dark anthracite chrome + electric-lime accent on
-   an off-white canvas. The token NAMES (hmd-teal / orange / charcoal) are legacy
-   aliases kept so components don't churn; they now carry HMD Secure roles below.
+   ../docs/brand-hmd-secure.md). DARK THEME: HMD Secure's security-grade look
+   taken full-dark — near-black canvas, anthracite cards, deep chrome, with the
+   single electric-lime accent unchanged. Token NAMES (hmd-teal / orange /
+   charcoal) are legacy aliases kept so components don't churn; they now carry
+   HMD Secure roles below.
    IMPORTANT: lime (#e4ff00) is a *light* colour — use it as a fill/accent with
-   BLACK text only, never for white-text buttons or as body/link text. */
+   BLACK/anthracite text only, never for white-text buttons or as body text. */
 :root {
-  --hmd-teal: #e4ff00; /* ACCENT (lime) — active nav, focus, highlights, CTA fills (black text) */
-  --hmd-teal-600: #242426; /* primary buttons/links on white (white text) — anthracite */
-  --hmd-teal-700: #0a0a0a; /* hover / emphasis — black */
+  --hmd-teal: #e4ff00; /* ACCENT (lime) — active nav, focus, highlights, CTA fills (dark text) */
+  --hmd-teal-600: #2a2a2e; /* primary buttons (white text) — raised anthracite for dark */
+  --hmd-teal-700: #0a0a0a; /* button hover (darker), modal backdrops, on-lime text */
   --hmd-orange: #e4ff00; /* folded into the single lime accent */
-  --hmd-gray: #5e5e5e; /* secondary / muted — low-gray */
-  --hmd-charcoal: #242426; /* app chrome / sidebar — anthracite */
-  --hmd-charcoal-soft: #2e2e31;
+  --hmd-gray: #9b9ba4; /* secondary / muted — light gray on dark */
+  --hmd-charcoal: #0c0c0e; /* app chrome / sidebar — deepest */
+  --hmd-charcoal-soft: #1c1c20;
 
-  --background: #fafafa; /* dirty-white */
-  --surface: #ffffff;
-  --border: #e6e6e6;
-  --foreground: #242426; /* anthracite ink */
-  --muted: #5e5e5e; /* low-gray */
+  --background: #0f0f12; /* near-black canvas */
+  --surface: #18181c; /* cards / surfaces */
+  --border: #2a2a30; /* hairlines */
+  --foreground: #f3f3f5; /* light ink */
+  --muted: #9b9ba4; /* light gray */
 
-  --success: #16a34a;
-  --warning: #d97706;
-  --danger: #dc2626;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
 }
 
 @theme inline {

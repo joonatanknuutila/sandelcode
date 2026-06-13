@@ -379,7 +379,7 @@ export function CatalogEditor({ products: initProducts, services: initServices }
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => openEditProduct(p)}
-                        className="text-xs text-hmd-teal-600 hover:underline"
+                        className="text-xs text-foreground hover:underline"
                       >
                         Edit
                       </button>
@@ -462,7 +462,7 @@ export function CatalogEditor({ products: initProducts, services: initServices }
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => openEditService(s)}
-                        className="text-xs text-hmd-teal-600 hover:underline"
+                        className="text-xs text-foreground hover:underline"
                       >
                         Edit
                       </button>

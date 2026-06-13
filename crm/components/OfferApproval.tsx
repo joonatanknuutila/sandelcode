@@ -116,7 +116,7 @@ export function OfferApproval({
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-semibold text-hmd-teal-700">
+                    <p className="text-sm font-semibold text-foreground">
                       {eur(o.total)}
                     </p>
                     <Badge tone="amber">{o.maxDiscountPct}% discount</Badge>

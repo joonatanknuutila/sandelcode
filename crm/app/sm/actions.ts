@@ -52,5 +52,7 @@ export async function reassignDealAction(
   }
 
   revalidatePath("/sm");
+  revalidatePath("/sm/pipeline");
   revalidatePath("/rep");
+  revalidatePath("/rep/pipeline");
 }

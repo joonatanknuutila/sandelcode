@@ -103,8 +103,6 @@ export default async function SalesManagerView({
 
   // Horizon scoping — band, KPIs and board all look at the same window.
   const openInScope = open.filter((d) => dealInHorizon(d, window));
-  const wonInScope = won.filter((d) => dealInHorizon(d, window));
-
   // Gap-to-target band — SAME math and SAME inputs as /finance, so the gap on
   // /sm equals the gap on /finance for the same horizon.
   const figures = computeForecastSummary(open, won, targets, horizon, overrides);
@@ -315,7 +313,7 @@ export default async function SalesManagerView({
                         <p className="line-clamp-2 text-xs font-medium leading-snug">
                           {account?.name}
                         </p>
-                        <p className="mt-1 text-sm font-semibold text-hmd-teal-700">
+                        <p className="mt-1 text-sm font-semibold text-foreground">
                           {eur(d.tcv)}
                         </p>
                         <div className="mt-1.5 flex flex-wrap items-center gap-1">

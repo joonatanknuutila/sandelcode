@@ -19,6 +19,7 @@ import { StageStepper } from "@/components/StageStepper";
 import { ForecastGrid } from "@/components/ForecastGrid";
 import { ActivityTimeline } from "@/components/ActivityTimeline";
 import { DealActions, LogActivityButton } from "./DealActions";
+import { setForecastPhasesAction } from "../../account-actions";
 
 const OFFER_STATUS_LABEL: Record<string, string> = {
   draft: "Draft",
@@ -81,7 +82,9 @@ export default async function DealDetail({
         <div className="flex gap-2">
           {/* Wired "+ Log activity" button */}
           <LogActivityButton dealId={deal.id} accountId={deal.accountId} />
-          <Button>Build &amp; send offer</Button>
+          <Link href={`/rep/deals/${deal.id}/offer`}>
+            <Button>Build &amp; send offer</Button>
+          </Link>
         </div>
       </div>
 
@@ -134,6 +137,9 @@ export default async function DealDetail({
           serviceModel={deal.serviceModel}
           unitPrice={unitPrice}
           serviceQuarterly={serviceQuarterly}
+          dealId={deal.id}
+          accountId={deal.accountId}
+          onSave={setForecastPhasesAction}
         />
       </section>
 
@@ -178,7 +184,7 @@ export default async function DealDetail({
                 </ul>
                 {o.justification && (
                   <p className="mt-2 text-xs italic text-muted">
-                    "{o.justification}"
+                    &ldquo;{o.justification}&rdquo;
                   </p>
                 )}
                 <div className="mt-3">

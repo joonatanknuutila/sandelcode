@@ -5,7 +5,7 @@
 // lets reviewers jump between the four role views. Persisted to localStorage so
 // a refresh keeps you on your role.
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { Role } from "@/lib/types";
 
 interface RoleContextValue {
@@ -18,14 +18,11 @@ const RoleContext = createContext<RoleContextValue | null>(null);
 export function RoleProvider({ children }: { children: React.ReactNode }) {
   const [role, setRoleState] = useState<Role>("rep");
 
-  useEffect(() => {
-    const saved = localStorage.getItem("hmd-crm-role") as Role | null;
-    if (saved) setRoleState(saved);
-  }, []);
-
   function setRole(next: Role) {
     setRoleState(next);
-    localStorage.setItem("hmd-crm-role", next);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("hmd-crm-role", next);
+    }
   }
 
   return (

@@ -145,7 +145,7 @@ export function ConfidenceOverride({ deals }: { deals: DealConfidenceVM[] }) {
 
             {/* Why — the rule reasoning, so Finance trusts the number. */}
             <details className="mt-3">
-              <summary className="cursor-pointer text-xs font-medium text-hmd-teal-700">
+              <summary className="cursor-pointer text-xs font-medium text-foreground">
                 Why {d.score}%? (rule logic)
               </summary>
               <ul className="mt-2 list-disc space-y-0.5 pl-4 text-xs text-muted">

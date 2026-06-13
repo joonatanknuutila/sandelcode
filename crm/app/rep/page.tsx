@@ -124,7 +124,7 @@ export default async function RepDashboard() {
                           <p className="line-clamp-2 text-xs font-medium leading-snug">
                             {account?.name}
                           </p>
-                          <p className="mt-1 text-sm font-semibold text-hmd-teal-700">
+                          <p className="mt-1 text-sm font-semibold text-foreground">
                             {eur(d.tcv)}
                           </p>
                           <div className="mt-1.5 flex items-center gap-1">
@@ -170,7 +170,7 @@ export default async function RepDashboard() {
                     <td className="px-4 py-2.5">
                       <Link
                         href={`/rep/deals/${d.id}`}
-                        className="font-medium hover:text-hmd-teal-700"
+                        className="font-medium hover:text-hmd-teal"
                       >
                         {account?.name}
                       </Link>

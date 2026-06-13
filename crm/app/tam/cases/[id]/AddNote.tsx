@@ -75,7 +75,7 @@ export function AddNote({ caseId }: AddNoteProps) {
           ) : (
             <>
               <span className="font-semibold text-foreground">Working note</span>
-              {" "}— visible in customer-facing view · end with "?" to flip waiting-on to customer
+              {" "}— visible in customer-facing view · end with &ldquo;?&rdquo; to flip waiting-on to customer
             </>
           )}
         </span>

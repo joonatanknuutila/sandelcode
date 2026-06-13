@@ -27,6 +27,7 @@ import {
 } from "./mappers";
 import {
   Account,
+  AccountCard,
   Activity,
   AppNotification,
   Case,
@@ -36,6 +37,7 @@ import {
   dealProbability,
   Offer,
   OfferStatus,
+  Stage,
   User,
 } from "@/lib/types";
 import type { Tables } from "@/lib/types.db";
@@ -143,6 +145,64 @@ export async function getAccounts(): Promise<Account[]> {
     accounts.map((a) => a.id),
   );
   return accounts.map((a) => mapAccount(a, channels.get(a.id) ?? "direct"));
+}
+
+/** Accounts a TAM is connected to — i.e. where they have at least one case
+ *  (brief Block 2: "tam sees accounts where they have cases"). */
+export async function getAccountsForTam(tamId: string): Promise<Account[]> {
+  const cases = await getCasesForTam(tamId);
+  const ids = new Set(cases.map((c) => c.accountId));
+  if (ids.size === 0) return [];
+  return (await getAccounts()).filter((a) => ids.has(a.id));
+}
+
+/** Summarise a set of accounts (deal counts, open cases, TCV, weighted) for the
+ *  AccountList — shared by every role's list view. */
+export async function getAccountCards(
+  accounts: Account[],
+): Promise<AccountCard[]> {
+  return Promise.all(
+    accounts.map(async (account) => {
+      const [deals, cases] = await Promise.all([
+        getDealsForAccount(account.id),
+        getCasesForAccount(account.id),
+      ]);
+      return {
+        account,
+        dealsCount: deals.length,
+        openCases: cases.filter((c) => c.status !== "resolved").length,
+        tcv: deals.reduce((s, d) => s + d.tcv, 0),
+        weighted: deals.reduce((s, d) => s + weightedValue(d), 0),
+        stages: deals.slice(0, 3).map((d) => d.stage as Stage),
+      };
+    }),
+  );
+}
+
+export interface AccountDetailData {
+  account: Account;
+  contacts: Contact[];
+  deals: Deal[];
+  cases: Case[];
+  activities: Activity[];
+  tam: User | null;
+}
+
+/** Everything the AccountDetail view needs, in one call (shared by all roles'
+ *  account detail routes). */
+export async function getAccountDetail(
+  id: string,
+): Promise<AccountDetailData | null> {
+  const account = await getAccount(id);
+  if (!account) return null;
+  const [contacts, deals, cases, activities, tam] = await Promise.all([
+    getContactsForAccount(id),
+    getDealsForAccount(id),
+    getCasesForAccount(id),
+    getActivitiesForAccount(id),
+    account.tamId ? getUser(account.tamId) : Promise.resolve(null),
+  ]);
+  return { account, contacts, deals, cases, activities, tam };
 }
 
 export async function getContactsForAccount(
@@ -572,3 +632,7 @@ export async function getTeamSummary(): Promise<RepSummary> {
     stalled: open.filter(isStalled).length,
   };
 }
+
+// --- inbox (internal messaging) --------------------------------------------
+// Re-exported so callers keep importing everything from "@/lib/db".
+export { getConversations, getInboxMessages } from "./inbox";

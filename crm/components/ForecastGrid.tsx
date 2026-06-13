@@ -140,7 +140,7 @@ export function ForecastGrid({
                 ? "opacity-0"
                 : saveState === "saving"
                   ? "text-muted opacity-100"
-                  : "text-hmd-teal-700 opacity-100"
+                  : "text-success opacity-100"
             }`}
           >
             {saveState === "saving" ? "Saving…" : "Saved"}
