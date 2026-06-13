@@ -1,5 +1,5 @@
 {
-  "pollSeconds": 30,
+  "pollSeconds": 2,
   "notionVersion": "2022-06-28",
   "tmuxSession": "hmd",
   "people": [
