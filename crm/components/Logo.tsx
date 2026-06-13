@@ -1,5 +1,5 @@
-// HMD Secure wordmark. The HMD site is image-based, so we render a clean
-// typographic lockup in HMD blue + navy rather than hotlinking their assets.
+// HMD Secure wordmark. Typographic lockup (no trademarked assets): lime tile
+// with an anthracite "H", "HMD" strong + "Secure" lighter as the product line.
 
 export function Logo({ light = false }: { light?: boolean }) {
   return (

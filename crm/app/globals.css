@@ -1,23 +1,25 @@
 @import "tailwindcss";
 
-/* HMD Secure brand palette — sourced from hmd.com (see BRAND.md).
-   HMD is a typographic-wordmark brand: teal primary, orange accent, gray
-   secondary. "Secure" (gov/enterprise) leans on a charcoal app chrome so the
-   teal reads as a precise, confident accent. */
+/* HMD Secure brand palette — sourced from hmdsecure.com (see BRAND.md and
+   ../docs/brand-hmd-secure.md). Dark anthracite chrome + electric-lime accent on
+   an off-white canvas. The token NAMES (hmd-teal / orange / charcoal) are legacy
+   aliases kept so components don't churn; they now carry HMD Secure roles below.
+   IMPORTANT: lime (#e4ff00) is a *light* colour — use it as a fill/accent with
+   BLACK text only, never for white-text buttons or as body/link text. */
 :root {
-  --hmd-teal: #47d7ac; /* primary brand — fills, accents, active-on-dark */
-  --hmd-teal-600: #1f9e7a; /* derived — interactive elements on white */
-  --hmd-teal-700: #177a5f; /* derived — hover / emphasis */
-  --hmd-orange: #ff7f41; /* accent — use sparingly */
-  --hmd-gray: #788890; /* secondary */
-  --hmd-charcoal: #161d23; /* app chrome / sidebar */
-  --hmd-charcoal-soft: #1f2830;
+  --hmd-teal: #e4ff00; /* ACCENT (lime) — active nav, focus, highlights, CTA fills (black text) */
+  --hmd-teal-600: #242426; /* primary buttons/links on white (white text) — anthracite */
+  --hmd-teal-700: #0a0a0a; /* hover / emphasis — black */
+  --hmd-orange: #e4ff00; /* folded into the single lime accent */
+  --hmd-gray: #5e5e5e; /* secondary / muted — low-gray */
+  --hmd-charcoal: #242426; /* app chrome / sidebar — anthracite */
+  --hmd-charcoal-soft: #2e2e31;
 
-  --background: #f5f7f7;
+  --background: #fafafa; /* dirty-white */
   --surface: #ffffff;
-  --border: #e3e8e8;
-  --foreground: #0f1719;
-  --muted: #5b6a72;
+  --border: #e6e6e6;
+  --foreground: #242426; /* anthracite ink */
+  --muted: #5e5e5e; /* low-gray */
 
   --success: #16a34a;
   --warning: #d97706;
@@ -43,7 +45,7 @@
   --color-warning: var(--warning);
   --color-danger: var(--danger);
 
-  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
 }
 

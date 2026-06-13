@@ -2,23 +2,25 @@
 // and the documentation in BRAND.md. Import these when you need a brand colour
 // in TS (e.g. charts) rather than a Tailwind class.
 //
-// Source: hmd.com + public brand references. HMD is a typographic-wordmark
-// brand: teal primary, orange accent, gray secondary.
+// Source: hmdsecure.com. HMD Secure brand: anthracite/black chrome + electric-
+// lime accent on off-white, Inter type. Token KEYS (teal/orange/charcoal) are
+// legacy aliases kept so call sites don't churn — they hold HMD Secure roles now.
+// NOTE: lime (#e4ff00) is light — use with BLACK text only, never white-on-lime.
 
 export const brand = {
-  teal: "#47d7ac", // HMD primary (fills, accents, active-on-dark)
-  teal600: "#1f9e7a", // derived — interactive elements on white
-  teal700: "#177a5f", // derived — hover / emphasis
-  orange: "#ff7f41", // HMD accent — use sparingly
-  gray: "#788890", // HMD secondary
-  charcoal: "#161d23", // derived — app chrome / sidebar
-  charcoalSoft: "#1f2830",
+  teal: "#e4ff00", // ACCENT (lime) — fills/highlights/active, black text on top
+  teal600: "#242426", // primary interactive on white (white text) — anthracite
+  teal700: "#0a0a0a", // hover / emphasis — black
+  orange: "#e4ff00", // folded into the single lime accent
+  gray: "#5e5e5e", // secondary / muted — low-gray
+  charcoal: "#242426", // app chrome / sidebar — anthracite
+  charcoalSoft: "#2e2e31",
 
-  background: "#f5f7f7",
+  background: "#fafafa", // dirty-white
   surface: "#ffffff",
-  border: "#e3e8e8",
-  ink: "#0f1719",
-  muted: "#5b6a72",
+  border: "#e6e6e6",
+  ink: "#242426", // anthracite
+  muted: "#5e5e5e", // low-gray
 
   success: "#16a34a",
   warning: "#d97706",
