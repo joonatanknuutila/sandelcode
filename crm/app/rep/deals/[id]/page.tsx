@@ -18,6 +18,7 @@ import {
 import { StageStepper } from "@/components/StageStepper";
 import { ForecastGrid } from "@/components/ForecastGrid";
 import { ActivityTimeline } from "@/components/ActivityTimeline";
+import { DealActions, LogActivityButton } from "./DealActions";
 
 const OFFER_STATUS_LABEL: Record<string, string> = {
   draft: "Draft",
@@ -42,7 +43,9 @@ export default async function DealDetail({
     getOffersForDeal(id),
   ]);
   if (!account) notFound();
-  const nba = nextBestAction(deal, activities[0]);
+
+  // Grounded NBA — async, uses full timeline + offers
+  const nba = await nextBestAction(deal, activities, offers);
 
   // Derive per-unit price + per-quarter service rate from the seeded forecast
   // so inline edits keep the same economics.
@@ -76,7 +79,8 @@ export default async function DealDetail({
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="secondary">+ Log activity</Button>
+          {/* Wired "+ Log activity" button */}
+          <LogActivityButton dealId={deal.id} accountId={deal.accountId} />
           <Button>Build &amp; send offer</Button>
         </div>
       </div>
@@ -85,20 +89,40 @@ export default async function DealDetail({
         <StageStepper stage={deal.stage} channel={deal.channel} />
       </Card>
 
-      {/* AI next best action */}
-      <Card className="border-hmd-teal-600/40 bg-hmd-teal/5 p-5">
+      {/* AI next best action — hero banner */}
+      <Card className="border-[#e4ff00]/40 bg-[#e4ff00]/5 p-5">
         <div className="flex items-start gap-3">
-          <span className="mt-0.5 rounded-md bg-hmd-teal px-2 py-1 text-xs font-semibold text-hmd-charcoal">
-            AI
+          <span className="mt-0.5 rounded-md bg-[#e4ff00] px-2 py-1 text-xs font-semibold text-black">
+            {nba.modelUsed ? "AI" : "AI"}
           </span>
           <div className="flex-1">
-            <p className="text-xs font-medium uppercase tracking-wide text-hmd-teal-700">
-              Next best action
+            <p className="text-xs font-medium uppercase tracking-wide text-muted">
+              Next best action{!nba.modelUsed && (
+                <span className="ml-2 text-[10px] font-normal normal-case text-muted/60">
+                  (deterministic)
+                </span>
+              )}
             </p>
             <p className="mt-1 font-medium">{nba.headline}</p>
             <p className="mt-1 text-sm text-muted">{nba.detail}</p>
           </div>
-          <Button variant="secondary">{nba.cta}</Button>
+
+          {/* CTA — open_offer links directly; others open modals via DealActions */}
+          {nba.cta.kind === "open_offer" ? (
+            <Link href={`/rep/deals/${deal.id}/offer`}>
+              <Button variant="secondary">{nba.cta.label}</Button>
+            </Link>
+          ) : (
+            <DealActions
+              dealId={deal.id}
+              accountId={deal.accountId}
+              dealName={deal.name}
+              accountName={account.name}
+              currentStage={deal.stage}
+              cta={nba.cta}
+              nbaDetail={nba.detail}
+            />
+          )}
         </div>
       </Card>
 
@@ -154,9 +178,16 @@ export default async function DealDetail({
                 </ul>
                 {o.justification && (
                   <p className="mt-2 text-xs italic text-muted">
-                    “{o.justification}”
+                    "{o.justification}"
                   </p>
                 )}
+                <div className="mt-3">
+                  <Link href={`/rep/deals/${deal.id}/offer`}>
+                    <Button variant="secondary" className="text-xs">
+                      View offer →
+                    </Button>
+                  </Link>
+                </div>
               </Card>
             ))}
             {offers.length === 0 && (

@@ -1,47 +1,170 @@
-// "AI next best action" — a deterministic stub now, to be replaced by Aarni's
-// Azure OpenAI agent (brief P1). Same signature; the UI doesn't change when the
-// real model lands. Picks a sensible next step from the deal's stage + timeline.
+// "AI next best action" — async, grounded in the live timeline and offers.
+// Falls back to deterministic logic when the model is offline; honest labeling.
 
-import { Activity, Deal, STAGE_LABELS } from "../types";
+import { Activity, Deal, Offer, STAGE_LABELS } from "../types";
 import { relativeDays } from "../format";
+import { ChatMessage, complete } from "./provider";
+
+export type NbaCTAKind =
+  | "log_call"
+  | "draft_email"
+  | "open_offer"
+  | "move_stage";
+
+export interface NbaCTA {
+  kind: NbaCTAKind;
+  label: string;
+}
 
 export interface NextBestAction {
   headline: string;
+  /** One-line rationale grounded in the timeline / offers. */
   detail: string;
-  /** Suggested CTA the rep can act on in one click. */
-  cta: string;
+  /** The suggested CTA the rep can act on in one click. */
+  cta: NbaCTA;
+  /** True when the Azure model produced this result. */
+  modelUsed: boolean;
 }
 
-// Pure + synchronous: the caller passes the deal's most recent activity (the
-// page already fetches the timeline from the data layer), so this stub stays
-// decoupled from where data comes from. Aarni's Azure OpenAI agent will keep
-// the same signature.
-export function nextBestAction(
+// ---------------------------------------------------------------------------
+// Deterministic fallback — always works without a model key
+// ---------------------------------------------------------------------------
+function deterministicNBA(
   deal: Deal,
-  lastActivity?: Activity,
+  activities: Activity[],
+  offers: Offer[],
 ): NextBestAction {
-  const staleDays = lastActivity ? relativeDays(lastActivity.createdAt) : 99;
+  const staleDays = activities.length > 0
+    ? relativeDays(activities[0].createdAt)
+    : 99;
 
   if (staleDays >= 14) {
     return {
-      headline: "Re-engage — this deal has gone quiet",
-      detail: `No activity in ${staleDays} days at "${STAGE_LABELS[deal.stage]}". A short check-in keeps momentum before it slips.`,
-      cta: "Draft a check-in email",
+      headline: `Re-engage — quiet ${staleDays} days`,
+      detail: `No activity in ${staleDays} days at stage "${STAGE_LABELS[deal.stage]}". A short check-in keeps momentum before this deal slips.`,
+      cta: { kind: "log_call", label: "Log a check-in call" },
+      modelUsed: false,
+    };
+  }
+
+  const openOffers = offers.filter(
+    (o) => o.status === "pending_sm" || o.status === "pending_finance" || o.status === "approved",
+  );
+
+  if (deal.stage === "rfp" && openOffers.length > 0) {
+    return {
+      headline: "Follow up on the offer",
+      detail: `Offer v${openOffers[0].version} (${openOffers[0].status.replace("_", " ")}) is outstanding. Check the decision timeline and address open objections.`,
+      cta: { kind: "open_offer", label: "View offer" },
+      modelUsed: false,
     };
   }
 
   switch (deal.stage) {
     case "interest":
-      return { headline: "Qualify the opportunity", detail: "Confirm budget, timeline and the security requirements driving interest.", cta: "Log a discovery call" };
+      return {
+        headline: "Qualify the opportunity",
+        detail: "Confirm budget, timeline, and the security requirements driving interest.",
+        cta: { kind: "log_call", label: "Log a discovery call" },
+        modelUsed: false,
+      };
     case "rfi":
-      return { headline: "Push toward an offer", detail: "RFI is answered — propose a scoped pilot to move into RFP.", cta: "Build an offer" };
+      return {
+        headline: "Push toward an offer",
+        detail: "RFI is answered — propose a scoped pilot to move into RFP.",
+        cta: { kind: "draft_email", label: "Draft proposal email" },
+        modelUsed: false,
+      };
     case "rfp":
-      return { headline: "Follow up on the offer", detail: "An offer is out. Check the decision timeline and address open objections.", cta: "Schedule a follow-up" };
+      return {
+        headline: "Follow up on the offer",
+        detail: "An offer is out. Check the decision timeline and address open objections.",
+        cta: { kind: "draft_email", label: "Draft follow-up email" },
+        modelUsed: false,
+      };
     case "customer_test":
-      return { headline: "Convert the pilot", detail: "Capture pilot success metrics and line up the follow-on 3-year order.", cta: "Request test feedback" };
+      return {
+        headline: "Convert the pilot",
+        detail: "Capture pilot success metrics and line up the follow-on 3-year order.",
+        cta: { kind: "log_call", label: "Log pilot review call" },
+        modelUsed: false,
+      };
     case "contract_negotiation":
-      return { headline: "Close the contract", detail: "Final terms in play — confirm pricing approval and target signature date.", cta: "Confirm close plan" };
+      return {
+        headline: "Close the contract",
+        detail: "Final terms in play — confirm pricing approval and target signature date.",
+        cta: { kind: "move_stage", label: "Mark as Won" },
+        modelUsed: false,
+      };
     default:
-      return { headline: "Review the account", detail: "Keep the timeline current so the whole team stays in sync.", cta: "Add a note" };
+      return {
+        headline: "Review the account",
+        detail: "Keep the timeline current so the whole team stays in sync.",
+        cta: { kind: "log_call", label: "Add a note" },
+        modelUsed: false,
+      };
   }
+}
+
+// ---------------------------------------------------------------------------
+// Main export — async, grounded
+// ---------------------------------------------------------------------------
+export async function nextBestAction(
+  deal: Deal,
+  activities: Activity[],
+  offers: Offer[],
+): Promise<NextBestAction> {
+  const recentSummary = activities
+    .slice(0, 5)
+    .map((a) => `[${a.type}] ${a.body ?? ""}`.trim())
+    .join("\n");
+  const offerSummary = offers
+    .map((o) => `Offer v${o.version} status=${o.status} total=${o.total}`)
+    .join("; ");
+
+  const staleDays = activities.length > 0
+    ? relativeDays(activities[0].createdAt)
+    : 99;
+
+  const messages: ChatMessage[] = [
+    {
+      role: "system",
+      content:
+        `You are a CRM copilot for a B2B security hardware sales rep. ` +
+        `Analyse the deal context below and return exactly one JSON object: ` +
+        `{"headline": string, "detail": string, "cta_kind": "log_call"|"draft_email"|"open_offer"|"move_stage", "cta_label": string}. ` +
+        `headline: ≤8 words. detail: one grounded sentence citing the timeline or offer. ` +
+        `Pick the CTA kind that would most advance the deal right now. ` +
+        `Do NOT invent facts not present in the context.`,
+    },
+    {
+      role: "user",
+      content:
+        `Deal: ${deal.name} | Stage: ${STAGE_LABELS[deal.stage]} | ` +
+        `Days since last activity: ${staleDays}\n` +
+        `Recent activity:\n${recentSummary || "none"}\n` +
+        `Offers: ${offerSummary || "none"}`,
+    },
+  ];
+
+  const raw = await complete(messages, { temperature: 0.2, maxTokens: 300, json: true });
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw);
+      const validKinds: NbaCTAKind[] = ["log_call", "draft_email", "open_offer", "move_stage"];
+      const kind: NbaCTAKind = validKinds.includes(parsed.cta_kind)
+        ? parsed.cta_kind
+        : "log_call";
+      return {
+        headline: String(parsed.headline ?? ""),
+        detail: String(parsed.detail ?? ""),
+        cta: { kind, label: String(parsed.cta_label ?? "Take action") },
+        modelUsed: true,
+      };
+    } catch {
+      // fall through to deterministic
+    }
+  }
+
+  return deterministicNBA(deal, activities, offers);
 }

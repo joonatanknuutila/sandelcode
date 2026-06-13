@@ -5,13 +5,16 @@ import {
   getActivitiesForAccount,
   getCasesForAccount,
   getContactsForAccount,
+  getCurrentUser,
   getDealsForAccount,
   getUser,
+  getUsers,
   weightedValue,
 } from "@/lib/db";
 import { eur, shortDate } from "@/lib/format";
-import { Badge, Button, Card, SectionTitle, StageBadge } from "@/components/ui";
+import { Badge, Card, SectionTitle, StageBadge } from "@/components/ui";
 import { ActivityTimeline } from "@/components/ActivityTimeline";
+import { AccountActionBar } from "./NewRecordModals";
 
 // Account 360 — deals + active cases + full timeline on one page, the rep's
 // "everything about this customer" view. params is a Promise in Next 16.
@@ -24,13 +27,17 @@ export default async function AccountDetail({
   const account = await getAccount(id);
   if (!account) notFound();
 
-  const [contacts, deals, cases, activities, tam] = await Promise.all([
-    getContactsForAccount(id),
-    getDealsForAccount(id),
-    getCasesForAccount(id),
-    getActivitiesForAccount(id),
-    account.tamId ? getUser(account.tamId) : Promise.resolve(null),
-  ]);
+  const [contacts, deals, cases, activities, tam, currentUser, allUsers] =
+    await Promise.all([
+      getContactsForAccount(id),
+      getDealsForAccount(id),
+      getCasesForAccount(id),
+      getActivitiesForAccount(id),
+      account.tamId ? getUser(account.tamId) : Promise.resolve(null),
+      getCurrentUser(),
+      getUsers(),
+    ]);
+  const tamUsers = allUsers.filter((u) => u.role === "tam");
 
   return (
     <div className="mx-auto max-w-7xl space-y-6">
@@ -61,10 +68,12 @@ export default async function AccountDetail({
             <p className="mt-2 max-w-2xl text-sm">{account.summary}</p>
           )}
         </div>
-        <div className="flex gap-2">
-          <Button variant="secondary">+ Open service case</Button>
-          <Button>+ New deal</Button>
-        </div>
+        <AccountActionBar
+          accountId={id}
+          currentUserId={currentUser?.id ?? ""}
+          tamUsers={tamUsers}
+          defaultTamId={account.tamId}
+        />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">

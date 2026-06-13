@@ -3,12 +3,22 @@
 // The 3-year time-phased forecast — HMD's core deal mechanic. Reps enter
 // expected device units per quarter; device + service revenue and the 3-yr TCV
 // recompute live. Low-friction inline editing (reps hate manual entry):
-// type a number, totals update, no modal. Persisting is wired to lib/api once
-// Arttu's mutation endpoint lands; for now edits are local state.
+// type a number, totals update, no modal. Persistence is opt-in: pass dealId
+// + accountId + onSave to enable debounced auto-save to Supabase.
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ForecastPoint, ServiceModel } from "@/lib/types";
 import { eur, num, quarterLabel } from "@/lib/format";
+import { toast } from "@/components/ui-client";
+
+// Payload shape that maps to ForecastPhaseInput in mutations.ts
+interface PhasePayload {
+  periodStart: string;
+  periodLabel: string;
+  deviceUnits: number;
+  deviceUnitPrice?: number;
+  serviceRevenue?: number;
+}
 
 const SERVICE_LABEL: Record<ServiceModel, string> = {
   one_off: "One-off at delivery",
@@ -21,17 +31,70 @@ export function ForecastGrid({
   serviceModel,
   unitPrice = 720,
   serviceQuarterly = 36,
+  dealId,
+  accountId,
+  onSave,
 }: {
   forecast: ForecastPoint[];
   serviceModel: ServiceModel;
   unitPrice?: number;
   serviceQuarterly?: number;
+  /** Optional: when present, edits are debounced and persisted via onSave. */
+  dealId?: string;
+  /** Optional: account id used for revalidation in onSave. */
+  accountId?: string;
+  /** Optional: async callback that persists phases; called after debounce. */
+  onSave?: (dealId: string, accountId: string, phases: PhasePayload[]) => Promise<void>;
 }) {
   const [points, setPoints] = useState<ForecastPoint[]>(forecast);
+  const [saveState, setSaveState] = useState<"idle" | "saving" | "saved">("idle");
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Convert a ForecastPoint to a persistence payload.
+  function toPhase(p: ForecastPoint, unitPriceArg: number): PhasePayload {
+    // Derive a calendar-like period start from year+quarter offset relative to
+    // current year so labels stay stable (Y1Q1 = current year Q1, etc.).
+    const baseYear = new Date().getFullYear();
+    const calYear = baseYear + p.year;
+    const month = String((p.quarter - 1) * 3 + 1).padStart(2, "0");
+    return {
+      periodStart: `${calYear}-${month}-01`,
+      periodLabel: `${calYear}-Q${p.quarter}`,
+      deviceUnits: p.devices,
+      deviceUnitPrice: unitPriceArg,
+      serviceRevenue: p.serviceRevenue,
+    };
+  }
+
+  function scheduleSave(newPoints: ForecastPoint[]) {
+    if (!dealId || !accountId || !onSave) return;
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    setSaveState("saving");
+    debounceRef.current = setTimeout(async () => {
+      try {
+        const phases = newPoints.map((p) => toPhase(p, unitPrice));
+        await onSave(dealId, accountId, phases);
+        setSaveState("saved");
+        setTimeout(() => setSaveState("idle"), 1800);
+      } catch (err) {
+        setSaveState("idle");
+        toast(err instanceof Error ? err.message : "Failed to save forecast", {
+          variant: "error",
+        });
+      }
+    }, 600);
+  }
+
+  // Clean up debounce on unmount.
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, []);
 
   function updateDevices(idx: number, devices: number) {
-    setPoints((prev) =>
-      prev.map((p, i) =>
+    setPoints((prev) => {
+      const next = prev.map((p, i) =>
         i === idx
           ? {
               ...p,
@@ -40,8 +103,10 @@ export function ForecastGrid({
               serviceRevenue: devices * serviceQuarterly,
             }
           : p,
-      ),
-    );
+      );
+      scheduleSave(next);
+      return next;
+    });
   }
 
   const totals = useMemo(() => {
@@ -68,6 +133,19 @@ export function ForecastGrid({
           </span>{" "}
           · device + service revenue tracked separately
         </p>
+        {dealId && onSave && (
+          <span
+            className={`text-xs transition-opacity duration-300 ${
+              saveState === "idle"
+                ? "opacity-0"
+                : saveState === "saving"
+                  ? "text-muted opacity-100"
+                  : "text-hmd-teal-700 opacity-100"
+            }`}
+          >
+            {saveState === "saving" ? "Saving…" : "Saved"}
+          </span>
+        )}
       </div>
 
       <div className="overflow-x-auto rounded-xl border border-border bg-surface">
