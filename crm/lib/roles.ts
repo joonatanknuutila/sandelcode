@@ -26,7 +26,10 @@ export const ROLES: Record<Role, RoleConfig> = {
     role: "tam",
     label: "Technical Account Manager",
     home: "/tam",
-    nav: [{ label: "My Cases", href: "/tam" }],
+    nav: [
+      { label: "My Cases", href: "/tam" },
+      { label: "AI Assistant", href: "/tam/ai" },
+    ],
   },
   sm: {
     role: "sm",
