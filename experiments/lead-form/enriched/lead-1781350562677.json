@@ -1,0 +1,152 @@
+{
+  "lead_id": "lead-1781350562677",
+  "enriched_at": "2026-06-13T14:35:00.000Z",
+  "source_lead": {
+    "first_name": "Marc",
+    "last_name": "Hofmann",
+    "email": "marc.hofmann@nordea.com",
+    "company": "Nordea",
+    "industry": "Banking & Financial Services",
+    "country": "Finland",
+    "product_interest": "HMD Fota",
+    "message": "Haluan jutella"
+  },
+  "step_1_normalized": {
+    "email_domain": "nordea.com",
+    "company_normalized": "Nordea Bank Abp",
+    "country_code": "FI",
+    "duration_ms": 2
+  },
+  "step_2_employment_verified": {
+    "verified": true,
+    "verified_title": "Group Chief Security Officer (CSO)",
+    "in_role_since": "2019-07",
+    "linkedin_url": "https://dk.linkedin.com/in/dr-marc-hofmann-b974b778",
+    "previous_roles": [
+      "Global CISO, SWIFT (2016–2019)",
+      "Regional CISO UK & Ireland, Deutsche Bank",
+      "Head of Group Information Security Office, Deutsche Bank (2008–2016)",
+      "ENISA Advisory Group member (2017–2020)"
+    ],
+    "education": [
+      "Diploma in Computer Science, Karlsruhe Institute of Technology",
+      "Doctorate in Business Computer Science, Justus Liebig University Giessen"
+    ],
+    "confidence": 0.9,
+    "sources": [
+      "https://theorg.com/org/nordea/org-chart/dr-marc-hofmann",
+      "https://www.kuppingercole.com/speakers/2941"
+    ]
+  },
+  "step_3_company_news": {
+    "items": [
+      {
+        "title": "First-quarter results 2026 — restructuring charge €190M",
+        "date": "2026-04-22",
+        "url": "https://www.nordea.com/en/press/2026-04-22/first-quarter-results-2026",
+        "summary": "Q1 2026 income €2.9bn, EPS €0.36, ROE 15.4%. €190M restructuring charge to deliver ≥€150M annual cost reduction by 2028."
+      },
+      {
+        "title": "Nordea to book restructuring costs to execute its 2030 strategy",
+        "date": "2026-03-17",
+        "url": "https://www.nordea.com/en/press/2026-03-17/nordea-to-book-restructuring-costs-to-execute-its-2030-strategy-implementation",
+        "summary": "2030 strategy: 6 growth areas, unified Nordic corporate credit platform, scalable payments platform. Tech/data/AI central."
+      },
+      {
+        "title": "Detection, prevention, response — staying ahead of cyber threats",
+        "date": "2024",
+        "url": "https://www.nordea.com/en/news/detection-prevention-response-staying-ahead-of-cyber-threats",
+        "summary": "Multi-layered cybersecurity strategy: 5 pillars (identity, protect, detect, respond, recover). Access management = backbone."
+      },
+      {
+        "title": "Beyond a bank: deep dive into Nordea's tech landscape",
+        "date": "2024",
+        "url": "https://www.nordea.com/en/news/beyond-a-bank-a-deep-dive-into-the-complex-tech-landscape-of-nordea",
+        "summary": "Tech transformation profile of Nordea internal systems."
+      }
+    ],
+    "duration_ms": 5400
+  },
+  "step_4_company_intel": {
+    "topics_searched": [
+      "Nordea cybersecurity strategy 2026",
+      "Nordea DORA mobile device management",
+      "Nordea Q1 2026 results",
+      "Nordea workforce restructuring"
+    ],
+    "findings": [
+      {
+        "topic": "DORA pressure on mobile fleet",
+        "summary": "DORA enforcement is live in 2026. Article 28 requires ICT third-party risk management — covers mobile-device vendors. Mobile security needs go beyond basic MDMs (Intune).",
+        "implication_for_sale": "HMD Secure can position as DORA-compliant alternative — EU manufacturing + audit trail + sovereign data residency.",
+        "sources": [
+          "https://www.hexnode.com/blogs/preparing-for-dora-in-2026/",
+          "https://www.neotas.com/dora-compliance-requirements/"
+        ]
+      },
+      {
+        "topic": "2030 strategy restructuring",
+        "summary": "Massive cost-out program (€150M+ annual). Workforce composition changing. Tech consolidation across Nordics.",
+        "implication_for_sale": "Procurement consolidation moment — vendors being re-evaluated. Window of opportunity to displace incumbents.",
+        "sources": ["https://www.nordea.com/en/press/2026-03-17/nordea-to-book-restructuring-costs-to-execute-its-2030-strategy-implementation"]
+      },
+      {
+        "topic": "Cybersecurity board-level priority",
+        "summary": "Nordea's 5-pillar framework (identity, protect, detect, respond, recover). Marc has openly spoken about regulation driving board accountability.",
+        "implication_for_sale": "Aligns with HMD Secure's end-to-end European chain — argument lands at executive level.",
+        "sources": ["https://www.nordea.com/en/news/detection-prevention-response-staying-ahead-of-cyber-threats"]
+      }
+    ],
+    "duration_ms": 6200
+  },
+  "step_5_person_intel": {
+    "topics_searched": [
+      "Marc Hofmann Nordea presentations",
+      "Marc Hofmann SWIFT background",
+      "Marc Hofmann ENISA advisory"
+    ],
+    "findings": [
+      {
+        "topic": "Public speaking",
+        "summary": "Spoke at 2024 Nordic CISO Executive Summit on regulation driving board accountability. KuppingerCole speaker. Sibos TV 2018 interview.",
+        "implication_for_sale": "Opens conversation: cite his Nordic CISO Summit theme of board accountability — DORA is the live test.",
+        "sources": ["https://www.evanta.com/ciso/nordic/nordic-ciso-executive-summit-7308", "https://www.kuppingercole.com/speakers/2941"]
+      },
+      {
+        "topic": "Background depth",
+        "summary": "Ex-SWIFT CISO. ENISA Advisory Group. PhD. Deep regulatory + crypto/payments background.",
+        "implication_for_sale": "Don't oversell basics — he knows them. Bring up advanced topics: supply-chain attacks, post-quantum readiness, hardware roots of trust.",
+        "sources": ["https://theorg.com/org/nordea/org-chart/dr-marc-hofmann"]
+      },
+      {
+        "topic": "Geography",
+        "summary": "LinkedIn = Denmark-based. Many roles UK/Germany. Nordea group role, not Finland-only.",
+        "implication_for_sale": "Speaks English, not Finnish. Reference DK/UK/DE customer cases, not only Finnish ones.",
+        "sources": ["https://dk.linkedin.com/in/dr-marc-hofmann-b974b778"]
+      }
+    ],
+    "duration_ms": 5800
+  },
+  "pre_meeting_brief": {
+    "headline": "Marc Hofmann, Group CSO Nordea since 2019. Ex-SWIFT CISO + ENISA. PhD in Business Computer Science. Cybersecurity is board-level priority during Nordea's 2030 restructuring (€190M charge Q1 2026).",
+    "rapport_opener": "Saw your Nordic CISO Summit talk on regulation driving board accountability — that's exactly the lens DORA Article 28 is pushing on mobile-device vendors right now.",
+    "three_discovery_questions": [
+      "Where does mobile fleet management sit within the 2030 restructuring — consolidating across the Nordics, or staying per-country?",
+      "How is Nordea approaching DORA Article 28 ICT third-party risk for mobile-device vendors specifically — are you re-papering existing contracts or restarting the RFP?",
+      "Given your SWIFT background, how comparable is the security posture you want for Nordea's mobile workflows vs SWIFT-connected operations?"
+    ],
+    "recommended_product": "HMD Enable Pro",
+    "product_interest_flag": "Lead selected HMD Fota, but Marc's role (CSO) and Nordea's situation (DORA + 2030 consolidation) point to HMD Enable Pro as the strategic conversation. Fota is a feature of Enable Pro — open with broader EMM scope, then mention Fota as one capability.",
+    "competitor_intel": [
+      "Nordea likely runs Intune today (Microsoft shop). Intune is explicitly called out in DORA-readiness articles as insufficient for finance.",
+      "Watch for: Samsung Knox-Suite, BlackBerry UEM, Hexnode."
+    ],
+    "things_not_to_mention": [
+      "Generic 'security' pitch — he's heard them all. Go specific.",
+      "Don't oversell Finnish manufacturing as nostalgia — Marc is DK/UK/DE background. Frame it as EU sovereignty + supply-chain integrity, not heritage."
+    ],
+    "decision_chain": "Marc Hofmann (CSO) → likely CIO + Procurement → Group CFO sign-off on multi-year contract. Nordea's restructuring window suggests CFO is unusually involved.",
+    "deal_sizing": "Nordea ~30,000 employees. Mobile fleet realistic 8,000–15,000 devices (relationship managers, branch staff, executives). Multi-year fixed-term contract with FOTA + EMM. Estimated 3-yr TCV €3–6M.",
+    "confidence": 0.85
+  }
+}
