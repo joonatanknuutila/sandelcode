@@ -9,6 +9,7 @@ import {
 } from "@/lib/tam";
 import { Card, SectionTitle, StatTile } from "@/components/ui";
 import { CaseStatusBadge, PriorityBadge, SlaBadge, ThirdPartyFlag } from "./ui";
+import { Assistant } from "./Assistant";
 
 // Technical Account Manager dashboard — the case queue, triaged.
 // Triage order = SLA pressure → priority → age, so the row that needs eyes
@@ -50,6 +51,9 @@ export default function TamView() {
           hint="blocked on a vendor"
         />
       </div>
+
+      {/* Assistant */}
+      <Assistant role="tam" scopeLabel="your case queue" />
 
       {/* Case queue */}
       <section>
