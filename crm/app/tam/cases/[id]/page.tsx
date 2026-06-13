@@ -15,6 +15,7 @@ import { Card, SectionTitle } from "@/components/ui";
 import { CaseStatusBadge, PriorityBadge, SlaBadge, ThirdPartyFlag } from "../../ui";
 import { CaseTimeline } from "./CaseTimeline";
 import { Assistant } from "../../Assistant";
+import { MeetingCapture } from "../../MeetingCapture";
 
 // Single-case view — "no surprises on cases". One timeline (service history +
 // notes), the SLA + 3rd-party state up top, an AI summary so a TAM landing on a
@@ -98,6 +99,9 @@ export default async function CaseDetail({
           <p className="mt-1 text-sm font-semibold capitalize">{service?.status ?? "—"}</p>
         </Card>
       </div>
+
+      {/* Meeting capture (human-approval gate) */}
+      <MeetingCapture accountId={account.id} />
 
       {/* Unified timeline */}
       <section>
