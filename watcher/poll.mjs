@@ -8,7 +8,7 @@
 // Each Prompt-inbox page must be shared with that integration in Notion.
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync, appendFileSync } from "node:fs";
-import { spawn, execSync } from "node:child_process";
+import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -62,30 +62,34 @@ async function readPromptBody(pageId) {
   return out.join("\n").trim();
 }
 
-function ensureWorktree(person) {
-  const wt = resolve(ROOT, person.worktree);
-  if (existsSync(wt)) return wt;
+const SESSION = cfg.tmuxSession || "hmd";
+
+function tmux(args) {
+  return execFileSync("tmux", args, { encoding: "utf8" });
+}
+
+// True if the tmux window <session>:<name> exists (i.e. a visible claude session is running there).
+function targetExists(name) {
   try {
-    execSync(`git worktree add "${wt}" -b "${person.branch}"`, { cwd: ROOT, stdio: "ignore" });
-    log(`created worktree ${person.worktree} on ${person.branch}`);
-    return wt;
+    const wins = tmux(["list-windows", "-t", SESSION, "-F", "#{window_name}"]).split("\n");
+    return wins.includes(name);
   } catch {
-    log(`WARN: could not create worktree for ${person.name} (need an initial commit?). Falling back to repo root.`);
-    return ROOT;
+    return false; // session not running
   }
 }
 
-function runClaude(person, prompt) {
-  const cwd = ensureWorktree(person);
-  log(`-> launching claude for ${person.name} (cwd=${cwd}, ${prompt.length} chars)`);
-  const child = spawn("claude", ["-p", "--continue", prompt], {
-    cwd,
-    stdio: ["ignore", "pipe", "pipe"],
-    env: process.env,
-  });
-  child.stdout.on("data", (d) => log(`[${person.name}] ${d.toString().trimEnd()}`));
-  child.stderr.on("data", (d) => log(`[${person.name}:err] ${d.toString().trimEnd()}`));
-  child.on("close", (code) => log(`<- claude(${person.name}) exited ${code}`));
+// Paste the prompt into that person's visible claude session via bracketed paste, then submit.
+function injectToSession(person, prompt) {
+  const target = `${SESSION}:${person.name}`;
+  if (!targetExists(person.name)) {
+    log(`WARN: tmux window ${target} not found — start sessions with ./start-sessions.sh. Prompt saved to file only.`);
+    return;
+  }
+  const buf = `prompt-${person.name}`;
+  tmux(["set-buffer", "-b", buf, prompt]);          // load text (literal arg, no shell)
+  tmux(["paste-buffer", "-t", target, "-b", buf, "-p", "-d"]); // -p bracketed paste, -d delete buffer
+  tmux(["send-keys", "-t", target, "Enter"]);       // submit
+  log(`-> injected prompt into ${target} (${prompt.length} chars)`);
 }
 
 async function checkPerson(person) {
@@ -104,7 +108,7 @@ async function checkPerson(person) {
 
   state[person.promptPageId] = { hash, at: ts };
   saveState();
-  runClaude(person, body);
+  injectToSession(person, body);
 }
 
 async function tick() {

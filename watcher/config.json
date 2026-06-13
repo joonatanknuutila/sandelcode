@@ -1,6 +1,7 @@
 {
   "pollSeconds": 30,
   "notionVersion": "2022-06-28",
+  "tmuxSession": "hmd",
   "people": [
     {
       "name": "joonatan",
