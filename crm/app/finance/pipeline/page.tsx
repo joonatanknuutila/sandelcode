@@ -3,6 +3,7 @@ import { getAccounts, getAllDeals, getUsers, isStalled, isOverdue } from "@/lib/
 import { dealProbability } from "@/lib/types";
 import { relativeDays } from "@/lib/format";
 import { BoardDeal, PipelineBoard } from "@/components/PipelineBoard";
+import { ExportLinks } from "@/components/ExportLinks";
 
 // Finance pipeline — read-only context. Forecast (with judgment adjustment) is
 // Finance's real tool, so the board just links there.
@@ -40,12 +41,15 @@ export default async function FinancePipelinePage() {
             figures.
           </p>
         </div>
-        <Link
-          href="/finance"
-          className="inline-flex items-center gap-1.5 rounded-md bg-hmd-teal px-3.5 py-2 text-sm font-medium text-hmd-teal-700 hover:bg-hmd-teal/90"
-        >
-          Open in forecast →
-        </Link>
+        <div className="flex flex-wrap items-center gap-2">
+          <ExportLinks kinds={["pipeline"]} />
+          <Link
+            href="/finance"
+            className="inline-flex items-center gap-1.5 rounded-md bg-hmd-teal px-3.5 py-2 text-sm font-medium text-hmd-teal-700 hover:bg-hmd-teal/90"
+          >
+            Open in forecast →
+          </Link>
+        </div>
       </div>
       <PipelineBoard
         deals={boardDeals}

@@ -45,8 +45,9 @@ export default async function AccountDetail({
       activities={activities}
       tam={tam}
       backHref="/rep/accounts"
-      backLabel="My accounts"
+      backLabel="My customers"
       dealHref="/rep/deals"
+      plain
       actions={
         <AccountActionBar
           accountId={id}

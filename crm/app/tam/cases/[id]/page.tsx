@@ -14,10 +14,12 @@ import {
   slaInfo,
   summariseCase,
 } from "@/lib/tam";
+import { aiCaseSummary, shouldOfferAiSummary } from "@/lib/ai/case-summary";
+import { GRAPH_DEFER_REASON, isGraphConfigured } from "@/lib/integrations/graph";
 import { Card, SectionTitle } from "@/components/ui";
 import { CaseStatusBadge, PriorityBadge, SlaBadge, ThirdPartyFlag } from "../../ui";
 import { CaseTimeline } from "./CaseTimeline";
-import { Assistant } from "../../Assistant";
+import { Assistant } from "@/components/Assistant";
 import { MeetingCapture } from "../../MeetingCapture";
 import { AddNote } from "./AddNote";
 import { CaseActions } from "./CaseActions";
@@ -52,6 +54,11 @@ export default async function CaseDetail({
   const sla = slaInfo(c);
   const req = requestStatus(c, notes);
   const summary = summariseCase(c, notes, events);
+  // Model-backed catch-up paragraph — only on long threads (brief: 5+ notes).
+  const ai = shouldOfferAiSummary(notes.length)
+    ? await aiCaseSummary(c, notes, events)
+    : null;
+  const graphReady = isGraphConfigured();
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
@@ -94,6 +101,18 @@ export default async function CaseDetail({
           </span>
           <p className="text-sm font-semibold">{summary.headline}</p>
         </div>
+        {/* Model-backed catch-up paragraph — long threads only (5+ notes). */}
+        {ai && (
+          <div className="mt-2 rounded-md border border-border bg-background p-3">
+            <p className="mb-1 text-[10px] font-medium uppercase tracking-wide text-muted">
+              Thread summary · {notes.length} notes
+              {!ai.modelUsed && (
+                <span className="ml-1 normal-case">· model offline — deterministic</span>
+              )}
+            </p>
+            <p className="text-sm leading-relaxed text-foreground">{ai.text}</p>
+          </div>
+        )}
         <ul className="mt-2 space-y-1">
           {summary.bullets.map((b, i) => (
             <li key={i} className="text-sm text-foreground">
@@ -123,8 +142,24 @@ export default async function CaseDetail({
         </Card>
       </div>
 
-      {/* Meeting capture (human-approval gate) */}
-      <MeetingCapture accountId={account.id} />
+      {/* Capture + integrations. Meeting + inbound-email both run through the
+          human-approval gate. "Book follow-up" is an honest placeholder for the
+          Azure/Graph Outlook path (see lib/integrations/graph.ts). */}
+      <div className="flex flex-wrap items-start gap-2">
+        <MeetingCapture accountId={account.id} />
+        <MeetingCapture accountId={account.id} mode="email" />
+        <button
+          type="button"
+          disabled={!graphReady}
+          title={graphReady ? "Book a follow-up in Outlook" : GRAPH_DEFER_REASON}
+          className="rounded-lg border border-border bg-surface px-3.5 py-2 text-sm font-medium text-foreground hover:border-hmd-teal-600 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          Book follow-up
+          {!graphReady && (
+            <span className="ml-1.5 text-xs text-muted">(Azure/Graph)</span>
+          )}
+        </button>
+      </div>
 
       {/* Add note composer */}
       {c.status !== "resolved" && (

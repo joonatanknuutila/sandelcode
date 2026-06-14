@@ -15,6 +15,7 @@ import {
 } from "@/lib/types";
 import { eur } from "@/lib/format";
 import { Card, SectionTitle, StatTile } from "@/components/ui";
+import { ExportLinks } from "@/components/ExportLinks";
 
 // Basic reporting (brief P1) — deterministic, read-only. Shared by the Sales
 // Manager and Finance roles (mounted at /sm/reports and /finance/reports).
@@ -169,12 +170,15 @@ export async function Reports() {
 
   return (
     <div className="mx-auto max-w-7xl space-y-8">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Reports</h1>
-        <p className="mt-1 text-sm text-muted">
-          Deals by stage and owner, cases by status and service, and close rate
-          — a deterministic snapshot of where things stand.
-        </p>
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">Reports</h1>
+          <p className="mt-1 text-sm text-muted">
+            Deals by stage and owner, cases by status and service, and close
+            rate — a deterministic snapshot of where things stand.
+          </p>
+        </div>
+        <ExportLinks kinds={["pipeline", "cases"]} />
       </div>
 
       {/* Headline numbers. */}

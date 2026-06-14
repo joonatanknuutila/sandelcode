@@ -20,6 +20,7 @@ export function AccountDetailView({
   backLabel,
   dealHref,
   actions,
+  plain = false,
 }: {
   account: Account;
   contacts: Contact[];
@@ -32,30 +33,43 @@ export function AccountDetailView({
   /** Deal card link base, e.g. "/rep/deals". Null = deals are not clickable. */
   dealHref?: string | null;
   actions?: React.ReactNode;
+  /** Rep-facing: plain words, larger text, no internal codes. */
+  plain?: boolean;
 }) {
   return (
     <div className="mx-auto max-w-7xl space-y-6">
-      <Link href={backHref} className="text-sm text-muted hover:text-foreground">
+      <Link
+        href={backHref}
+        className={`text-muted hover:text-foreground ${plain ? "text-base" : "text-sm"}`}
+      >
         ← {backLabel}
       </Link>
 
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-semibold tracking-tight">
+            <h1 className={`font-semibold tracking-tight ${plain ? "text-3xl" : "text-2xl"}`}>
               {account.name}
             </h1>
-            <Badge tone={account.channel === "reseller" ? "amber" : "blue"}>
-              {account.channel}
-            </Badge>
+            {plain ? (
+              account.channel === "reseller" && (
+                <Badge tone="amber">Partner</Badge>
+              )
+            ) : (
+              <Badge tone={account.channel === "reseller" ? "amber" : "blue"}>
+                {account.channel}
+              </Badge>
+            )}
           </div>
-          <p className="mt-1 text-sm text-muted">
+          <p className={`text-muted ${plain ? "mt-2 text-base" : "mt-1 text-sm"}`}>
             {account.industry} · {account.region}
             {account.website && ` · ${account.website}`}
-            {tam && ` · TAM: ${tam.name}`}
+            {tam && ` · ${plain ? "Tech contact" : "TAM"}: ${tam.name}`}
           </p>
           {account.summary && (
-            <p className="mt-2 max-w-2xl text-sm">{account.summary}</p>
+            <p className={`max-w-2xl ${plain ? "mt-2 text-base" : "mt-2 text-sm"}`}>
+              {account.summary}
+            </p>
           )}
         </div>
         {actions}
@@ -70,16 +84,17 @@ export function AccountDetailView({
                 const row = (
                   <Card className="flex items-center justify-between p-4 transition-colors hover:border-hmd-teal-600">
                     <div>
-                      <p className="font-medium">{d.name}</p>
-                      <p className="text-xs text-muted">
-                        Expected close {shortDate(d.expectedCloseDate)}
+                      <p className={`font-medium ${plain ? "text-base" : ""}`}>{d.name}</p>
+                      <p className={`text-muted ${plain ? "text-sm" : "text-xs"}`}>
+                        {plain ? "Expected to close" : "Expected close"}{" "}
+                        {shortDate(d.expectedCloseDate)}
                       </p>
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="text-right">
-                        <p className="font-semibold">{eur(d.tcv)}</p>
+                        <p className={`font-semibold ${plain ? "text-lg" : ""}`}>{eur(d.tcv)}</p>
                       </div>
-                      <StageBadge stage={d.stage} />
+                      <StageBadge stage={d.stage} plain={plain} />
                     </div>
                   </Card>
                 );
@@ -92,25 +107,28 @@ export function AccountDetailView({
                 );
               })}
               {deals.length === 0 && (
-                <p className="text-sm text-muted">No deals yet.</p>
+                <p className={`text-muted ${plain ? "text-base" : "text-sm"}`}>No deals yet.</p>
               )}
             </div>
           </section>
 
           <section>
-            <SectionTitle>Service cases</SectionTitle>
+            <SectionTitle>{plain ? "Support tickets" : "Service cases"}</SectionTitle>
             <div className="space-y-2">
               {cases.map((c) => (
                 <Card key={c.id} className="flex items-center justify-between p-4">
                   <div>
-                    <p className="font-medium">{c.title}</p>
-                    <p className="text-xs text-muted">
+                    <p className={`font-medium ${plain ? "text-base" : ""}`}>{c.title}</p>
+                    <p className={`text-muted ${plain ? "text-sm" : "text-xs"}`}>
                       Opened {shortDate(c.createdAt)}
-                      {c.slaDueDate && ` · SLA ${shortDate(c.slaDueDate)}`}
+                      {c.slaDueDate &&
+                        ` · ${plain ? "Due" : "SLA"} ${shortDate(c.slaDueDate)}`}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
-                    {c.escalatedToThirdParty && <Badge tone="amber">3rd party</Badge>}
+                    {c.escalatedToThirdParty && (
+                      <Badge tone="amber">{plain ? "Outside help" : "3rd party"}</Badge>
+                    )}
                     <Badge
                       tone={
                         c.priority === "high" || c.priority === "urgent"
@@ -127,7 +145,9 @@ export function AccountDetailView({
                 </Card>
               ))}
               {cases.length === 0 && (
-                <p className="text-sm text-muted">No open cases.</p>
+                <p className={`text-muted ${plain ? "text-base" : "text-sm"}`}>
+                  {plain ? "No support tickets." : "No open cases."}
+                </p>
               )}
             </div>
           </section>
@@ -135,27 +155,29 @@ export function AccountDetailView({
 
         <div className="space-y-6">
           <section>
-            <SectionTitle>Contacts</SectionTitle>
+            <SectionTitle>{plain ? "People" : "Contacts"}</SectionTitle>
             <Card className="divide-y divide-border">
               {contacts.map((c) => (
                 <div key={c.id} className="p-3">
                   <div className="flex items-center justify-between">
-                    <p className="text-sm font-medium">{c.name}</p>
-                    {c.primary && <Badge tone="blue">primary</Badge>}
+                    <p className={`font-medium ${plain ? "text-base" : "text-sm"}`}>{c.name}</p>
+                    {c.primary && (
+                      <Badge tone="blue">{plain ? "main contact" : "primary"}</Badge>
+                    )}
                   </div>
-                  <p className="text-xs text-muted">{c.title}</p>
-                  <p className="text-xs text-foreground">{c.email}</p>
+                  <p className={`text-muted ${plain ? "text-sm" : "text-xs"}`}>{c.title}</p>
+                  <p className={`text-foreground ${plain ? "text-sm" : "text-xs"}`}>{c.email}</p>
                 </div>
               ))}
               {contacts.length === 0 && (
-                <p className="p-3 text-sm text-muted">No contacts.</p>
+                <p className={`p-3 text-muted ${plain ? "text-base" : "text-sm"}`}>No contacts.</p>
               )}
             </Card>
           </section>
 
           <section>
-            <SectionTitle>Activity timeline</SectionTitle>
-            <ActivityTimeline activities={activities} />
+            <SectionTitle>{plain ? "History" : "Activity timeline"}</SectionTitle>
+            <ActivityTimeline activities={activities} plain={plain} />
           </section>
         </div>
       </div>

@@ -25,16 +25,16 @@ export default async function OfferBuilderPage({
         <div>
           <Link
             href={`/rep/deals/${id}`}
-            className="text-xs font-medium uppercase tracking-wide text-muted hover:text-foreground transition-colors"
+            className="text-sm font-medium uppercase tracking-wide text-muted hover:text-foreground transition-colors"
           >
             ← Back to {deal.name}
           </Link>
-          <h1 className="mt-1 text-2xl font-semibold tracking-tight">
-            Build & send offer
+          <h1 className="mt-1 text-3xl font-semibold tracking-tight">
+            Build &amp; send offer
           </h1>
-          <p className="mt-1 text-sm text-muted">
-            {deal.name} — select products and services, set a discount, then
-            submit for approval.
+          <p className="mt-2 text-base text-muted">
+            {deal.name} — pick what you&apos;re selling, set a discount if you
+            need one, then send it for approval.
           </p>
         </div>
       </div>

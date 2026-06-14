@@ -1,8 +1,8 @@
 "use server";
 
 // Sales Manager Server Actions (SM M3). All writes go through lib/db/mutations
-// and revalidate the affected pages; reads through lib/db. Never import lib/api
-// or lib/mock-data.
+// and revalidate the affected pages; reads through lib/db (live Supabase, the
+// only data layer).
 
 import { revalidatePath } from "next/cache";
 import * as mutations from "@/lib/db/mutations";

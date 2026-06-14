@@ -141,7 +141,7 @@ export function NotificationCenter({
         aria-haspopup="true"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
-        className="relative flex h-8 w-8 items-center justify-center rounded-lg text-muted transition-colors hover:bg-background hover:text-foreground"
+        className="relative flex h-11 w-11 items-center justify-center rounded-lg text-muted transition-colors hover:bg-background hover:text-foreground"
       >
         <BellIcon className="h-5 w-5" />
         {unreadCount > 0 && (

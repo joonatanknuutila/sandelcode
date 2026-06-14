@@ -11,8 +11,9 @@ export default async function AccountsPage() {
     <AccountListView
       cards={cards}
       basePath="/rep/accounts"
-      title="My accounts"
-      subtitle={`${accounts.length} accounts in your book.`}
+      title="My customers"
+      subtitle={`You look after ${accounts.length} ${accounts.length === 1 ? "customer" : "customers"}.`}
+      plain
     />
   );
 }

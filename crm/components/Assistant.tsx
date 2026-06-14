@@ -4,9 +4,10 @@ import { useState } from "react";
 import { Role } from "@/lib/types";
 import { Card } from "@/components/ui";
 
-// Grounded persona assistant widget. Read-only: it answers from CRM facts and
-// never writes. Posts to /api/assistant. Drops a small "model offline" tag when
-// the deterministic fallback answered, so it's honest about what produced it.
+// Grounded persona assistant widget (brief §05.03 conversational query). It is
+// read-only: answers from CRM facts and never writes. Posts to /api/assistant.
+// Drops a small "model offline" tag when the deterministic fallback answered,
+// so it's honest about what produced the answer.
 
 interface Turn {
   q: string;
@@ -15,7 +16,7 @@ interface Turn {
   pending?: boolean;
 }
 
-const SUGGESTIONS = [
+const DEFAULT_SUGGESTIONS = [
   "Which cases are at risk of breaching SLA?",
   "What's the top case I should act on?",
   "Anything blocked on a 3rd party?",
@@ -25,10 +26,12 @@ export function Assistant({
   role,
   accountId,
   scopeLabel,
+  suggestions = DEFAULT_SUGGESTIONS,
 }: {
   role: Role;
   accountId?: string;
   scopeLabel?: string;
+  suggestions?: string[];
 }) {
   const [turns, setTurns] = useState<Turn[]>([]);
   const [input, setInput] = useState("");
@@ -93,7 +96,7 @@ export function Assistant({
 
       {turns.length === 0 && (
         <div className="mt-3 flex flex-wrap gap-1.5">
-          {SUGGESTIONS.map((s) => (
+          {suggestions.map((s) => (
             <button
               key={s}
               onClick={() => send(s)}

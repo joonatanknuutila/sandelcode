@@ -19,6 +19,7 @@ export default async function RepInboxPage({
       basePath="/rep/inbox"
       conversations={conversations}
       selectedKey={c}
+      plain
     />
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { Modal, toast } from "@/components/ui-client";
 import { Button, Input, Select, Textarea } from "@/components/ui";
 import {
@@ -9,7 +10,24 @@ import {
   createContactAction,
 } from "@/app/rep/account-actions";
 import { EnrichmentPanel } from "./EnrichmentPanel";
-import type { User } from "@/lib/types";
+import { REP_STAGE_LABELS, type Channel, type Stage, type User } from "@/lib/types";
+
+// Creatable HMD pipeline stages (brief §2.3) — open stages only; won/lost are
+// reached later via the stage stepper, not at creation. Reseller deals skip
+// "contract negotiation" (direct-only), so the picker drops it for resellers.
+const CREATABLE_STAGES: Stage[] = [
+  "interest",
+  "rfi",
+  "rfp",
+  "customer_test",
+  "contract_negotiation",
+];
+
+function stageOptionsFor(channel: Channel) {
+  return CREATABLE_STAGES.filter(
+    (s) => !(channel === "reseller" && s === "contract_negotiation"),
+  ).map((s) => ({ value: s, label: REP_STAGE_LABELS[s] }));
+}
 
 // ---------------------------------------------------------------------------
 // New Deal modal
@@ -28,16 +46,26 @@ export function NewDealModal({
   accountId,
   currentUserId,
 }: NewDealModalProps) {
+  const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [title, setTitle] = useState("");
-  const [channel, setChannel] = useState<"direct" | "reseller">("direct");
-  const [stage, setStage] = useState("interest_shown");
+  const [channel, setChannel] = useState<Channel>("direct");
+  const [stage, setStage] = useState<Stage>("interest");
   const [closeDate, setCloseDate] = useState("");
+
+  // Switching to reseller while on the direct-only "contract negotiation" stage
+  // would submit a stage that channel can't have — snap back to interest.
+  function handleChannel(next: Channel) {
+    setChannel(next);
+    if (next === "reseller" && stage === "contract_negotiation") {
+      setStage("interest");
+    }
+  }
 
   function handleClose() {
     setTitle("");
     setChannel("direct");
-    setStage("interest_shown");
+    setStage("interest");
     setCloseDate("");
     onClose();
   }
@@ -47,16 +75,19 @@ export function NewDealModal({
     if (!title.trim()) return;
     startTransition(async () => {
       try {
-        await createDealAction({
+        const { id } = await createDealAction({
           accountId,
           title: title.trim(),
           channel,
-          stage: stage as Parameters<typeof createDealAction>[0]["stage"],
+          stage,
           expectedCloseDate: closeDate || undefined,
           ownerId: currentUserId,
         });
         toast("Deal created", { variant: "success" });
         handleClose();
+        // Land on the new deal so the rep enters the 3-year forecast next
+        // (brief §07.02: "creates a deal … enters a 12-month forecast").
+        router.push(`/rep/deals/${id}`);
       } catch (err) {
         toast(err instanceof Error ? err.message : "Failed to create deal", {
           variant: "error",
@@ -78,27 +109,17 @@ export function NewDealModal({
         <Select
           label="Channel"
           value={channel}
-          onChange={(e) =>
-            setChannel(e.target.value as "direct" | "reseller")
-          }
+          onChange={(e) => handleChannel(e.target.value as Channel)}
           options={[
             { value: "direct", label: "Direct" },
-            { value: "reseller", label: "Reseller" },
+            { value: "reseller", label: "Reseller (partner)" },
           ]}
         />
         <Select
           label="Stage"
           value={stage}
-          onChange={(e) => setStage(e.target.value)}
-          options={[
-            { value: "interest_shown", label: "Interest shown" },
-            { value: "discovery", label: "Discovery" },
-            { value: "pilot", label: "Pilot" },
-            { value: "proposal", label: "Proposal" },
-            { value: "negotiation", label: "Negotiation" },
-            { value: "closed_won", label: "Closed won" },
-            { value: "closed_lost", label: "Closed lost" },
-          ]}
+          onChange={(e) => setStage(e.target.value as Stage)}
+          options={stageOptionsFor(channel)}
         />
         <Input
           label="Expected close date"

@@ -42,16 +42,17 @@ export default async function RepPipelinePage() {
   return (
     <div className="mx-auto max-w-[100rem] space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">My pipeline</h1>
-        <p className="mt-1 text-sm text-muted">
-          Drag a deal between stages to update it. Reseller deals skip contract
-          negotiation. Every move is recorded on the account timeline.
+        <h1 className="text-3xl font-semibold tracking-tight">My deals</h1>
+        <p className="mt-2 text-base text-muted">
+          Drag a card to the right as a deal moves forward. Each move is saved
+          automatically.
         </p>
       </div>
       <PipelineBoard
         deals={boardDeals}
         capabilities={{ canDrag: true, canReassign: false }}
         dealHref="/rep/deals"
+        plain
       />
     </div>
   );

@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { Modal, toast } from "@/components/ui-client";
 import { Button, Select, Textarea } from "@/components/ui";
-import { ActivityType, Stage, STAGE_LABELS, STAGE_ORDER } from "@/lib/types";
+import { ActivityType, Stage, REP_STAGE_LABELS, STAGE_ORDER } from "@/lib/types";
 import type { NbaCTA } from "@/lib/ai";
 import {
   logActivityAction,
@@ -231,14 +231,14 @@ function MoveStageModal({
 
   const stageOptions = availableStages.map((s) => ({
     value: s,
-    label: STAGE_LABELS[s],
+    label: REP_STAGE_LABELS[s],
   }));
 
   function handleConfirm() {
     startTransition(async () => {
       const result = await moveStageAction(dealId, accountId, targetStage as Stage);
       if (result.ok) {
-        toast(`Stage updated to "${STAGE_LABELS[targetStage as Stage]}"`, {
+        toast(`Stage updated to "${REP_STAGE_LABELS[targetStage as Stage]}"`, {
           variant: "success",
         });
         onClose();
@@ -254,7 +254,7 @@ function MoveStageModal({
         <p className="text-sm text-muted">
           Current stage:{" "}
           <span className="font-medium text-foreground">
-            {STAGE_LABELS[currentStage]}
+            {REP_STAGE_LABELS[currentStage]}
           </span>
         </p>
         <Select
@@ -333,6 +333,7 @@ export function DealActions({
     <>
       {/* NBA CTA button */}
       <Button
+        className="min-h-[44px] px-5 text-base"
         onClick={cta.kind !== "open_offer" ? handleCtaClick : undefined}
         style={
           cta.kind !== "open_offer"
@@ -389,7 +390,11 @@ export function LogActivityButton({
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Button variant="secondary" onClick={() => setOpen(true)}>
+      <Button
+        variant="secondary"
+        className="min-h-[44px] px-5 text-base"
+        onClick={() => setOpen(true)}
+      >
         + Log activity
       </Button>
       <LogActivityModal

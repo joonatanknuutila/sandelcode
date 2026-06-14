@@ -104,10 +104,14 @@ for (const acc of accounts) {
     const device = pick(devices);
     const createdAt = daysAgo(int(20, 300));
     const lastAct = daysAgo(stage === 'won' || stage === 'lost' ? int(10, 90) : int(1, 28)); // some stalled >14d
+    const openStage = stage !== 'won' && stage !== 'lost';
+    // ~1 in 4 open deals has slipped past its expected close — the "overdue"
+    // deal-risk signal the Sales Manager needs to see (brief P1 / scenario 05).
+    const closeOffsetDays = openStage && chance(0.25) ? -int(5, 70) : int(30, 480);
     const deal = {
       id, account_id: acc.id, name: `${device.name} rollout — ${acc.name}`, channel: acc.channel, stage,
       owner_rep_id: acc.owner_rep_id, currency: 'EUR', total_value_3yr_eur: 0,
-      expected_close: iso(new Date(Date.now() + int(30, 480) * 864e5)).slice(0, 10),
+      expected_close: iso(new Date(Date.now() + closeOffsetDays * 864e5)).slice(0, 10),
       created_at: iso(createdAt), last_activity_at: iso(lastAct), lost_reason: stage === 'lost' ? pick(['price', 'lost to incumbent', 'project cancelled', 'no budget']) : null,
     };
     // phase units across ~8 quarters (front-loaded pilot then ramp)
@@ -255,6 +259,36 @@ approvals.push({ id: uid('apr'), offer_id: hOff, approver_role: 'sales_manager',
 approvals.push({ id: uid('apr'), offer_id: hOff, approver_role: 'finance', approver_id: fin, decision: 'approved', comment: 'Margin holds at 12%; committed to forecast.', decided_at: at(146) });
 activities.push({ id: uid('act'), account_id: hAcc, deal_id: hDeal, case_id: null, type: 'offer', body: `Offer v2 approved (12% discount) — €${Math.round(lDev + lMdm).toLocaleString()}`, actor_id: heroRep, created_at: at(150) });
 
+// (1b) Open EXPANSION deal on the hero account — so the default rep's showcase
+// account has a LIVE deal to work (open deals + active cases together, scenario
+// 01), it has slipped past its close date (overdue risk for the SM, scenario
+// 05), and it carries a discounted offer still sitting at the Sales-Manager gate
+// (so the SM→Finance approval walkthrough has a real item to act on, scenario 08).
+const hExp = uid('deal');
+const EUNITS = [400, 500, 600, 700];
+let eTotal = 0;
+EUNITS.forEach((units, i) => {
+  const deviceRev = units * S30.list_price_eur;
+  const svcRev = units * (6 + 9) * 12 + (i === 0 ? 4500 : 0);
+  eTotal += deviceRev + svcRev;
+  deal_forecast.push({ id: uid('fc'), deal_id: hExp, period: QS[i], device_units: units, device_revenue_eur: round2(deviceRev), service_revenue_eur: round2(svcRev) });
+});
+// expected_close 12 days ago + open stage => overdue; last activity 18 days ago => also stalled.
+deals.push({ id: hExp, account_id: hAcc, name: 'HMD Secure S30 expansion — Bundespolizei (Command-2)', channel: 'direct', stage: 'contract_negotiation', owner_rep_id: heroRep, currency: 'EUR', total_value_3yr_eur: round2(eTotal), expected_close: day(12), created_at: at(70), last_activity_at: at(18), lost_reason: null });
+activities.push({ id: uid('act'), account_id: hAcc, deal_id: hExp, case_id: null, type: 'stage_change', body: 'Deal moved to contract_negotiation', actor_id: heroRep, created_at: at(24) });
+activities.push({ id: uid('act'), account_id: hAcc, deal_id: hExp, case_id: null, type: 'meeting', body: 'Command-2 expansion scoped — 2,200 units; pricing under review with procurement.', actor_id: heroRep, created_at: at(18) });
+
+// Discounted offer on the expansion, still awaiting the Sales Manager (gate 1).
+const hOff2 = uid('off');
+const eQty = 2200, eDisc = 15;
+const eDev = round2(eQty * S30.list_price_eur * (1 - eDisc / 100));
+const eMdm = round2(eQty * mdm.unit_price_eur * 12 * (1 - eDisc / 100));
+offers.push({ id: hOff2, deal_id: hExp, account_id: hAcc, version: 1, status: 'pending_sm', discount_pct: eDisc, justification: 'Command-2 expansion on the existing federal framework; 15% matches the incumbent renewal price and locks the 3-yr volume.', total_eur: round2(eDev + eMdm), created_by: heroRep, created_at: at(3) });
+offer_lines.push({ id: uid('ol'), offer_id: hOff2, product_id: S30.id, service_id: null, qty: eQty, unit_price_eur: S30.list_price_eur, discount_pct: eDisc, line_total_eur: eDev });
+offer_lines.push({ id: uid('ol'), offer_id: hOff2, product_id: null, service_id: mdm.id, qty: eQty, unit_price_eur: round2(mdm.unit_price_eur * 12), discount_pct: eDisc, line_total_eur: eMdm });
+activities.push({ id: uid('act'), account_id: hAcc, deal_id: hExp, case_id: null, type: 'offer', body: `Offer v1 submitted — ${eDisc}% discount, pending Sales Manager`, actor_id: heroRep, created_at: at(3) });
+notifications.push({ id: uid('ntf'), user_id: sm, type: 'approval_request', body: `Offer needs approval: ${eDisc}% discount — Bundespolizei expansion`, link_kind: 'offer', link_id: hOff2, read: false, created_at: at(3) });
+
 // Cases on the hero account (Stage 4 — cases as sales-risk) -------------------
 const mkCase = (svcSku, title, type, status, prio, created, esc, resolved) => {
   const id = uid('cas');
@@ -269,7 +303,13 @@ const ca2 = mkCase('SVC-SOC', 'SOC escalation — anomalous traffic from 6 devic
 case_notes.push({ id: uid('cn'), case_id: ca2, author_id: heroTam, body: 'Escalated to 3rd-party SOC (ticket #7741). Devices quarantined; awaiting threat-intel confirmation. Vendor SLA 48h.', kind: 'tech_working', created_at: at(1) });
 case_notes.push({ id: uid('cn'), case_id: ca2, author_id: heroRep, body: 'Live account — keep this tight, renewal talks start next quarter.', kind: 'internal_sales', created_at: at(1) });
 const ca3 = mkCase('SVC-MDM', 'Request: add geofencing policy for border units', 'request', 'in_progress', 'medium', 9, false, null);
+// A deliberately long thread (5+ notes) so the model-backed case summary is
+// demonstrable — below this threshold only the deterministic headline shows.
+case_notes.push({ id: uid('cn'), case_id: ca3, author_id: heroTam, body: 'Requirement intake: border units need device lockdown when leaving designated operational zones. Confirmed scope covers 220 S30 handsets.', kind: 'tech_working', created_at: at(9) });
 case_notes.push({ id: uid('cn'), case_id: ca3, author_id: heroTam, body: 'Drafting geofencing profile; pending customer confirmation of zones.', kind: 'tech_working', created_at: at(7) });
+case_notes.push({ id: uid('cn'), case_id: ca3, author_id: heroRep, body: 'Customer flagged this as a gating item for the 3-yr renewal — worth getting right.', kind: 'internal_sales', created_at: at(6) });
+case_notes.push({ id: uid('cn'), case_id: ca3, author_id: heroTam, body: 'Tested profile on 5 pilot devices; lock/unlock at zone boundary works. Battery impact within tolerance.', kind: 'tech_working', created_at: at(3) });
+case_notes.push({ id: uid('cn'), case_id: ca3, author_id: heroTam, body: 'Awaiting customer reply on the final coordinate set for the eastern border zone before fleet-wide rollout. Are the published zones final?', kind: 'tech_working', created_at: at(1) });
 notifications.push({ id: uid('ntf'), user_id: heroTam, type: 'sla_warning', body: `Urgent case approaching SLA: SOC escalation — anomalous traffic from 6 devices`, link_kind: 'case', link_id: ca2, read: false, created_at: at(0) });
 
 // (2) Reseller deal (skips contract_negotiation) -----------------------------

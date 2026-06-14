@@ -9,6 +9,7 @@ import {
 } from "@/lib/db/mutations";
 import type { OfferLineInput } from "@/lib/db/mutations";
 import { getUsers } from "@/lib/db";
+import { requiresFinanceApproval } from "@/lib/scoring";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -46,8 +47,8 @@ export interface CreateOfferActionResult {
 // ---------------------------------------------------------------------------
 // APPROVAL ROUTING ASSUMPTION: Every submitted offer always goes to SM first
 // (pending_sm). The mutations.recordApproval function auto-advances discounts
-// >10% to Finance after the SM approves — this action never sets
-// "pending_finance" directly.
+// above the Finance threshold (lib/scoring) to Finance after the SM approves —
+// this action never sets "pending_finance" directly.
 
 // ---------------------------------------------------------------------------
 // Action
@@ -104,9 +105,9 @@ export async function createOfferAction(
       ),
     );
 
-    // If discount >10%, also notify Finance that an escalation is incoming
+    // If the discount needs Finance, also notify them an escalation is incoming
     // (they'll receive a formal approval request after SM approves).
-    if (input.discountPct > 10) {
+    if (requiresFinanceApproval(input.discountPct)) {
       await Promise.all(
         financeUsers.map((f) =>
           createNotification({

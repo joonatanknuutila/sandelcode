@@ -26,6 +26,13 @@ const SERVICE_LABEL: Record<ServiceModel, string> = {
   monthly_recurring: "Monthly recurring / active device",
 };
 
+// Rep-facing plain-language version of the service model.
+const REP_SERVICE_LABEL: Record<ServiceModel, string> = {
+  one_off: "Pay once on delivery",
+  fixed_term: "Fixed yearly plan (1–5 yrs)",
+  monthly_recurring: "Monthly, per phone in use",
+};
+
 export function ForecastGrid({
   forecast,
   serviceModel,
@@ -34,6 +41,7 @@ export function ForecastGrid({
   dealId,
   accountId,
   onSave,
+  plain = false,
 }: {
   forecast: ForecastPoint[];
   serviceModel: ServiceModel;
@@ -45,6 +53,8 @@ export function ForecastGrid({
   accountId?: string;
   /** Optional: async callback that persists phases; called after debounce. */
   onSave?: (dealId: string, accountId: string, phases: PhasePayload[]) => Promise<void>;
+  /** Rep-facing: plain words ("Phones" not "Devices"), larger text. */
+  plain?: boolean;
 }) {
   const [points, setPoints] = useState<ForecastPoint[]>(forecast);
   const [saveState, setSaveState] = useState<"idle" | "saving" | "saved">("idle");
@@ -126,12 +136,12 @@ export function ForecastGrid({
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-xs text-muted">
-          Service model:{" "}
+        <p className={`text-muted ${plain ? "text-sm" : "text-xs"}`}>
+          {plain ? "How they pay:" : "Service model:"}{" "}
           <span className="font-medium text-foreground">
-            {SERVICE_LABEL[serviceModel]}
-          </span>{" "}
-          · device + service revenue tracked separately
+            {plain ? REP_SERVICE_LABEL[serviceModel] : SERVICE_LABEL[serviceModel]}
+          </span>
+          {!plain && " · device + service revenue tracked separately"}
         </p>
         {dealId && onSave && (
           <span
@@ -149,22 +159,22 @@ export function ForecastGrid({
       </div>
 
       <div className="overflow-x-auto rounded-xl border border-border bg-surface">
-        <table className="w-full text-sm">
-          <thead className="bg-background text-left text-xs uppercase tracking-wide text-muted">
+        <table className={`w-full ${plain ? "text-base" : "text-sm"}`}>
+          <thead className={`bg-background text-left uppercase tracking-wide text-muted ${plain ? "text-sm" : "text-xs"}`}>
             <tr>
               <th className="px-3 py-2 font-medium">Quarter</th>
-              <th className="px-3 py-2 font-medium">Devices</th>
-              <th className="px-3 py-2 text-right font-medium">Device €</th>
-              <th className="px-3 py-2 text-right font-medium">Service €</th>
+              <th className="px-3 py-2 font-medium">{plain ? "Phones" : "Devices"}</th>
+              <th className="px-3 py-2 text-right font-medium">{plain ? "Phone sales (€)" : "Device €"}</th>
+              <th className="px-3 py-2 text-right font-medium">{plain ? "Service (€)" : "Service €"}</th>
             </tr>
           </thead>
           <tbody>
             {points.map((p, idx) => (
               <tr key={idx} className="border-t border-border">
-                <td className="px-3 py-1.5 text-muted">
+                <td className={`px-3 text-muted ${plain ? "py-2" : "py-1.5"}`}>
                   {quarterLabel(p.year, p.quarter)}
                 </td>
-                <td className="px-3 py-1.5">
+                <td className={`px-3 ${plain ? "py-2" : "py-1.5"}`}>
                   <input
                     type="number"
                     min={0}
@@ -172,13 +182,15 @@ export function ForecastGrid({
                     onChange={(e) =>
                       updateDevices(idx, Math.max(0, Number(e.target.value)))
                     }
-                    className="w-24 rounded-md border border-border bg-background px-2 py-1 text-sm focus:border-hmd-teal-600 focus:outline-none focus:ring-1 focus:ring-hmd-teal-600"
+                    className={`w-24 rounded-md border border-border bg-background px-2 focus:border-hmd-teal-600 focus:outline-none focus:ring-1 focus:ring-hmd-teal-600 ${
+                      plain ? "py-2 text-base" : "py-1 text-sm"
+                    }`}
                   />
                 </td>
-                <td className="px-3 py-1.5 text-right text-muted">
+                <td className={`px-3 text-right text-muted ${plain ? "py-2" : "py-1.5"}`}>
                   {eur(p.deviceRevenue)}
                 </td>
-                <td className="px-3 py-1.5 text-right text-muted">
+                <td className={`px-3 text-right text-muted ${plain ? "py-2" : "py-1.5"}`}>
                   {eur(p.serviceRevenue)}
                 </td>
               </tr>
@@ -186,7 +198,9 @@ export function ForecastGrid({
           </tbody>
           <tfoot>
             <tr className="border-t-2 border-border bg-background font-semibold">
-              <td className="px-3 py-2">Total ({num(totals.devices)} units)</td>
+              <td className="px-3 py-2">
+                Total ({num(totals.devices)} {plain ? "phones" : "units"})
+              </td>
               <td className="px-3 py-2" />
               <td className="px-3 py-2 text-right">{eur(totals.device)}</td>
               <td className="px-3 py-2 text-right">{eur(totals.service)}</td>
@@ -211,8 +225,10 @@ export function ForecastGrid({
           );
           return (
             <div key={y} className="rounded-lg border border-border p-3">
-              <p className="text-xs text-muted">Year {y + 1}</p>
-              <p className="text-sm font-semibold">{num(yearDevices)} units</p>
+              <p className={`text-muted ${plain ? "text-sm" : "text-xs"}`}>Year {y + 1}</p>
+              <p className={`font-semibold ${plain ? "text-base" : "text-sm"}`}>
+                {num(yearDevices)} {plain ? "phones" : "units"}
+              </p>
               <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-background">
                 <div
                   className="h-full rounded-full bg-hmd-teal"
@@ -226,16 +242,20 @@ export function ForecastGrid({
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         <div className="rounded-lg bg-hmd-charcoal p-4 text-white">
-          <p className="text-xs text-white/60">3-year TCV</p>
-          <p className="text-xl font-semibold">{eur(totals.tcv)}</p>
+          <p className={`text-white/60 ${plain ? "text-sm" : "text-xs"}`}>
+            {plain ? "Total (3 yrs)" : "3-year TCV"}
+          </p>
+          <p className={`font-semibold ${plain ? "text-2xl" : "text-xl"}`}>{eur(totals.tcv)}</p>
         </div>
         <div className="rounded-lg border border-border p-4">
-          <p className="text-xs text-muted">Next 12 months</p>
-          <p className="text-xl font-semibold">{eur(totals.nearTerm)}</p>
+          <p className={`text-muted ${plain ? "text-sm" : "text-xs"}`}>Next 12 months</p>
+          <p className={`font-semibold ${plain ? "text-2xl" : "text-xl"}`}>{eur(totals.nearTerm)}</p>
         </div>
         <div className="rounded-lg border border-border p-4">
-          <p className="text-xs text-muted">Total devices</p>
-          <p className="text-xl font-semibold">{num(totals.devices)}</p>
+          <p className={`text-muted ${plain ? "text-sm" : "text-xs"}`}>
+            {plain ? "Total phones" : "Total devices"}
+          </p>
+          <p className={`font-semibold ${plain ? "text-2xl" : "text-xl"}`}>{num(totals.devices)}</p>
         </div>
       </div>
     </div>

@@ -23,6 +23,7 @@ import {
   PERIOD_OPTIONS,
 } from "@/components/ForecastSummary";
 import { pipelineNarrative } from "@/lib/ai/forecast";
+import { Assistant } from "@/components/Assistant";
 import { Reassign, RepOption } from "./Reassign";
 
 // Sales Manager — the screen that IS the forecast meeting. The team's
@@ -107,11 +108,14 @@ export default async function SalesManagerView({
   // /sm equals the gap on /finance for the same horizon.
   const figures = computeForecastSummary(open, won, targets, horizon, overrides);
 
-  // Stalled (14+ days) + slipped (past close) — the intervention list.
-  const stalledDeals = openInScope
-    .filter(isStalled)
-    .sort((a, b) => relativeDays(b.updatedAt) - relativeDays(a.updatedAt));
+  // Stalled (14+ days) + slipped (past close) — the intervention list. The list
+  // catches BOTH risks (a deal can be overdue without being idle), so an overdue
+  // deal the SM must chase never hides just because it had recent activity.
+  const stalledDeals = openInScope.filter(isStalled);
   const slippedCount = openInScope.filter(isSlipped).length;
+  const atRiskDeals = openInScope
+    .filter((d) => isStalled(d) || isSlipped(d))
+    .sort((a, b) => relativeDays(b.updatedAt) - relativeDays(a.updatedAt));
 
   // Scoped team KPIs.
   const kpiOpen = openInScope.length;
@@ -202,6 +206,17 @@ export default async function SalesManagerView({
         </p>
       </Card>
 
+      {/* Conversational query (brief §05.03) — ask the pipeline in plain words. */}
+      <Assistant
+        role="sm"
+        scopeLabel="your team's pipeline"
+        suggestions={[
+          "At-risk deals in DACH",
+          "Which enterprise deals are at risk?",
+          "Biggest open deals in the pipeline",
+        ]}
+      />
+
       {/* Team KPIs (scoped to the selected horizon). */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <StatTile label="Open deals" value={String(kpiOpen)} />
@@ -216,26 +231,28 @@ export default async function SalesManagerView({
           hint="open deals in window"
         />
         <StatTile
-          label="Stalled deals"
-          value={String(stalledDeals.length)}
-          hint="no update in 14+ days"
-          tone={stalledDeals.length > 0 ? "warning" : "default"}
+          label="At-risk deals"
+          value={String(atRiskDeals.length)}
+          hint="idle 14d+ or past close"
+          tone={atRiskDeals.length > 0 ? "warning" : "default"}
         />
       </div>
 
-      {/* Stalled — needs intervention. Above the board, sorted by idle days. */}
+      {/* At risk — needs intervention. Above the board: idle 14d+ OR overdue
+          (past expected close), so the SM sees every deal that needs a nudge. */}
       <section>
-        <SectionTitle>Stalled — needs intervention</SectionTitle>
-        {stalledDeals.length === 0 ? (
+        <SectionTitle>At risk — needs intervention</SectionTitle>
+        {atRiskDeals.length === 0 ? (
           <Card className="p-4 text-sm text-muted">
-            Nothing stalled in this window — the pipeline is moving.
+            Nothing stalled or overdue in this window — the pipeline is moving.
           </Card>
         ) : (
           <Card className="divide-y divide-border">
-            {stalledDeals.map((d) => {
+            {atRiskDeals.map((d) => {
               const account = accountById.get(d.accountId);
               const owner = userById.get(d.ownerId);
               const idle = relativeDays(d.updatedAt);
+              const stalled = isStalled(d);
               return (
                 <div
                   key={d.id}
@@ -253,7 +270,7 @@ export default async function SalesManagerView({
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge tone="amber">{idle}d idle</Badge>
+                    {stalled && <Badge tone="amber">{idle}d idle</Badge>}
                     <Reassign
                       dealId={d.id}
                       currentOwnerId={d.ownerId}

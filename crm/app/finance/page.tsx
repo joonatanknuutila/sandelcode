@@ -11,8 +11,11 @@ import {
 import { confidence } from "@/lib/ai/confidence";
 import { Deal, dealProbability } from "@/lib/types";
 import { eur, num, quarterLabel } from "@/lib/format";
-import { SectionTitle, StatTile } from "@/components/ui";
+import { Badge, Card, SectionTitle, StatTile } from "@/components/ui";
+import { ExportLinks } from "@/components/ExportLinks";
 import { OfferApproval, OfferVM } from "@/components/OfferApproval";
+import { forecastNarrative } from "@/lib/ai/forecast";
+import { Assistant } from "@/components/Assistant";
 import {
   computeForecastSummary,
   ForecastSummary,
@@ -135,6 +138,11 @@ export default async function FinanceView({
   const accountById = new Map(accounts.map((a) => [a.id, a]));
   const dealById = new Map(allDeals.map((d) => [d.id, d]));
 
+  // Plain-English forecast story (brief P2 places the narrative on Finance).
+  // Numbers are computed deterministically in forecastNarrative; the model only
+  // phrases them, and falls back to a template with an honest "offline" label.
+  const narrative = await forecastNarrative();
+
   // Deal-size filter applies to BOTH the band and the grid (one view).
   const openF = open.filter((d) => d.tcv >= minTcv);
   const wonF = won.filter((d) => d.tcv >= minTcv);
@@ -200,12 +208,15 @@ export default async function FinanceView({
 
   return (
     <div className="mx-auto max-w-7xl space-y-8">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Forecast</h1>
-        <p className="mt-1 text-sm text-muted">
-          Weighted vs committed revenue across {allDeals.length} deals — gap to
-          target, time-phased, no need to ask sales.
-        </p>
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">Forecast</h1>
+          <p className="mt-1 text-sm text-muted">
+            Weighted vs committed revenue across {allDeals.length} deals — gap to
+            target, time-phased, no need to ask sales.
+          </p>
+        </div>
+        <ExportLinks kinds={["pipeline"]} />
       </div>
 
       {/* Period toggle (Quarter / Half / Year / All) + deal-size floor — both
@@ -255,6 +266,36 @@ export default async function FinanceView({
 
       {/* Gap-to-target band (shared with /sm via ForecastSummary). */}
       <ForecastSummary figures={figures} horizon={horizon} />
+
+      {/* AI forecast narrative — "give me the number, plainly". Figures are
+          computed deterministically; the model only phrases them. */}
+      <Card className="p-4">
+        <div className="flex items-center justify-between">
+          <p className="text-xs font-medium uppercase tracking-wide text-muted">
+            Forecast narrative
+            {!narrative.modelUsed && (
+              <span className="ml-1 normal-case text-muted">
+                · model offline — deterministic
+              </span>
+            )}
+          </p>
+          <Badge tone="blue">AI</Badge>
+        </div>
+        <p className="mt-2 text-sm leading-relaxed text-foreground">
+          {narrative.text}
+        </p>
+      </Card>
+
+      {/* Conversational query (brief §05.03) — interrogate the pipeline. */}
+      <Assistant
+        role="finance"
+        scopeLabel="the pipeline & forecast"
+        suggestions={[
+          "Which deals are past their close date?",
+          "Biggest deals by value",
+          "Enterprise deals at risk",
+        ]}
+      />
 
       {/* Headline forecast numbers — reconcile with the grid below. */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">

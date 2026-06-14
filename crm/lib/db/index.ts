@@ -1,12 +1,9 @@
-// Typed data-access layer (Supabase-backed).
+// Typed data-access layer (Supabase-backed) — the ONE source of read data.
 //
-// This is the real replacement for the mock `lib/api.ts`. Every function is
-// async (it hits Postgres) and returns the SAME UI types the components already
-// use (`lib/types.ts`) — the DB->UI translation happens in `./mappers`.
-//
-// Adoption (Joonatan): swap `from "@/lib/api"` to `from "@/lib/db"`, make the
-// calling Server Component `async`, and `await` the call. Signatures otherwise
-// match the old api.ts names. See ./README.md.
+// Every function is async (it hits Postgres) and returns the UI types the
+// components use (`lib/types.ts`) — the DB->UI translation happens in
+// `./mappers`. Read from a Server Component: `await` the call. There is no mock
+// layer; all views render against live Supabase data.
 //
 // Auth target: Supabase Auth for the demo; Azure Entra ID is the production
 // target (swap the client in lib/supabase/* — query layer is unaffected).
@@ -42,6 +39,8 @@ import {
 } from "@/lib/types";
 import type { Tables } from "@/lib/types.db";
 import type { CaseNote, Service, ServiceEvent } from "@/lib/tam";
+import { relativeDays } from "@/lib/format";
+import { STALE_DAYS } from "@/lib/scoring";
 
 // --- users -----------------------------------------------------------------
 
@@ -619,23 +618,22 @@ export async function getConfidenceOverrides(): Promise<
   return out;
 }
 
-// --- derived analytics (pure; mirror lib/api.ts) ---------------------------
+// --- derived analytics (pure) ----------------------------------------------
 
 /** Weighted value of a deal = TCV x win-probability (deal's own, else stage). */
 export function weightedValue(deal: Deal): number {
   return Math.round(deal.tcv * dealProbability(deal));
 }
 
-/** A deal is "stalled" if open and untouched for 14+ days. */
+/** A deal is "stalled" if open and untouched for STALE_DAYS+ days. */
 export function isStalled(deal: Deal): boolean {
   if (deal.stage === "won" || deal.stage === "lost") return false;
-  const days = (Date.now() - new Date(deal.updatedAt).getTime()) / 86_400_000;
-  return days >= 14;
+  return relativeDays(deal.updatedAt) >= STALE_DAYS;
 }
 
 /** Open deal past its expected close date — "overdue". The second half of the
- *  deal-risk signal (brief P1: "flags deals not updated 14+ days, past expected
- *  close"); isStalled covers idle, this covers slipped close dates. */
+ *  deal-risk signal (brief P1: "flags deals not updated STALE_DAYS+ days, past
+ *  expected close"); isStalled covers idle, this covers slipped close dates. */
 export function isOverdue(deal: Deal): boolean {
   if (deal.stage === "won" || deal.stage === "lost") return false;
   if (!deal.expectedCloseDate) return false;

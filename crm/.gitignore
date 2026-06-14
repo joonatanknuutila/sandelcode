@@ -36,6 +36,16 @@ yarn-error.log*
 # vercel
 .vercel
 
+# playwright (eval suite)
+/test-results/
+/playwright-report/
+
+# QA tooling + captured screenshots/logs (not product source)
+/.qa/
+
+# generated seed output (generate.mjs is the source of truth)
+/seed/out/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

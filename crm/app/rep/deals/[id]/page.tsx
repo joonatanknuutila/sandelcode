@@ -21,12 +21,13 @@ import { ActivityTimeline } from "@/components/ActivityTimeline";
 import { DealActions, LogActivityButton } from "./DealActions";
 import { setForecastPhasesAction } from "../../account-actions";
 
+// Rep-facing, plain-language offer states (this page is /rep only).
 const OFFER_STATUS_LABEL: Record<string, string> = {
   draft: "Draft",
-  pending_sm: "Pending Sales Manager",
-  pending_finance: "Pending Finance",
+  pending_sm: "Waiting on your manager",
+  pending_finance: "Waiting on Finance",
   approved: "Approved",
-  rejected: "Rejected",
+  rejected: "Not approved",
 };
 
 export default async function DealDetail({
@@ -60,7 +61,7 @@ export default async function DealDetail({
     <div className="mx-auto max-w-6xl space-y-6">
       <Link
         href={`/rep/accounts/${account.id}`}
-        className="text-sm text-muted hover:text-foreground"
+        className="text-base text-muted hover:text-foreground"
       >
         ← {account.name}
       </Link>
@@ -69,45 +70,45 @@ export default async function DealDetail({
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-semibold tracking-tight">
+            <h1 className="text-3xl font-semibold tracking-tight">
               {deal.name}
             </h1>
-            <StageBadge stage={deal.stage} />
-            {deal.channel === "reseller" && <Badge tone="amber">reseller</Badge>}
+            <StageBadge stage={deal.stage} plain />
+            {deal.channel === "reseller" && (
+              <Badge tone="amber">Partner deal</Badge>
+            )}
           </div>
-          <p className="mt-1 text-sm text-muted">
-            {account.name} · expected close {shortDate(deal.expectedCloseDate)}
+          <p className="mt-2 text-base text-muted">
+            {account.name} · expected to close {shortDate(deal.expectedCloseDate)}
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           {/* Wired "+ Log activity" button */}
           <LogActivityButton dealId={deal.id} accountId={deal.accountId} />
           <Link href={`/rep/deals/${deal.id}/offer`}>
-            <Button>Build &amp; send offer</Button>
+            <Button className="min-h-[44px] px-5 text-base">
+              Build &amp; send offer
+            </Button>
           </Link>
         </div>
       </div>
 
       <Card className="p-4">
-        <StageStepper stage={deal.stage} channel={deal.channel} />
+        <StageStepper stage={deal.stage} channel={deal.channel} plain />
       </Card>
 
-      {/* AI next best action — hero banner */}
+      {/* Next best action — hero banner */}
       <Card className="border-[#e4ff00]/40 bg-[#e4ff00]/5 p-5">
         <div className="flex items-start gap-3">
-          <span className="mt-0.5 rounded-md bg-[#e4ff00] px-2 py-1 text-xs font-semibold text-black">
-            {nba.modelUsed ? "AI" : "AI"}
+          <span className="mt-0.5 rounded-md bg-[#e4ff00] px-2.5 py-1 text-sm font-semibold text-black">
+            Tip
           </span>
           <div className="flex-1">
-            <p className="text-xs font-medium uppercase tracking-wide text-muted">
-              Next best action{!nba.modelUsed && (
-                <span className="ml-2 text-[10px] font-normal normal-case text-muted/60">
-                  (deterministic)
-                </span>
-              )}
+            <p className="text-sm font-medium uppercase tracking-wide text-muted">
+              What to do next
             </p>
-            <p className="mt-1 font-medium">{nba.headline}</p>
-            <p className="mt-1 text-sm text-muted">{nba.detail}</p>
+            <p className="mt-1 text-lg font-medium">{nba.headline}</p>
+            <p className="mt-1 text-base text-muted">{nba.detail}</p>
           </div>
 
           {/* CTA — open_offer links directly; others open modals via DealActions */}
@@ -131,7 +132,7 @@ export default async function DealDetail({
 
       {/* Forecast */}
       <section>
-        <SectionTitle>3-year time-phased forecast</SectionTitle>
+        <SectionTitle>Expected sales over 3 years</SectionTitle>
         <ForecastGrid
           forecast={deal.forecast}
           serviceModel={deal.serviceModel}
@@ -140,6 +141,7 @@ export default async function DealDetail({
           dealId={deal.id}
           accountId={deal.accountId}
           onSave={setForecastPhasesAction}
+          plain
         />
       </section>
 
@@ -151,7 +153,7 @@ export default async function DealDetail({
             {offers.map((o) => (
               <Card key={o.id} className="p-4">
                 <div className="flex items-center justify-between">
-                  <p className="font-medium">
+                  <p className="text-base font-medium">
                     Offer v{o.version} · {eur(o.total, false)}
                   </p>
                   <Badge
@@ -166,7 +168,7 @@ export default async function DealDetail({
                     {OFFER_STATUS_LABEL[o.status]}
                   </Badge>
                 </div>
-                <ul className="mt-2 space-y-1 text-sm text-muted">
+                <ul className="mt-2 space-y-1 text-base text-muted">
                   {o.lines.map((l) => (
                     <li key={l.productId} className="flex justify-between">
                       <span>
@@ -183,13 +185,13 @@ export default async function DealDetail({
                   ))}
                 </ul>
                 {o.justification && (
-                  <p className="mt-2 text-xs italic text-muted">
+                  <p className="mt-2 text-sm italic text-muted">
                     &ldquo;{o.justification}&rdquo;
                   </p>
                 )}
                 <div className="mt-3">
                   <Link href={`/rep/deals/${deal.id}/offer`}>
-                    <Button variant="secondary" className="text-xs">
+                    <Button variant="secondary" className="min-h-[44px] text-base">
                       View offer →
                     </Button>
                   </Link>
@@ -197,8 +199,8 @@ export default async function DealDetail({
               </Card>
             ))}
             {offers.length === 0 && (
-              <Card className="p-4 text-sm text-muted">
-                No offers yet. Build one from the product catalog.
+              <Card className="p-4 text-base text-muted">
+                No offers yet. Tap &ldquo;Build &amp; send offer&rdquo; above to make one.
               </Card>
             )}
           </div>
@@ -206,8 +208,8 @@ export default async function DealDetail({
 
         {/* Timeline */}
         <section>
-          <SectionTitle>Deal activity</SectionTitle>
-          <ActivityTimeline activities={activities} />
+          <SectionTitle>History</SectionTitle>
+          <ActivityTimeline activities={activities} plain />
         </section>
       </div>
     </div>

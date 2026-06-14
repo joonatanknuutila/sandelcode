@@ -1,8 +1,8 @@
 // Domain model for the HMD Secure CRM.
-// This is the shared contract between the frontend (Joonatan) and the backend
-// (Arttu). The frontend renders against `lib/api.ts`, which currently returns
-// mock data shaped exactly like these types. When Arttu's Azure API is ready,
-// only `lib/api.ts` changes — components stay the same.
+// The shared contract between the UI and the data layer. Components render
+// against these types; `lib/db` (Supabase-backed) returns data shaped exactly
+// like them via `lib/db/mappers`, so swapping the backing store never touches
+// components.
 
 export type Role = "rep" | "tam" | "sm" | "finance";
 
@@ -93,6 +93,18 @@ export const STAGE_LABELS: Record<Stage, string> = {
   rfp: "RFP / offer given",
   customer_test: "Customer test",
   contract_negotiation: "Contract negotiation",
+  won: "Won",
+  lost: "Lost",
+};
+
+// Plain-language stage labels for the rep-facing UI: same stages, no acronyms.
+// Power roles (SM/Finance/TAM) keep STAGE_LABELS; only /rep/* opts into these.
+export const REP_STAGE_LABELS: Record<Stage, string> = {
+  interest: "Interested",
+  rfi: "Answered questions",
+  rfp: "Offer sent",
+  customer_test: "Trying devices",
+  contract_negotiation: "Agreeing terms",
   won: "Won",
   lost: "Lost",
 };

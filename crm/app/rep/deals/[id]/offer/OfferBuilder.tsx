@@ -190,7 +190,7 @@ export function OfferBuilder({ deal, products, services }: Props) {
       });
 
       if (result.success) {
-        toast("Offer submitted for SM approval.", { variant: "success" });
+        toast("Offer sent to your manager for approval.", { variant: "success" });
         router.push(`/rep/deals/${deal.id}`);
       } else {
         setSubmitError(result.error ?? "Submission failed.");
@@ -206,11 +206,12 @@ export function OfferBuilder({ deal, products, services }: Props) {
     <div className="space-y-6">
       {/* Offer title */}
       <Card className="p-5 space-y-4">
-        <h2 className="text-xs font-medium uppercase tracking-wide text-muted">
-          Offer details
+        <h2 className="text-sm font-medium uppercase tracking-wide text-muted">
+          Offer name
         </h2>
         <Input
           label="Offer title"
+          className="py-2.5 text-base"
           value={offerTitle}
           onChange={(e) => setOfferTitle(e.target.value)}
           placeholder="e.g. Nokia XR21 fleet — 200 units"
@@ -218,26 +219,22 @@ export function OfferBuilder({ deal, products, services }: Props) {
       </Card>
 
       {/* Approval routing note */}
-      <div className="rounded-lg border border-border bg-surface/60 px-4 py-3 text-xs text-muted">
-        <span className="font-semibold text-foreground">
-          Product assumption — approval routing:
-        </span>{" "}
-        Every submitted offer goes to the Sales Manager first. Discounts{" "}
-        <span className="font-medium">{"≤10%"}</span> are approved by SM only;
-        discounts{" "}
-        <span className="font-medium">{">10%"}</span> automatically escalate to
-        Finance after SM approves.
+      <div className="rounded-lg border border-border bg-surface/60 px-4 py-3 text-base text-muted">
+        <span className="font-semibold text-foreground">How approval works:</span>{" "}
+        Your manager checks every offer. Small discounts (10% or less) they can
+        approve on their own. Bigger discounts also go to Finance.
       </div>
 
       {/* Catalog picker */}
       <Card className="p-5 space-y-4">
-        <h2 className="text-xs font-medium uppercase tracking-wide text-muted">
-          Add line items
+        <h2 className="text-sm font-medium uppercase tracking-wide text-muted">
+          Add items
         </h2>
         <div className="flex gap-3 items-end">
           <div className="flex-1">
             <Select
-              label="Product / service"
+              label="Product or service"
+              className="py-2.5 text-base"
               options={catalogOptions(products, services)}
               value={selectedCatalog}
               onChange={(e) => setSelectedCatalog(e.target.value)}
@@ -245,7 +242,8 @@ export function OfferBuilder({ deal, products, services }: Props) {
           </div>
           <div className="w-28">
             <Input
-              label="Qty"
+              label="How many"
+              className="py-2.5 text-base"
               type="number"
               min={1}
               value={selectedQty}
@@ -256,6 +254,7 @@ export function OfferBuilder({ deal, products, services }: Props) {
           </div>
           <Button
             variant="secondary"
+            className="min-h-[44px] px-5 text-base"
             onClick={addLine}
             disabled={!selectedCatalog}
           >
@@ -266,28 +265,28 @@ export function OfferBuilder({ deal, products, services }: Props) {
         {/* Line items table */}
         {lines.length > 0 && (
           <div className="mt-2 overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full text-base">
               <thead>
-                <tr className="text-left text-xs font-medium uppercase tracking-wide text-muted border-b border-border">
+                <tr className="text-left text-sm font-medium uppercase tracking-wide text-muted border-b border-border">
                   <th className="pb-2 pr-4">Item</th>
-                  <th className="pb-2 pr-4">Model</th>
-                  <th className="pb-2 pr-4 text-right">Unit price</th>
-                  <th className="pb-2 pr-4 text-right">Qty</th>
-                  <th className="pb-2 text-right">Line total</th>
+                  <th className="pb-2 pr-4">Billing</th>
+                  <th className="pb-2 pr-4 text-right">Price each</th>
+                  <th className="pb-2 pr-4 text-right">How many</th>
+                  <th className="pb-2 text-right">Total</th>
                   <th className="pb-2" />
                 </tr>
               </thead>
               <tbody>
                 {lines.map((line) => (
                   <tr key={line.key} className="border-b border-border/50">
-                    <td className="py-2 pr-4 font-medium">{line.name}</td>
-                    <td className="py-2 pr-4 text-muted text-xs capitalize">
+                    <td className="py-2.5 pr-4 font-medium">{line.name}</td>
+                    <td className="py-2.5 pr-4 text-muted text-sm capitalize">
                       {line.invoicingModel?.replace(/_/g, " ") ?? "one-off"}
                     </td>
-                    <td className="py-2 pr-4 text-right tabular-nums">
+                    <td className="py-2.5 pr-4 text-right tabular-nums">
                       {eur(line.unitPrice)}
                     </td>
-                    <td className="py-2 pr-4 text-right">
+                    <td className="py-2.5 pr-4 text-right">
                       <input
                         type="number"
                         min={1}
@@ -298,17 +297,17 @@ export function OfferBuilder({ deal, products, services }: Props) {
                             parseInt(e.target.value, 10) || 1,
                           )
                         }
-                        className="w-16 rounded border border-border bg-surface px-2 py-1 text-sm text-right tabular-nums outline-none focus:border-hmd-teal focus:ring-1 focus:ring-hmd-teal/40"
+                        className="w-20 rounded border border-border bg-surface px-2 py-2 text-base text-right tabular-nums outline-none focus:border-hmd-teal focus:ring-1 focus:ring-hmd-teal/40"
                       />
                     </td>
-                    <td className="py-2 text-right tabular-nums">
+                    <td className="py-2.5 text-right tabular-nums">
                       {eur(line.unitPrice * line.quantity)}
                     </td>
-                    <td className="py-2 pl-3">
+                    <td className="py-2.5 pl-3">
                       <button
                         onClick={() => removeLine(line.key)}
-                        className="text-muted hover:text-danger transition-colors text-xs"
-                        aria-label="Remove line"
+                        className="grid h-9 w-9 place-items-center rounded text-muted hover:text-danger transition-colors text-base"
+                        aria-label="Remove item"
                       >
                         ✕
                       </button>
@@ -321,16 +320,16 @@ export function OfferBuilder({ deal, products, services }: Props) {
         )}
 
         {lines.length === 0 && (
-          <p className="text-sm text-muted text-center py-4">
-            No line items yet — select a product or service above.
+          <p className="text-base text-muted text-center py-4">
+            Nothing added yet — pick a product or service above.
           </p>
         )}
       </Card>
 
       {/* Discount slider + totals */}
       <Card className="p-5 space-y-4">
-        <h2 className="text-xs font-medium uppercase tracking-wide text-muted">
-          Discount & totals
+        <h2 className="text-sm font-medium uppercase tracking-wide text-muted">
+          Discount &amp; total
         </h2>
 
         <Slider
@@ -347,15 +346,15 @@ export function OfferBuilder({ deal, products, services }: Props) {
         <div className="mt-4 rounded-xl bg-[#e4ff00] px-5 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-black/60">
-                List total
+              <p className="text-sm font-semibold uppercase tracking-wide text-black/60">
+                Normal price
               </p>
-              <p className="text-lg font-semibold text-black tabular-nums line-through decoration-black/40">
+              <p className="text-xl font-semibold text-black tabular-nums line-through decoration-black/40">
                 {eur(listTotal)}
               </p>
             </div>
             <div className="text-right">
-              <p className="text-xs font-semibold uppercase tracking-wide text-black/60">
+              <p className="text-sm font-semibold uppercase tracking-wide text-black/60">
                 Offer price ({discountPct}% off)
               </p>
               <p className="text-3xl font-bold text-black tabular-nums">
@@ -364,8 +363,8 @@ export function OfferBuilder({ deal, products, services }: Props) {
             </div>
           </div>
           {discountPct > 0 && (
-            <p className="mt-2 text-xs text-black/60 text-right">
-              Saving {eur(savings)} vs. list
+            <p className="mt-2 text-sm text-black/60 text-right">
+              You save {eur(savings)}
             </p>
           )}
         </div>
@@ -373,8 +372,9 @@ export function OfferBuilder({ deal, products, services }: Props) {
         {/* Justification */}
         {discountPct > 0 && (
           <Textarea
-            label="Discount justification (required)"
-            placeholder="Explain the business rationale for this discount…"
+            label="Why this discount? (required)"
+            className="text-base"
+            placeholder="A short reason — e.g. big order, repeat customer, matching a competitor…"
             value={justification}
             onChange={(e) => setJustification(e.target.value)}
             error={justificationError}
@@ -387,19 +387,24 @@ export function OfferBuilder({ deal, products, services }: Props) {
       <div className="flex items-center justify-between gap-4">
         <div>
           {submitError && (
-            <p className="text-sm text-danger">{submitError}</p>
+            <p className="text-base text-danger">{submitError}</p>
           )}
         </div>
         <div className="flex gap-3">
           <Button
             variant="secondary"
+            className="min-h-[44px] px-5 text-base"
             onClick={() => router.push(`/rep/deals/${deal.id}`)}
             disabled={isPending}
           >
             Cancel
           </Button>
-          <Button onClick={handleSubmit} disabled={isPending || lines.length === 0}>
-            {isPending ? "Submitting…" : "Submit for approval"}
+          <Button
+            className="min-h-[44px] px-5 text-base"
+            onClick={handleSubmit}
+            disabled={isPending || lines.length === 0}
+          >
+            {isPending ? "Sending…" : "Send for approval"}
           </Button>
         </div>
       </div>

@@ -169,7 +169,7 @@ export function EnrichmentPanel({
               <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
                 {/* Found this */}
                 <section>
-                  <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted">
+                  <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-muted">
                     Found this
                   </h3>
                   {result.found.length === 0 && result.contacts.length === 0 ? (
@@ -190,7 +190,7 @@ export function EnrichmentPanel({
                             />
                             <span className="flex-1">
                               <span className="flex items-center justify-between gap-2">
-                                <span className="text-xs uppercase tracking-wide text-muted">
+                                <span className="text-sm uppercase tracking-wide text-muted">
                                   {f.field}
                                 </span>
                                 <Badge tone={confidenceTone(f.confidence)}>
@@ -203,7 +203,7 @@ export function EnrichmentPanel({
                                   href={f.sourceUrl}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="text-xs text-hmd-teal underline"
+                                  className="text-sm text-hmd-teal underline"
                                 >
                                   {sourceHost(f.sourceUrl)} ↗
                                 </a>
@@ -226,7 +226,7 @@ export function EnrichmentPanel({
                             />
                             <span className="flex-1">
                               <span className="flex items-center justify-between gap-2">
-                                <span className="text-xs uppercase tracking-wide text-muted">
+                                <span className="text-sm uppercase tracking-wide text-muted">
                                   contact
                                 </span>
                                 <Badge tone={confidenceTone(c.confidence)}>
@@ -242,7 +242,7 @@ export function EnrichmentPanel({
                                   href={c.publicProfileUrl}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="text-xs text-hmd-teal underline"
+                                  className="text-sm text-hmd-teal underline"
                                 >
                                   {sourceHost(c.publicProfileUrl)} ↗
                                 </a>
@@ -257,7 +257,7 @@ export function EnrichmentPanel({
 
                 {/* Worth checking yourself */}
                 <section>
-                  <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted">
+                  <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-muted">
                     Worth checking yourself
                   </h3>
                   {result.checkYourself.length === 0 ? (
@@ -270,7 +270,7 @@ export function EnrichmentPanel({
                           className="rounded-md border border-dashed border-border p-2 text-muted"
                         >
                           <span className="block text-foreground/80">{g.topic}</span>
-                          <span className="text-xs">{g.why}</span>
+                          <span className="text-sm">{g.why}</span>
                         </li>
                       ))}
                     </ul>
@@ -279,7 +279,7 @@ export function EnrichmentPanel({
               </div>
 
               <div className="flex items-center justify-between gap-2 border-t border-border pt-3">
-                <span className="text-xs text-muted">
+                <span className="text-sm text-muted">
                   {selectedCount} item(s) selected to save
                 </span>
                 <div className="flex gap-2">

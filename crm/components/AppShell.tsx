@@ -36,6 +36,8 @@ export function AppShell({
   const router = useRouter();
   const activeRole = roleFromPath(pathname) ?? role;
   const config = ROLES[activeRole];
+  // Reps are non-technical: give them larger nav targets + plainer chrome.
+  const repView = activeRole === "rep";
 
   function switchRole(next: typeof role) {
     setRole(next);
@@ -60,7 +62,9 @@ export function AppShell({
               <Link
                 key={item.href}
                 href={item.href}
-                className={`block rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                className={`block rounded-md px-3 font-medium transition-colors ${
+                  repView ? "py-3 text-base" : "py-2 text-sm"
+                } ${
                   active
                     ? "bg-hmd-teal font-semibold text-hmd-charcoal"
                     : "text-white/70 hover:bg-white/10 hover:text-white"
@@ -71,8 +75,8 @@ export function AppShell({
             );
           })}
         </nav>
-        <div className="border-t border-white/10 p-4 text-xs text-white/50">
-          EU region · Entra ID SSO
+        <div className={`border-t border-white/10 p-4 text-white/50 ${repView ? "text-sm" : "text-xs"}`}>
+          {repView ? "🔒 Secure · EU" : "EU region · Entra ID SSO"}
         </div>
       </aside>
 
@@ -80,18 +84,18 @@ export function AppShell({
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="flex items-center justify-between border-b border-border bg-surface px-6 py-3">
           <div>
-            <p className="text-xs font-medium uppercase tracking-wide text-muted">
+            <p className={`font-medium uppercase tracking-wide text-muted ${repView ? "text-sm" : "text-xs"}`}>
               {config.label}
             </p>
           </div>
           <div className="flex items-center gap-4">
             {/* Role switcher — demo aid; replaced by SSO claims */}
-            <label className="flex items-center gap-2 text-xs text-muted">
+            <label className={`flex items-center gap-2 text-muted ${repView ? "text-sm" : "text-xs"}`}>
               View as
               <select
                 value={activeRole}
                 onChange={(e) => switchRole(e.target.value as Role)}
-                className="rounded-md border border-border bg-background px-2 py-1 text-xs font-medium text-foreground"
+                className={`rounded-md border border-border bg-background px-2 font-medium text-foreground ${repView ? "min-h-11 py-2 text-sm" : "py-1 text-xs"}`}
               >
                 {ROLE_ORDER.map((r) => (
                   <option key={r} value={r}>
@@ -103,7 +107,7 @@ export function AppShell({
             <SearchCommand />
             <NotificationCenter notifications={notifications} />
             <div className="flex items-center gap-2">
-              <span className="grid h-8 w-8 place-items-center rounded-full bg-hmd-teal text-xs font-semibold text-hmd-charcoal">
+              <span className={`grid place-items-center rounded-full bg-hmd-teal font-semibold text-hmd-charcoal ${repView ? "h-10 w-10 text-sm" : "h-8 w-8 text-xs"}`}>
                 {user.initials}
               </span>
             </div>

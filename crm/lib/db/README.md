@@ -1,28 +1,26 @@
 # `lib/db` — the typed data layer
 
 Supabase-backed, async, returns the **UI types** in `lib/types.ts`. This is the
-real replacement for the mock `lib/api.ts`.
+**only** read layer — every view renders against live Supabase data. The old
+mock `lib/api.ts` / `lib/mock-data.ts` have been removed.
 
-## For Joonatan (frontend adoption)
+## Usage
 
-The mock `lib/api.ts` is **synchronous**; `lib/db` is **async** (it hits
-Postgres). To switch a page over:
+`lib/db` is **async** (it hits Postgres) and **Server-Component only** (the
+module imports `server-only`). Read from an `async` Server Component and
+`await` the call:
 
-```diff
-- import { getAccount, getDealsForRep } from "@/lib/api";
-+ import { getAccount, getDealsForRep } from "@/lib/db";
+```ts
+import { getAccount, getDealsForRep } from "@/lib/db";
 
-- export default function RepDashboard() {
--   const deals = getDealsForRep(repId);
-+ export default async function RepDashboard() {
-+   const deals = await getDealsForRep(repId);
+export default async function RepDashboard() {
+  const deals = await getDealsForRep(repId);
+}
 ```
 
-Server Components only (the layer imports `server-only`). Function names match
-the old `api.ts`. Newly added: `getUsers`, `getAllDeals`, `getAllCases`,
-`getCasesForTam`, `getOffersForAccount`, `getProducts`, `getServices`.
-
-`api.ts` is left untouched so the build keeps working during migration.
+Writes go through `lib/db/mutations.ts` (called from Server Actions, paired with
+`revalidatePath`). Tunable scoring/forecast/approval constants live in
+`lib/scoring.ts` — never inline them here.
 
 ## Auth / current user
 

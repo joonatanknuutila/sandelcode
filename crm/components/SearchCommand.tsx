@@ -172,11 +172,11 @@ export function SearchCommand() {
         type="button"
         onClick={() => setOpen(true)}
         aria-label="Search accounts, deals and cases"
-        className="flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-1.5 text-xs text-muted transition-colors hover:border-hmd-teal/50 hover:text-foreground"
+        className="flex min-h-11 items-center gap-2 rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-muted transition-colors hover:border-hmd-teal/50 hover:text-foreground"
       >
         <SearchIcon className="h-4 w-4" />
         <span className="hidden sm:inline">Search</span>
-        <kbd className="hidden rounded border border-border px-1 font-mono text-[10px] text-muted sm:inline">
+        <kbd className="hidden rounded border border-border px-1 font-mono text-xs text-muted sm:inline">
           ⌘K
         </kbd>
       </button>

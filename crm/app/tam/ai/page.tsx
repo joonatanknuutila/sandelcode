@@ -4,7 +4,7 @@ import { forecastNarrative } from "@/lib/ai/forecast";
 import { eur } from "@/lib/format";
 import { STAGE_LABELS } from "@/lib/types";
 import { Card, SectionTitle, StatTile } from "@/components/ui";
-import { Assistant } from "../Assistant";
+import { Assistant } from "@/components/Assistant";
 import { MeetingCapture } from "../MeetingCapture";
 
 // AI workspace — the differentiator layer, all in one reachable page.

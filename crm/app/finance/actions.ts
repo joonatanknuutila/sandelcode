@@ -1,8 +1,8 @@
 "use server";
 
 // Finance Server Actions (F2 + F4). All writes go through lib/db/mutations and
-// revalidate the affected pages; reads through lib/db. Never import lib/api or
-// lib/mock-data.
+// revalidate the affected pages; reads through lib/db (live Supabase, the only
+// data layer).
 
 import { revalidatePath } from "next/cache";
 import * as mutations from "@/lib/db/mutations";

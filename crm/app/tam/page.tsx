@@ -3,7 +3,7 @@ import { getAccounts, getAllCases, getUsers } from "@/lib/db";
 import { caseAgeDays, getTamSummary, slaInfo, triageSort } from "@/lib/tam";
 import { Card, SectionTitle, StatTile } from "@/components/ui";
 import { CaseStatusBadge, PriorityBadge, SlaBadge, ThirdPartyFlag } from "./ui";
-import { Assistant } from "./Assistant";
+import { Assistant } from "@/components/Assistant";
 import { QueueResolveButton } from "./QueueResolveButton";
 
 // Technical Account Manager dashboard — the case queue, triaged.
@@ -71,7 +71,11 @@ export default async function TamView() {
                 <Link href={`/tam/cases/${c.id}`} className="min-w-0 flex-1">
                   <Card
                     className={`flex items-center gap-4 p-3.5 transition-colors hover:border-hmd-teal-600 ${
-                      sla.state === "breach" ? "border-l-2 border-l-danger" : ""
+                      sla.state === "breach"
+                        ? "border-l-2 border-l-danger"
+                        : sla.state === "soon"
+                          ? "border-l-2 border-l-warning"
+                          : ""
                     }`}
                   >
                     <PriorityBadge priority={c.priority} />

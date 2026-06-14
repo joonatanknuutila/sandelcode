@@ -1,8 +1,9 @@
 // "AI next best action" — async, grounded in the live timeline and offers.
 // Falls back to deterministic logic when the model is offline; honest labeling.
 
-import { Activity, Deal, Offer, STAGE_LABELS } from "../types";
+import { Activity, Deal, Offer, REP_STAGE_LABELS } from "../types";
 import { relativeDays } from "../format";
+import { STALE_DAYS } from "../scoring";
 import { ChatMessage, complete } from "./provider";
 
 export type NbaCTAKind =
@@ -26,6 +27,15 @@ export interface NextBestAction {
   modelUsed: boolean;
 }
 
+/** Days since the most recent activity. With no activity at all the deal reads
+ *  as maximally stale, so we return a large sentinel rather than 0. */
+const NO_ACTIVITY_STALE_DAYS = 99;
+function daysSinceLastActivity(activities: Activity[]): number {
+  return activities.length > 0
+    ? relativeDays(activities[0].createdAt)
+    : NO_ACTIVITY_STALE_DAYS;
+}
+
 // ---------------------------------------------------------------------------
 // Deterministic fallback — always works without a model key
 // ---------------------------------------------------------------------------
@@ -34,14 +44,12 @@ function deterministicNBA(
   activities: Activity[],
   offers: Offer[],
 ): NextBestAction {
-  const staleDays = activities.length > 0
-    ? relativeDays(activities[0].createdAt)
-    : 99;
+  const staleDays = daysSinceLastActivity(activities);
 
-  if (staleDays >= 14) {
+  if (staleDays >= STALE_DAYS) {
     return {
       headline: `Re-engage — quiet ${staleDays} days`,
-      detail: `No activity in ${staleDays} days at stage "${STAGE_LABELS[deal.stage]}". A short check-in keeps momentum before this deal slips.`,
+      detail: `No activity in ${staleDays} days at stage "${REP_STAGE_LABELS[deal.stage]}". A short check-in keeps momentum before this deal slips.`,
       cta: { kind: "log_call", label: "Log a check-in call" },
       modelUsed: false,
     };
@@ -71,7 +79,7 @@ function deterministicNBA(
     case "rfi":
       return {
         headline: "Push toward an offer",
-        detail: "RFI is answered — propose a scoped pilot to move into RFP.",
+        detail: "The customer's questions are answered — propose a scoped pilot and send your offer.",
         cta: { kind: "draft_email", label: "Draft proposal email" },
         modelUsed: false,
       };
@@ -122,9 +130,7 @@ export async function nextBestAction(
     .map((o) => `Offer v${o.version} status=${o.status} total=${o.total}`)
     .join("; ");
 
-  const staleDays = activities.length > 0
-    ? relativeDays(activities[0].createdAt)
-    : 99;
+  const staleDays = daysSinceLastActivity(activities);
 
   const messages: ChatMessage[] = [
     {
@@ -135,12 +141,15 @@ export async function nextBestAction(
         `{"headline": string, "detail": string, "cta_kind": "log_call"|"draft_email"|"open_offer"|"move_stage", "cta_label": string}. ` +
         `headline: ≤8 words. detail: one grounded sentence citing the timeline or offer. ` +
         `Pick the CTA kind that would most advance the deal right now. ` +
+        `All amounts are in euros (€) — never write "$" or any other currency. ` +
+        `Write for the rep in plain language; never use internal acronyms or jargon ` +
+        `(no RFI, RFP, TCV, SLA, "weighted", "% confidence", "win probability"). ` +
         `Do NOT invent facts not present in the context.`,
     },
     {
       role: "user",
       content:
-        `Deal: ${deal.name} | Stage: ${STAGE_LABELS[deal.stage]} | ` +
+        `Deal: ${deal.name} | Stage: ${REP_STAGE_LABELS[deal.stage]} | ` +
         `Days since last activity: ${staleDays}\n` +
         `Recent activity:\n${recentSummary || "none"}\n` +
         `Offers: ${offerSummary || "none"}`,

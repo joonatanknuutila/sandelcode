@@ -11,6 +11,7 @@ import { ChatMessage, complete } from "./provider";
 import { getAllDeals } from "@/lib/db";
 import { Deal, dealProbability } from "@/lib/types";
 import { eur } from "@/lib/format";
+import { FORECAST_BANDS } from "@/lib/scoring";
 import type { ForecastSummaryFigures } from "@/components/ForecastSummary";
 import type { Horizon } from "@/components/ForecastSummary";
 import { HORIZON_LABELS } from "@/components/ForecastSummary";
@@ -51,8 +52,8 @@ export async function computeForecast(): Promise<ForecastFigures> {
     const tcv = d.forecast.reduce((s, f) => s + f.deviceRevenue + f.serviceRevenue, 0);
     weightedPipeline += tcv * p;
 
-    if (p >= 0.8) committed += tcv;
-    else if (p >= 0.4) atRisk += tcv * p;
+    if (p >= FORECAST_BANDS.committed) committed += tcv;
+    else if (p >= FORECAST_BANDS.atRisk) atRisk += tcv * p;
     else if (p > 0) upside += tcv * p;
 
     deviceWeighted += d.forecast.reduce((s, f) => s + f.deviceRevenue, 0) * p;

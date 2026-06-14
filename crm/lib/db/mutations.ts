@@ -13,6 +13,7 @@
 import "server-only";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getAccount, getCurrentUser } from "@/lib/db";
+import { requiresFinanceApproval } from "@/lib/scoring";
 import {
   caseStatusToDb,
   mapActivity,
@@ -541,8 +542,9 @@ export interface RecordApprovalInput {
 }
 
 /** Record an approval and advance the offer through its gates.
- *  rejected -> rejected; SM approve & discount>10% -> pending_finance; SM approve
- *  & discount<=10% -> approved; Finance approve -> approved + locked_at=now(). */
+ *  rejected -> rejected; SM approve & discount over the Finance threshold ->
+ *  pending_finance; SM approve & within threshold -> approved; Finance approve
+ *  -> approved + locked_at=now(). Threshold lives in lib/scoring. */
 export async function recordApproval(input: RecordApprovalInput) {
   const admin = createAdminClient();
   const approver = await actorId(input.approverId);
@@ -571,8 +573,13 @@ export async function recordApproval(input: RecordApprovalInput) {
   if (input.decision === "rejected") {
     update.status = "rejected";
   } else if (input.role === "sm") {
-    update.status =
-      Number(offer.discount_pct) > 10 ? "pending_finance_approval" : "approved";
+    if (requiresFinanceApproval(Number(offer.discount_pct))) {
+      update.status = "pending_finance_approval";
+    } else {
+      // Within the Finance threshold: SM is the final gate — approve & lock now.
+      update.status = "approved";
+      update.locked_at = new Date().toISOString();
+    }
   } else {
     update.status = "approved";
     update.locked_at = new Date().toISOString();

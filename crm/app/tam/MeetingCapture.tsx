@@ -27,7 +27,39 @@ const TYPE_LABEL: Record<string, string> = {
   case: "Case",
 };
 
-export function MeetingCapture({ accountId }: { accountId: string }) {
+// Two front-ends over the SAME meeting→CRM approval gate. "email" is the demo
+// stand-in for the Azure/Graph inbound-email→case webhook (see
+// lib/integrations/graph.ts): paste an inbound email, it proposes a case, a
+// human approves before anything is written.
+type CaptureMode = "meeting" | "email";
+
+const COPY: Record<
+  CaptureMode,
+  { trigger: string; title: string; placeholder: string; draftCta: string; note?: string }
+> = {
+  meeting: {
+    trigger: "+ Log a meeting",
+    title: "Log a meeting",
+    placeholder: "Paste meeting notes or a transcript…",
+    draftCta: "Draft update",
+  },
+  email: {
+    trigger: "+ Paste an inbound email",
+    title: "Inbound email → propose a case",
+    placeholder: "Paste an inbound customer email…",
+    draftCta: "Propose from email",
+    note: "Demo stand-in for the Azure/Graph email→case webhook — same human-approval gate.",
+  },
+};
+
+export function MeetingCapture({
+  accountId,
+  mode = "meeting",
+}: {
+  accountId: string;
+  mode?: CaptureMode;
+}) {
+  const copy = COPY[mode];
   const [open, setOpen] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [draft, setDraft] = useState<Draft | null>(null);
@@ -102,7 +134,7 @@ export function MeetingCapture({ accountId }: { accountId: string }) {
         onClick={() => setOpen(true)}
         className="rounded-lg border border-border bg-surface px-3.5 py-2 text-sm font-medium text-foreground hover:border-hmd-teal-600"
       >
-        + Log a meeting
+        {copy.trigger}
       </button>
     );
   }
@@ -114,7 +146,7 @@ export function MeetingCapture({ accountId }: { accountId: string }) {
           <span className="rounded bg-hmd-teal px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-hmd-charcoal">
             AI
           </span>
-          <p className="text-sm font-semibold">Log a meeting</p>
+          <p className="text-sm font-semibold">{copy.title}</p>
         </div>
         <button onClick={() => { setOpen(false); reset(); }} className="text-xs text-muted hover:text-foreground">
           Close
@@ -129,19 +161,22 @@ export function MeetingCapture({ accountId }: { accountId: string }) {
 
       {!draft && (
         <>
+          {copy.note && (
+            <p className="mt-3 text-xs text-muted">{copy.note}</p>
+          )}
           <textarea
             value={transcript}
             onChange={(e) => setTranscript(e.target.value)}
-            placeholder="Paste meeting notes or a transcript…"
+            placeholder={copy.placeholder}
             rows={5}
-            className="mt-3 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-hmd-teal-600"
+            className="mt-2 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-hmd-teal-600"
           />
           <button
             onClick={makeDraft}
             disabled={busy || !transcript.trim()}
             className="mt-2 rounded-md bg-hmd-teal px-3.5 py-2 text-sm font-medium text-hmd-teal-700 hover:bg-hmd-teal/90 disabled:opacity-40"
           >
-            {busy ? "Drafting…" : "Draft update"}
+            {busy ? "Drafting…" : copy.draftCta}
           </button>
         </>
       )}

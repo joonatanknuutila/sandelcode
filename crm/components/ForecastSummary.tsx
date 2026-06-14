@@ -14,6 +14,7 @@
 import { Deal, dealProbability } from "@/lib/types";
 import type { ForecastTarget, ConfidenceOverride } from "@/lib/db";
 import { eur } from "@/lib/format";
+import { FORECAST_BANDS } from "@/lib/scoring";
 import { Card } from "@/components/ui";
 
 // ---------------------------------------------------------------------------
@@ -119,8 +120,8 @@ export function computeForecastSummary(
       0,
     );
     const weighted = value * conf;
-    if (conf >= 0.8) committed += weighted;
-    else if (conf >= 0.4) atRisk += weighted;
+    if (conf >= FORECAST_BANDS.committed) committed += weighted;
+    else if (conf >= FORECAST_BANDS.atRisk) atRisk += weighted;
     else if (conf > 0) upside += weighted;
   }
 
