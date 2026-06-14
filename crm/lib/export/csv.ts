@@ -9,10 +9,20 @@
 
 export type CsvValue = string | number | boolean | null | undefined;
 
-/** Quote a single field if it contains a delimiter, quote or newline. */
+// A string field beginning with one of these is interpreted as a formula by
+// Excel / Google Sheets when the CSV is opened (CSV / formula injection,
+// CWE-1236). Account names, deal titles and justifications are user-entered, so
+// neutralise them. Numbers/booleans are our own computed values and pass
+// through untouched, keeping numeric columns summable.
+const FORMULA_LEAD = /^[=+\-@\t\r]/;
+
+/** Quote a single field if it contains a delimiter, quote or newline, after
+ *  neutralising any leading formula trigger on text fields. */
 function escapeField(value: CsvValue): string {
   if (value === null || value === undefined) return "";
-  const s = typeof value === "string" ? value : String(value);
+  if (typeof value !== "string") return String(value);
+  // Prefix a single quote so a leading =/+/-/@ is rendered as literal text.
+  const s = FORMULA_LEAD.test(value) ? `'${value}` : value;
   if (/[",\r\n]/.test(s)) {
     return `"${s.replace(/"/g, '""')}"`;
   }
