@@ -310,11 +310,15 @@ export function mapActivity(a: Tables<"activity_timeline">): Activity {
 
 export function mapOfferLine(li: Tables<"offer_line_items">): OfferLine {
   return {
+    itemType: li.item_type === "service" ? "service" : "product",
     productId: li.product_id ?? li.service_id ?? li.id,
+    serviceId: li.service_id ?? undefined,
     name: li.description,
     quantity: li.quantity,
     unitPrice: Number(li.unit_price),
     discountPct: Number(li.discount_pct),
+    invoicingModel: li.invoicing_model ?? undefined,
+    termYears: li.term_years ?? undefined,
   };
 }
 
@@ -326,10 +330,12 @@ export function mapOffer(
     id: o.id,
     accountId: o.account_id,
     dealId: o.deal_id ?? "",
+    title: o.title,
     version: o.version,
     status: toOfferStatus(o.status),
     lines: lines.map(mapOfferLine),
     total: Number(o.total_discounted_value ?? o.total_list_value ?? 0),
+    discountPct: Number(o.discount_pct),
     justification: o.discount_justification ?? undefined,
     createdAt: o.created_at,
   };

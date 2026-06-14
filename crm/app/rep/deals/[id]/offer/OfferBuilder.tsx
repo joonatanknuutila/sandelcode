@@ -3,7 +3,7 @@
 import { useState, useTransition, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import type { Tables } from "@/lib/types.db";
-import type { Deal } from "@/lib/types";
+import type { Deal, Offer } from "@/lib/types";
 import { eur } from "@/lib/format";
 import { Button, Card, Input, Select, Slider, Textarea } from "@/components/ui";
 import { toast } from "@/components/ui-client";
@@ -35,6 +35,7 @@ interface Props {
   deal: Deal;
   products: Product[];
   services: Service[];
+  existingOffer?: Offer;
 }
 
 // ---------------------------------------------------------------------------
@@ -95,18 +96,48 @@ function nextKey() {
   return ++keyCounter;
 }
 
-export function OfferBuilder({ deal, products, services }: Props) {
+function offerLineBillingLabel(line: Offer["lines"][number]): string {
+  if (line.itemType === "product") return "Device";
+  if (line.invoicingModel === "monthly_recurring") {
+    const years = line.termYears ?? 1;
+    return `Monthly service, ${years} year${years === 1 ? "" : "s"}`;
+  }
+  if (line.invoicingModel === "fixed_term") {
+    const years = line.termYears ?? 1;
+    return `Fixed service, ${years} year${years === 1 ? "" : "s"}`;
+  }
+  return "One-off service";
+}
+
+function lineFromOffer(line: Offer["lines"][number]): LineItem {
+  const kind = line.itemType;
+  return {
+    key: nextKey(),
+    kind,
+    id: kind === "service" ? (line.serviceId ?? line.productId) : line.productId,
+    name: line.name,
+    billingLabel: offerLineBillingLabel(line),
+    unitPrice: line.unitPrice,
+    quantity: line.quantity,
+    invoicingModel: line.invoicingModel,
+    termYears: line.termYears,
+  };
+}
+
+export function OfferBuilder({ deal, products, services, existingOffer }: Props) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const [offerTitle, setOfferTitle] = useState(
-    `Offer for ${deal.name}`,
+    existingOffer?.title ?? `Offer for ${deal.name}`,
   );
-  const [lines, setLines] = useState<LineItem[]>([]);
+  const [lines, setLines] = useState<LineItem[]>(
+    () => existingOffer?.lines.map(lineFromOffer) ?? [],
+  );
   const [selectedCatalog, setSelectedCatalog] = useState("");
   const [selectedQty, setSelectedQty] = useState(1);
-  const [discountPct, setDiscountPct] = useState(0);
-  const [justification, setJustification] = useState("");
+  const [discountPct, setDiscountPct] = useState(existingOffer?.discountPct ?? 0);
+  const [justification, setJustification] = useState(existingOffer?.justification ?? "");
   const [justificationError, setJustificationError] = useState("");
   const [submitError, setSubmitError] = useState("");
 

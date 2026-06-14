@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getDeal, getProducts, getServices } from "@/lib/db";
+import { getDeal, getOffersForDeal, getProducts, getServices } from "@/lib/db";
 import { OfferBuilder } from "./OfferBuilder";
 
 export default async function OfferBuilderPage({
@@ -10,10 +10,11 @@ export default async function OfferBuilderPage({
 }) {
   const { id } = await params;
 
-  const [deal, products, services] = await Promise.all([
+  const [deal, products, services, offers] = await Promise.all([
     getDeal(id),
     getProducts(),
     getServices(),
+    getOffersForDeal(id),
   ]);
 
   if (!deal) notFound();
@@ -39,7 +40,12 @@ export default async function OfferBuilderPage({
         </div>
       </div>
 
-      <OfferBuilder deal={deal} products={products} services={services} />
+      <OfferBuilder
+        deal={deal}
+        products={products}
+        services={services}
+        existingOffer={offers[0]}
+      />
     </div>
   );
 }

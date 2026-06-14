@@ -223,21 +223,27 @@ export type OfferStatus =
   | "rejected";
 
 export interface OfferLine {
+  itemType: "product" | "service";
   productId: string;
+  serviceId?: string;
   name: string;
   quantity: number;
   unitPrice: number;
   discountPct: number;
+  invoicingModel?: "one_off" | "monthly_recurring" | "fixed_term";
+  termYears?: number;
 }
 
 export interface Offer {
   id: string;
   accountId: string;
   dealId: string;
+  title: string;
   version: number;
   status: OfferStatus;
   lines: OfferLine[];
   total: number;
+  discountPct: number;
   /** Required when a discount is applied. */
   justification?: string;
   createdAt: string;
