@@ -18,10 +18,27 @@ const ACTIVE_STAGES: Stage[] = STAGE_ORDER.filter(
   (s) => s !== "won" && s !== "lost",
 );
 
-/** A deal's weighted value (3-yr TCV × win probability). Won = full, lost = 0
- *  via dealProbability. Matches the weighting used across the forecast. */
-function weighted(d: Deal): number {
-  return d.tcv * dealProbability(d);
+/** Absolute quarter index of a forecast point (year 0..2, quarter 1..4). */
+function quarterOffset(p: { year: number; quarter: number }): number {
+  return p.year * 4 + (p.quarter - 1);
+}
+
+/** A deal's device + service revenue landing within the first `window` quarters
+ *  of the horizon — the figure every windowed chart reconciles against. Pass
+ *  window = 12 for the full 3-year view (equivalent to the deal's TCV). */
+export function dealRevenueInWindow(
+  d: Deal,
+  window: number,
+): { device: number; service: number; total: number } {
+  let device = 0;
+  let service = 0;
+  for (const f of d.forecast) {
+    if (quarterOffset(f) < window) {
+      device += f.deviceRevenue;
+      service += f.serviceRevenue;
+    }
+  }
+  return { device, service, total: device + service };
 }
 
 // --- Device vs service revenue split (brief keeps these separate) -----------
@@ -33,16 +50,15 @@ export interface RevenueSplit {
 
 /** Weighted device vs service revenue across all non-lost deals (won counts at
  *  full probability via dealProbability). Summed from the time-phased points. */
-export function deviceServiceSplit(deals: Deal[]): RevenueSplit {
+export function deviceServiceSplit(deals: Deal[], window: number): RevenueSplit {
   let device = 0;
   let service = 0;
   for (const d of deals) {
     if (d.stage === "lost") continue;
     const p = dealProbability(d);
-    for (const f of d.forecast) {
-      device += f.deviceRevenue * p;
-      service += f.serviceRevenue * p;
-    }
+    const w = dealRevenueInWindow(d, window);
+    device += w.device * p;
+    service += w.service * p;
   }
   return { device: Math.round(device), service: Math.round(service) };
 }
@@ -57,14 +73,15 @@ export interface FunnelStage {
   count: number;
 }
 
-/** Open pipeline value by active stage, in pipeline order — the funnel. */
-export function stageFunnel(openDeals: Deal[]): FunnelStage[] {
+/** Open pipeline value by active stage, in pipeline order — the funnel.
+ *  Value is the revenue landing inside the horizon window. */
+export function stageFunnel(openDeals: Deal[], window: number): FunnelStage[] {
   return ACTIVE_STAGES.map((stage) => {
     const inStage = openDeals.filter((d) => d.stage === stage);
     return {
       stage,
       label: STAGE_LABELS[stage],
-      value: inStage.reduce((s, d) => s + d.tcv, 0),
+      value: inStage.reduce((s, d) => s + dealRevenueInWindow(d, window).total, 0),
       count: inStage.length,
     };
   });
@@ -93,6 +110,7 @@ export function revenueByDimension(
   openDeals: Deal[],
   accounts: Account[],
   dim: Dimension,
+  window: number,
 ): DimensionSlice[] {
   const accountById = new Map(accounts.map((a) => [a.id, a]));
   const groups = new Map<string, { value: number; count: number }>();
@@ -106,7 +124,7 @@ export function revenueByDimension(
       key = a ? (dim === "region" ? a.region : a.industry) : "Unknown";
     }
     const cur = groups.get(key) ?? { value: 0, count: 0 };
-    cur.value += weighted(d);
+    cur.value += dealRevenueInWindow(d, window).total * dealProbability(d);
     cur.count += 1;
     groups.set(key, cur);
   }
@@ -128,22 +146,22 @@ const BAND_LABELS: Record<ConfidenceBand, string> = {
 export interface ConfidenceBucket {
   band: ConfidenceBand;
   label: string;
-  /** Total opportunity (TCV) whose confidence falls in this band. */
+  /** In-window opportunity whose confidence falls in this band. */
   value: number;
   count: number;
 }
 
-/** Aggregate per-deal confidence VMs into low/medium/high buckets by TCV — how
- *  much pipeline value rests on shaky vs solid deals. */
+/** Aggregate per-deal confidence into low/medium/high buckets by in-window
+ *  value — how much pipeline rests on shaky vs solid deals. */
 export function confidenceDistribution(
-  vms: { band: ConfidenceBand; tcv: number }[],
+  items: { band: ConfidenceBand; value: number }[],
 ): ConfidenceBucket[] {
   return BAND_ORDER.map((band) => {
-    const inBand = vms.filter((v) => v.band === band);
+    const inBand = items.filter((v) => v.band === band);
     return {
       band,
       label: BAND_LABELS[band],
-      value: inBand.reduce((s, v) => s + v.tcv, 0),
+      value: inBand.reduce((s, v) => s + v.value, 0),
       count: inBand.length,
     };
   });

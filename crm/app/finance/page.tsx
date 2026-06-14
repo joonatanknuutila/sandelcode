@@ -31,6 +31,7 @@ import {
 import { TargetImport } from "@/components/finance/TargetImport";
 import {
   confidenceDistribution,
+  dealRevenueInWindow,
   deviceServiceSplit,
   discountExposure,
   closeRate as computeCloseRate,
@@ -244,19 +245,23 @@ export default async function FinanceView({
     wonCount: won.length,
     lostCount,
 
-    split: deviceServiceSplit([...openF, ...wonF]),
-    funnel: stageFunnel(openF),
+    split: deviceServiceSplit([...openF, ...wonF], window),
+    funnel: stageFunnel(openF, window),
 
     dim,
-    dimSlices: revenueByDimension(openF, accounts, dim),
+    dimSlices: revenueByDimension(openF, accounts, dim, window),
     dimHrefs: {
       region: financeHref(horizon, minTcv, "region"),
       industry: financeHref(horizon, minTcv, "industry"),
       channel: financeHref(horizon, minTcv, "channel"),
     },
 
+    // confidenceVMs is Promise.all over openF, so index i aligns with openF[i].
     confidence: confidenceDistribution(
-      confidenceVMs.map((v) => ({ band: v.band, tcv: v.tcv })),
+      confidenceVMs.map((v, i) => ({
+        band: v.band,
+        value: dealRevenueInWindow(openF[i], window).total,
+      })),
     ),
     discount: discountExposure(pendingOffers),
   };

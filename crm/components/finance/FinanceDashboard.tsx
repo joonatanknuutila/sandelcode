@@ -167,7 +167,7 @@ export function FinanceDashboard({ data }: { data: FinanceDashboardData }) {
             ]}
           />
           <p className="mt-3 text-xs text-muted">
-            Kept separate per the brief — service revenue is back-loaded and volume-dependent.
+            Kept separate per the brief — service is back-loaded and volume-dependent · {data.horizonLabel}.
           </p>
         </Card>
       </div>
@@ -177,6 +177,7 @@ export function FinanceDashboard({ data }: { data: FinanceDashboardData }) {
         <Card className="p-4">
           <SectionTitle>Pipeline by stage</SectionTitle>
           <Funnel stages={funnelStages} />
+          <p className="mt-3 text-xs text-muted">Open pipeline value · {data.horizonLabel}.</p>
         </Card>
 
         <Card className="p-4">
@@ -200,14 +201,16 @@ export function FinanceDashboard({ data }: { data: FinanceDashboardData }) {
             </div>
           </div>
           <BarList items={dimItems} color={CHART.committed} />
-          <p className="mt-3 text-xs text-muted">Weighted open pipeline · count after each label.</p>
+          <p className="mt-3 text-xs text-muted">
+            Weighted open pipeline · {data.horizonLabel} · count after label.
+          </p>
         </Card>
 
         <Card className="p-4">
           <SectionTitle>Confidence distribution</SectionTitle>
           <BarList items={confidenceItems} />
           <p className="mt-3 text-xs text-muted">
-            Open pipeline (TCV) by confidence band — how much rests on shaky deals.
+            Open pipeline by confidence band · {data.horizonLabel} — how much rests on shaky deals.
           </p>
         </Card>
       </div>
