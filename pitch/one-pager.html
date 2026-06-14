@@ -132,7 +132,7 @@
 
   /* ---------- PRODUCT band ---------- */
   .roles{position:relative;z-index:10;flex:1 1 0;min-height:0;display:grid;
-    grid-template-columns:repeat(4,1fr);gap:1.4cqw;padding:0 4.2cqw;align-content:center}
+    grid-template-columns:repeat(3,1fr);gap:1.4cqw;padding:0 4.2cqw;align-content:center}
   .card{position:relative;border:1px solid var(--border);border-radius:1.2cqw;
     background:var(--surface);padding:1.9cqh 1.4cqw;overflow:hidden;
     transition:transform .35s var(--ease),border-color .35s var(--ease),background .35s var(--ease)}
@@ -148,7 +148,6 @@
   .card .ct{font-size:1.3cqw;font-weight:700;letter-spacing:-.01em;line-height:1.12}
   .card .cd{font-size:.98cqw;color:var(--muted);line-height:1.36;margin-top:.7cqh}
   .card.pro::before{background:var(--success)}
-  .card.con::before{background:var(--warning)}
   .card .mini{display:flex;flex-wrap:wrap;gap:.45cqw;margin-top:1cqh}
   .card .mini span{font-size:.72cqw;font-weight:700;color:var(--ink);padding:.35cqh .55cqw;
     border-radius:5cqw;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.08)}
@@ -221,9 +220,9 @@
           <span class="tile">H</span><span class="word">HMD <span class="s">Secure</span></span>
         </div>
         <div class="status r" style="--i:0">
-          <span class="chip"><span class="d g"></span> Live on Vercel</span>
-          <span class="chip"><span class="d"></span> Supabase · EU&nbsp;(eu-north-1)</span>
-          <span class="chip"><span class="d"></span> 0 AI keys required</span>
+          <span class="chip"><span class="d g"></span> Live demo</span>
+          <span class="chip"><span class="d"></span> EU-resident data</span>
+          <span class="chip"><span class="d"></span> Grounded AI</span>
         </div>
       </div>
 
@@ -232,12 +231,12 @@
         <div>
           <div class="tag r" style="--i:1"><span class="dot"></span> HMD Secure — Internal CRM</div>
           <h1>
-            <span class="r" style="--i:2">Sell secure devices.</span><br/>
-            <span class="r" style="--i:3">Forecast the hardware.</span><br/>
-            <span class="r" style="--i:4"><span class="uline">Trust every number.</span></span>
+            <span class="r" style="--i:2">One CRM for the</span><br/>
+            <span class="r" style="--i:3">secure device sale.</span><br/>
+            <span class="r" style="--i:4"><span class="uline">From lead to forecast.</span></span>
           </h1>
-          <p class="lead r" style="--i:6">An AI CRM that thinks like a security vendor — grounded in your
-            data, EU-resident, and useful with zero AI keys. Four roles, one opinionated tool.</p>
+          <p class="lead r" style="--i:6">A role-aware sales system for HMD Secure: reps move deals,
+            TAMs protect delivery, managers unblock risk, and finance gets a forecast it can defend.</p>
         </div>
         <div class="hero-media r" style="--i:5">
           <div class="hero-glow" aria-hidden="true"></div>
@@ -250,60 +249,48 @@
       <div class="roles">
         <div class="card r" style="--i:7">
           <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h5"/></svg></span>
-          <div class="role">Software</div>
-          <div class="ct">Next.js CRM on live Postgres</div>
-          <div class="cd">Frontend, API routes and typed Supabase data layer in one deployable app.</div>
-          <div class="mini"><span>Next.js 16</span><span>Supabase EU</span><span>Vercel</span></div>
+          <div class="role">Complete flow</div>
+          <div class="ct">Lead → deal → offer → approval</div>
+          <div class="cd">The core sales motion is in one place, so the demo is a real workflow, not a mockup.</div>
+          <div class="mini"><span>Accounts</span><span>Offers</span><span>Pipeline</span></div>
         </div>
         <div class="card r" style="--i:8">
           <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 8h8M8 12h5M8 16h7"/></svg></span>
-          <div class="role">UI</div>
-          <div class="ct">Role-first workspaces</div>
-          <div class="cd">Rep, TAM, manager and finance screens expose the next action without hunting.</div>
-          <div class="mini"><span>Account 360</span><span>SLA queue</span><span>Forecast</span></div>
+          <div class="role">User experience</div>
+          <div class="ct">Built around the job to be done</div>
+          <div class="cd">Every persona lands on the work that matters now: next actions, SLA risk, approvals and numbers.</div>
+          <div class="mini"><span>Rep</span><span>TAM</span><span>SM</span><span>Finance</span></div>
         </div>
         <div class="card pro r" style="--i:9">
           <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg></span>
-          <div class="role">Pros</div>
-          <div class="ct">Grounded, demoable, secure</div>
-          <div class="cd">Real seed data, EU residency, deterministic fallbacks and human-approved writes.</div>
-          <div class="mini"><span>No fake facts</span><span>0 AI keys</span><span>Audit trail</span></div>
-        </div>
-        <div class="card con r" style="--i:10">
-          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/><path d="M10.3 4.3L2 19h20L13.7 4.3a2 2 0 00-3.4 0z"/></svg></span>
-          <div class="role">Cons / Risks</div>
-          <div class="ct">Hackathon scope limits</div>
-          <div class="cd">Auth is demo-grade, no Azure/Graph wiring yet, and imports are intentionally out of scope.</div>
-          <div class="mini"><span>Needs hardening</span><span>No migration</span><span>Azure later</span></div>
+          <div class="role">AI advantage</div>
+          <div class="ct">Helpful without hallucinating</div>
+          <div class="cd">The model can phrase, summarize and suggest, but the facts come from queried CRM data.</div>
+          <div class="mini"><span>No fake deals</span><span>Fallbacks</span><span>Human approval</span></div>
         </div>
       </div>
 
       <!-- PROOF -->
       <div class="proof">
         <div class="ground">
-          <div class="gt r" style="--i:11">Top 3 priorities.<br/><span class="uline">Finish what proves value.</span></div>
-          <div class="gd r" style="--i:12">The demo should show a CRM that reduces work now, while being honest about what still needs enterprise hardening.</div>
+          <div class="gt r" style="--i:11">Why judges should care.<br/><span class="uline">It solves the brief end to end.</span></div>
+          <div class="gd r" style="--i:12">HMD does not need another generic CRM skin. It needs a secure-device sales cockpit with trustworthy forecasting and role-specific AI.</div>
           <div class="priority-list r" style="--i:13">
-            <div class="priority"><b>1</b><span><strong>Forecast trust:</strong> 3-year time-phased pipeline, confidence and manager/finance override.</span></div>
-            <div class="priority"><b>2</b><span><strong>Rep speed:</strong> account 360, offer builder, next best action and discount approvals.</span></div>
-            <div class="priority"><b>3</b><span><strong>TAM control:</strong> case triage, SLA risk and grounded summaries when threads get long.</span></div>
-          </div>
-          <div class="pills r" style="--i:13">
-            <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Can't invent a deal</span>
-            <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg> Enrichment opt-in</span>
-            <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> Agent on every page</span>
+            <div class="priority"><b>1</b><span><strong>Revenue clarity:</strong> 3-year weighted forecast by quarter, not spreadsheet guesswork.</span></div>
+            <div class="priority"><b>2</b><span><strong>Faster selling:</strong> account context, catalog offers and discount approvals stay connected.</span></div>
+            <div class="priority"><b>3</b><span><strong>Delivery confidence:</strong> cases, SLAs and technical history travel with the account.</span></div>
           </div>
         </div>
         <div class="closewrap">
           <div class="stats">
-            <div class="stat r" style="--i:12"><div class="n"><span class="count" data-to="4">0</span></div><div class="sl">role-specific workspaces</div></div>
+            <div class="stat r" style="--i:12"><div class="n"><span class="count" data-to="4">0</span></div><div class="sl">personas covered end to end</div></div>
             <div class="stat r" style="--i:13"><div class="n"><span class="count" data-to="3">0</span><span class="u">yr</span></div><div class="sl">time-phased forecast</div></div>
             <div class="stat r" style="--i:14"><div class="n"><span class="count" data-to="2">0</span></div><div class="sl">approval gates for discounts</div></div>
             <div class="stat r" style="--i:15"><div class="n"><span class="u">0</span></div><div class="sl">AI keys required</div></div>
           </div>
           <div class="close r" style="--i:16">
-            <div class="cl">HMD Secure CRM <span>— live, grounded &amp; EU-resident.</span></div>
-            <a class="cta" href="index.html">▶ Open the full deck</a>
+            <div class="cl">HMD Secure CRM <span>— built to run the sales motion, not just describe it.</span></div>
+            <a class="cta" href="https://web-teal-xi-17.vercel.app/rep">▶ Launch live CRM</a>
           </div>
         </div>
       </div>
