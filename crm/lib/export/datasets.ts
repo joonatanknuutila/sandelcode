@@ -15,6 +15,7 @@ import {
   weightedValue,
 } from "@/lib/db";
 import { STAGE_LABELS, dealProbability } from "@/lib/types";
+import { quarterLabel } from "@/lib/format";
 import { caseAgeDays, slaInfo } from "@/lib/tam";
 import type { CsvValue } from "./csv";
 
@@ -23,12 +24,14 @@ export interface Dataset {
   rows: Record<string, CsvValue>[];
 }
 
-// The 12 quarter columns of the 3-year time-phased forecast (Y1Q1 … Y3Q4).
+// The 12 quarter columns of the 3-year time-phased forecast. The `key` stays
+// relative + stable (y1q1 … y3q4) so column ids never shift; the human label
+// shows the actual calendar year (2026 Q1 … 2028 Q4).
 const QUARTERS: { key: string; label: string; year: 0 | 1 | 2; quarter: 1 | 2 | 3 | 4 }[] =
   ([0, 1, 2] as const).flatMap((year) =>
     ([1, 2, 3, 4] as const).map((quarter) => ({
       key: `y${year + 1}q${quarter}`,
-      label: `Y${year + 1} Q${quarter} (EUR)`,
+      label: `${quarterLabel(year, quarter)} (EUR)`,
       year,
       quarter,
     })),
