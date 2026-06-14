@@ -11,27 +11,41 @@ import {
 import { confidence } from "@/lib/ai/confidence";
 import { Deal, dealProbability } from "@/lib/types";
 import { eur, num, quarterLabel } from "@/lib/format";
-import { Badge, Card, SectionTitle, StatTile } from "@/components/ui";
+import { Badge, Card, SectionTitle } from "@/components/ui";
 import { ExportLinks } from "@/components/ExportLinks";
 import { OfferApproval, OfferVM } from "@/components/OfferApproval";
 import { forecastNarrative } from "@/lib/ai/forecast";
 import { Assistant } from "@/components/Assistant";
 import {
   computeForecastSummary,
-  ForecastSummary,
   HORIZON_QUARTERS,
+  HORIZON_LABELS,
   Horizon,
   PERIOD_OPTIONS,
 } from "@/components/ForecastSummary";
 import { ConfidenceOverride, DealConfidenceVM } from "./ConfidenceOverride";
+import {
+  FinanceDashboard,
+  type FinanceDashboardData,
+} from "@/components/finance/FinanceDashboard";
+import { TargetImport } from "@/components/finance/TargetImport";
+import {
+  confidenceDistribution,
+  deviceServiceSplit,
+  discountExposure,
+  closeRate as computeCloseRate,
+  revenueByDimension,
+  stageFunnel,
+  type Dimension,
+} from "@/lib/finance/selectors";
 
-// Finance — reads the pipeline without asking sales: a weighted vs committed
-// forecast, time-phased across 3 years, the gap-to-target band, the confidence
-// override that drives hardware ordering, and the second discount-approval gate.
-//
-// One opinionated view (no pivot builder). The Quarter/Half/Year/All toggle and
-// the deal-size floor are URL-driven (searchParams) so the SAME horizon feeds
-// both the grid and the gap-to-target band via computeForecastSummary.
+// Finance — dashboard-first cockpit. A visual top section (KPI row, gap-to-
+// target gauge, time-phased / device-vs-service / funnel / region / confidence
+// charts, discount exposure) makes the financial picture clear at a glance;
+// the working tools (detail grid, CSV target import, discount approvals,
+// confidence override) sit below. One opinionated view — the Quarter/Half/Year/
+// All toggle, the deal-size floor and the revenue-by dimension are all URL-
+// driven so the SAME horizon feeds the band, the gauge and the grid.
 
 const YEARS = [0, 1, 2] as const;
 const QUARTERS = [1, 2, 3, 4] as const;
@@ -100,6 +114,10 @@ function parseHorizon(raw: string | undefined): Horizon {
   return "all";
 }
 
+function parseDim(raw: string | undefined): Dimension {
+  return raw === "industry" || raw === "channel" ? raw : "region";
+}
+
 // Deal-size floor options for the grid + band filter (one opinionated view).
 const SIZE_FILTERS: { value: number; label: string }[] = [
   { value: 0, label: "All sizes" },
@@ -108,10 +126,12 @@ const SIZE_FILTERS: { value: number; label: string }[] = [
   { value: 1_000_000, label: "≥ €1M" },
 ];
 
-function controlHref(horizon: Horizon, minTcv: number): string {
+/** A finance URL that preserves every control and changes only the given ones. */
+function financeHref(horizon: Horizon, minTcv: number, dim: Dimension): string {
   const params = new URLSearchParams();
   if (horizon !== "all") params.set("horizon", horizon);
   if (minTcv > 0) params.set("minTcv", String(minTcv));
+  if (dim !== "region") params.set("dim", dim);
   const qs = params.toString();
   return qs ? `/finance?${qs}` : "/finance";
 }
@@ -119,11 +139,12 @@ function controlHref(horizon: Horizon, minTcv: number): string {
 export default async function FinanceView({
   searchParams,
 }: {
-  searchParams: Promise<{ horizon?: string; minTcv?: string }>;
+  searchParams: Promise<{ horizon?: string; minTcv?: string; dim?: string }>;
 }) {
   const sp = await searchParams;
   const horizon = parseHorizon(sp.horizon);
   const minTcv = Math.max(0, Number(sp.minTcv) || 0);
+  const dim = parseDim(sp.dim);
 
   const [allDeals, open, won, pendingOffers, accounts, targets, overrides] =
     await Promise.all([
@@ -139,8 +160,6 @@ export default async function FinanceView({
   const dealById = new Map(allDeals.map((d) => [d.id, d]));
 
   // Plain-English forecast story (brief P2 places the narrative on Finance).
-  // Numbers are computed deterministically in forecastNarrative; the model only
-  // phrases them, and falls back to a template with an honest "offline" label.
   const narrative = await forecastNarrative();
 
   // Deal-size filter applies to BOTH the band and the grid (one view).
@@ -148,14 +167,8 @@ export default async function FinanceView({
   const wonF = won.filter((d) => d.tcv >= minTcv);
 
   // Gap-to-target band — shared math; overrides feed the committed/weighted
-  // figure for any deal Finance has overridden.
-  const figures = computeForecastSummary(
-    openF,
-    wonF,
-    targets,
-    horizon,
-    overrides,
-  );
+  // figure for any deal Finance has overridden. Drives the KPI row + gauge.
+  const figures = computeForecastSummary(openF, wonF, targets, horizon, overrides);
 
   const window = HORIZON_QUARTERS[horizon];
   const rows = buildForecast(openF, wonF, overrides).filter(
@@ -206,21 +219,57 @@ export default async function FinanceView({
     }),
   );
 
+  // --- Dashboard figures (reuse the band + shared selectors) -----------------
+  const lostCount = allDeals.filter((d) => d.stage === "lost").length;
+  const dashboardData: FinanceDashboardData = {
+    rows: rows.map((r) => ({
+      label: r.label,
+      committed: r.committed,
+      weighted: r.weighted,
+    })),
+    quarterTargets: targets.slice(0, window).map((t) => t.amountEur),
+    horizonLabel: HORIZON_LABELS[horizon],
+
+    forecastTotal: figures.committed + figures.atRisk + figures.upside,
+    committed: figures.committed,
+    atRisk: figures.atRisk,
+    target: figures.target,
+    gap: figures.gap,
+    closeRate: computeCloseRate(won.length, lostCount),
+    wonCount: won.length,
+    lostCount,
+
+    split: deviceServiceSplit([...openF, ...wonF]),
+    funnel: stageFunnel(openF),
+
+    dim,
+    dimSlices: revenueByDimension(openF, accounts, dim),
+    dimHrefs: {
+      region: financeHref(horizon, minTcv, "region"),
+      industry: financeHref(horizon, minTcv, "industry"),
+      channel: financeHref(horizon, minTcv, "channel"),
+    },
+
+    confidence: confidenceDistribution(
+      confidenceVMs.map((v) => ({ band: v.band, tcv: v.tcv })),
+    ),
+    discount: discountExposure(pendingOffers),
+  };
+
   return (
     <div className="mx-auto max-w-7xl space-y-8">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Forecast</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">Finance</h1>
           <p className="mt-1 text-sm text-muted">
-            Weighted vs committed revenue across {allDeals.length} deals — gap to
-            target, time-phased, no need to ask sales.
+            Where the company stands financially across {allDeals.length} deals —
+            forecast, gap to target, revenue shape and risk, no need to ask sales.
           </p>
         </div>
         <ExportLinks kinds={["pipeline"]} />
       </div>
 
-      {/* Period toggle (Quarter / Half / Year / All) + deal-size floor — both
-          URL-driven, both feed the SAME horizon used by the band and the grid. */}
+      {/* Period toggle + deal-size floor — URL-driven, preserve the dimension. */}
       <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
         <div className="flex items-center gap-2">
           <span className="text-xs font-medium uppercase tracking-wide text-muted">
@@ -230,7 +279,7 @@ export default async function FinanceView({
             {PERIOD_OPTIONS.map((opt) => (
               <Link
                 key={opt.value}
-                href={controlHref(opt.value, minTcv)}
+                href={financeHref(opt.value, minTcv, dim)}
                 className={`px-3 py-1.5 text-xs font-medium transition-colors ${
                   horizon === opt.value
                     ? "bg-hmd-teal text-hmd-teal-700"
@@ -250,7 +299,7 @@ export default async function FinanceView({
             {SIZE_FILTERS.map((opt) => (
               <Link
                 key={opt.value}
-                href={controlHref(horizon, opt.value)}
+                href={financeHref(horizon, opt.value, dim)}
                 className={`px-3 py-1.5 text-xs font-medium transition-colors ${
                   minTcv === opt.value
                     ? "bg-hmd-teal text-hmd-teal-700"
@@ -264,11 +313,10 @@ export default async function FinanceView({
         </div>
       </div>
 
-      {/* Gap-to-target band (shared with /sm via ForecastSummary). */}
-      <ForecastSummary figures={figures} horizon={horizon} />
+      {/* The visual cockpit — KPI row, gauge, charts, discount exposure. */}
+      <FinanceDashboard data={dashboardData} />
 
-      {/* AI forecast narrative — "give me the number, plainly". Figures are
-          computed deterministically; the model only phrases them. */}
+      {/* AI forecast narrative — "give me the number, plainly". */}
       <Card className="p-4">
         <div className="flex items-center justify-between">
           <p className="text-xs font-medium uppercase tracking-wide text-muted">
@@ -297,27 +345,9 @@ export default async function FinanceView({
         ]}
       />
 
-      {/* Headline forecast numbers — reconcile with the grid below. */}
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
-        <StatTile
-          label="Committed (won)"
-          value={eur(totals.committed)}
-          hint="certain, time-phased"
-          tone="success"
-        />
-        <StatTile
-          label="Weighted pipeline"
-          value={eur(totals.weighted)}
-          hint="confidence-adjusted, at-risk"
-        />
-        <StatTile
-          label="Forecast total"
-          value={eur(totals.committed + totals.weighted)}
-          hint="committed + weighted"
-        />
-      </div>
+      {/* ---------------- Working tools ---------------- */}
 
-      {/* Time-phased forecast grid */}
+      {/* Time-phased forecast grid — the exact detail behind the chart. */}
       <section>
         <SectionTitle>Time-phased forecast · {rows.length} quarters</SectionTitle>
         <div className="overflow-x-auto rounded-xl border border-border bg-surface">
@@ -373,6 +403,9 @@ export default async function FinanceView({
           Finance override when one is set.
         </p>
       </section>
+
+      {/* CSV target import — bulk-load the quarterly gap-to-target numbers. */}
+      <TargetImport />
 
       {/* Discount approvals — second gate (locks the offer) */}
       <OfferApproval offers={pendingApprovals} gate="finance" />
