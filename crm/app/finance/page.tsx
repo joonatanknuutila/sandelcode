@@ -10,7 +10,7 @@ import {
 } from "@/lib/db";
 import { confidence } from "@/lib/ai/confidence";
 import { Deal, dealProbability } from "@/lib/types";
-import { eur, num, quarterLabel } from "@/lib/format";
+import { eur, num, quarterLabel, quarterLabelShort } from "@/lib/format";
 import { Badge, Card, SectionTitle } from "@/components/ui";
 import { ExportLinks } from "@/components/ExportLinks";
 import { OfferApproval, OfferVM } from "@/components/OfferApproval";
@@ -222,8 +222,13 @@ export default async function FinanceView({
   // --- Dashboard figures (reuse the band + shared selectors) -----------------
   const lostCount = allDeals.filter((d) => d.stage === "lost").length;
   const dashboardData: FinanceDashboardData = {
+    // Chart axis uses the compact "26 Q1" form so 12 quarters don't overlap;
+    // the detail grid below keeps the full year.
     rows: rows.map((r) => ({
-      label: r.label,
+      label: quarterLabelShort(
+        Math.floor(r.offset / 4) as 0 | 1 | 2,
+        ((r.offset % 4) + 1) as 1 | 2 | 3 | 4,
+      ),
       committed: r.committed,
       weighted: r.weighted,
     })),

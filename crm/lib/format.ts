@@ -32,3 +32,9 @@ export function relativeDays(iso: string): number {
 export function quarterLabel(year: 0 | 1 | 2, quarter: 1 | 2 | 3 | 4): string {
   return `${new Date().getFullYear() + year} Q${quarter}`;
 }
+
+/** Compact form (e.g. "26 Q1") for tight axes where the full year overlaps. */
+export function quarterLabelShort(year: 0 | 1 | 2, quarter: 1 | 2 | 3 | 4): string {
+  const yy = String((new Date().getFullYear() + year) % 100).padStart(2, "0");
+  return `${yy} Q${quarter}`;
+}
