@@ -77,9 +77,40 @@ export async function complete(
   messages: ChatMessage[],
   opts: CompleteOptions = {},
 ): Promise<string | null> {
-  if (isVertexConfigured()) return completeVertex(messages, opts);
-  if (isGeminiApiKeyConfigured()) return completeGeminiApiKey(messages, opts);
+  if (isVertexConfigured()) {
+    return firstNonNull(modelCandidates(process.env.GOOGLE_VERTEX_MODEL), (m) =>
+      completeVertex(messages, opts, m),
+    );
+  }
+  if (isGeminiApiKeyConfigured()) {
+    return firstNonNull(modelCandidates(process.env.GEMINI_MODEL), (m) =>
+      completeGeminiApiKey(messages, opts, m),
+    );
+  }
   if (isAzureConfigured()) return completeAzure(messages, opts);
+  return null;
+}
+
+const SAFETY_MODEL = "gemini-2.5-flash";
+const DEFAULT_MODEL = "gemini-2.5-pro";
+
+/** Quality-first with a safety net: try the configured model (default the more
+ *  capable gemini-2.5-pro), then fall back to flash. So a pro hiccup — quota, or
+ *  an empty thinking-only response — degrades to the proven flash rather than to
+ *  the non-AI deterministic path. */
+function modelCandidates(configured: string | undefined): string[] {
+  const primary = configured ?? DEFAULT_MODEL;
+  return primary === SAFETY_MODEL ? [primary] : [primary, SAFETY_MODEL];
+}
+
+async function firstNonNull(
+  models: string[],
+  run: (model: string) => Promise<string | null>,
+): Promise<string | null> {
+  for (const m of models) {
+    const out = await run(m);
+    if (out != null) return out;
+  }
   return null;
 }
 
@@ -165,8 +196,8 @@ function geminiText(data: {
 async function completeGeminiApiKey(
   messages: ChatMessage[],
   opts: CompleteOptions,
+  model: string = process.env.GEMINI_MODEL ?? DEFAULT_MODEL,
 ): Promise<string | null> {
-  const model = process.env.GEMINI_MODEL ?? "gemini-2.5-pro";
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
 
   try {
@@ -215,11 +246,11 @@ async function vertexAccessToken(): Promise<string | null> {
 async function completeVertex(
   messages: ChatMessage[],
   opts: CompleteOptions,
+  model: string = process.env.GOOGLE_VERTEX_MODEL ?? DEFAULT_MODEL,
 ): Promise<string | null> {
   const project =
     process.env.GOOGLE_VERTEX_PROJECT ?? process.env.GOOGLE_CLOUD_PROJECT!;
   const location = process.env.GOOGLE_VERTEX_LOCATION ?? "us-central1";
-  const model = process.env.GOOGLE_VERTEX_MODEL ?? "gemini-2.5-pro";
 
   const token = await vertexAccessToken();
   if (!token) return null;

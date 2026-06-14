@@ -143,9 +143,10 @@ export function Donut({
   const r = 42;
   const C = 2 * Math.PI * r;
   let offset = 0;
+  const ariaLabel = segments.map((s) => `${s.label} ${s.valueLabel}`).join(", ");
   return (
     <div className="flex items-center gap-5">
-      <svg viewBox="0 0 110 110" className="h-28 w-28 shrink-0" role="img">
+      <svg viewBox="0 0 110 110" className="h-28 w-28 shrink-0" role="img" aria-label={ariaLabel}>
         <circle cx="55" cy="55" r={r} fill="none" stroke={CHART.track} strokeWidth="14" />
         {segments.map((s, i) => {
           const len = (s.value / total) * C;
@@ -225,6 +226,7 @@ export function Gauge({
         className="relative h-3 w-full overflow-hidden rounded-full"
         style={{ background: CHART.track }}
         role="img"
+        aria-label={`Committed ${eur(committed)}, at-risk ${eur(atRisk)}, target ${eur(target)}`}
       >
         {cW > 0 && (
           <div
@@ -265,6 +267,8 @@ export function StackedRevenueChart({
   const n = rows.length;
   if (n === 0) return <p className="text-sm text-muted">No forecast in range.</p>;
   const max = Math.max(1, ...rows.map((r) => r.committed + r.weighted), ...targets);
+  const sumCommitted = rows.reduce((s, r) => s + r.committed, 0);
+  const sumWeighted = rows.reduce((s, r) => s + r.weighted, 0);
   const W = Math.max(240, n * 26);
   const H = 150;
   const padTop = 10;
@@ -282,6 +286,7 @@ export function StackedRevenueChart({
         className="w-full"
         style={{ minWidth: n > 6 ? "520px" : undefined }}
         role="img"
+        aria-label={`Revenue across ${n} quarters: committed ${eur(sumCommitted)}, weighted ${eur(sumWeighted)}.`}
       >
         {rows.map((r, i) => {
           const cY = yAt(r.committed);
