@@ -81,14 +81,19 @@ const SLA_SOON_HOURS = 24;
 export function slaInfo(c: Case): SlaInfo {
   if (c.status === "resolved") return { state: "met", label: "Resolved" };
   if (!c.slaDueDate) return { state: "none", label: "No SLA" };
-  const hoursLeft = (new Date(`${c.slaDueDate}T17:00:00Z`).getTime() - Date.now()) / 3_600_000;
+  // sla_due_date is a full ISO timestamp from the DB; tolerate a date-only value
+  // (treat its deadline as 17:00Z that day).
+  const dueIso = c.slaDueDate.includes("T") ? c.slaDueDate : `${c.slaDueDate}T17:00:00Z`;
+  const hoursLeft = (new Date(dueIso).getTime() - Date.now()) / 3_600_000;
   if (hoursLeft < 0) return { state: "breach", hoursLeft, label: `${Math.abs(Math.round(hoursLeft))}h over SLA` };
   if (hoursLeft <= SLA_SOON_HOURS) return { state: "soon", hoursLeft, label: `${Math.round(hoursLeft)}h to SLA` };
   return { state: "ok", hoursLeft, label: `${Math.round(hoursLeft / 24)}d to SLA` };
 }
 
 export function caseAgeDays(c: Case): number {
-  return relativeDays(`${c.createdAt}T00:00:00Z`);
+  // created_at is a full ISO timestamp from the DB; tolerate a date-only value.
+  const iso = c.createdAt.includes("T") ? c.createdAt : `${c.createdAt}T00:00:00Z`;
+  return relativeDays(iso);
 }
 
 const PRIORITY_RANK: Record<CasePriority, number> = { urgent: 0, high: 1, medium: 2, low: 3 };

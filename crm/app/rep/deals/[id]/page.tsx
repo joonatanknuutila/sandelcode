@@ -106,6 +106,11 @@ export default async function DealDetail({
           <div className="flex-1">
             <p className="text-sm font-medium uppercase tracking-wide text-muted">
               What to do next
+              {!nba.modelUsed && (
+                <span className="ml-1 normal-case font-normal text-muted">
+                  · suggested from this deal&apos;s history
+                </span>
+              )}
             </p>
             <p className="mt-1 text-lg font-medium">{nba.headline}</p>
             <p className="mt-1 text-base text-muted">{nba.detail}</p>
