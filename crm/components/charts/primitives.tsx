@@ -203,26 +203,39 @@ export function Gauge({
 }) {
   const reach = committed + atRisk;
   const scale = Math.max(target, reach, 1);
-  const cW = (committed / scale) * 100;
-  const aW = (atRisk / scale) * 100;
-  const tX = (target / scale) * 100;
+  const cW = Math.min(100, (committed / scale) * 100);
+  const aW = Math.min(100 - cW, (atRisk / scale) * 100);
+  const tX = Math.min(100, (target / scale) * 100);
+  // CSS bar (not stretched SVG) so thickness stays constant edge-to-edge — the
+  // rounded ends are real pixels, never distorted by horizontal scaling.
   return (
-    <svg viewBox="0 0 100 16" preserveAspectRatio="none" className="h-5 w-full" role="img">
-      <rect x="0" y="4" width="100" height="8" rx="4" fill={CHART.track} />
-      {cW > 0 && <rect x="0" y="4" width={cW} height="8" rx="4" fill={CHART.committed} />}
-      {aW > 0 && <rect x={cW} y="4" width={aW} height="8" fill={CHART.weighted} opacity="0.8" />}
+    <div className="relative w-full py-1.5">
+      <div
+        className="relative h-3 w-full overflow-hidden rounded-full"
+        style={{ background: CHART.track }}
+        role="img"
+      >
+        {cW > 0 && (
+          <div
+            className="absolute inset-y-0 left-0"
+            style={{ width: `${cW}%`, background: CHART.committed }}
+          />
+        )}
+        {aW > 0 && (
+          <div
+            className="absolute inset-y-0"
+            style={{ left: `${cW}%`, width: `${aW}%`, background: CHART.weighted, opacity: 0.85 }}
+          />
+        )}
+      </div>
       {target > 0 && (
-        <line
-          x1={tX}
-          y1="0.5"
-          x2={tX}
-          y2="15.5"
-          stroke={CHART.target}
-          strokeWidth="1.5"
-          vectorEffect="non-scaling-stroke"
+        <div
+          className="absolute inset-y-0 w-0.5 rounded"
+          style={{ left: `${tX}%`, background: CHART.target, transform: "translateX(-1px)" }}
+          aria-hidden="true"
         />
       )}
-    </svg>
+    </div>
   );
 }
 
