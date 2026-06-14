@@ -145,7 +145,7 @@ export function Donut({
   let offset = 0;
   const ariaLabel = segments.map((s) => `${s.label} ${s.valueLabel}`).join(", ");
   return (
-    <div className="flex items-center gap-5">
+    <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-5">
       <svg viewBox="0 0 110 110" className="h-28 w-28 shrink-0" role="img" aria-label={ariaLabel}>
         <circle cx="55" cy="55" r={r} fill="none" stroke={CHART.track} strokeWidth="14" />
         {segments.map((s, i) => {

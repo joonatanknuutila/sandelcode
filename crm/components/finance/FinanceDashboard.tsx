@@ -174,7 +174,7 @@ export function FinanceDashboard({ data }: { data: FinanceDashboardData }) {
       </div>
 
       {/* 4 — funnel ∥ region mix ∥ confidence distribution */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <Card className="p-4">
           <SectionTitle>Pipeline by stage</SectionTitle>
           <Funnel stages={funnelStages} />
