@@ -81,11 +81,18 @@ export function MeetingCapture({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ accountId, transcript: transcript.trim() }),
       });
-      const data: Draft = await res.json();
-      setDraft(data);
-      setKeep(data.changes.map(() => true));
-      setDetails(data.changes.map((c) => c.detail));
-      setAnswers(data.questions.map(() => ""));
+      const data = await res.json();
+      // Guard the shape: on an error/!ok response, assuming a Draft and mapping
+      // over data.changes would set a malformed draft and crash the panel.
+      if (!res.ok || !Array.isArray(data?.changes) || !Array.isArray(data?.questions)) {
+        setError(data?.error ?? "Couldn't draft from that transcript.");
+        return;
+      }
+      const drafted = data as Draft;
+      setDraft(drafted);
+      setKeep(drafted.changes.map(() => true));
+      setDetails(drafted.changes.map((c) => c.detail));
+      setAnswers(drafted.questions.map(() => ""));
     } catch {
       setError("Couldn't draft from that transcript.");
     } finally {
@@ -107,8 +114,8 @@ export function MeetingCapture({
         body: JSON.stringify({ accountId, approved: true, changes, answers }),
       });
       const data = await res.json();
-      if (data.ok) {
-        setSaved({ count: data.applied.length });
+      if (res.ok && data.ok) {
+        setSaved({ count: Array.isArray(data.applied) ? data.applied.length : 0 });
         setDraft(null);
         setTranscript("");
       } else {
