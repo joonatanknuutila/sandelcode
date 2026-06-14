@@ -5,6 +5,7 @@
 // colours live in CHART so every chart stays on the HMD dark theme.
 
 import { Card } from "@/components/ui";
+import { eur } from "@/lib/format";
 
 // Explicit hexes (not Tailwind fill-* utilities, which aren't configured) so
 // SVG fills are reliable. Aligned with the badge tones already in ui.tsx.
@@ -141,19 +142,22 @@ export function Donut({
         <circle cx="55" cy="55" r={r} fill="none" stroke={CHART.track} strokeWidth="14" />
         {segments.map((s, i) => {
           const len = (s.value / total) * C;
+          const pct = Math.round((s.value / total) * 100);
           const el = (
-            <circle
-              key={i}
-              cx="55"
-              cy="55"
-              r={r}
-              fill="none"
-              stroke={s.color}
-              strokeWidth="14"
-              strokeDasharray={`${len.toFixed(2)} ${(C - len).toFixed(2)}`}
-              strokeDashoffset={(-offset).toFixed(2)}
-              transform="rotate(-90 55 55)"
-            />
+            <g key={i}>
+              <title>{`${s.label}: ${s.valueLabel} (${pct}%)`}</title>
+              <circle
+                cx="55"
+                cy="55"
+                r={r}
+                fill="none"
+                stroke={s.color}
+                strokeWidth="14"
+                strokeDasharray={`${len.toFixed(2)} ${(C - len).toFixed(2)}`}
+                strokeDashoffset={(-offset).toFixed(2)}
+                transform="rotate(-90 55 55)"
+              />
+            </g>
           );
           offset += len;
           return el;
@@ -219,12 +223,14 @@ export function Gauge({
           <div
             className="absolute inset-y-0 left-0"
             style={{ width: `${cW}%`, background: CHART.committed }}
+            title={`Committed ${eur(committed)}`}
           />
         )}
         {aW > 0 && (
           <div
             className="absolute inset-y-0"
             style={{ left: `${cW}%`, width: `${aW}%`, background: CHART.weighted, opacity: 0.85 }}
+            title={`At-risk ${eur(atRisk)}`}
           />
         )}
       </div>
@@ -232,7 +238,7 @@ export function Gauge({
         <div
           className="absolute inset-y-0 w-0.5 rounded"
           style={{ left: `${tX}%`, background: CHART.target, transform: "translateX(-1px)" }}
-          aria-hidden="true"
+          title={`Target ${eur(target)}`}
         />
       )}
     </div>
@@ -276,6 +282,9 @@ export function StackedRevenueChart({
           const x = xAt(i) - barW / 2;
           return (
             <g key={r.label}>
+              <title>
+                {`${r.label}: committed ${eur(r.committed)} · weighted ${eur(r.weighted)} · total ${eur(r.committed + r.weighted)}`}
+              </title>
               {r.committed > 0 && (
                 <rect x={x} y={cY} width={barW} height={baseY - cY} fill={CHART.committed} rx="1" />
               )}
@@ -317,7 +326,11 @@ export function Funnel({
       {stages.map((s, i) => {
         const pct = Math.max(4, (s.value / max) * 100);
         return (
-          <div key={s.label} className="flex items-center gap-3">
+          <div
+            key={s.label}
+            className="flex items-center gap-3"
+            title={`${s.label}: ${s.valueLabel} · ${s.count} ${s.count === 1 ? "deal" : "deals"}`}
+          >
             <span className="w-32 shrink-0 truncate text-sm text-muted" title={s.label}>
               {s.label}
             </span>
@@ -358,7 +371,7 @@ export function BarList({ items, color }: { items: BarItem[]; color?: string }) 
       {items.map((it) => {
         const pct = Math.max(2, (it.value / max) * 100);
         return (
-          <div key={it.label}>
+          <div key={it.label} title={`${it.label}: ${it.valueLabel}${it.sub ? ` · ${it.sub}` : ""}`}>
             <div className="mb-1 flex items-baseline justify-between gap-2 text-sm">
               <span className="truncate text-foreground">
                 {it.label}
