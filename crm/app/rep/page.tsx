@@ -154,8 +154,8 @@ export default async function RepDashboard() {
       {/* Recent deals table */}
       <section>
         <SectionTitle>All my deals</SectionTitle>
-        <Card className="overflow-hidden">
-          <table className="w-full text-base">
+        <Card className="overflow-x-auto">
+          <table className="w-full min-w-[640px] text-base">
             <thead className="bg-background text-left text-sm uppercase tracking-wide text-muted">
               <tr>
                 <th className="px-4 py-3 font-medium">Customer</th>

@@ -74,6 +74,31 @@ const COUNTRY_NAMES: Record<string, string> = {
   PT: "portugal",
 };
 
+// Regions HMD Secure does NOT operate in — so "at-risk deals in Latin America"
+// honestly returns nothing instead of silently answering for the whole book.
+const UNSERVED_REGIONS = [
+  "latin america",
+  "americas",
+  "north america",
+  "south america",
+  "united states",
+  "usa",
+  "canada",
+  "mexico",
+  "brazil",
+  "apac",
+  "asia pacific",
+  "asia",
+  "china",
+  "japan",
+  "india",
+  "africa",
+  "middle east",
+  "australia",
+  "new zealand",
+  "oceania",
+];
+
 /** The sales region a country code belongs to (e.g. DE -> "DACH"). */
 function regionGroup(country: string): string {
   const c = country.toUpperCase();
@@ -102,6 +127,11 @@ function regionFilter(
     if (q.includes(name) || new RegExp(`\\b${code}\\b`).test(raw)) {
       return { test: (c) => c.toUpperCase() === code, label: name.replace(/\b\w/g, (m) => m.toUpperCase()) };
     }
+  }
+  // A region we don't operate in → match nothing (honest "no deals there").
+  const unserved = UNSERVED_REGIONS.find((r) => q.includes(r));
+  if (unserved) {
+    return { test: () => false, label: unserved.replace(/\b\w/g, (m) => m.toUpperCase()) };
   }
   return null;
 }

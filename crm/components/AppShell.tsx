@@ -100,7 +100,7 @@ export function AppShell({
 
       {/* Main column */}
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex items-center justify-between gap-2 border-b border-border bg-surface px-4 py-3 md:px-6">
+        <header className="flex items-center justify-between gap-2 border-b border-border bg-surface px-3 py-3 md:px-6">
           <div className="flex items-center gap-2">
             {/* Hamburger — opens the nav drawer below md */}
             <button
@@ -115,18 +115,18 @@ export function AppShell({
                 <line x1="3" y1="18" x2="21" y2="18" />
               </svg>
             </button>
-            <p className={`font-medium uppercase tracking-wide text-muted ${repView ? "text-sm" : "text-xs"}`}>
+            <p className={`hidden truncate sm:block font-medium uppercase tracking-wide text-muted ${repView ? "text-sm" : "text-xs"}`}>
               {config.label}
             </p>
           </div>
-          <div className="flex items-center gap-2 sm:gap-4">
+          <div className="flex min-w-0 items-center gap-1.5 sm:gap-4">
             {/* Role switcher — demo aid; replaced by SSO claims */}
             <label className={`flex items-center gap-2 text-muted ${repView ? "text-sm" : "text-xs"}`}>
               <span className="hidden sm:inline">View as</span>
               <select
                 value={activeRole}
                 onChange={(e) => switchRole(e.target.value as Role)}
-                className={`rounded-md border border-border bg-background px-2 font-medium text-foreground ${repView ? "min-h-11 py-2 text-sm" : "py-1 text-xs"}`}
+                className={`max-w-[7.5rem] truncate rounded-md border border-border bg-background px-2 font-medium text-foreground sm:max-w-none ${repView ? "min-h-11 py-2 text-sm" : "py-1 text-xs"}`}
               >
                 {ROLE_ORDER.map((r) => (
                   <option key={r} value={r}>
