@@ -140,14 +140,18 @@ function geminiBody(
       parts: [{ text: m.content }],
     }));
 
-  // Thinking control. FLASH models let us disable thinking (budget 0) to cut
-  // latency/cost, and these grounded CRM tasks don't need it. PRO / Gemini-3
-  // models REQUIRE thinking — sending budget 0 is a hard 400 — so we leave their
-  // default thinking on (or honour an explicit positive override). Thinking
-  // tokens are spent against maxOutputTokens, so thinking models get extra
-  // headroom or the visible answer can come back empty.
-  const supportsZeroThinking = /flash/.test(model);
-  const isThinkingModel = /gemini-(2\.5|3)/.test(model);
+  // Thinking control differs by model family:
+  //  • Gemini 3.x uses `thinkingLevel` (minimal|low|medium|high). The legacy
+  //    `thinkingBudget` is NOT valid for 3.x and mixing the two is a hard 400.
+  //    "low" keeps these grounded CRM answers fast/cheap (override:
+  //    GEMINI_THINKING_LEVEL). Thinking tokens are billed against
+  //    maxOutputTokens, so give the visible reply headroom.
+  //  • Gemini 2.5 FLASH can disable thinking entirely (thinkingBudget 0).
+  //  • Gemini 2.5 PRO requires thinking (budget 0 → 400); bound it + headroom.
+  const isGemini3 = /gemini-3/.test(model);
+  const supportsZeroThinking = !isGemini3 && /flash/.test(model);
+  const isThinking25Pro =
+    !isGemini3 && /gemini-2\.5/.test(model) && !supportsZeroThinking;
   const envBudget =
     process.env.GOOGLE_VERTEX_THINKING_BUDGET != null
       ? Number(process.env.GOOGLE_VERTEX_THINKING_BUDGET)
@@ -156,14 +160,19 @@ function geminiBody(
 
   let thinkingConfig = {};
   let maxOutputTokens = baseMax;
-  if (supportsZeroThinking) {
-    // Flash: thinking off by default (fast/cheap) — these grounded tasks don't
-    // need it. Overridable via GOOGLE_VERTEX_THINKING_BUDGET.
+  if (isGemini3) {
+    // Gemini 3.x: thinkingLevel (not thinkingBudget). "low" is plenty for these
+    // grounded tasks; give the visible reply headroom since thinking eats tokens.
+    const level = process.env.GEMINI_THINKING_LEVEL ?? "low";
+    thinkingConfig = { thinkingConfig: { thinkingLevel: level } };
+    maxOutputTokens = Math.max(baseMax + 4096, 8192);
+  } else if (supportsZeroThinking) {
+    // Gemini 2.5 Flash: thinking off by default (fast/cheap). Overridable via
+    // GOOGLE_VERTEX_THINKING_BUDGET.
     thinkingConfig = { thinkingConfig: { thinkingBudget: envBudget ?? 0 } };
-  } else if (isThinkingModel) {
-    // Pro / Gemini-3: thinking is MANDATORY (budget 0 → 400) and thinking tokens
-    // are billed against maxOutputTokens, so a small cap returns an EMPTY answer.
-    // Bound the thinking and give the visible reply generous headroom on top.
+  } else if (isThinking25Pro) {
+    // Gemini 2.5 Pro: thinking is MANDATORY (budget 0 → 400). Bound it and give
+    // the visible reply generous headroom on top.
     const budget = envBudget != null && envBudget > 0 ? envBudget : 2048;
     thinkingConfig = { thinkingConfig: { thinkingBudget: budget } };
     maxOutputTokens = Math.max(baseMax + budget + 1024, 8192);
