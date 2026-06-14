@@ -387,9 +387,11 @@ export async function updateCaseStatus(
   const admin = createAdminClient();
   const update: {
     status: Tables<"cases">["status"];
-    resolved_at?: string;
+    resolved_at?: string | null;
   } = { status: caseStatusToDb(status) };
-  if (status === "resolved") update.resolved_at = new Date().toISOString();
+  // Stamp the resolution time when resolving; clear it when a case is reopened
+  // so a stale timestamp can't be counted as a resolution (caseFlow / metrics).
+  update.resolved_at = status === "resolved" ? new Date().toISOString() : null;
   const { data, error } = await admin
     .from("cases")
     .update(update)
