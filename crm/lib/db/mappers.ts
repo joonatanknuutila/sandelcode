@@ -276,6 +276,7 @@ export function mapDeal(
     createdAt: d.created_at,
     updatedAt: d.last_activity_at,
     parentDealId: d.parent_deal_id ?? undefined,
+    committedQuantity: d.committed_quantity ?? undefined,
   };
 }
 

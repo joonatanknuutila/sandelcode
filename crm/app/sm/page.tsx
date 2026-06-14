@@ -7,6 +7,7 @@ import {
   getTargets,
   getUsers,
   getWonDeals,
+  isOverdue,
   isStalled,
   weightedValue,
 } from "@/lib/db";
@@ -72,13 +73,6 @@ function dealInHorizon(deal: Deal, window: number): boolean {
     (p) =>
       quarterOffset(p) < window && p.deviceRevenue + p.serviceRevenue > 0,
   );
-}
-
-/** Open deal whose expected close date is already in the past — "slipped". */
-function isSlipped(deal: Deal): boolean {
-  if (deal.stage === "won" || deal.stage === "lost") return false;
-  if (!deal.expectedCloseDate) return false;
-  return new Date(deal.expectedCloseDate).getTime() < Date.now();
 }
 
 function effectiveConfidence(
@@ -157,14 +151,27 @@ export default async function SalesManagerView({
   // /sm equals the gap on /finance for the same horizon.
   const figures = computeForecastSummary(open, won, targets, horizon, overrides);
 
-  // Stalled (14+ days) + slipped (past close) — the intervention list. The list
+  // Stalled (14+ days) + overdue (past close) — the intervention list. The list
   // catches BOTH risks (a deal can be overdue without being idle), so an overdue
   // deal the SM must chase never hides just because it had recent activity.
   const stalledDeals = openInScope.filter(isStalled);
-  const slippedCount = openInScope.filter(isSlipped).length;
-  const atRiskDeals = openInScope
-    .filter((d) => isStalled(d) || isSlipped(d))
-    .sort((a, b) => relativeDays(b.updatedAt) - relativeDays(a.updatedAt));
+  const overdueDeals = openInScope.filter(isOverdue);
+  const slippedCount = overdueDeals.length;
+  const atRiskDeals = openInScope.filter((d) => isStalled(d) || isOverdue(d));
+  // Order the intervention list so OVERDUE deals lead (most days past close
+  // first), then merely-idle deals by how long they've been quiet — overdue is
+  // the manager's most urgent signal and must never sit below a stale-but-
+  // on-time deal.
+  const attentionDeals = [...atRiskDeals].sort((a, b) => {
+    const ao = isOverdue(a);
+    const bo = isOverdue(b);
+    if (ao !== bo) return ao ? -1 : 1;
+    if (ao && bo)
+      return (
+        relativeDays(b.expectedCloseDate) - relativeDays(a.expectedCloseDate)
+      );
+    return relativeDays(b.updatedAt) - relativeDays(a.updatedAt);
+  });
 
   // Scoped team KPIs.
   const kpiOpen = openInScope.length;
@@ -195,7 +202,7 @@ export default async function SalesManagerView({
     (sum, offer) => sum + offer.total,
     0,
   );
-  const biggestAtRisk = atRiskDeals.slice(0, 3);
+  const topAttention = attentionDeals.slice(0, 6);
 
   return (
     <div className="mx-auto max-w-7xl space-y-8">
@@ -299,10 +306,10 @@ export default async function SalesManagerView({
           <Card className="p-4">
             <div className="grid grid-cols-2 gap-3">
               <AttentionMetric
-                label="At risk"
-                value={String(atRiskDeals.length)}
-                hint="idle 14d+ or past close"
-                tone={atRiskDeals.length > 0 ? "text-warning" : "text-success"}
+                label="Overdue"
+                value={String(overdueDeals.length)}
+                hint="past expected close"
+                tone={overdueDeals.length > 0 ? "text-warning" : "text-success"}
               />
               <AttentionMetric
                 label="SM approvals"
@@ -317,19 +324,21 @@ export default async function SalesManagerView({
             </p>
           </Card>
           <Card className="divide-y divide-border">
-            {biggestAtRisk.length === 0 ? (
+            {topAttention.length === 0 ? (
               <p className="p-4 text-sm text-muted">
-                Nothing stalled or overdue in this window.
+                Nothing overdue or stalled in this window.
               </p>
             ) : (
-              biggestAtRisk.map((deal) => {
+              topAttention.map((deal) => {
                 const account = accountById.get(deal.accountId);
                 const owner = userById.get(deal.ownerId);
+                const overdue = isOverdue(deal);
                 const stalled = isStalled(deal);
                 return (
-                  <div
+                  <Link
                     key={deal.id}
-                    className="flex flex-wrap items-center justify-between gap-3 p-3"
+                    href={`/sm/deals/${deal.id}`}
+                    className="flex flex-wrap items-center justify-between gap-3 p-3 transition-colors hover:bg-background"
                   >
                     <div className="min-w-0">
                       <p className="truncate text-sm font-medium">
@@ -339,13 +348,21 @@ export default async function SalesManagerView({
                         <Badge>{owner?.initials ?? "?"}</Badge>
                         <span>{STAGE_LABELS[deal.stage]}</span>
                         <span>{eur(deal.tcv)}</span>
-                        {isSlipped(deal) && <Badge tone="red">past close</Badge>}
                       </p>
                     </div>
-                    {stalled && (
-                      <Badge tone="amber">{relativeDays(deal.updatedAt)}d idle</Badge>
-                    )}
-                  </div>
+                    <div className="flex shrink-0 items-center gap-1.5">
+                      {overdue && (
+                        <Badge tone="red">
+                          {relativeDays(deal.expectedCloseDate)}d overdue
+                        </Badge>
+                      )}
+                      {stalled && (
+                        <Badge tone="amber">
+                          {relativeDays(deal.updatedAt)}d idle
+                        </Badge>
+                      )}
+                    </div>
+                  </Link>
                 );
               })
             )}

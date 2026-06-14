@@ -10,6 +10,7 @@ import {
   updateCaseStatus,
 } from "@/lib/db/mutations";
 import { getCase } from "@/lib/db";
+import type { CaseStatus } from "@/lib/types";
 
 // ---------------------------------------------------------------------------
 // Add note
@@ -39,6 +40,41 @@ export async function resolveCaseAction(caseId: string): Promise<void> {
     eventType: "case_resolved",
     title: "Case resolved",
     body: `Case "${c.title}" marked as resolved.`,
+    entityType: "case",
+    entityId: caseId,
+  });
+
+  revalidatePath(`/tam/cases/${caseId}`);
+  revalidatePath("/tam");
+}
+
+// ---------------------------------------------------------------------------
+// Set status (open / in progress) — the one-click status control. Resolve and
+// escalate keep their own actions (they stamp resolved_at / raise the 3rd-party
+// flag respectively). Every status move writes a timeline event so the case
+// history reads cleanly ("marked in progress", "reopened").
+// ---------------------------------------------------------------------------
+
+const STATUS_VERB: Record<CaseStatus, string> = {
+  open: "reopened",
+  in_progress: "marked in progress",
+  escalated: "escalated",
+  resolved: "resolved",
+};
+
+export async function setCaseStatusAction(
+  caseId: string,
+  status: CaseStatus,
+): Promise<void> {
+  const c = await getCase(caseId);
+  if (!c) throw new Error("Case not found");
+
+  await updateCaseStatus(caseId, status);
+  await logActivity({
+    accountId: c.accountId,
+    eventType: status === "resolved" ? "case_resolved" : "note",
+    title: `Case ${STATUS_VERB[status]}`,
+    body: `Case "${c.title}" ${STATUS_VERB[status]}.`,
     entityType: "case",
     entityId: caseId,
   });

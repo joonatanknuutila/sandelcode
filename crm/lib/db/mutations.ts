@@ -261,6 +261,8 @@ export async function reassignDeal(
 
 export interface UpdateDealInput {
   title?: string;
+  /** Customer-agreed device quantity; null clears the commitment. */
+  committedQuantity?: number | null;
 }
 
 export async function updateDeal(
@@ -270,6 +272,9 @@ export async function updateDeal(
   const admin = createAdminClient();
   const update: Partial<TablesInsert<"deals">> = {};
   if (patch.title !== undefined) update.title = patch.title.trim();
+  if (patch.committedQuantity !== undefined) {
+    update.committed_quantity = patch.committedQuantity;
+  }
   if (Object.keys(update).length > 0) {
     update.last_activity_at = new Date().toISOString();
     const { error } = await admin.from("deals").update(update).eq("id", dealId);

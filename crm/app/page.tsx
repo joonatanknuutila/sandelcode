@@ -1,8 +1,8 @@
-import { redirect } from "next/navigation";
+import { LoginScreen } from "@/components/LoginScreen";
 
-// Default landing. Real SSO (Arttu) will route to the signed-in user's role
-// home; until then the demo defaults to the Sales Rep view — the only role
-// that creates data and our priority persona.
+// Front door. No passwords for the demo — pick a persona and the LoginScreen
+// routes into that role's view. Real SSO (Entra ID, owned by Arttu) takes over
+// here in production.
 export default function Home() {
-  redirect("/rep");
+  return <LoginScreen />;
 }

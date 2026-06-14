@@ -63,7 +63,7 @@ function LogActivityModal({
   }
 
   return (
-    <Modal open={open} onClose={onClose} title="Log activity">
+    <Modal open={open} onClose={onClose} title="Add note">
       <form onSubmit={handleSubmit} className="space-y-4">
         <Select
           label="Type"
@@ -87,7 +87,7 @@ function LogActivityModal({
             disabled={pending || !body.trim()}
             style={{ background: "#e4ff00", color: "#000" }}
           >
-            {pending ? "Saving…" : "Log activity"}
+            {pending ? "Saving…" : "Add note"}
           </Button>
         </div>
       </form>
@@ -407,7 +407,7 @@ export function LogActivityButton({
         className="min-h-[44px] px-5 text-base"
         onClick={() => setOpen(true)}
       >
-        + Log activity
+        + Add note
       </Button>
       <LogActivityModal
         open={open}

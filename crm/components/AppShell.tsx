@@ -1,14 +1,15 @@
 "use client";
 
 // The application chrome: HMD-branded navy sidebar (role-aware nav) + top bar
-// with the role switcher and in-app notifications. Wraps every page.
+// with search, in-app notifications and sign-out. Wraps every page except the
+// login persona picker ("/"), which renders bare.
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Logo } from "./Logo";
 import { useRole } from "./RoleProvider";
-import { ROLES, ROLE_ORDER } from "@/lib/roles";
+import { ROLES } from "@/lib/roles";
 import { NotificationCenter } from "./NotificationCenter";
 import { SearchCommand } from "./SearchCommand";
 import { AgentDock } from "./AgentDock";
@@ -33,9 +34,8 @@ export function AppShell({
   user: { name: string; initials: string };
   notifications?: AppNotification[];
 }) {
-  const { role, setRole } = useRole();
+  const { role } = useRole();
   const pathname = usePathname();
-  const router = useRouter();
   const activeRole = roleFromPath(pathname) ?? role;
   const config = ROLES[activeRole];
   // Reps are non-technical: give them larger nav targets + plainer chrome.
@@ -45,10 +45,9 @@ export function AppShell({
   // Close the drawer whenever the route changes (tapping a nav link navigates).
   useEffect(() => setNavOpen(false), [pathname]);
 
-  function switchRole(next: typeof role) {
-    setRole(next);
-    router.push(ROLES[next].home);
-  }
+  // The login page ("/") is its own full-screen surface — no sidebar, header
+  // or agent dock. Render it bare.
+  if (pathname === "/") return <>{children}</>;
 
   return (
     <div className="flex min-h-screen">
@@ -121,27 +120,19 @@ export function AppShell({
             </p>
           </div>
           <div className="flex min-w-0 items-center gap-1.5 sm:gap-4">
-            {/* Role switcher — demo aid; replaced by SSO claims */}
-            <label className={`flex items-center gap-2 text-muted ${repView ? "text-sm" : "text-xs"}`}>
-              <span className="hidden sm:inline">View as</span>
-              <select
-                value={activeRole}
-                onChange={(e) => switchRole(e.target.value as Role)}
-                className={`max-w-[7.5rem] truncate rounded-md border border-border bg-background px-2 font-medium text-foreground sm:max-w-none ${repView ? "min-h-11 py-2 text-sm" : "py-1 text-xs"}`}
-              >
-                {ROLE_ORDER.map((r) => (
-                  <option key={r} value={r}>
-                    {ROLES[r].label}
-                  </option>
-                ))}
-              </select>
-            </label>
             <SearchCommand />
             <NotificationCenter notifications={notifications} />
             <div className="flex items-center gap-2">
               <span className={`grid place-items-center rounded-full bg-hmd-teal font-semibold text-hmd-charcoal ${repView ? "h-10 w-10 text-sm" : "h-8 w-8 text-xs"}`}>
                 {user.initials}
               </span>
+              {/* Back to the persona picker — stands in for SSO sign-out. */}
+              <Link
+                href="/"
+                className={`font-medium text-muted transition-colors hover:text-foreground ${repView ? "text-sm" : "text-xs"}`}
+              >
+                Sign out
+              </Link>
             </div>
           </div>
         </header>

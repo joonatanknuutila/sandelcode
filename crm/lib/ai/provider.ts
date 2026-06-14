@@ -10,14 +10,14 @@
 // Vertex uses IAM, NOT an API key. Auth is Application Default Credentials:
 //   LOCAL:  `gcloud auth application-default login` (one-time), then set
 //           GOOGLE_VERTEX_PROJECT in .env.local. The Google SDK finds the creds.
-//   VERCEL: ADC isn't available on serverless, so leave GOOGLE_VERTEX_PROJECT
-//           unset there — Vertex is skipped and the next provider (Gemini API
-//           key) handles prod. (To use Vertex on Vercel instead: a service-
-//           account key or Workload Identity Federation, no code change here.)
+//   VERCEL: ADC isn't available on serverless, so set GOOGLE_VERTEX_CREDENTIALS
+//           to the service-account key JSON (alongside GOOGLE_VERTEX_PROJECT).
+//           Absent => Vertex is skipped and the Gemini API key path handles prod.
 // Env (.env.local, never hardcoded):
 //   GOOGLE_VERTEX_PROJECT     e.g. ferrous-wonder-491213-e7  (or GOOGLE_CLOUD_PROJECT)
 //   GOOGLE_VERTEX_LOCATION    default us-central1 (e.g. europe-west1 for EU)
 //   GOOGLE_VERTEX_MODEL       default gemini-2.5-flash
+//   GOOGLE_VERTEX_CREDENTIALS service-account key JSON (serverless; local uses ADC)
 //
 // --- Gemini API key (AI Studio) — works on Vercel serverless ----------------
 // A plain Gemini Developer API key needs no IAM, so unlike Vertex it runs on
@@ -77,15 +77,22 @@ export async function complete(
   messages: ChatMessage[],
   opts: CompleteOptions = {},
 ): Promise<string | null> {
+  // Each provider degrades to null when unreachable; fall through to the next so
+  // a Vertex hiccup (bad creds, missing IAM, quota) drops to the Gemini API key
+  // rather than straight to the deterministic, non-AI fallback.
   if (isVertexConfigured()) {
-    return firstNonNull(modelCandidates(process.env.GOOGLE_VERTEX_MODEL), (m) =>
-      completeVertex(messages, opts, m),
+    const out = await firstNonNull(
+      modelCandidates(process.env.GOOGLE_VERTEX_MODEL),
+      (m) => completeVertex(messages, opts, m),
     );
+    if (out != null) return out;
   }
   if (isGeminiApiKeyConfigured()) {
-    return firstNonNull(modelCandidates(process.env.GEMINI_MODEL), (m) =>
-      completeGeminiApiKey(messages, opts, m),
+    const out = await firstNonNull(
+      modelCandidates(process.env.GEMINI_MODEL),
+      (m) => completeGeminiApiKey(messages, opts, m),
     );
+    if (out != null) return out;
   }
   if (isAzureConfigured()) return completeAzure(messages, opts);
   return null;
@@ -243,14 +250,19 @@ async function completeGeminiApiKey(
 async function vertexAccessToken(): Promise<string | null> {
   try {
     const { GoogleAuth } = await import("google-auth-library");
+    // Serverless (Vercel) has no ADC, so pass the service-account key directly
+    // via GOOGLE_VERTEX_CREDENTIALS (the full JSON). Locally, with that env var
+    // absent, GoogleAuth falls back to gcloud ADC.
+    const raw = process.env.GOOGLE_VERTEX_CREDENTIALS;
     const auth = new GoogleAuth({
       scopes: "https://www.googleapis.com/auth/cloud-platform",
+      ...(raw ? { credentials: JSON.parse(raw) } : {}),
     });
     const token = await auth.getAccessToken();
     return token ?? null;
   } catch (err) {
     console.error(
-      "Vertex ADC unavailable — run `gcloud auth application-default login`",
+      "Vertex auth unavailable — set GOOGLE_VERTEX_CREDENTIALS (service-account JSON) on serverless, or run `gcloud auth application-default login` locally",
       err,
     );
     return null;

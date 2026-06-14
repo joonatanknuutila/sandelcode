@@ -30,7 +30,7 @@ export default async function OfferBuilderPage({
             ← Back to {deal.name}
           </Link>
           <h1 className="mt-1 text-3xl font-semibold tracking-tight">
-            Build &amp; send offer
+            Build offer
           </h1>
           <p className="mt-2 text-base text-muted">
             {deal.name} — pick what you&apos;re selling, set a discount if you

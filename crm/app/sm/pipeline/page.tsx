@@ -196,7 +196,7 @@ export default async function SmPipelinePage({
         capabilities={{ canDrag: true, canReassign: true }}
         reps={repOptions}
         reassignAction={reassignDealAction}
-        dealHref="/rep/deals"
+        dealHref="/sm/deals"
       />
     </div>
   );

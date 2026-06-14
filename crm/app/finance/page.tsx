@@ -15,7 +15,6 @@ import { Badge, Card, SectionTitle } from "@/components/ui";
 import { ExportLinks } from "@/components/ExportLinks";
 import { OfferApproval, OfferVM } from "@/components/OfferApproval";
 import { forecastNarrative } from "@/lib/ai/forecast";
-import { Assistant } from "@/components/Assistant";
 import {
   computeForecastSummary,
   HORIZON_QUARTERS,
@@ -351,17 +350,6 @@ export default async function FinanceView({
           {narrative.text}
         </p>
       </Card>
-
-      {/* Conversational query (brief §05.03) — interrogate the pipeline. */}
-      <Assistant
-        role="finance"
-        scopeLabel="the pipeline & forecast"
-        suggestions={[
-          "Which deals are past their close date?",
-          "Biggest deals by value",
-          "Enterprise deals at risk",
-        ]}
-      />
 
       {/* ---------------- Working tools ---------------- */}
 

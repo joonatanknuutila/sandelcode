@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { logActivity, updateDealStage } from "@/lib/db/mutations";
+import { logActivity, updateDeal, updateDealStage } from "@/lib/db/mutations";
 import { getDeal } from "@/lib/db";
 import { ActivityType, Stage, STAGE_ORDER } from "@/lib/types";
 
@@ -59,6 +59,44 @@ export async function moveStageAction(
   } catch (err) {
     const message = err instanceof Error ? err.message : "Failed to update stage";
     return { ok: false, error: message };
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Set / clear the customer commitment ("agreed to buy N phones"). Optional — an
+// early-stage deal needn't have one. quantity=null clears it.
+// ---------------------------------------------------------------------------
+export async function setCommitmentAction(input: {
+  dealId: string;
+  accountId: string;
+  quantity: number | null;
+}): Promise<{ ok: boolean; error?: string }> {
+  try {
+    const qty =
+      input.quantity != null && Number.isFinite(input.quantity) && input.quantity > 0
+        ? Math.round(input.quantity)
+        : null;
+    await updateDeal(input.dealId, { committedQuantity: qty });
+    await logActivity({
+      accountId: input.accountId,
+      eventType: "note",
+      title: "Commitment updated",
+      body:
+        qty != null
+          ? `Customer agreed to buy ${qty} device${qty === 1 ? "" : "s"}.`
+          : "Customer commitment cleared — no firm quantity yet.",
+      entityType: "deal",
+      entityId: input.dealId,
+    });
+    revalidatePath(`/rep/deals/${input.dealId}`);
+    revalidatePath(`/rep/accounts/${input.accountId}`);
+    revalidatePath("/rep");
+    return { ok: true };
+  } catch (err) {
+    return {
+      ok: false,
+      error: err instanceof Error ? err.message : "Failed to update commitment",
+    };
   }
 }
 

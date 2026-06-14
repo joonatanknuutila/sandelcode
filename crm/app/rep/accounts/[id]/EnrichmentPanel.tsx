@@ -32,12 +32,15 @@ interface EnrichmentPanelProps {
   accountName: string;
   /** Defense / government accounts: enrichment is off until the rep opts in. */
   sensitive: boolean;
+  /** Tertiary placement (§3) — render a small, low-prominence trigger. */
+  subtle?: boolean;
 }
 
 export function EnrichmentPanel({
   accountId,
   accountName,
   sensitive,
+  subtle = false,
 }: EnrichmentPanelProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -105,9 +108,19 @@ export function EnrichmentPanel({
 
   return (
     <>
-      <Button variant="secondary" onClick={() => setOpen(true)}>
-        ✦ Fetch background
-      </Button>
+      {subtle ? (
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className="text-sm text-muted underline-offset-2 hover:text-foreground hover:underline"
+        >
+          ✦ Fetch background
+        </button>
+      ) : (
+        <Button variant="secondary" onClick={() => setOpen(true)}>
+          ✦ Fetch background
+        </Button>
+      )}
 
       <Drawer
         open={open}

@@ -165,6 +165,9 @@ export interface Deal {
   updatedAt: string; // ISO date
   /** Original opportunity this follow-on order links back to. */
   parentDealId?: string;
+  /** Customer-agreed device quantity. Undefined = no firm commitment yet — at
+   *  early stages a deal needn't have one. Drives the "agreed to buy N" toggle. */
+  committedQuantity?: number;
 }
 
 // --- Cases (TAM territory, but reps open them from an account) --------------

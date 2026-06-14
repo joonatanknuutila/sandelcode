@@ -6,9 +6,12 @@ import {
   getDeal,
   getDealsForAccount,
   getOffersForDeal,
+  getUser,
+  isOverdue,
+  isStalled,
 } from "@/lib/db";
 import { nextBestAction } from "@/lib/ai";
-import { eur, shortDate } from "@/lib/format";
+import { eur, relativeDays, shortDate } from "@/lib/format";
 import {
   Badge,
   Button,
@@ -19,23 +22,21 @@ import {
 import { StageStepper } from "@/components/StageStepper";
 import { ForecastGrid } from "@/components/ForecastGrid";
 import { ActivityTimeline } from "@/components/ActivityTimeline";
-import { ConfidenceMeter } from "@/components/ConfidenceMeter";
-import { CommitmentToggle } from "@/components/CommitmentToggle";
-import { AddNote } from "@/components/AddNote";
-import { dealConfidence } from "@/lib/confidence";
-import { DealActions } from "./DealActions";
-import { setForecastPhasesAction } from "../../account-actions";
 
-// Rep-facing, plain-language offer states (this page is /rep only).
+// Sales Manager deal lens — the SAME deal a rep works, framed for the manager:
+// who owns it, why it's at risk, and the levers (board / inbox) a manager pulls.
+// Read-only by design — the rep drives the deal; the SM coaches and unblocks.
+// Mirrors /sm/accounts/[id] (each role gets its own detail route) so opening a
+// deal from the SM dashboard or Team Board keeps the manager in their own view.
 const OFFER_STATUS_LABEL: Record<string, string> = {
   draft: "Draft",
-  pending_sm: "Waiting on your manager",
-  pending_finance: "Waiting on Finance",
+  pending_sm: "Awaiting your approval",
+  pending_finance: "With Finance",
   approved: "Approved",
-  rejected: "Not approved",
+  rejected: "Rejected",
 };
 
-export default async function DealDetail({
+export default async function SmDealDetail({
   params,
 }: {
   params: Promise<{ id: string }>;
@@ -44,28 +45,33 @@ export default async function DealDetail({
   const deal = await getDeal(id);
   if (!deal) notFound();
 
-  const [account, activities, offers, accountDeals] = await Promise.all([
+  const [account, owner, activities, offers, accountDeals] = await Promise.all([
     getAccount(deal.accountId),
+    getUser(deal.ownerId),
     getActivitiesForDeal(id),
     getOffersForDeal(id),
     getDealsForAccount(deal.accountId),
   ]);
   if (!account) notFound();
 
-  // Follow-on / original-opportunity linkage (brief §2.1).
+  // Follow-on / original-opportunity linkage — kept in the SM view (links stay
+  // inside /sm/deals).
   const parentDeal = deal.parentDealId
     ? accountDeals.find((d) => d.id === deal.parentDealId)
     : undefined;
   const followOnDeals = accountDeals.filter((d) => d.parentDealId === deal.id);
 
-  // Grounded NBA — async, uses full timeline + offers
+  // Deal-risk flags — the reason this deal lands on the manager's radar.
+  const overdue = isOverdue(deal);
+  const stalled = isStalled(deal);
+  const daysOverdue = overdue ? relativeDays(deal.expectedCloseDate) : 0;
+  const idleDays = relativeDays(deal.updatedAt);
+
+  // Grounded NBA — shown read-only here as coaching context ("what the rep
+  // should do next"), not as a manager action.
   const nba = await nextBestAction(deal, activities, offers);
 
-  // One confidence figure (§0.2), with the rule-based "Why?" (§4).
-  const conf = dealConfidence(deal);
-
-  // Derive per-unit price + per-quarter service rate from the seeded forecast
-  // so inline edits keep the same economics.
+  // Derive per-unit economics from the seeded forecast (same as the rep view).
   const sample = deal.forecast.find((p) => p.devices > 0);
   const unitPrice = sample ? Math.round(sample.deviceRevenue / sample.devices) : 720;
   const serviceQuarterly = sample
@@ -75,7 +81,7 @@ export default async function DealDetail({
   return (
     <div className="mx-auto max-w-6xl space-y-6">
       <Link
-        href={`/rep/accounts/${account.id}`}
+        href={`/sm/accounts/${account.id}`}
         className="text-base text-muted hover:text-foreground"
       >
         ← {account.name}
@@ -84,7 +90,7 @@ export default async function DealDetail({
       {/* Header */}
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <h1 className="text-3xl font-semibold tracking-tight">
               {deal.name}
             </h1>
@@ -92,31 +98,45 @@ export default async function DealDetail({
             {deal.channel === "reseller" && (
               <Badge tone="amber">Partner deal</Badge>
             )}
+            {overdue && <Badge tone="red">{daysOverdue}d overdue</Badge>}
+            {!overdue && stalled && <Badge tone="amber">{idleDays}d idle</Badge>}
           </div>
-          <p className="mt-2 text-base text-muted">
-            {account.name} · expected to close {shortDate(deal.expectedCloseDate)}
+          <p className="mt-2 flex flex-wrap items-center gap-1.5 text-base text-muted">
+            <span className="font-medium text-foreground">{account.name}</span>
+            <span>·</span>
+            <Badge>{owner?.initials ?? "?"}</Badge>
+            <span>{owner?.name ?? "Unassigned"}</span>
+            <span>·</span>
+            {overdue ? (
+              <span className="font-medium text-warning">
+                was due {shortDate(deal.expectedCloseDate)}
+              </span>
+            ) : (
+              <span>expected to close {shortDate(deal.expectedCloseDate)}</span>
+            )}
+            <span>·</span>
+            <span>{eur(deal.tcv)} TCV</span>
           </p>
-          <div className="mt-3">
-            <ConfidenceMeter score={conf.score} band={conf.band} reasons={conf.reasons} />
-          </div>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Link href={`/rep/deals/${deal.id}/offer`}>
-            <Button className="min-h-[44px] px-5 text-base">
-              Build offer
+          {/* The manager's levers — reassign / restage on the board, decide
+              discounts in the inbox. The deal itself is the rep's to run. */}
+          <Link href={`/sm/pipeline?rep=${deal.ownerId}`}>
+            <Button variant="secondary" className="min-h-[44px] text-base">
+              Open on Team Board
             </Button>
           </Link>
         </div>
       </div>
 
-      {/* Follow-on / original-opportunity linkage (brief §2.1) */}
+      {/* Follow-on / original-opportunity linkage */}
       {(parentDeal || followOnDeals.length > 0) && (
         <Card className="space-y-2 p-4">
           {parentDeal && (
             <p className="text-base">
               <span className="text-muted">Follow-on order of</span>{" "}
               <Link
-                href={`/rep/deals/${parentDeal.id}`}
+                href={`/sm/deals/${parentDeal.id}`}
                 className="font-medium text-foreground underline-offset-2 hover:underline"
               >
                 {parentDeal.name}
@@ -133,7 +153,7 @@ export default async function DealDetail({
                 {followOnDeals.map((f) => (
                   <li key={f.id}>
                     <Link
-                      href={`/rep/deals/${f.id}`}
+                      href={`/sm/deals/${f.id}`}
                       className="font-medium text-foreground underline-offset-2 hover:underline"
                     >
                       {f.name}
@@ -148,75 +168,35 @@ export default async function DealDetail({
       )}
 
       <Card className="p-4">
-        <StageStepper stage={deal.stage} channel={deal.channel} plain />
+        <StageStepper stage={deal.stage} channel={deal.channel} />
       </Card>
 
-      {/* Next best action — hero banner */}
-      <Card className="border-[#e4ff00]/40 bg-[#e4ff00]/5 p-5">
-        <div className="flex items-start gap-3">
-          <span className="mt-0.5 rounded-md bg-[#e4ff00] px-2.5 py-1 text-sm font-semibold text-black">
-            Tip
-          </span>
-          <div className="flex-1">
-            <p className="text-sm font-medium uppercase tracking-wide text-muted">
-              What to do next
-              {!nba.modelUsed && (
-                <span className="ml-1 normal-case font-normal text-muted">
-                  · suggested from this deal&apos;s history
-                </span>
-              )}
-            </p>
-            <p className="mt-1 text-lg font-medium">{nba.headline}</p>
-            <p className="mt-1 text-base text-muted">{nba.detail}</p>
-          </div>
-
-          {/* CTA — open_offer links directly; others open modals via DealActions */}
-          {nba.cta.kind === "open_offer" ? (
-            <Link href={`/rep/deals/${deal.id}/offer`}>
-              <Button variant="secondary">{nba.cta.label}</Button>
-            </Link>
-          ) : (
-            <DealActions
-              dealId={deal.id}
-              accountId={deal.accountId}
-              dealName={deal.name}
-              accountName={account.name}
-              currentStage={deal.stage}
-              channel={deal.channel}
-              cta={nba.cta}
-              nbaDetail={nba.detail}
-            />
-          )}
+      {/* Coaching context — what the rep should do next, read-only for the SM. */}
+      <Card className="p-5">
+        <div className="flex items-center justify-between">
+          <p className="text-xs font-medium uppercase tracking-wide text-muted">
+            What this deal needs
+            {!nba.modelUsed && (
+              <span className="ml-1 normal-case text-muted">
+                · suggested from this deal&apos;s history
+              </span>
+            )}
+          </p>
+          <Badge tone="blue">AI</Badge>
         </div>
+        <p className="mt-2 text-lg font-medium">{nba.headline}</p>
+        <p className="mt-1 text-base text-muted">{nba.detail}</p>
       </Card>
 
-      {/* Capture + commitment — record what happened, flag a firm order. */}
-      <div className="grid gap-6 lg:grid-cols-2">
-        <AddNote
-          accountId={deal.accountId}
-          dealId={deal.id}
-          heading="Add note"
-          placeholder="Log what just happened on this deal — a call, a reply, a commitment. Or paste an email."
-        />
-        <CommitmentToggle
-          dealId={deal.id}
-          accountId={deal.accountId}
-          initialQuantity={deal.committedQuantity}
-        />
-      </div>
-
-      {/* Forecast */}
+      {/* Forecast — read-only manager lens. */}
       <section>
-        <SectionTitle>Expected sales over 3 years</SectionTitle>
+        <SectionTitle>3-year forecast</SectionTitle>
         <ForecastGrid
           forecast={deal.forecast}
           serviceModel={deal.serviceModel}
           unitPrice={unitPrice}
           serviceQuarterly={serviceQuarterly}
-          dealId={deal.id}
-          accountId={deal.accountId}
-          onSave={setForecastPhasesAction}
-          plain
+          readOnly
         />
       </section>
 
@@ -240,7 +220,7 @@ export default async function DealDetail({
                           : "amber"
                     }
                   >
-                    {OFFER_STATUS_LABEL[o.status]}
+                    {OFFER_STATUS_LABEL[o.status] ?? o.status}
                   </Badge>
                 </div>
                 <ul className="mt-2 space-y-1 text-base text-muted">
@@ -264,18 +244,20 @@ export default async function DealDetail({
                     &ldquo;{o.justification}&rdquo;
                   </p>
                 )}
-                <div className="mt-3">
-                  <Link href={`/rep/deals/${deal.id}/offer`}>
-                    <Button variant="secondary" className="min-h-[44px] text-base">
-                      View offer →
-                    </Button>
-                  </Link>
-                </div>
+                {o.status === "pending_sm" && (
+                  <div className="mt-3">
+                    <Link href="/sm/inbox">
+                      <Button variant="secondary" className="min-h-[44px] text-base">
+                        Review in Inbox →
+                      </Button>
+                    </Link>
+                  </div>
+                )}
               </Card>
             ))}
             {offers.length === 0 && (
               <Card className="p-4 text-base text-muted">
-                No offers yet. Tap &ldquo;Build offer&rdquo; above to make one.
+                No offers on this deal yet.
               </Card>
             )}
           </div>
@@ -284,7 +266,7 @@ export default async function DealDetail({
         {/* Timeline */}
         <section>
           <SectionTitle>History</SectionTitle>
-          <ActivityTimeline activities={activities} plain />
+          <ActivityTimeline activities={activities} />
         </section>
       </div>
     </div>

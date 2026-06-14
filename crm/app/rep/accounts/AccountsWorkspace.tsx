@@ -4,6 +4,7 @@ import { useMemo, useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AccountListView } from "@/components/AccountListView";
 import { PipelineBoard, type BoardDeal } from "@/components/PipelineBoard";
+import { VoiceInput } from "@/components/VoiceInput";
 import { Button, Card, Input, Select, Textarea } from "@/components/ui";
 import { Modal, toast } from "@/components/ui-client";
 import {
@@ -211,8 +212,14 @@ function NewAccountModal({
             rows={12}
           />
           <div className="mt-3 flex items-center justify-between gap-3">
-            <p className="text-sm text-muted">{parserStatus}</p>
-            <Button type="button" variant="secondary" onClick={parseText} disabled={pending || !leadText.trim()}>
+            <div className="flex items-center gap-2">
+              <VoiceInput
+                onTranscript={(t) => setLeadText((v) => (v ? `${v} ${t}` : t))}
+                title="Dictate"
+              />
+              <p className="text-sm text-muted">{parserStatus}</p>
+            </div>
+            <Button type="button" onClick={parseText} disabled={pending || !leadText.trim()}>
               {pending ? "Parsing..." : "Determine fields"}
             </Button>
           </div>

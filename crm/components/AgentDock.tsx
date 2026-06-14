@@ -15,6 +15,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import type { Role } from "@/lib/types";
 import { Markdown } from "./Markdown";
+import { VoiceInput } from "./VoiceInput";
 
 interface UIAction {
   label: string;
@@ -89,29 +90,48 @@ export function AgentDock({ role }: { role: Role }) {
   }, [role]);
 
   // The brief drives both the panel's opening view AND the closed-state nudge
-  // bubble, so fetch it whenever the persona changes (not only when open).
+  // bubble, so fetch it whenever the persona changes (not only when open). On a
+  // case page we pass the caseId so the TAM gets the case's ready-made questions.
+  const briefCaseId = pageContextFromPath(pathname).caseId;
   useEffect(() => {
-    fetch(`/api/agent/brief?role=${role}`)
+    const qs = new URLSearchParams({ role });
+    if (briefCaseId) qs.set("caseId", briefCaseId);
+    fetch(`/api/agent/brief?${qs.toString()}`)
       .then((r) => r.json())
       .then((b) => setBrief(b))
       .catch(() => setBrief(null));
-  }, [role]);
+  }, [role, briefCaseId]);
 
   // History is only needed once the panel is open.
   useEffect(() => {
     if (open) refreshChats();
   }, [open, refreshChats]);
 
-  // Closed + a brief available + not dismissed → pop a speech bubble after a
-  // beat to draw attention to the assistant. Opening or dismissing hides it.
+  // The closed-state "needs your attention" nudge appears AT MOST ONCE per
+  // session and ONLY on a role dashboard (§0.3) — it never follows the user from
+  // page to page, and never auto-reopens. Once shown we mark the session so the
+  // only way back to the assistant is clicking the button.
   useEffect(() => {
-    if (open || nudgeDismissed || !brief?.headline) {
+    const onDashboard = /^\/(rep|sm|tam|finance)$/.test(pathname);
+    if (open || nudgeDismissed || !brief?.headline || !onDashboard) {
       setShowNudge(false);
       return;
     }
-    const t = setTimeout(() => setShowNudge(true), 2500);
+    try {
+      if (sessionStorage.getItem("hmd_attention_nudge_shown")) return;
+    } catch {
+      /* sessionStorage unavailable — fall through and show once */
+    }
+    const t = setTimeout(() => {
+      setShowNudge(true);
+      try {
+        sessionStorage.setItem("hmd_attention_nudge_shown", "1");
+      } catch {
+        /* ignore */
+      }
+    }, 2500);
     return () => clearTimeout(t);
-  }, [open, nudgeDismissed, brief]);
+  }, [open, nudgeDismissed, brief, pathname]);
 
   // Keep the thread pinned to the newest message.
   useEffect(() => {
@@ -258,9 +278,6 @@ export function AgentDock({ role }: { role: Role }) {
             aria-label="Open AI assistant"
             className="relative flex h-14 w-14 items-center justify-center rounded-full bg-hmd-teal text-hmd-charcoal shadow-lg shadow-black/20 transition-transform hover:scale-105 active:scale-95"
           >
-            {showNudge && (
-              <span className="pointer-events-none absolute inset-0 animate-ping rounded-full bg-hmd-teal/70" />
-            )}
             <SparkIcon />
           </button>
         </div>
@@ -439,6 +456,11 @@ export function AgentDock({ role }: { role: Role }) {
                 rows={1}
                 placeholder="Ask, or tell me what to do…"
                 className="max-h-32 min-h-[44px] min-w-0 flex-1 resize-none rounded-xl border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-hmd-teal-600"
+              />
+              <VoiceInput
+                onTranscript={(t) => setInput((v) => (v ? `${v} ${t}` : t))}
+                className="shrink-0 self-end"
+                title="Dictate"
               />
               <button
                 type="submit"

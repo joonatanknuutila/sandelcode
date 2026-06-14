@@ -262,6 +262,7 @@ export type Database = {
         Row: {
           account_id: string
           channel: Database["public"]["Enums"]["deal_channel"]
+          committed_quantity: number | null
           created_at: string
           device_unit_price: number | null
           expected_close_date: string | null
@@ -278,6 +279,7 @@ export type Database = {
         Insert: {
           account_id: string
           channel: Database["public"]["Enums"]["deal_channel"]
+          committed_quantity?: number | null
           created_at?: string
           device_unit_price?: number | null
           expected_close_date?: string | null

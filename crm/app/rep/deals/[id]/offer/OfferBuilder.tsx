@@ -364,32 +364,39 @@ export function OfferBuilder({ deal, products, services }: Props) {
           onChange={(e) => setDiscountPct(Number(e.target.value))}
         />
 
-        {/* Live totals */}
-        <div className="mt-4 rounded-xl bg-[#e4ff00] px-5 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-wide text-black/60">
-              Catalog total
-              </p>
-              <p className="text-xl font-semibold text-black tabular-nums line-through decoration-black/40">
-                {eur(listTotal)}
-              </p>
+        {/* Live totals — quiet until there's a line item (§5), so the page
+            doesn't open with a big empty €0 / €0 band. */}
+        {lines.length === 0 ? (
+          <p className="mt-4 rounded-xl border border-dashed border-border px-5 py-4 text-center text-sm text-muted">
+            Add a product or service to see the total.
+          </p>
+        ) : (
+          <div className="mt-4 rounded-xl bg-[#e4ff00] px-5 py-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-wide text-black/60">
+                  Catalog total
+                </p>
+                <p className="text-xl font-semibold text-black tabular-nums line-through decoration-black/40">
+                  {eur(listTotal)}
+                </p>
+              </div>
+              <div className="text-right">
+                <p className="text-sm font-semibold uppercase tracking-wide text-black/60">
+                  Submitted price ({discountPct}% off)
+                </p>
+                <p className="text-3xl font-bold text-black tabular-nums">
+                  {eur(discountedTotal)}
+                </p>
+              </div>
             </div>
-            <div className="text-right">
-              <p className="text-sm font-semibold uppercase tracking-wide text-black/60">
-                Submitted price ({discountPct}% off)
+            {discountPct > 0 && (
+              <p className="mt-2 text-sm text-black/60 text-right">
+                Discount value {eur(savings)}
               </p>
-              <p className="text-3xl font-bold text-black tabular-nums">
-                {eur(discountedTotal)}
-              </p>
-            </div>
+            )}
           </div>
-          {discountPct > 0 && (
-            <p className="mt-2 text-sm text-black/60 text-right">
-              Discount value {eur(savings)}
-            </p>
-          )}
-        </div>
+        )}
 
         {/* Justification */}
         {discountPct > 0 && (

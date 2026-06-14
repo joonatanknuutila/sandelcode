@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Modal, toast } from "@/components/ui-client";
 import { Button, Input, Select, Textarea } from "@/components/ui";
@@ -9,7 +10,6 @@ import {
   createCaseAction,
   createContactAction,
 } from "@/app/rep/account-actions";
-import { EnrichmentPanel } from "./EnrichmentPanel";
 import { REP_STAGE_LABELS, type Channel, type Stage, type User } from "@/lib/types";
 
 // Creatable HMD pipeline stages (brief §2.3) — open stages only; won/lost are
@@ -61,6 +61,12 @@ export function NewDealModal({
   const [stage, setStage] = useState<Stage>("interest");
   const [closeDate, setCloseDate] = useState("");
   const [parentDealId, setParentDealId] = useState("");
+  // Optional 12-month forecast at creation — off by default (an interest-stage
+  // deal needn't have one yet); the full 3-year grid lives on the deal page.
+  const [fcOpen, setFcOpen] = useState(false);
+  const [fcPhones, setFcPhones] = useState("");
+  const [fcPrice, setFcPrice] = useState("720");
+  const [fcService, setFcService] = useState("36");
 
   // Switching to reseller while on the direct-only "contract negotiation" stage
   // would submit a stage that channel can't have — snap back to interest.
@@ -77,6 +83,10 @@ export function NewDealModal({
     setStage("interest");
     setCloseDate("");
     setParentDealId("");
+    setFcOpen(false);
+    setFcPhones("");
+    setFcPrice("720");
+    setFcService("36");
     onClose();
   }
 
@@ -85,6 +95,7 @@ export function NewDealModal({
     if (!title.trim()) return;
     startTransition(async () => {
       try {
+        const phones = Math.max(0, Math.round(Number(fcPhones) || 0));
         const { id } = await createDealAction({
           accountId,
           title: title.trim(),
@@ -93,6 +104,14 @@ export function NewDealModal({
           expectedCloseDate: closeDate || undefined,
           ownerId: currentUserId,
           parentDealId: parentDealId || undefined,
+          forecast12mo:
+            fcOpen && phones > 0
+              ? {
+                  totalPhones: phones,
+                  unitPrice: Math.max(0, Number(fcPrice) || 0),
+                  serviceQuarterly: Math.max(0, Number(fcService) || 0),
+                }
+              : undefined,
         });
         toast("Deal created", { variant: "success" });
         handleClose();
@@ -147,6 +166,50 @@ export function NewDealModal({
             options={existingDeals.map((d) => ({ value: d.id, label: d.name }))}
           />
         )}
+
+        {/* Optional 12-month forecast at creation. */}
+        <div className="rounded-md border border-border p-3">
+          <label className="flex items-center gap-2 text-sm font-medium">
+            <input
+              type="checkbox"
+              checked={fcOpen}
+              onChange={(e) => setFcOpen(e.target.checked)}
+            />
+            Add a 12-month forecast now (optional)
+          </label>
+          {fcOpen ? (
+            <div className="mt-3 grid gap-3 sm:grid-cols-3">
+              <Input
+                label="Phones (12 mo)"
+                type="number"
+                min={0}
+                value={fcPhones}
+                onChange={(e) => setFcPhones(e.target.value)}
+                placeholder="e.g. 300"
+              />
+              <Input
+                label="Price / phone €"
+                type="number"
+                min={0}
+                value={fcPrice}
+                onChange={(e) => setFcPrice(e.target.value)}
+              />
+              <Input
+                label="Service €/phone/qtr"
+                type="number"
+                min={0}
+                value={fcService}
+                onChange={(e) => setFcService(e.target.value)}
+              />
+            </div>
+          ) : (
+            <p className="mt-1.5 text-xs text-muted">
+              Not needed at the interest stage — you can fill the full 3-year forecast on
+              the deal afterwards.
+            </p>
+          )}
+        </div>
+
         <div className="flex justify-end gap-2 pt-2">
           <Button
             type="button"
@@ -401,23 +464,22 @@ export function NewContactModal({ open, onClose, accountId }: NewContactModalPro
 
 interface AccountActionBarProps {
   accountId: string;
-  accountName: string;
   currentUserId: string;
   tamUsers: User[];
   defaultTamId?: string;
-  /** Defense / government account: enrichment is off until the rep opts in. */
-  sensitive: boolean;
   /** Existing deals on this account, for the "follow-on of" picker. */
   existingDeals?: DealRef[];
 }
 
+// Action buttons ordered by how often a rep reaches for them (§3): Message team
+// (primary, capture/Add-note lives as the field at the top of the page), then
+// New deal · Open service case · Add contact. Fetch background is demoted to a
+// quiet control in the side column — it's rendered by the page, not here.
 export function AccountActionBar({
   accountId,
-  accountName,
   currentUserId,
   tamUsers,
   defaultTamId,
-  sensitive,
   existingDeals = [],
 }: AccountActionBarProps) {
   const [dealOpen, setDealOpen] = useState(false);
@@ -427,18 +489,18 @@ export function AccountActionBar({
   return (
     <>
       <div className="flex flex-wrap gap-2">
-        <EnrichmentPanel
-          accountId={accountId}
-          accountName={accountName}
-          sensitive={sensitive}
-        />
-        <Button variant="secondary" onClick={() => setContactOpen(true)}>
-          + Add contact
+        <Link href={`/rep/inbox?account=${accountId}`}>
+          <Button>Message team</Button>
+        </Link>
+        <Button variant="secondary" onClick={() => setDealOpen(true)}>
+          New deal
         </Button>
         <Button variant="secondary" onClick={() => setCaseOpen(true)}>
-          + Open service case
+          Open service case
         </Button>
-        <Button onClick={() => setDealOpen(true)}>+ New deal</Button>
+        <Button variant="secondary" onClick={() => setContactOpen(true)}>
+          Add contact
+        </Button>
       </div>
 
       <NewDealModal

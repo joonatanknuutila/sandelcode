@@ -6,8 +6,10 @@
 // agent as a normal turn (so a suggestion can lead to a real action).
 import "server-only";
 import {
+  getAccount,
   getAccounts,
   getAllCases,
+  getCase,
   getCasesForTam,
   getDealsForRep,
   getOffersByStatus,
@@ -34,10 +36,41 @@ export interface Brief {
   suggestions: Suggestion[];
 }
 
-export async function buildBrief(role: Role, userId: string | null): Promise<Brief> {
+export async function buildBrief(
+  role: Role,
+  userId: string | null,
+  ctx?: { caseId?: string },
+): Promise<Brief> {
+  if (role === "tam" && ctx?.caseId) return tamCaseBrief(ctx.caseId);
   if (role === "tam") return tamBrief(userId);
   if (role === "finance") return financeBrief();
   return salesBrief(role, userId);
+}
+
+// On a case page the assistant offers the demo's ready-made questions (§3). The
+// prompts are answered grounded on the open case via the dock's pageContext.
+async function tamCaseBrief(caseId: string): Promise<Brief> {
+  const c = await getCase(caseId);
+  if (!c) return tamBrief(null);
+  const account = await getAccount(c.accountId);
+  const sla = slaInfo(c);
+
+  const items: string[] = [
+    `${c.priority} priority · ${sla.label}${account ? ` · ${account.name}` : ""}.`,
+    c.escalatedToThirdParty
+      ? "Currently escalated to a 3rd-party vendor."
+      : "The history below has the full story — no need to ask around.",
+  ];
+
+  return {
+    headline: "Caught up on this case?",
+    items,
+    suggestions: [
+      { label: "Summarise this case's history", prompt: "Summarise this case's history." },
+      { label: "What did sales promise this customer?", prompt: "What did sales promise this customer in the lead-up to this case?" },
+      { label: "Is anything blocked on a 3rd party?", prompt: "Is anything on this case blocked on a 3rd party right now?" },
+    ],
+  };
 }
 
 // Finance gets a numbers-first lens (not the sales-manager pipeline view):

@@ -42,6 +42,7 @@ export function ForecastGrid({
   accountId,
   onSave,
   plain = false,
+  readOnly = false,
 }: {
   forecast: ForecastPoint[];
   serviceModel: ServiceModel;
@@ -55,6 +56,8 @@ export function ForecastGrid({
   onSave?: (dealId: string, accountId: string, phases: PhasePayload[]) => Promise<void>;
   /** Rep-facing: plain words ("Phones" not "Devices"), larger text. */
   plain?: boolean;
+  /** View-only: render device counts as static text (e.g. the SM lens). */
+  readOnly?: boolean;
 }) {
   const [points, setPoints] = useState<ForecastPoint[]>(forecast);
   const [saveState, setSaveState] = useState<"idle" | "saving" | "saved">("idle");
@@ -175,17 +178,23 @@ export function ForecastGrid({
                   {quarterLabel(p.year, p.quarter)}
                 </td>
                 <td className={`px-3 ${plain ? "py-2" : "py-1.5"}`}>
-                  <input
-                    type="number"
-                    min={0}
-                    value={p.devices}
-                    onChange={(e) =>
-                      updateDevices(idx, Math.max(0, Number(e.target.value)))
-                    }
-                    className={`w-24 rounded-md border border-border bg-background px-2 focus:border-hmd-teal-600 focus:outline-none focus:ring-1 focus:ring-hmd-teal-600 ${
-                      plain ? "py-2 text-base" : "py-1 text-sm"
-                    }`}
-                  />
+                  {readOnly ? (
+                    <span className={plain ? "text-base" : "text-sm"}>
+                      {num(p.devices)}
+                    </span>
+                  ) : (
+                    <input
+                      type="number"
+                      min={0}
+                      value={p.devices}
+                      onChange={(e) =>
+                        updateDevices(idx, Math.max(0, Number(e.target.value)))
+                      }
+                      className={`w-24 rounded-md border border-border bg-background px-2 focus:border-hmd-teal-600 focus:outline-none focus:ring-1 focus:ring-hmd-teal-600 ${
+                        plain ? "py-2 text-base" : "py-1 text-sm"
+                      }`}
+                    />
+                  )}
                 </td>
                 <td className={`px-3 text-right text-muted ${plain ? "py-2" : "py-1.5"}`}>
                   {eur(p.deviceRevenue)}

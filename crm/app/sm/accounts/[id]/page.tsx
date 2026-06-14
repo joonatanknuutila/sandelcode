@@ -16,7 +16,7 @@ export default async function SmAccountDetail({
       {...data}
       backHref="/sm/accounts"
       backLabel="Accounts"
-      dealHref="/rep/deals"
+      dealHref="/sm/deals"
     />
   );
 }
