@@ -235,8 +235,13 @@ export function mapForecast(
   );
   const baseQ = quarterIndex(new Date(sorted[0].period_start));
   return sorted.map((p) => {
-    const offset = quarterIndex(new Date(p.period_start)) - baseQ;
-    const year = Math.min(2, Math.max(0, Math.floor(offset / 4))) as 0 | 1 | 2;
+    // Clamp the quarter offset to the 12-quarter (3-year) horizon BEFORE
+    // deriving year/quarter, so the two always agree. Clamping only `year`
+    // while letting `quarter` cycle off the raw offset let an out-of-horizon
+    // phase (offset ≥ 12, or a calendar gap) land on a wrong/duplicate slot
+    // — e.g. offset 12 became year 2 Q1, colliding with offset 8.
+    const offset = Math.min(11, Math.max(0, quarterIndex(new Date(p.period_start)) - baseQ));
+    const year = Math.floor(offset / 4) as 0 | 1 | 2;
     const quarter = ((offset % 4) + 1) as 1 | 2 | 3 | 4;
     const price = p.device_unit_price ?? dealUnitPrice ?? 0;
     return {

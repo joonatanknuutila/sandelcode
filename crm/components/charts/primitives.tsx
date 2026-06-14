@@ -132,7 +132,14 @@ export function Donut({
   centerLabel?: string;
   centerSub?: string;
 }) {
-  const total = segments.reduce((s, x) => s + x.value, 0) || 1;
+  const total = segments.reduce((s, x) => s + x.value, 0);
+  if (total <= 0) {
+    return (
+      <div className="flex h-28 items-center text-sm text-muted">
+        No revenue in this range.
+      </div>
+    );
+  }
   const r = 42;
   const C = 2 * Math.PI * r;
   let offset = 0;
@@ -321,6 +328,9 @@ export function Funnel({
   stages: { label: string; value: number; count: number; valueLabel: string }[];
 }) {
   const max = Math.max(1, ...stages.map((s) => s.value));
+  if (stages.every((s) => s.count === 0)) {
+    return <p className="text-sm text-muted">No open pipeline in this range.</p>;
+  }
   return (
     <div className="space-y-1.5">
       {stages.map((s, i) => {
