@@ -2,7 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { logActivity, updateDealStage } from "@/lib/db/mutations";
-import { ActivityType, Stage } from "@/lib/types";
+import { getDeal } from "@/lib/db";
+import { ActivityType, Stage, STAGE_ORDER } from "@/lib/types";
 
 // ---------------------------------------------------------------------------
 // Log an activity (call/email/note/meeting) attached to a deal
@@ -41,6 +42,16 @@ export async function moveStageAction(
   stage: Stage,
 ): Promise<{ ok: boolean; error?: string }> {
   try {
+    // Never trust the client: validate the target and re-enforce the channel
+    // rule (the move modal hides it, but the action is callable directly).
+    if (!(STAGE_ORDER as string[]).includes(stage)) {
+      return { ok: false, error: "Unknown stage" };
+    }
+    const deal = await getDeal(dealId);
+    if (!deal) return { ok: false, error: "Deal not found" };
+    if (deal.channel === "reseller" && stage === "contract_negotiation") {
+      return { ok: false, error: "Reseller deals skip contract negotiation" };
+    }
     await updateDealStage(dealId, stage);
     revalidatePath(`/rep/deals/${dealId}`);
     revalidatePath(`/rep/accounts`);

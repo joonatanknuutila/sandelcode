@@ -174,6 +174,7 @@ export default async function DealDetail({
               dealName={deal.name}
               accountName={account.name}
               currentStage={deal.stage}
+              channel={deal.channel}
               cta={nba.cta}
               nbaDetail={nba.detail}
             />

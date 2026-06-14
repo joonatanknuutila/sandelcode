@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { Modal, toast } from "@/components/ui-client";
 import { Button, Select, Textarea } from "@/components/ui";
-import { ActivityType, Stage, REP_STAGE_LABELS, STAGE_ORDER } from "@/lib/types";
+import { ActivityType, Channel, Stage, REP_STAGE_LABELS, STAGE_ORDER } from "@/lib/types";
 import type { NbaCTA } from "@/lib/ai";
 import {
   logActivityAction,
@@ -216,14 +216,22 @@ function MoveStageModal({
   dealId,
   accountId,
   currentStage,
+  channel,
 }: {
   open: boolean;
   onClose: () => void;
   dealId: string;
   accountId: string;
   currentStage: Stage;
+  channel: Channel;
 }) {
-  const availableStages = STAGE_ORDER.filter((s) => s !== currentStage);
+  // Reseller deals skip contract negotiation (brief 2.3) — don't offer it as a
+  // move target, mirroring StageStepper and the server-side guard.
+  const availableStages = STAGE_ORDER.filter(
+    (s) =>
+      s !== currentStage &&
+      !(channel === "reseller" && s === "contract_negotiation"),
+  );
   const [targetStage, setTargetStage] = useState<string>(
     availableStages[0] ?? currentStage,
   );
@@ -289,6 +297,8 @@ export interface DealActionsProps {
   dealName: string;
   accountName: string;
   currentStage: Stage;
+  /** Deal channel — gates reseller-specific stage rules in the move modal. */
+  channel: Channel;
   /** CTA descriptor from the NBA result */
   cta: NbaCTA;
   /** Rationale text used to ground the email draft */
@@ -307,6 +317,7 @@ export function DealActions({
   dealName,
   accountName,
   currentStage,
+  channel,
   cta,
   nbaDetail,
 }: DealActionsProps) {
@@ -371,6 +382,7 @@ export function DealActions({
         dealId={dealId}
         accountId={accountId}
         currentStage={currentStage}
+        channel={channel}
       />
     </>
   );
