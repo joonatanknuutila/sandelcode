@@ -5,9 +5,10 @@
 
 import Link from "next/link";
 import { Account, Activity, Case, Contact, Deal, User } from "@/lib/types";
-import { eur, shortDate } from "@/lib/format";
-import { Badge, Card, SectionTitle, StageBadge } from "./ui";
+import { shortDate } from "@/lib/format";
+import { Badge, Card, SectionTitle } from "./ui";
 import { ActivityTimeline } from "./ActivityTimeline";
+import { AccountDealsPanel } from "./AccountDealsPanel";
 
 export function AccountDetailView({
   account,
@@ -20,6 +21,7 @@ export function AccountDetailView({
   backLabel,
   dealHref,
   actions,
+  editableDeals,
   plain = false,
 }: {
   account: Account;
@@ -33,6 +35,10 @@ export function AccountDetailView({
   /** Deal card link base, e.g. "/rep/deals". Null = deals are not clickable. */
   dealHref?: string | null;
   actions?: React.ReactNode;
+  editableDeals?: {
+    accountId: string;
+    currentUserId?: string;
+  };
   /** Rep-facing: plain words, larger text, no internal codes. */
   plain?: boolean;
 }) {
@@ -77,40 +83,14 @@ export function AccountDetailView({
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
-          <section>
-            <SectionTitle>Deals</SectionTitle>
-            <div className="space-y-2">
-              {deals.map((d) => {
-                const row = (
-                  <Card className="flex items-center justify-between p-4 transition-colors hover:border-hmd-teal-600">
-                    <div>
-                      <p className={`font-medium ${plain ? "text-base" : ""}`}>{d.name}</p>
-                      <p className={`text-muted ${plain ? "text-sm" : "text-xs"}`}>
-                        {plain ? "Expected to close" : "Expected close"}{" "}
-                        {shortDate(d.expectedCloseDate)}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <div className="text-right">
-                        <p className={`font-semibold ${plain ? "text-lg" : ""}`}>{eur(d.tcv)}</p>
-                      </div>
-                      <StageBadge stage={d.stage} plain={plain} />
-                    </div>
-                  </Card>
-                );
-                return dealHref ? (
-                  <Link key={d.id} href={`${dealHref}/${d.id}`}>
-                    {row}
-                  </Link>
-                ) : (
-                  <div key={d.id}>{row}</div>
-                );
-              })}
-              {deals.length === 0 && (
-                <p className={`text-muted ${plain ? "text-base" : "text-sm"}`}>No deals yet.</p>
-              )}
-            </div>
-          </section>
+          <AccountDealsPanel
+            accountId={editableDeals?.accountId ?? account.id}
+            currentUserId={editableDeals?.currentUserId}
+            deals={deals}
+            dealHref={dealHref}
+            plain={plain}
+            editable={Boolean(editableDeals)}
+          />
 
           <section>
             <SectionTitle>{plain ? "Support tickets" : "Service cases"}</SectionTitle>

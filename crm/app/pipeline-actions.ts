@@ -27,6 +27,7 @@ export async function moveDealStageAction(input: {
       entityType: "deal",
       entityId: deal.id,
     });
+    revalidatePath("/rep/accounts");
     revalidatePath("/rep/pipeline");
     revalidatePath("/sm/pipeline");
     revalidatePath(`/rep/deals/${deal.id}`);

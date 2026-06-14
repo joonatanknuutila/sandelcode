@@ -16,6 +16,7 @@ import { getAccount, getCurrentUser } from "@/lib/db";
 import { requiresFinanceApproval } from "@/lib/scoring";
 import {
   caseStatusToDb,
+  mapAccount,
   mapActivity,
   mapCase,
   mapCaseNote,
@@ -118,6 +119,47 @@ export async function updateAccount(
   return getAccount(accountId);
 }
 
+export interface CreateAccountInput {
+  /** Company / customer name — the only required field. */
+  name: string;
+  /** Free-text industry label (round-trips through toIndustry on read). */
+  industry?: string;
+  /** Country / region label. Stored on accounts.country. */
+  region?: string;
+  website?: string;
+  /** One-line situation note, stored on accounts.address (read as summary). */
+  summary?: string;
+  /** Owning rep; defaults to the current demo user. */
+  ownerId?: string;
+  /** Not stored on accounts (channel lives on deals) — only shapes the
+   *  returned UI Account so the caller doesn't need a re-read. */
+  channel?: Channel;
+}
+
+/** Create a customer account. Lets a rep go from an inbound email to a real
+ *  account in one step; pair with createContact to attach the sender. */
+export async function createAccount(
+  input: CreateAccountInput,
+): Promise<Account> {
+  const admin = createAdminClient();
+  const owner = await actorId(input.ownerId);
+  const row: TablesInsert<"accounts"> = {
+    name: input.name.trim(),
+    industry: input.industry?.trim() || null,
+    country: input.region?.trim() || null,
+    website: input.website?.trim() || null,
+    address: input.summary?.trim() || null,
+    assigned_rep_id: owner ?? null,
+  };
+  const { data, error } = await admin
+    .from("accounts")
+    .insert(row)
+    .select()
+    .single();
+  if (error || !data) throw new Error(error?.message ?? "Failed to create account");
+  return mapAccount(data, input.channel ?? "direct");
+}
+
 export interface CreateContactInput {
   accountId: string;
   /** Full name; split on the first space into first/last for storage. */
@@ -214,6 +256,25 @@ export async function reassignDeal(
     .update({ owner_id: newOwnerId, last_activity_at: new Date().toISOString() })
     .eq("id", dealId);
   if (error) throw new Error(error.message);
+  return loadDeal(admin, dealId);
+}
+
+export interface UpdateDealInput {
+  title?: string;
+}
+
+export async function updateDeal(
+  dealId: string,
+  patch: UpdateDealInput,
+): Promise<Deal> {
+  const admin = createAdminClient();
+  const update: Partial<TablesInsert<"deals">> = {};
+  if (patch.title !== undefined) update.title = patch.title.trim();
+  if (Object.keys(update).length > 0) {
+    update.last_activity_at = new Date().toISOString();
+    const { error } = await admin.from("deals").update(update).eq("id", dealId);
+    if (error) throw new Error(error.message);
+  }
   return loadDeal(admin, dealId);
 }
 

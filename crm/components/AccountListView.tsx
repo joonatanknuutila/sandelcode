@@ -12,6 +12,7 @@ export function AccountListView({
   basePath,
   title,
   subtitle,
+  showHeader = true,
   plain = false,
 }: {
   cards: AccountCard[];
@@ -19,19 +20,22 @@ export function AccountListView({
   basePath: string;
   title: string;
   subtitle: string;
+  showHeader?: boolean;
   /** Rep-facing: plain words ("Deal value"/"Likely value"), larger text. */
   plain?: boolean;
 }) {
   return (
     <div className="mx-auto max-w-7xl space-y-6">
-      <div>
-        <h1 className={`font-semibold tracking-tight ${plain ? "text-3xl" : "text-2xl"}`}>
-          {title}
-        </h1>
-        <p className={`text-muted ${plain ? "mt-2 text-base" : "mt-1 text-sm"}`}>
-          {subtitle}
-        </p>
-      </div>
+      {showHeader && (
+        <div>
+          <h1 className={`font-semibold tracking-tight ${plain ? "text-3xl" : "text-2xl"}`}>
+            {title}
+          </h1>
+          <p className={`text-muted ${plain ? "mt-2 text-base" : "mt-1 text-sm"}`}>
+            {subtitle}
+          </p>
+        </div>
+      )}
 
       {cards.length === 0 ? (
         <Card className={`p-6 text-muted ${plain ? "text-base" : "text-sm"}`}>

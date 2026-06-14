@@ -24,6 +24,7 @@ interface LineItem {
   kind: "product" | "service";
   id: string;
   name: string;
+  billingLabel: string;
   unitPrice: number;
   quantity: number;
   invoicingModel?: Service["invoicing_model"];
@@ -53,17 +54,36 @@ function computeTotals(lines: LineItem[], discountPct: number) {
 function catalogOptions(products: Product[], services: Service[]) {
   const productOptions = products.map((p) => ({
     value: `product:${p.id}`,
-    label: `${p.name} — ${eur(p.unit_price)} / unit`,
+    label: `${p.name} - ${eur(p.unit_price)} per device`,
   }));
   const serviceOptions = services.map((s) => ({
     value: `service:${s.id}`,
-    label: `${s.name} (${s.invoicing_model})`,
+    label: `${s.name} - ${servicePriceLabel(s)}`,
   }));
   return [
-    { value: "", label: "— select a product or service —" },
+    { value: "", label: "Select from pricing catalog" },
     ...productOptions,
     ...serviceOptions,
   ];
+}
+
+function servicePriceLabel(service: Service): string {
+  if (service.invoicing_model === "monthly_recurring") {
+    const years = service.term_years ?? 1;
+    return `${eur(service.monthly_rate ?? 0)} / month, ${years} year${years === 1 ? "" : "s"}`;
+  }
+  if (service.invoicing_model === "fixed_term") {
+    const years = service.term_years ?? 1;
+    return `${eur(service.base_price ?? 0)} fixed, ${years} year${years === 1 ? "" : "s"}`;
+  }
+  return `${eur(service.base_price ?? 0)} one-off`;
+}
+
+function serviceLinePrice(service: Service): number {
+  if (service.invoicing_model === "monthly_recurring") {
+    return (service.monthly_rate ?? 0) * 12 * (service.term_years ?? 1);
+  }
+  return service.base_price ?? 0;
 }
 
 // ---------------------------------------------------------------------------
@@ -110,21 +130,18 @@ export function OfferBuilder({ deal, products, services }: Props) {
         kind: "product",
         id: p.id,
         name: p.name,
+        billingLabel: "Device",
         unitPrice: p.unit_price,
       };
     } else {
       const s = services.find((x) => x.id === id);
       if (!s) return;
-      // For services: use base_price or monthly_rate as unit price depending on model
-      const unitPrice =
-        s.invoicing_model === "monthly_recurring"
-          ? (s.monthly_rate ?? 0)
-          : (s.base_price ?? 0);
       item = {
         kind: "service",
         id: s.id,
         name: s.name,
-        unitPrice,
+        billingLabel: servicePriceLabel(s),
+        unitPrice: serviceLinePrice(s),
         invoicingModel: s.invoicing_model,
         termYears: s.term_years ?? undefined,
       };
@@ -190,7 +207,12 @@ export function OfferBuilder({ deal, products, services }: Props) {
       });
 
       if (result.success) {
-        toast("Offer sent to your manager for approval.", { variant: "success" });
+        toast(
+          discountPct > 0
+            ? "Discount submitted to your manager."
+            : "Offer submitted to your manager.",
+          { variant: "success" },
+        );
         router.push(`/rep/deals/${deal.id}`);
       } else {
         setSubmitError(result.error ?? "Submission failed.");
@@ -221,19 +243,19 @@ export function OfferBuilder({ deal, products, services }: Props) {
       {/* Approval routing note */}
       <div className="rounded-lg border border-border bg-surface/60 px-4 py-3 text-base text-muted">
         <span className="font-semibold text-foreground">How approval works:</span>{" "}
-        Your manager checks every offer. Small discounts (10% or less) they can
-        approve on their own. Bigger discounts also go to Finance.
+        Your manager checks every submitted offer. Discounts up to 10% can be
+        approved there; larger discounts automatically continue to Finance.
       </div>
 
       {/* Catalog picker */}
       <Card className="p-5 space-y-4">
         <h2 className="text-sm font-medium uppercase tracking-wide text-muted">
-          Add items
+          Pricing catalog
         </h2>
         <div className="flex gap-3 items-end">
           <div className="flex-1">
             <Select
-              label="Product or service"
+              label="Catalog item"
               className="py-2.5 text-base"
               options={catalogOptions(products, services)}
               value={selectedCatalog}
@@ -280,8 +302,8 @@ export function OfferBuilder({ deal, products, services }: Props) {
                 {lines.map((line) => (
                   <tr key={line.key} className="border-b border-border/50">
                     <td className="py-2.5 pr-4 font-medium">{line.name}</td>
-                    <td className="py-2.5 pr-4 text-muted text-sm capitalize">
-                      {line.invoicingModel?.replace(/_/g, " ") ?? "one-off"}
+                    <td className="py-2.5 pr-4 text-muted text-sm">
+                      {line.billingLabel}
                     </td>
                     <td className="py-2.5 pr-4 text-right tabular-nums">
                       {eur(line.unitPrice)}
@@ -347,7 +369,7 @@ export function OfferBuilder({ deal, products, services }: Props) {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-semibold uppercase tracking-wide text-black/60">
-                Normal price
+              Catalog total
               </p>
               <p className="text-xl font-semibold text-black tabular-nums line-through decoration-black/40">
                 {eur(listTotal)}
@@ -355,7 +377,7 @@ export function OfferBuilder({ deal, products, services }: Props) {
             </div>
             <div className="text-right">
               <p className="text-sm font-semibold uppercase tracking-wide text-black/60">
-                Offer price ({discountPct}% off)
+                Submitted price ({discountPct}% off)
               </p>
               <p className="text-3xl font-bold text-black tabular-nums">
                 {eur(discountedTotal)}
@@ -364,7 +386,7 @@ export function OfferBuilder({ deal, products, services }: Props) {
           </div>
           {discountPct > 0 && (
             <p className="mt-2 text-sm text-black/60 text-right">
-              You save {eur(savings)}
+              Discount value {eur(savings)}
             </p>
           )}
         </div>
@@ -372,9 +394,9 @@ export function OfferBuilder({ deal, products, services }: Props) {
         {/* Justification */}
         {discountPct > 0 && (
           <Textarea
-            label="Why this discount? (required)"
+            label="Discount justification (required)"
             className="text-base"
-            placeholder="A short reason — e.g. big order, repeat customer, matching a competitor…"
+            placeholder="A short reason, such as order size, strategic account, or competitive pressure."
             value={justification}
             onChange={(e) => setJustification(e.target.value)}
             error={justificationError}
@@ -404,7 +426,11 @@ export function OfferBuilder({ deal, products, services }: Props) {
             onClick={handleSubmit}
             disabled={isPending || lines.length === 0}
           >
-            {isPending ? "Sending…" : "Send for approval"}
+            {isPending
+              ? "Submitting..."
+              : discountPct > 0
+                ? "Submit discount"
+                : "Submit offer"}
           </Button>
         </div>
       </div>

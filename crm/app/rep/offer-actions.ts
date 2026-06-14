@@ -6,9 +6,10 @@ import {
   setOfferLines,
   submitOffer,
   createNotification,
+  logActivity,
 } from "@/lib/db/mutations";
 import type { OfferLineInput } from "@/lib/db/mutations";
-import { getUsers } from "@/lib/db";
+import { getOffersForDeal, getUsers } from "@/lib/db";
 import { requiresFinanceApproval } from "@/lib/scoring";
 
 // ---------------------------------------------------------------------------
@@ -58,6 +59,10 @@ export async function createOfferAction(
   input: CreateOfferActionInput,
 ): Promise<CreateOfferActionResult> {
   try {
+    const existingOffers = await getOffersForDeal(input.dealId);
+    const nextVersion =
+      existingOffers.reduce((max, offer) => Math.max(max, offer.version), 0) + 1;
+
     // 1. Create the offer header.
     const offer = await createOffer({
       accountId: input.accountId,
@@ -65,7 +70,7 @@ export async function createOfferAction(
       title: input.title,
       discountPct: input.discountPct,
       discountJustification: input.discountJustification,
-      version: 1,
+      version: nextVersion,
     });
 
     // 2. Set line items (recomputes totals on the server).
@@ -83,7 +88,19 @@ export async function createOfferAction(
     await setOfferLines(offer.id, lines);
 
     // 3. Submit: always goes to SM first.
-    await submitOffer(offer.id, "pending_sm");
+    const submittedOffer = await submitOffer(offer.id, "pending_sm");
+
+    await logActivity({
+      accountId: input.accountId,
+      eventType: "offer_sent",
+      title: `Offer submitted: ${input.title}`,
+      body:
+        input.discountPct > 0
+          ? `${input.discountPct}% discount submitted for approval. ${input.discountJustification ?? ""}`.trim()
+          : "Offer submitted for approval.",
+      entityType: "deal",
+      entityId: input.dealId,
+    });
 
     // 4. Notify relevant users.
     const users = await getUsers();
@@ -123,8 +140,12 @@ export async function createOfferAction(
 
     // 5. Revalidate the deal cockpit so it reflects the new offer.
     revalidatePath(offerHref);
+    revalidatePath("/rep");
+    revalidatePath("/rep/accounts");
+    revalidatePath("/sm");
+    revalidatePath("/finance");
 
-    return { success: true, offerId: offer.id };
+    return { success: true, offerId: submittedOffer.id };
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
     return { success: false, error: message };

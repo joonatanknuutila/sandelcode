@@ -1,19 +1,46 @@
-import { getAccountCards, getAccountsForRep, getCurrentUser } from "@/lib/db";
-import { AccountListView } from "@/components/AccountListView";
+import {
+  getAccountCards,
+  getAccounts,
+  getAccountsForRep,
+  getCurrentUser,
+  getDealsForRep,
+  getUsers,
+  isOverdue,
+  isStalled,
+} from "@/lib/db";
+import { relativeDays } from "@/lib/format";
+import { dealProbability } from "@/lib/types";
+import { AccountsWorkspace } from "./AccountsWorkspace";
+import type { BoardDeal } from "@/components/PipelineBoard";
 
-// Sales Rep — "all my accounts + deal status at a glance".
+// Sales Rep — accounts + deal Kanban in one place.
 export default async function AccountsPage() {
   const user = await getCurrentUser();
   if (!user) return <p className="text-sm text-muted">No user signed in.</p>;
-  const accounts = await getAccountsForRep(user.id);
+
+  const [accounts, deals, allAccounts, users] = await Promise.all([
+    getAccountsForRep(user.id),
+    getDealsForRep(user.id),
+    getAccounts(),
+    getUsers(),
+  ]);
   const cards = await getAccountCards(accounts);
-  return (
-    <AccountListView
-      cards={cards}
-      basePath="/rep/accounts"
-      title="My customers"
-      subtitle={`You look after ${accounts.length} ${accounts.length === 1 ? "customer" : "customers"}.`}
-      plain
-    />
-  );
+  const accountById = new Map(allAccounts.map((a) => [a.id, a]));
+  const userById = new Map(users.map((u) => [u.id, u]));
+  const boardDeals: BoardDeal[] = deals.map((d) => ({
+    id: d.id,
+    accountName: accountById.get(d.accountId)?.name ?? "Unknown account",
+    dealName: d.name,
+    ownerId: d.ownerId,
+    ownerInitials: userById.get(d.ownerId)?.initials ?? "?",
+    tcv: d.tcv,
+    channel: d.channel,
+    stage: d.stage,
+    confidence: Math.round(dealProbability(d) * 100),
+    stalled: isStalled(d),
+    overdue: isOverdue(d),
+    idleDays: relativeDays(d.updatedAt),
+  }));
+
+  return <AccountsWorkspace cards={cards} boardDeals={boardDeals} accountCount={accounts.length} />;
 }

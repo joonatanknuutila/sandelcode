@@ -19,8 +19,7 @@ export const ROLES: Record<Role, RoleConfig> = {
     home: "/rep",
     nav: [
       { label: "Dashboard", href: "/rep" },
-      { label: "My Accounts", href: "/rep/accounts" },
-      { label: "Pipeline", href: "/rep/pipeline" },
+      { label: "Accounts", href: "/rep/accounts" },
       { label: "Inbox", href: "/rep/inbox" },
     ],
   },

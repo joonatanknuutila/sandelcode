@@ -3,17 +3,22 @@
 import { revalidatePath } from "next/cache";
 import {
   setForecastPhases,
+  createAccount,
   createDeal,
   createCase,
   createContact,
   logActivity,
+  updateDeal,
 } from "@/lib/db/mutations";
+import { parseLead } from "@/lib/ai/lead";
 import type {
   ForecastPhaseInput,
+  CreateAccountInput,
   CreateDealInput,
   CreateCaseInput,
   CreateContactInput,
 } from "@/lib/db/mutations";
+import type { ParsedLead } from "@/lib/ai/lead";
 
 // ---------------------------------------------------------------------------
 // Forecast phases
@@ -27,6 +32,38 @@ export async function setForecastPhasesAction(
   await setForecastPhases(dealId, phases);
   revalidatePath(`/rep/deals/${dealId}`);
   revalidatePath(`/rep/accounts/${accountId}`);
+}
+
+// ---------------------------------------------------------------------------
+// Create account
+// ---------------------------------------------------------------------------
+
+export interface CreateAccountActionInput extends CreateAccountInput {
+  primaryContact?: Omit<CreateContactInput, "accountId">;
+}
+
+export async function createAccountAction(
+  input: CreateAccountActionInput,
+): Promise<{ id: string }> {
+  const account = await createAccount(input);
+  if (input.primaryContact?.name?.trim()) {
+    await createContact({
+      ...input.primaryContact,
+      accountId: account.id,
+      isPrimary: input.primaryContact.isPrimary ?? true,
+    });
+  }
+  await logActivity({
+    accountId: account.id,
+    eventType: "note",
+    title: "Account created",
+    body: input.summary,
+    entityType: "account",
+    entityId: account.id,
+  });
+  revalidatePath("/rep");
+  revalidatePath("/rep/accounts");
+  return { id: account.id };
 }
 
 // ---------------------------------------------------------------------------
@@ -47,6 +84,47 @@ export async function createDealAction(
   revalidatePath(`/rep/accounts/${input.accountId}`);
   revalidatePath("/rep");
   return { id: deal.id };
+}
+
+// ---------------------------------------------------------------------------
+// Rename deal
+// ---------------------------------------------------------------------------
+
+export async function renameDealAction(input: {
+  dealId: string;
+  accountId: string;
+  title: string;
+}): Promise<{ ok: boolean; error?: string }> {
+  try {
+    const title = input.title.trim();
+    if (!title) return { ok: false, error: "Deal title is required" };
+    const deal = await updateDeal(input.dealId, { title });
+    await logActivity({
+      accountId: input.accountId,
+      eventType: "note",
+      title: `Deal renamed: ${deal.name}`,
+      entityType: "deal",
+      entityId: deal.id,
+    });
+    revalidatePath(`/rep/accounts/${input.accountId}`);
+    revalidatePath(`/rep/deals/${input.dealId}`);
+    revalidatePath("/rep/accounts");
+    revalidatePath("/rep");
+    return { ok: true };
+  } catch (err) {
+    return {
+      ok: false,
+      error: err instanceof Error ? err.message : "Failed to rename deal",
+    };
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Parse inbound lead text
+// ---------------------------------------------------------------------------
+
+export async function parseLeadAction(text: string): Promise<ParsedLead> {
+  return parseLead(text);
 }
 
 // ---------------------------------------------------------------------------

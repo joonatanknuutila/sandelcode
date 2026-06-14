@@ -48,6 +48,7 @@ export default async function AccountDetail({
       backLabel="My customers"
       dealHref="/rep/deals"
       plain
+      editableDeals={{ accountId: id, currentUserId: currentUser?.id }}
       actions={
         <AccountActionBar
           accountId={id}
