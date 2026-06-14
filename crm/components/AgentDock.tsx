@@ -83,10 +83,12 @@ export function AgentDock({ role }: { role: Role }) {
   // the TAM. History is reloaded per-persona by the effect below. A fresh persona
   // also re-arms the nudge so it can surface that persona's brief.
   useEffect(() => {
-    setChatId(undefined);
-    setMessages([]);
-    setShowHistory(false);
-    setNudgeDismissed(false);
+    queueMicrotask(() => {
+      setChatId(undefined);
+      setMessages([]);
+      setShowHistory(false);
+      setNudgeDismissed(false);
+    });
   }, [role]);
 
   // The brief drives both the panel's opening view AND the closed-state nudge
@@ -104,7 +106,7 @@ export function AgentDock({ role }: { role: Role }) {
 
   // History is only needed once the panel is open.
   useEffect(() => {
-    if (open) refreshChats();
+    if (open) queueMicrotask(refreshChats);
   }, [open, refreshChats]);
 
   // The closed-state "needs your attention" nudge appears AT MOST ONCE per
@@ -114,7 +116,7 @@ export function AgentDock({ role }: { role: Role }) {
   useEffect(() => {
     const onDashboard = /^\/(rep|sm|tam|finance)$/.test(pathname);
     if (open || nudgeDismissed || !brief?.headline || !onDashboard) {
-      setShowNudge(false);
+      queueMicrotask(() => setShowNudge(false));
       return;
     }
     try {

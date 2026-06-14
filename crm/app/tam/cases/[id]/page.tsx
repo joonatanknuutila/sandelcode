@@ -10,6 +10,7 @@ import {
   getUsers,
 } from "@/lib/db";
 import { caseAgeDays, requestStatus, slaInfo } from "@/lib/tam";
+import { relativeDays } from "@/lib/format";
 import { Card, SectionTitle } from "@/components/ui";
 import { CaseStatusBadge, PriorityBadge, SlaBadge } from "../../ui";
 import { CaseTimeline } from "./CaseTimeline";
@@ -50,7 +51,7 @@ export default async function CaseDetail({
   const tamUsers = users.filter((u) => u.role === "tam");
   const latestEscalation = events.find((e) => e.kind === "escalation");
   const waitingDays = latestEscalation
-    ? Math.max(0, Math.floor((Date.now() - new Date(latestEscalation.createdAt).getTime()) / 86_400_000))
+    ? Math.max(0, relativeDays(latestEscalation.createdAt))
     : caseAgeDays(c);
 
   return (

@@ -43,7 +43,9 @@ export function AppShell({
   // Mobile nav drawer (md+ shows the sidebar statically; below md it slides in).
   const [navOpen, setNavOpen] = useState(false);
   // Close the drawer whenever the route changes (tapping a nav link navigates).
-  useEffect(() => setNavOpen(false), [pathname]);
+  useEffect(() => {
+    queueMicrotask(() => setNavOpen(false));
+  }, [pathname]);
 
   // The login page ("/") is its own full-screen surface — no sidebar, header
   // or agent dock. Render it bare.

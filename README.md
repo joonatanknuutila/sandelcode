@@ -18,6 +18,15 @@ npm run dev                  # http://localhost:3000
 
 `npm run build` runs the production build (also run in CI on every PR to `main`).
 
+## Pitch materials
+
+- [`pitch/index.html`](pitch/index.html) — interactive 10-slide pitch deck.
+- [`pitch/one-pager.html`](pitch/one-pager.html) — single-screen one-pager.
+- [`pitch/exports/`](pitch/exports/) — PDF exports for sharing.
+
+When the app is running locally, the same static materials are served from
+`/pitch/index.html` and `/pitch/one-pager.html`.
+
 ## Layout
 
 ```

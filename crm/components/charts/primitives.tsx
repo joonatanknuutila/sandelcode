@@ -142,16 +142,27 @@ export function Donut({
   }
   const r = 42;
   const C = 2 * Math.PI * r;
-  let offset = 0;
+  const arcs = segments.reduce<
+    Array<{ segment: DonutSegment; len: number; pct: number; offset: number }>
+  >((acc, segment) => {
+    const len = (segment.value / total) * C;
+    const prev = acc.at(-1);
+    const offset = prev ? prev.offset + prev.len : 0;
+    acc.push({
+      segment,
+      len,
+      offset,
+      pct: Math.round((segment.value / total) * 100),
+    });
+    return acc;
+  }, []);
   const ariaLabel = segments.map((s) => `${s.label} ${s.valueLabel}`).join(", ");
   return (
     <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-5">
       <svg viewBox="0 0 110 110" className="h-28 w-28 shrink-0" role="img" aria-label={ariaLabel}>
         <circle cx="55" cy="55" r={r} fill="none" stroke={CHART.track} strokeWidth="14" />
-        {segments.map((s, i) => {
-          const len = (s.value / total) * C;
-          const pct = Math.round((s.value / total) * 100);
-          const el = (
+        {arcs.map(({ segment: s, len, pct, offset }, i) => {
+          return (
             <g key={i}>
               <title>{`${s.label}: ${s.valueLabel} (${pct}%)`}</title>
               <circle
@@ -167,8 +178,6 @@ export function Donut({
               />
             </g>
           );
-          offset += len;
-          return el;
         })}
         {centerLabel && (
           <text x="55" y="53" textAnchor="middle" fill={FG} fontSize="14" fontWeight="700">

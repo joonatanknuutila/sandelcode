@@ -58,8 +58,9 @@ export function VoiceInput({
   const recRef = useRef<SpeechRecognitionLike | null>(null);
 
   useEffect(() => {
-    setSupported(getRecognitionCtor() != null);
+    const id = window.setTimeout(() => setSupported(getRecognitionCtor() != null), 0);
     return () => {
+      window.clearTimeout(id);
       try {
         recRef.current?.stop();
       } catch {

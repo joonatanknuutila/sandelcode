@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HMD Secure CRM — Pitch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  /* ============================================================
+     HMD SECURE CRM — pitch deck
+     Tokens mirror crm/app/globals.css. Lime is a FILL accent only;
+     type stays off-white ink. Underline accents are thin, not bold.
+     ============================================================ */
+  :root{
+    --lime:#e4ff00;
+    --bg:#0f0f12; --chrome:#0a0a0c; --surface:#18181c; --surface-2:#1c1c20;
+    --border:#2a2a30; --ink:#f3f3f5; --muted:#9b9ba4; --dim:#6a6a73;
+    --success:#22c55e; --warning:#f59e0b; --danger:#ef4444;
+    --ease:cubic-bezier(.76,0,.24,1);
+    --settle:cubic-bezier(.2,.75,.25,1);
+    --trans:820ms;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--chrome);color:var(--ink);
+    font-family:"Inter",system-ui,-apple-system,sans-serif;overflow:hidden;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+
+  /* ---------- deck shell + 16:9 stage ---------- */
+  .deck{position:fixed;inset:0;display:grid;place-items:center;
+    background:radial-gradient(120% 90% at 50% -10%, #131318 0%, var(--chrome) 60%)}
+  .stage{position:relative;
+    width:min(100vw, calc(100vh * 16 / 9));
+    height:min(100vh, calc(100vw * 9 / 16));
+    container-type:size;overflow:hidden;background:var(--bg);
+    box-shadow:0 0 0 1px var(--border), 0 4cqh 14cqh -4cqh rgba(0,0,0,.8)}
+
+  /* ---------- atmosphere ---------- */
+  .bg{position:absolute;inset:0;z-index:0;pointer-events:none}
+  .bg .grid{position:absolute;inset:-2px;
+    background-image:linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);
+    background-size:4cqw 4cqw;
+    mask-image:radial-gradient(120% 100% at 70% 20%,#000 35%,transparent 80%);
+    animation:drift 28s linear infinite}
+  .bg .glow{position:absolute;width:70cqw;height:70cqw;right:-18cqw;top:-26cqw;
+    background:radial-gradient(circle,rgba(228,255,0,.10) 0%,rgba(228,255,0,0) 62%);
+    filter:blur(2px);animation:breathe 9s ease-in-out infinite}
+  .bg .glow.b{left:-22cqw;right:auto;top:auto;bottom:-30cqw;width:60cqw;height:60cqw;
+    background:radial-gradient(circle,rgba(228,255,0,.05) 0%,rgba(228,255,0,0) 60%);animation-delay:-4s}
+  .bg .scan{position:absolute;inset:0;
+    background:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 1px,transparent 1px 3px);
+    opacity:.35;mix-blend-mode:overlay}
+  .bg .grain{position:absolute;inset:-40%;opacity:.04;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    animation:grain 6s steps(6) infinite}
+  @keyframes drift{to{background-position:4cqw 4cqw}}
+  @keyframes breathe{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}
+  @keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}
+    40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,1%)}80%{transform:translate(3%,2%)}100%{transform:translate(0,0)}}
+
+  /* ---------- persistent chrome ---------- */
+  .chrome-top{position:absolute;z-index:30;top:0;left:0;right:0;height:9cqh;
+    display:flex;align-items:center;justify-content:space-between;padding:0 6.5cqw}
+  .logo{display:flex;align-items:center;gap:1cqw}
+  .logo .tile{width:3cqw;height:3cqw;min-width:3cqw;border-radius:.7cqw;background:var(--lime);
+    color:#0a0a0c;display:grid;place-items:center;font-weight:800;font-size:1.9cqw;line-height:1;
+    box-shadow:0 0 2.4cqw rgba(228,255,0,.35)}
+  .logo .word{font-size:1.55cqw;font-weight:600;letter-spacing:-.01em}
+  .logo .word .s{font-weight:400;opacity:.6}
+  .counter{font-size:1.2cqw;font-weight:500;color:var(--muted);
+    font-variant-numeric:tabular-nums;letter-spacing:.04em}
+  .counter b{color:var(--ink);font-weight:700}
+  .progress{position:absolute;z-index:31;top:0;left:0;height:.28cqh;background:var(--lime);
+    box-shadow:0 0 1.4cqw rgba(228,255,0,.6);transition:width .6s var(--ease)}
+
+  /* ---------- slides ---------- */
+  .slides{position:absolute;z-index:10;left:0;right:0;top:9cqh;bottom:8cqh}
+  .slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+    padding:1cqh 6.5cqw 0;opacity:0;visibility:hidden;pointer-events:none;
+    will-change:clip-path,transform,filter}
+  .slide.active{opacity:1;visibility:visible;pointer-events:auto}
+
+  .slides[data-dir="f"] .slide.enter{animation:revealF var(--trans) var(--ease) both}
+  .slides[data-dir="b"] .slide.enter{animation:revealB var(--trans) var(--ease) both}
+  .slides[data-dir="f"] .slide.leave{animation:leaveF var(--trans) var(--ease) both}
+  .slides[data-dir="b"] .slide.leave{animation:leaveB var(--trans) var(--ease) both}
+  @keyframes revealF{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+  @keyframes revealB{from{clip-path:inset(0 0 0 100%)}to{clip-path:inset(0 0 0 0)}}
+  @keyframes leaveF{from{clip-path:inset(0 0 0 0);filter:none;transform:scale(1)}
+    to{clip-path:inset(0 0 0 100%);filter:blur(7px) brightness(.55) saturate(.4);transform:scale(.985)}}
+  @keyframes leaveB{from{clip-path:inset(0 0 0 0);filter:none;transform:scale(1)}
+    to{clip-path:inset(0 100% 0 0);filter:blur(7px) brightness(.55) saturate(.4);transform:scale(.985)}}
+
+  /* ---------- lime security-scan sweep ---------- */
+  .sweep{position:absolute;z-index:25;inset:0;pointer-events:none;opacity:0}
+  .sweep.run{opacity:1}
+  .sweep .bar{position:absolute;top:-2%;bottom:-2%;width:.32cqw;left:-3%;
+    background:linear-gradient(180deg,transparent,var(--lime) 12%,#fff 50%,var(--lime) 88%,transparent);
+    box-shadow:0 0 3cqw 1cqw rgba(228,255,0,.55),0 0 .6cqw .2cqw #fff}
+  .sweep .haze{position:absolute;top:0;bottom:0;width:14cqw;left:-17cqw;
+    background:linear-gradient(90deg,rgba(228,255,0,0),rgba(228,255,0,.16))}
+  .sweep.run[data-dir="f"] .bar{animation:barF var(--trans) var(--ease) both}
+  .sweep.run[data-dir="b"] .bar{animation:barB var(--trans) var(--ease) both}
+  .sweep.run[data-dir="f"] .haze{animation:hazeF var(--trans) var(--ease) both}
+  .sweep.run[data-dir="b"] .haze{animation:hazeB var(--trans) var(--ease) both;transform:scaleX(-1)}
+  @keyframes barF{0%{left:-3%;opacity:0}7%{opacity:1}93%{opacity:1}100%{left:103%;opacity:0}}
+  @keyframes barB{0%{left:103%;opacity:0}7%{opacity:1}93%{opacity:1}100%{left:-3%;opacity:0}}
+  @keyframes hazeF{0%{left:-17cqw;opacity:0}10%{opacity:1}90%{opacity:1}100%{left:100cqw;opacity:0}}
+  @keyframes hazeB{0%{left:103cqw;opacity:0}10%{opacity:1}90%{opacity:1}100%{left:-17cqw;opacity:0}}
+
+  /* ---------- content stagger ---------- */
+  .r{opacity:0;transform:translateY(1.6cqh);filter:blur(8px)}
+  .slide.play .r{animation:settle .72s var(--settle) forwards;animation-delay:calc(var(--i,0)*70ms + 340ms)}
+  @keyframes settle{to{opacity:1;transform:none;filter:none}}
+
+  /* ---------- shared type ---------- */
+  .tag{display:inline-flex;align-items:center;gap:.9cqw;font-size:1.18cqw;font-weight:600;
+    letter-spacing:.22em;color:var(--muted);text-transform:uppercase}
+  .tag .dot{width:.7cqw;height:.7cqw;border-radius:50%;background:var(--lime);
+    box-shadow:0 0 1.4cqw rgba(228,255,0,.8);animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+  h1{font-size:5.4cqw;line-height:1.04;font-weight:800;letter-spacing:-.025em}
+  h2{font-size:4.1cqw;line-height:1.05;font-weight:800;letter-spacing:-.022em}
+  .lead{font-size:1.65cqw;line-height:1.5;color:var(--muted);font-weight:400;max-width:46cqw}
+
+  /* thin, refined underline accent (replaces fat highlighter) */
+  .uline{position:relative;white-space:nowrap}
+  .uline::after{content:"";position:absolute;left:0;right:0;bottom:-.06em;height:.085em;
+    background:var(--lime);border-radius:2px;opacity:.92;
+    transform:scaleX(0);transform-origin:left}
+  .slide.play .uline::after{animation:wipe .7s var(--ease) forwards;animation-delay:.85s}
+  @keyframes wipe{to{transform:scaleX(1)}}
+
+  .chips{display:flex;gap:1cqw;flex-wrap:wrap}
+  .chip{display:inline-flex;align-items:center;gap:.7cqw;padding:.7cqh 1.3cqw;
+    border:1px solid var(--border);border-radius:5cqw;font-size:1.12cqw;font-weight:500;
+    color:var(--ink);background:rgba(255,255,255,.02)}
+  .chip .d{width:.6cqw;height:.6cqw;border-radius:50%;background:var(--lime)}
+  .chip .d.g{background:var(--success)}
+
+  .head{margin-bottom:4cqh}
+  .head .tag{margin-bottom:2cqh}
+
+  /* ================= SLIDE 1 — TITLE ================= */
+  .s1{justify-content:center}
+  .s1 .tag,.s1 h1,.s1 .lead,.s1 .foot{position:relative;z-index:2}
+  .s1 .tag{margin-bottom:3cqh}
+  .s1 h1{margin-bottom:2.6cqh}
+  .s1 .lead{margin-bottom:4cqh}
+  .s1 .foot{display:flex;gap:1cqw}
+  .hero-glow{position:absolute;z-index:0;right:14cqw;top:50%;transform:translateY(-50%);
+    width:32cqw;height:32cqw;border-radius:50%;
+    background:radial-gradient(circle,rgba(228,255,0,.16) 0%,rgba(228,255,0,0) 62%);
+    filter:blur(2px);animation:breathe 8s ease-in-out infinite}
+  .hero-media{position:absolute;z-index:1;right:-2cqw;top:0;bottom:0;width:50cqw;overflow:hidden;
+    -webkit-mask-image:linear-gradient(to right,transparent 0%,#000 34%);
+            mask-image:linear-gradient(to right,transparent 0%,#000 34%)}
+  .hero-media img{width:100%;height:100%;object-fit:cover;object-position:46% 50%;
+    opacity:.95;animation:floaty 9s ease-in-out infinite}
+  .hero-media::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(to right,var(--bg),transparent 32%),
+      radial-gradient(70% 70% at 64% 50%,transparent 40%,rgba(15,15,18,.5))}
+  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.4cqh)}}
+
+  /* ================= SLIDE — PROBLEM ================= */
+  .rows{display:flex;flex-direction:column;gap:.6cqh}
+  .row{display:grid;grid-template-columns:4.4cqw 1fr;gap:2cqw;align-items:start;
+    padding:2.1cqh 0;border-top:1px solid var(--border)}
+  .row:last-child{border-bottom:1px solid var(--border)}
+  .row .ix{font-size:2cqw;font-weight:800;color:var(--lime);line-height:1;
+    font-variant-numeric:tabular-nums;opacity:.9}
+  .row .rt{font-size:2.1cqw;font-weight:700;letter-spacing:-.01em;margin-bottom:.5cqh}
+  .row .rd{font-size:1.42cqw;color:var(--muted);line-height:1.45;max-width:64cqw}
+
+  /* ================= SLIDE — ROLE OVERVIEW ================= */
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.6cqw}
+  .card{border:1px solid var(--border);border-radius:1.4cqw;background:var(--surface);
+    padding:2.6cqh 2.2cqw;position:relative;overflow:hidden}
+  .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:.3cqw;background:var(--lime);
+    transform:scaleY(0);transform-origin:top;transition:transform .5s var(--ease)}
+  .slide.play .card::before{transform:scaleY(1);transition-delay:calc(var(--i,0)*70ms + .5s)}
+  .card .role{font-size:1.05cqw;font-weight:700;letter-spacing:.18em;color:var(--muted);
+    text-transform:uppercase;margin-bottom:1.4cqh;display:flex;align-items:center;gap:1cqw}
+  .ico{display:grid;place-items:center;background:rgba(228,255,0,.08);
+    border:1px solid rgba(228,255,0,.22);color:var(--lime)}
+  .card .ico{width:2.6cqw;height:2.6cqw;border-radius:.7cqw}
+  .card .ico svg{width:1.5cqw;height:1.5cqw}
+  .card .ct{font-size:1.9cqw;font-weight:700;letter-spacing:-.01em}
+  .card .cd{font-size:1.3cqw;color:var(--muted);margin-top:.7cqh}
+
+  /* ================= ROLE DEEP-DIVE TEMPLATE ================= */
+  .rs{display:grid;grid-template-columns:.9fr 1.1fr;gap:4.5cqw;align-items:center;height:100%}
+  .role-head{display:flex;align-items:center;gap:1.2cqw;margin-bottom:2.2cqh}
+  .role-head .ico{width:3.6cqw;height:3.6cqw;border-radius:.9cqw}
+  .role-head .ico svg{width:2cqw;height:2cqw}
+  .role-head .rk{font-size:1.25cqw;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--lime)}
+  .rs h3{font-size:3cqw;line-height:1.07;font-weight:800;letter-spacing:-.02em;margin-bottom:2.8cqh}
+  .blist{display:flex;flex-direction:column;gap:1.7cqh}
+  .bi{display:grid;grid-template-columns:auto 1fr;gap:1.2cqw;align-items:start}
+  .bi .tick{width:2.1cqw;height:2.1cqw;min-width:2.1cqw;margin-top:.2cqh;border-radius:.55cqw;display:grid;
+    place-items:center;background:rgba(228,255,0,.1);border:1px solid rgba(228,255,0,.25);color:var(--lime)}
+  .bi .tick svg{width:1.1cqw;height:1.1cqw}
+  .bi .bt{font-size:1.5cqw;font-weight:600;line-height:1.25}
+  .bi .bt span{display:block;font-size:1.18cqw;color:var(--muted);font-weight:400;margin-top:.25cqh}
+
+  /* viz panel */
+  .panel{border:1px solid var(--border);border-radius:1.4cqw;
+    background:linear-gradient(180deg,var(--surface),#141418);padding:3cqh 2.6cqw 2.6cqh;
+    position:relative;overflow:hidden;height:48cqh;display:flex;flex-direction:column}
+  .ptitle{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2.4cqh}
+  .ptitle .t{font-size:1.05cqw;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .ptitle .v{font-size:1.05cqw;font-weight:700;color:var(--lime);font-variant-numeric:tabular-nums}
+
+  /* generic horizontal-grow */
+  .grow-x{transform:scaleX(0);transform-origin:left}
+  .slide.play .grow-x{animation:growX .9s var(--settle) forwards;animation-delay:calc(var(--gi,0)*80ms + .55s)}
+  @keyframes growX{to{transform:scaleX(1)}}
+
+  /* horizontal bars (Rep + Manager) */
+  .hbars{display:flex;flex-direction:column;gap:1.45cqh}
+  .hrow{display:grid;grid-template-columns:9cqw 1fr 5cqw;gap:1.2cqw;align-items:center;font-size:1.05cqw}
+  .hrow .hl{color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .htrack{height:1.7cqh;border-radius:5cqw;background:rgba(255,255,255,.05);position:relative;overflow:hidden}
+  .hfill{position:absolute;left:0;top:0;bottom:0;border-radius:5cqw;
+    background:linear-gradient(90deg,rgba(228,255,0,.45),var(--lime))}
+  .hrow .hv{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
+
+  /* offer chip (Rep) */
+  .offer{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:1cqw;
+    padding:1.4cqh 1.6cqw;border:1px solid var(--border);border-radius:1cqw;background:rgba(255,255,255,.02)}
+  .offer .ol{font-size:1.1cqw;font-weight:600}
+  .offer .ol span{display:block;font-size:.92cqw;color:var(--muted);font-weight:400;margin-top:.2cqh}
+  .offer .ob{font-size:.95cqw;font-weight:700;color:var(--warning);
+    padding:.5cqh 1cqw;border-radius:5cqw;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.35)}
+
+  /* SLA gauge (TAM) */
+  .gauge-wrap{display:flex;align-items:center;gap:2.6cqw;margin-bottom:2.4cqh}
+  .gauge{position:relative;width:15cqw;height:15cqw;min-width:15cqw}
+  .donut{width:100%;height:100%;transform:rotate(-90deg)}
+  .donut .track{fill:none;stroke:rgba(255,255,255,.07);stroke-width:8}
+  .donut .val{fill:none;stroke:var(--lime);stroke-width:8;stroke-linecap:round;
+    stroke-dasharray:264;stroke-dashoffset:264;filter:drop-shadow(0 0 .4cqw rgba(228,255,0,.5))}
+  .slide.play .donut .val{animation:donut 1.3s var(--settle) forwards;animation-delay:.55s}
+  @keyframes donut{to{stroke-dashoffset:var(--off,16)}}
+  .gauge-c{position:absolute;inset:0;display:grid;place-content:center;text-align:center;gap:.3cqh}
+  .gauge-c b{font-size:3.3cqw;font-weight:800;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+  .gauge-c span{font-size:.95cqw;color:var(--muted)}
+  .gauge-meta{display:flex;flex-direction:column;gap:1.1cqh}
+  .gm{font-size:1.25cqw}
+  .gm b{font-size:1.7cqw;font-weight:800;font-variant-numeric:tabular-nums}
+  .gm span{color:var(--muted)}
+  .queue{margin-top:auto;display:flex;flex-direction:column;gap:.9cqh}
+  .q{display:grid;grid-template-columns:auto 1fr auto;gap:1cqw;align-items:center;font-size:1.02cqw;
+    padding:1cqh 1.3cqw;border:1px solid var(--border);border-radius:.8cqw;background:rgba(255,255,255,.02)}
+  .q .pd{width:.8cqw;height:.8cqw;border-radius:50%}
+  .q .pd.p1{background:var(--danger)} .q .pd.p2{background:var(--warning)} .q .pd.p3{background:var(--muted)}
+  .q .qt{color:var(--ink);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .q .qa{color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+  /* gap-to-target bar (Manager) */
+  .gaplabel{display:flex;justify-content:space-between;font-size:1.05cqw;color:var(--muted);margin-top:2.4cqh}
+  .gapbar{height:2.2cqh;border-radius:5cqw;overflow:hidden;background:rgba(255,255,255,.05);margin-top:1cqh}
+  .gapfill{display:flex;height:100%;width:100%}
+  .gapfill .seg{height:100%}
+  .seg.committed{background:var(--lime)}
+  .seg.atrisk{background:var(--warning)}
+  .seg.gap{background:repeating-linear-gradient(45deg,rgba(255,255,255,.1) 0 .5cqw,transparent .5cqw 1cqw)}
+  .gleg{display:flex;gap:1.8cqw;margin-top:1.4cqh}
+  .gleg .lg{display:flex;align-items:center;gap:.6cqw;font-size:.98cqw;color:var(--muted)}
+  .gleg .sw{width:1.1cqw;height:.8cqw;border-radius:.2cqw}
+  .gleg .sw.c{background:var(--lime)} .gleg .sw.a{background:var(--warning)}
+  .gleg .sw.g{background:repeating-linear-gradient(45deg,rgba(255,255,255,.25) 0 3px,transparent 3px 6px)}
+
+  /* Finance forecast (vertical bars) */
+  .conf{position:absolute;right:2.6cqw;bottom:2.4cqh;display:inline-flex;align-items:center;gap:.7cqw;
+    padding:.6cqh 1.1cqw;border-radius:5cqw;background:rgba(34,197,94,.12);
+    border:1px solid rgba(34,197,94,.4);color:var(--success);font-size:.96cqw;font-weight:600}
+  .bars{position:relative;display:flex;align-items:flex-end;gap:1cqw;height:26cqh}
+  .bcol{flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:100%;gap:.3cqh}
+  .bcol .stack{display:flex;flex-direction:column;justify-content:flex-end;height:100%;
+    transform:scaleY(0);transform-origin:bottom}
+  .slide.play .bcol .stack{animation:grow .8s var(--settle) forwards;animation-delay:calc(var(--i,0)*55ms + .5s)}
+  @keyframes grow{to{transform:scaleY(1)}}
+  .bcol .svc{background:rgba(228,255,0,.22);border-radius:.3cqw .3cqw 0 0}
+  .bcol .dev{background:var(--lime);border-radius:0 0 .3cqw .3cqw;box-shadow:0 0 1.4cqw rgba(228,255,0,.25)}
+  .bcol .lbl{font-size:.78cqw;color:var(--dim);text-align:center;font-variant-numeric:tabular-nums}
+  .target{position:absolute;left:0;right:0;border-top:1.5px dashed var(--warning);opacity:0}
+  .slide.play .target{animation:fadein .6s ease forwards;animation-delay:1.1s}
+  @keyframes fadein{to{opacity:.8}}
+  .target .tl{position:absolute;right:0;top:-2.2cqh;font-size:.95cqw;color:var(--warning);
+    font-weight:600;background:var(--surface);padding:0 .6cqw}
+  .legend{display:flex;gap:1.6cqw;margin-top:1.8cqh}
+  .legend .lg{display:flex;align-items:center;gap:.7cqw;font-size:1cqw;color:var(--muted)}
+  .legend .sw{width:1.2cqw;height:.8cqw;border-radius:.2cqw}
+  .legend .sw.dev{background:var(--lime)} .legend .sw.svc{background:rgba(228,255,0,.22)}
+  .legend .sw.tgt{background:transparent;border-top:1.5px dashed var(--warning);height:0;width:1.4cqw}
+
+  /* ================= TRUST ================= */
+  .trust{display:grid;grid-template-columns:1.05fr .95fr;gap:5cqw;align-items:center;height:100%}
+  .trust .stmt{font-size:3.9cqw;line-height:1.07;font-weight:800;letter-spacing:-.02em}
+  .trust .stmt small{display:block;font-size:1.45cqw;font-weight:500;color:var(--muted);
+    margin-top:2.4cqh;letter-spacing:0;line-height:1.5;max-width:42cqw}
+  .points{display:flex;flex-direction:column;gap:1.5cqh}
+  .pt{display:grid;grid-template-columns:auto 1fr;gap:1.4cqw;align-items:start}
+  .pt .k{width:2.4cqw;height:2.4cqw;min-width:2.4cqw;border-radius:.6cqw;display:grid;place-items:center;
+    background:rgba(228,255,0,.1);border:1px solid rgba(228,255,0,.25);color:var(--lime)}
+  .pt .k svg{width:1.3cqw;height:1.3cqw}
+  .pt .pt-t{font-size:1.55cqw;font-weight:700}
+  .pt .pt-d{font-size:1.25cqw;color:var(--muted);line-height:1.42;margin-top:.3cqh}
+  .offline{display:inline-flex;align-items:center;gap:.8cqw;margin-top:2.6cqh;padding:.7cqh 1.3cqw;
+    border-radius:5cqw;border:1px dashed var(--warning);color:var(--warning);font-size:1.1cqw;
+    font-weight:600;letter-spacing:.04em}
+  .offline .od{width:.7cqw;height:.7cqw;border-radius:50%;background:var(--warning);animation:pulse 1.8s ease-in-out infinite}
+
+  /* ================= AGENTIC ================= */
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6cqw}
+  .acard{border:1px solid var(--border);border-radius:1.4cqw;background:var(--surface);
+    padding:3cqh 1.9cqw;position:relative;overflow:hidden}
+  .acard .ico{width:3cqw;height:3cqw;border-radius:.8cqw;margin-bottom:2cqh}
+  .acard .ico svg{width:1.7cqw;height:1.7cqw}
+  .acard .at{font-size:1.75cqw;font-weight:700;letter-spacing:-.01em;margin-bottom:1cqh}
+  .acard .ad{font-size:1.22cqw;color:var(--muted);line-height:1.45}
+  .acard .flow{display:flex;align-items:center;gap:.6cqw;margin-top:1.8cqh;font-size:.92cqw;color:var(--dim)}
+  .acard .flow b{color:var(--ink);font-weight:600}
+  .acard .flow .ar{color:var(--lime)}
+
+  /* ================= PROOF ================= */
+  .proof-bg{position:absolute;inset:0;z-index:0;overflow:hidden}
+  .proof-bg img{width:100%;height:100%;object-fit:cover;object-position:center 32%;
+    filter:grayscale(.55) brightness(.4) contrast(1.04);transform:scale(1.06);
+    animation:slowzoom 16s ease-in-out infinite alternate}
+  .proof-bg::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(to right,rgba(15,15,18,.94),rgba(15,15,18,.6) 60%,rgba(15,15,18,.78)),
+      radial-gradient(80% 90% at 18% 40%,rgba(228,255,0,.07),transparent 60%)}
+  @keyframes slowzoom{to{transform:scale(1.14)}}
+  .proof{position:relative;z-index:1;display:flex;flex-direction:column;height:100%;justify-content:center}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4cqw;margin:1cqh 0 3.2cqh}
+  .stat{border:1px solid var(--border);border-radius:1.2cqw;background:rgba(24,24,28,.82);
+    backdrop-filter:blur(6px);padding:2.6cqh 1.6cqw;text-align:left}
+  .stat .n{font-size:3.6cqw;font-weight:800;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+  .stat .n .u{color:var(--lime)}
+  .stat .sl{font-size:1.1cqw;color:var(--muted);margin-top:1cqh;letter-spacing:.02em}
+  .proof .close{display:flex;align-items:center;justify-content:space-between;gap:2cqw}
+  .proof .close .cl{font-size:1.9cqw;font-weight:700;letter-spacing:-.01em}
+  .cta{display:inline-flex;align-items:center;gap:1cqw;padding:1.5cqh 2.4cqw;border-radius:1cqw;
+    background:var(--lime);color:#0a0a0c;font-size:1.5cqw;font-weight:800;letter-spacing:-.01em;
+    animation:ctaPulse 2.6s ease-in-out infinite;text-decoration:none}
+  @keyframes ctaPulse{0%,100%{box-shadow:0 0 0 0 rgba(228,255,0,.4)}50%{box-shadow:0 0 3cqw .4cqw rgba(228,255,0,.25)}}
+
+  /* ---------- bottom chrome ---------- */
+  .chrome-bot{position:absolute;z-index:30;left:0;right:0;bottom:0;height:8cqh;
+    display:flex;align-items:center;justify-content:space-between;padding:0 6.5cqw}
+  .dots{display:flex;gap:.9cqw;align-items:center}
+  .dots button{width:1.4cqw;height:.55cqw;border-radius:5cqw;border:0;cursor:pointer;padding:0;
+    background:var(--border);transition:all .4s var(--ease)}
+  .dots button.on{width:3cqw;background:var(--lime);box-shadow:0 0 1.4cqw rgba(228,255,0,.5)}
+  .hint{font-size:1.05cqw;color:var(--dim);display:flex;align-items:center;gap:1cqw;letter-spacing:.02em}
+  .hint kbd{font-family:inherit;font-size:.92cqw;padding:.35cqh .8cqw;border-radius:.5cqw;
+    border:1px solid var(--border);background:var(--surface);color:var(--muted)}
+
+  .nav{position:absolute;z-index:28;top:0;bottom:0;width:12%;display:grid;place-items:center;
+    cursor:pointer;opacity:0;transition:opacity .3s}
+  .nav:hover{opacity:1}
+  .nav.prev{left:0;justify-items:start;padding-left:1.5cqw}
+  .nav.next{right:0;justify-items:end;padding-right:1.5cqw}
+  .nav svg{width:3cqw;height:3cqw;color:var(--muted)}
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important}
+    .slide.enter,.slide.leave{animation:none}
+    .r{opacity:1;transform:none;filter:none}
+    .grow-x,.bcol .stack{transform:none}
+    .donut .val{stroke-dashoffset:var(--off,16)}
+  }
+</style>
+</head>
+<body>
+  <div class="deck">
+    <div class="stage" id="stage">
+
+      <div class="bg" aria-hidden="true">
+        <div class="grid"></div><div class="glow"></div><div class="glow b"></div>
+        <div class="scan"></div><div class="grain"></div>
+      </div>
+
+      <div class="progress" id="progress"></div>
+
+      <div class="chrome-top">
+        <div class="logo"><span class="tile">H</span><span class="word">HMD <span class="s">Secure</span></span></div>
+        <div class="counter"><b id="cnum">01</b> / <span id="ctot">10</span></div>
+      </div>
+
+      <div class="slides" id="slides" data-dir="f">
+
+        <!-- 1 — TITLE -->
+        <section class="slide s1 active">
+          <div class="hero-glow" aria-hidden="true"></div>
+          <div class="hero-media r" style="--i:6" aria-hidden="true"><img src="assets/device.webp" alt="HMD Secure device" /></div>
+          <div class="tag r" style="--i:0"><span class="dot"></span> HMD Secure — Internal CRM</div>
+          <h1>
+            <span class="r" style="--i:1">One CRM for the</span><br/>
+            <span class="r" style="--i:2">secure device sale.</span><br/>
+            <span class="r" style="--i:3"><span class="uline">From lead to forecast.</span></span>
+          </h1>
+          <p class="lead r" style="--i:4">A role-aware sales system for HMD Secure: reps move deals, TAMs protect delivery, managers unblock risk, and finance gets a forecast it can defend.</p>
+          <div class="foot chips r" style="--i:5">
+            <span class="chip"><span class="d g"></span> Live demo</span>
+            <span class="chip"><span class="d"></span> EU-resident data</span>
+            <span class="chip"><span class="d"></span> Grounded AI</span>
+          </div>
+        </section>
+
+        <!-- 2 — PROBLEM -->
+        <section class="slide">
+          <div class="head">
+            <div class="tag r" style="--i:0"><span class="dot"></span> 01 — The gap</div>
+            <h2 class="r" style="--i:1">Generic CRMs track opportunities.<br/><span class="uline">HMD has to plan devices.</span></h2>
+          </div>
+          <div class="rows">
+            <div class="row r" style="--i:2"><div class="ix">01</div>
+              <div><div class="rt">Device sales create supply-chain commitments</div>
+              <div class="rd">Secured phones cannot be treated like SaaS seats. Finance needs <b>units by quarter</b>, confidence, and expected close timing.</div></div></div>
+            <div class="row r" style="--i:3"><div class="ix">02</div>
+              <div><div class="rt">Trust is part of the product</div>
+              <div class="rd">Government, enterprise and defense buyers will not forgive invented numbers, hidden assumptions, or AI that writes silently.</div></div></div>
+            <div class="row r" style="--i:4"><div class="ix">03</div>
+              <div><div class="rt">The handoff is where revenue leaks</div>
+              <div class="rd">Rep, TAM, Sales Manager and Finance need the same account truth, but each role needs a different action surface.</div></div></div>
+          </div>
+        </section>
+
+        <!-- 3 — ROLE OVERVIEW -->
+        <section class="slide">
+          <div class="head">
+            <div class="tag r" style="--i:0"><span class="dot"></span> 02 — The product</div>
+            <h2 class="r" style="--i:1">One CRM, four job-specific workspaces.<br/><span class="uline">No generic dashboard maze.</span></h2>
+          </div>
+          <div class="grid2">
+            <div class="card r" style="--i:2">
+              <div class="role"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span> Rep</div>
+              <div class="ct">Move the deal forward</div>
+              <div class="cd">Account 360, next best action, catalog offers and discount approvals in one flow.</div></div>
+            <div class="card r" style="--i:3">
+              <div class="role"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16M4 12h16M4 19h10"/></svg></span> TAM</div>
+              <div class="ct">Protect delivery promises</div>
+              <div class="cd">SLA-aware case queue, account history, technical context and grounded summaries.</div></div>
+            <div class="card r" style="--i:4">
+              <div class="role"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5M4 19h16M8 16v-5M13 16V8M18 16v-9"/></svg></span> Sales Manager</div>
+              <div class="ct">Unblock revenue risk</div>
+              <div class="cd">At-risk deals, stale opportunities, approvals and team forecast health surfaced immediately.</div></div>
+            <div class="card r" style="--i:5">
+              <div class="role"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l5-5 4 3 7-8"/><path d="M16 4h4v4"/></svg></span> Finance</div>
+              <div class="ct">Defend the number</div>
+              <div class="cd">3-year time-phased forecast, device/service split, confidence and exportable evidence.</div></div>
+          </div>
+        </section>
+
+        <!-- 4 — REP -->
+        <section class="slide">
+          <div class="rs">
+            <div>
+              <div class="role-head r" style="--i:0"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span><span class="rk">Rep</span></div>
+              <h3 class="r" style="--i:1">Reps sell faster when context is <span class="uline">already assembled</span>.</h3>
+              <div class="blist">
+                <div class="bi r" style="--i:2"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span><div class="bt">Account 360<span>Deals, tickets &amp; history together — no tab-hopping.</span></div></div>
+                <div class="bi r" style="--i:3"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span><div class="bt">Build credible offers<span>Catalog devices + services, live pricing, and approval routing when discounting matters.</span></div></div>
+                <div class="bi r" style="--i:4"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span><div class="bt">"What to do next"<span>A grounded next-best-action per deal, from its own timeline.</span></div></div>
+              </div>
+            </div>
+            <div class="panel r" style="--i:2">
+              <div class="ptitle"><span class="t">My deals by stage</span><span class="v">27 open</span></div>
+              <div class="hbars">
+                <div class="hrow" style="--gi:0"><span class="hl">Interest</span><span class="htrack"><span class="hfill grow-x" style="width:100%"></span></span><span class="hv">8</span></div>
+                <div class="hrow" style="--gi:1"><span class="hl">RFI</span><span class="htrack"><span class="hfill grow-x" style="width:74%"></span></span><span class="hv">6</span></div>
+                <div class="hrow" style="--gi:2"><span class="hl">RFP</span><span class="htrack"><span class="hfill grow-x" style="width:60%"></span></span><span class="hv">5</span></div>
+                <div class="hrow" style="--gi:3"><span class="hl">Customer test</span><span class="htrack"><span class="hfill grow-x" style="width:40%"></span></span><span class="hv">3</span></div>
+                <div class="hrow" style="--gi:4"><span class="hl">Negotiation</span><span class="htrack"><span class="hfill grow-x" style="width:28%"></span></span><span class="hv">2</span></div>
+                <div class="hrow" style="--gi:5"><span class="hl">Won</span><span class="htrack"><span class="hfill grow-x" style="width:38%"></span></span><span class="hv">3</span></div>
+              </div>
+              <div class="offer">
+                <div class="ol">Offer #2231 · Bundesdruckerei<span>14 devices + MDM · €420,000 · −12%</span></div>
+                <span class="ob">Needs approval</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5 — TAM -->
+        <section class="slide">
+          <div class="rs">
+            <div>
+              <div class="role-head r" style="--i:0"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16M4 12h16M4 19h10"/></svg></span><span class="rk">TAM</span></div>
+              <h3 class="r" style="--i:1">TAMs keep the promise after the sale.</h3>
+              <div class="blist">
+                <div class="bi r" style="--i:2"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span><div class="bt">Work by risk, not inbox order<span>Priority &amp; SLA sort the work — start at the top.</span></div></div>
+                <div class="bi r" style="--i:3"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span><div class="bt">Attributed history<span>Notes are timestamped &amp; signed; SLA and age update on resolve.</span></div></div>
+                <div class="bi r" style="--i:4"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span><div class="bt">AI thread summary<span>Cases with 5+ notes get a grounded recap of the whole story.</span></div></div>
+              </div>
+            </div>
+            <div class="panel r" style="--i:2">
+              <div class="ptitle"><span class="t">Support SLA — this week</span><span class="v">24 open cases</span></div>
+              <div class="gauge-wrap">
+                <div class="gauge">
+                  <svg class="donut" viewBox="0 0 100 100"><circle class="track" cx="50" cy="50" r="42"/><circle class="val" style="--off:15.8" cx="50" cy="50" r="42"/></svg>
+                  <div class="gauge-c"><b><span class="count" data-to="94" data-suffix="%">0%</span></b><span>within SLA</span></div>
+                </div>
+                <div class="gauge-meta">
+                  <div class="gm"><b>3</b> <span>breaching in &lt; 4h</span></div>
+                  <div class="gm"><b>1.8d</b> <span>median resolution</span></div>
+                  <div class="gm"><b>6</b> <span>summarised by AI</span></div>
+                </div>
+              </div>
+              <div class="queue">
+                <div class="q"><span class="pd p1"></span><span class="qt">Bundesdruckerei · MDM rollout stalled</span><span class="qa">2h left</span></div>
+                <div class="q"><span class="pd p2"></span><span class="qt">Police DACH · device swap (RMA)</span><span class="qa">1d</span></div>
+                <div class="q"><span class="pd p3"></span><span class="qt">Terra fleet · OTA update window</span><span class="qa">3d</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 6 — SALES MANAGER -->
+        <section class="slide">
+          <div class="rs">
+            <div>
+              <div class="role-head r" style="--i:0"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5M4 19h16M8 16v-5M13 16V8M18 16v-9"/></svg></span><span class="rk">Sales Manager</span></div>
+              <h3 class="r" style="--i:1">Managers see what will miss before it misses.</h3>
+              <div class="blist">
+                <div class="bi r" style="--i:2"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span><div class="bt">At-risk list<span>Idle 14d+ or past expected close — surfaced, not buried.</span></div></div>
+                <div class="bi r" style="--i:3"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span><div class="bt">Forecast they can coach<span>3-yr value by stage, with committed, at-risk and gap-to-target separated.</span></div></div>
+                <div class="bi r" style="--i:4"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span><div class="bt">AI pipeline-health<span>A grounded narrative of what's moving and what's slipping.</span></div></div>
+              </div>
+            </div>
+            <div class="panel r" style="--i:2">
+              <div class="ptitle"><span class="t">Weighted pipeline by stage · 3-yr</span><span class="v">7 at risk</span></div>
+              <div class="hbars">
+                <div class="hrow" style="--gi:0"><span class="hl">Interest</span><span class="htrack"><span class="hfill grow-x" style="width:40%"></span></span><span class="hv">€2.1M</span></div>
+                <div class="hrow" style="--gi:1"><span class="hl">RFI</span><span class="htrack"><span class="hfill grow-x" style="width:57%"></span></span><span class="hv">€3.0M</span></div>
+                <div class="hrow" style="--gi:2"><span class="hl">RFP</span><span class="htrack"><span class="hfill grow-x" style="width:84%"></span></span><span class="hv">€4.4M</span></div>
+                <div class="hrow" style="--gi:3"><span class="hl">Customer test</span><span class="htrack"><span class="hfill grow-x" style="width:69%"></span></span><span class="hv">€3.6M</span></div>
+                <div class="hrow" style="--gi:4"><span class="hl">Negotiation</span><span class="htrack"><span class="hfill grow-x" style="width:100%"></span></span><span class="hv">€5.2M</span></div>
+              </div>
+              <div class="gaplabel"><span>Gap to FY target</span><span>Target €18.0M</span></div>
+              <div class="gapbar"><div class="gapfill grow-x" style="--gi:6">
+                <span class="seg committed" style="width:62%"></span>
+                <span class="seg atrisk" style="width:12%"></span>
+                <span class="seg gap" style="width:26%"></span>
+              </div></div>
+              <div class="gleg">
+                <span class="lg"><span class="sw c"></span> Committed €11.2M</span>
+                <span class="lg"><span class="sw a"></span> At-risk €2.2M</span>
+                <span class="lg"><span class="sw g"></span> Gap €4.6M</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 7 — FINANCE -->
+        <section class="slide">
+          <div class="rs">
+            <div>
+              <div class="role-head r" style="--i:0"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l5-5 4 3 7-8"/><path d="M16 4h4v4"/></svg></span><span class="rk">Finance</span></div>
+              <h3 class="r" style="--i:1">Finance gets a forecast it can actually use to buy hardware.</h3>
+              <div class="blist">
+                <div class="bi r" style="--i:2"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span><div class="bt">Time-phased, 3 years<span>Weighted by stage, quarter by quarter — 0–6 months sharp.</span></div></div>
+                <div class="bi r" style="--i:3"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span><div class="bt">Counted in devices<span>Device vs service kept separate — units drive component buying.</span></div></div>
+                <div class="bi r" style="--i:4"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span><div class="bt">Confidence + override<span>Reasoning per opportunity; Finance can adjust, explain, and export CSV.</span></div></div>
+              </div>
+            </div>
+            <div class="panel r" style="--i:2">
+              <div class="conf">Confidence 82% · stage + recency</div>
+              <div class="ptitle"><span class="t">Device units / quarter</span><span class="v">▲ <span class="count" data-to="18400">0</span> committed · FY1</span></div>
+              <div class="bars" id="bars"></div>
+              <div class="legend">
+                <span class="lg"><span class="sw dev"></span> Device</span>
+                <span class="lg"><span class="sw svc"></span> Service</span>
+                <span class="lg"><span class="sw tgt"></span> Target</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 8 — TRUST -->
+        <section class="slide">
+          <div class="trust">
+            <div>
+              <div class="tag r" style="--i:0"><span class="dot"></span> 03 — Trust</div>
+              <div class="stmt r" style="--i:1;margin-top:2.4cqh">AI can help.<br/><span class="uline">It cannot make up the business.</span>
+                <small>The model phrases, summarizes and suggests. Deals, forecasts, cases and approvals come from queried CRM data.</small>
+              </div>
+              <div class="offline r" style="--i:2"><span class="od"></span> Falls back to “model offline” — still grounded</div>
+            </div>
+            <div class="points">
+              <div class="pt r" style="--i:3"><span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg></span>
+                <div><div class="pt-t">Runs with zero AI keys</div><div class="pt-d">Every AI surface degrades to a deterministic, grounded result — and labels itself honestly.</div></div></div>
+              <div class="pt r" style="--i:4"><span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg></span>
+                <div><div class="pt-t">It can't invent a deal</div><div class="pt-d">Facts are pre-filtered by region, industry and risk before the model is allowed to answer.</div></div></div>
+              <div class="pt r" style="--i:5"><span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg></span>
+                <div><div class="pt-t">Enrichment is opt-in</div><div class="pt-d">Defense &amp; government accounts never auto-enrich; only public name &amp; domain, on request.</div></div></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 9 — AGENTIC -->
+        <section class="slide">
+          <div class="head">
+            <div class="tag r" style="--i:0"><span class="dot"></span> 04 — The AI layer</div>
+            <h2 class="r" style="--i:1">AI removes admin work.<br/><span class="uline">Humans keep control.</span></h2>
+          </div>
+          <div class="grid3">
+            <div class="acard r" style="--i:2">
+              <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span>
+              <div class="at">Ask the pipeline</div>
+              <div class="ad">Plain-language questions across region, industry and risk — answered from permitted CRM rows.</div>
+              <div class="flow">“At-risk deals in DACH” <span class="ar">→</span> <b>real rows only</b></div></div>
+            <div class="acard r" style="--i:3">
+              <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v12H7l-3 3z"/><path d="M8 9h8M8 12h5"/></svg></span>
+              <div class="at">Meeting → CRM</div>
+              <div class="ad">Paste notes or an inbound email; it proposes records, the user approves, and only then does it write.</div>
+              <div class="flow"><b>Notes</b> <span class="ar">→</span> propose <span class="ar">→</span> <b>you approve</b></div></div>
+            <div class="acard r" style="--i:4">
+              <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v6m0 0l3-3m-3 3L9 5"/><rect x="4" y="10" width="16" height="11" rx="2"/></svg></span>
+              <div class="at">Approvals route themselves</div>
+              <div class="ad">Discounts go Rep → SM → Finance, threshold-gated and in-app. The offer locks once approvals land.</div>
+              <div class="flow"><b>Rep</b> <span class="ar">→</span> SM <span class="ar">→</span> <b>Finance</b></div></div>
+          </div>
+        </section>
+
+        <!-- 10 — PROOF / CLOSE -->
+        <section class="slide">
+          <div class="proof-bg" aria-hidden="true"><img src="assets/field.webp" alt="" /></div>
+          <div class="proof">
+            <div class="head" style="margin-bottom:0">
+              <div class="tag r" style="--i:0"><span class="dot"></span> 05 — Why this wins</div>
+              <h2 class="r" style="--i:1;margin-top:2cqh">A working CRM, not a concept deck.</h2>
+            </div>
+            <div class="stats">
+              <div class="stat r" style="--i:2"><div class="n"><span class="count" data-to="26">0</span></div><div class="sl">accounts of realistic seed</div></div>
+              <div class="stat r" style="--i:3"><div class="n"><span class="count" data-to="42">0</span></div><div class="sl">deals across 3 years</div></div>
+              <div class="stat r" style="--i:4"><div class="n"><span class="count" data-to="24">0</span></div><div class="sl">support cases mid-flight</div></div>
+              <div class="stat r" style="--i:5"><div class="n"><span class="u">0</span></div><div class="sl">AI keys required</div></div>
+            </div>
+            <div class="close r" style="--i:6">
+              <div class="cl">HMD Secure CRM —<br/>built to run the sales motion.</div>
+              <a class="cta" href="https://web-teal-xi-17.vercel.app/" target="_blank" rel="noopener">▶ Launch live CRM</a>
+            </div>
+          </div>
+        </section>
+
+      </div><!-- /slides -->
+
+      <div class="sweep" id="sweep"><div class="haze"></div><div class="bar"></div></div>
+
+      <div class="nav prev" id="navPrev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 5l-7 7 7 7"/></svg></div>
+      <div class="nav next" id="navNext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5l7 7-7 7"/></svg></div>
+
+      <div class="chrome-bot">
+        <div class="dots" id="dots"></div>
+        <div class="hint"><kbd>←</kbd><kbd>→</kbd> navigate <span style="opacity:.4">·</span> <kbd>F</kbd> fullscreen</div>
+      </div>
+
+    </div>
+  </div>
+
+<script>
+(function(){
+  const slidesEl = document.getElementById('slides');
+  const slides = Array.from(slidesEl.querySelectorAll('.slide'));
+  const sweep = document.getElementById('sweep');
+  const dotsWrap = document.getElementById('dots');
+  const cnum = document.getElementById('cnum');
+  const progress = document.getElementById('progress');
+  const TRANS = 820;
+  let cur = 0, busy = false;
+  const N = slides.length;
+  document.getElementById('ctot').textContent = String(N).padStart(2,'0');
+
+  // Finance forecast bars: 12 quarters, device-led growth + service tail
+  (function buildBars(){
+    const bars = document.getElementById('bars'); if(!bars) return;
+    const dev=[34,40,46,52,49,58,64,70,66,76,82,88], svc=[10,12,14,15,18,20,22,24,28,30,33,36];
+    const labels=['Q1','Q2','Q3','Q4','Q1','Q2','Q3','Q4','Q1','Q2','Q3','Q4'];
+    dev.forEach((d,i)=>{
+      const total=Math.min(d+svc[i],96);
+      const col=document.createElement('div'); col.className='bcol';
+      col.innerHTML='<div class="stack" style="--i:'+i+';height:'+total+'%">'+
+        '<div class="svc" style="flex:'+svc[i]+'"></div><div class="dev" style="flex:'+d+'"></div></div>'+
+        '<div class="lbl">'+labels[i]+'</div>';
+      bars.appendChild(col);
+    });
+    const t=document.createElement('div'); t.className='target';
+    t.style.bottom='calc('+(0.78*26)+'cqh)'; t.innerHTML='<span class="tl">Target</span>';
+    bars.appendChild(t);
+  })();
+
+  slides.forEach((_,i)=>{
+    const b=document.createElement('button'); b.setAttribute('aria-label','Go to slide '+(i+1));
+    b.addEventListener('click',e=>{e.stopPropagation();goTo(i)}); dotsWrap.appendChild(b);
+  });
+  const dots = Array.from(dotsWrap.children);
+
+  function countUp(el){
+    const to=parseInt(el.dataset.to,10), suf=el.dataset.suffix||'', dur=1100, t0=performance.now();
+    const fmt=n=>n.toLocaleString('en-US')+suf;
+    (function step(now){ const p=Math.min((now-t0)/dur,1), e=1-Math.pow(1-p,3);
+      el.textContent=fmt(Math.round(to*e)); if(p<1) requestAnimationFrame(step); })(t0);
+  }
+  function play(el){
+    el.classList.remove('play'); void el.offsetWidth; el.classList.add('play');
+    el.querySelectorAll('.count').forEach(c=>{ c.textContent='0'+(c.dataset.suffix||''); });
+    setTimeout(()=>el.querySelectorAll('.count').forEach(countUp),600);
+  }
+  function ui(){
+    cnum.textContent=String(cur+1).padStart(2,'0');
+    dots.forEach((d,i)=>d.classList.toggle('on',i===cur));
+    progress.style.width=(((cur+1)/N)*100)+'%';
+  }
+  function goTo(next){
+    if(busy||next===cur||next<0||next>=N) return; busy=true;
+    const dir=next>cur?'f':'b'; slidesEl.dataset.dir=dir; sweep.dataset.dir=dir;
+    const outEl=slides[cur], inEl=slides[next];
+    inEl.style.zIndex=3; outEl.style.zIndex=2;
+    inEl.classList.add('active','enter'); outEl.classList.add('leave'); play(inEl);
+    sweep.classList.remove('run'); void sweep.offsetWidth; sweep.classList.add('run');
+    setTimeout(()=>{
+      outEl.classList.remove('active','leave','play'); outEl.style.zIndex=''; inEl.style.zIndex='';
+      inEl.classList.remove('enter'); sweep.classList.remove('run');
+      cur=next; ui(); busy=false;
+    },TRANS);
+  }
+  const nextS=()=>goTo(cur+1), prevS=()=>goTo(cur-1);
+
+  document.getElementById('navNext').addEventListener('click',e=>{e.stopPropagation();nextS()});
+  document.getElementById('navPrev').addEventListener('click',e=>{e.stopPropagation();prevS()});
+  slidesEl.addEventListener('click',nextS);
+  window.addEventListener('keydown',e=>{
+    if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();nextS();}
+    else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();prevS();}
+    else if(e.key==='Home'){goTo(0);} else if(e.key==='End'){goTo(N-1);}
+    else if(e.key==='f'||e.key==='F'){ document.fullscreenElement?document.exitFullscreen?.():document.documentElement.requestFullscreen?.(); }
+  });
+  let tx=0;
+  window.addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+  window.addEventListener('touchend',e=>{ const dx=e.changedTouches[0].clientX-tx;
+    if(Math.abs(dx)>40){ dx<0?nextS():prevS(); } },{passive:true});
+
+  ui(); play(slides[0]);
+})();
+</script>
+</body>
+</html>
