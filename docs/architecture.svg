@@ -1,0 +1,291 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1340" font-family="Inter, system-ui, -apple-system, sans-serif">
+  <defs>
+    <style>
+      .t-title { font: 700 30px Inter, system-ui, sans-serif; fill:#fafafa; }
+      .t-sub   { font: 400 15px Inter, system-ui, sans-serif; fill:#a1a1aa; }
+      .band-h  { font: 700 16px Inter, system-ui, sans-serif; fill:#fafafa; }
+      .box-t   { font: 700 13px Inter, system-ui, sans-serif; fill:#fafafa; }
+      .box-l   { font: 400 11px Inter, system-ui, sans-serif; fill:#a1a1aa; }
+      .mini-t  { font: 700 12px Inter, system-ui, sans-serif; fill:#e4e4e7; }
+      .mini-l  { font: 400 9.5px Inter, system-ui, sans-serif; fill:#a1a1aa; }
+      .alab    { font: 600 11px Inter, system-ui, sans-serif; }
+      .legend  { font: 600 12px Inter, system-ui, sans-serif; fill:#e4e4e7; }
+      .badge-n { font: 700 14px Inter, system-ui, sans-serif; fill:#242426; }
+    </style>
+    <marker id="aHead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#e4e4e7"/>
+    </marker>
+    <marker id="bHead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#60a5fa"/>
+    </marker>
+    <marker id="amHead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#fbbf24"/>
+    </marker>
+    <marker id="vHead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/>
+    </marker>
+    <marker id="gHead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#9ca3af"/>
+    </marker>
+  </defs>
+
+  <!-- background -->
+  <rect x="0" y="0" width="1500" height="1340" fill="#161618"/>
+
+  <!-- title -->
+  <text x="40" y="50" class="t-title">HMD Secure CRM — Architecture &amp; Data Flow</text>
+  <text x="40" y="78" class="t-sub">Next.js 16 App Router · React 19 · Supabase Postgres (EU) · Gemini AI · deployed on Vercel</text>
+
+  <!-- legend -->
+  <rect x="965" y="32" width="495" height="52" rx="10" fill="#1f1f22" stroke="#34343a"/>
+  <text x="980" y="50" class="legend" fill="#a1a1aa" font-size="10">DATA FLOW</text>
+  <line x1="980" y1="68" x2="1012" y2="68" stroke="#60a5fa" stroke-width="2.5" marker-end="url(#bHead)"/>
+  <text x="1018" y="72" class="legend">Read</text>
+  <line x1="1075" y1="68" x2="1107" y2="68" stroke="#fbbf24" stroke-width="2.5" marker-end="url(#amHead)"/>
+  <text x="1113" y="72" class="legend">Write</text>
+  <line x1="1175" y1="68" x2="1207" y2="68" stroke="#a78bfa" stroke-width="2.5" marker-end="url(#vHead)"/>
+  <text x="1213" y="72" class="legend">AI / LLM</text>
+  <line x1="1295" y1="68" x2="1327" y2="68" stroke="#9ca3af" stroke-width="2.5" stroke-dasharray="4 3" marker-end="url(#gHead)"/>
+  <text x="1333" y="72" class="legend">Deferred</text>
+
+  <!-- ============ BAND 1: CLIENT ============ -->
+  <rect x="40" y="110" width="1420" height="215" rx="16" fill="#1f1f22" stroke="#34343a"/>
+  <rect x="60" y="124" width="24" height="24" rx="6" fill="#e4ff00"/>
+  <text x="72" y="141" text-anchor="middle" class="badge-n">1</text>
+  <text x="94" y="141" class="band-h">CLIENT — Browser · React 19 client components</text>
+
+  <!-- AppShell -->
+  <rect x="60" y="162" width="300" height="145" rx="10" fill="#27272b" stroke="#3a3a40"/>
+  <text x="76" y="186" class="box-t">AppShell (app chrome)</text>
+  <text x="76" y="210" class="box-l">• Sidebar nav (role-aware)</text>
+  <text x="76" y="230" class="box-l">• Role switcher · Search ⌘K</text>
+  <text x="76" y="250" class="box-l">• Notification center</text>
+  <text x="76" y="276" class="box-l" font-style="italic">layout.tsx → RoleProvider</text>
+  <text x="76" y="294" class="box-l" font-style="italic">wraps every page</text>
+
+  <!-- Role workspaces -->
+  <rect x="380" y="162" width="620" height="145" rx="10" fill="#27272b" stroke="#3a3a40"/>
+  <text x="396" y="186" class="box-t">Role workspaces (route sections)</text>
+  <!-- Rep -->
+  <rect x="396" y="198" width="140" height="98" rx="8" fill="#1f1f22" stroke="#3a3a40"/>
+  <text x="466" y="218" text-anchor="middle" class="mini-t">Sales Rep · /rep</text>
+  <text x="466" y="238" text-anchor="middle" class="mini-l">Dashboard</text>
+  <text x="466" y="254" text-anchor="middle" class="mini-l">Accounts · Deals</text>
+  <text x="466" y="270" text-anchor="middle" class="mini-l">Offers · Inbox</text>
+  <!-- TAM -->
+  <rect x="548" y="198" width="140" height="98" rx="8" fill="#1f1f22" stroke="#3a3a40"/>
+  <text x="618" y="218" text-anchor="middle" class="mini-t">TAM · /tam</text>
+  <text x="618" y="238" text-anchor="middle" class="mini-l">Cases · Accounts</text>
+  <text x="618" y="254" text-anchor="middle" class="mini-l">AI Assistant</text>
+  <text x="618" y="270" text-anchor="middle" class="mini-l">Integrations · Inbox</text>
+  <!-- SM -->
+  <rect x="700" y="198" width="140" height="98" rx="8" fill="#1f1f22" stroke="#3a3a40"/>
+  <text x="770" y="218" text-anchor="middle" class="mini-t">Sales Mgr · /sm</text>
+  <text x="770" y="238" text-anchor="middle" class="mini-l">Dashboard</text>
+  <text x="770" y="254" text-anchor="middle" class="mini-l">Team Board</text>
+  <text x="770" y="270" text-anchor="middle" class="mini-l">Reports · Accounts</text>
+  <!-- Finance -->
+  <rect x="852" y="198" width="140" height="98" rx="8" fill="#1f1f22" stroke="#3a3a40"/>
+  <text x="922" y="218" text-anchor="middle" class="mini-t">Finance · /finance</text>
+  <text x="922" y="238" text-anchor="middle" class="mini-l">Forecast · Pipeline</text>
+  <text x="922" y="254" text-anchor="middle" class="mini-l">Catalog · Reports</text>
+  <text x="922" y="270" text-anchor="middle" class="mini-l">Accounts · Inbox</text>
+
+  <!-- AgentDock -->
+  <rect x="1020" y="162" width="180" height="145" rx="10" fill="#27272b" stroke="#e4ff00" stroke-width="2"/>
+  <rect x="1020" y="162" width="8" height="145" rx="4" fill="#e4ff00"/>
+  <text x="1040" y="186" class="box-t">⚡ AgentDock</text>
+  <text x="1040" y="210" class="box-l">Always-on agent</text>
+  <text x="1040" y="230" class="box-l">FAB on every page</text>
+  <text x="1040" y="250" class="box-l">Chat · acts · Undo</text>
+  <text x="1040" y="276" class="box-l" font-style="italic">persona-scoped</text>
+  <text x="1040" y="294" class="box-l" font-style="italic">history (ai_chats)</text>
+
+  <!-- Client components -->
+  <rect x="1220" y="162" width="220" height="145" rx="10" fill="#27272b" stroke="#3a3a40"/>
+  <text x="1236" y="186" class="box-t">Client components</text>
+  <text x="1236" y="210" class="box-l">PipelineBoard · ForecastGrid</text>
+  <text x="1236" y="230" class="box-l">Assistant · OfferApproval</text>
+  <text x="1236" y="250" class="box-l">Inbox · SearchCommand</text>
+  <text x="1236" y="276" class="box-l">charts/* — Donut, Bars,</text>
+  <text x="1236" y="294" class="box-l">StackedBar, TrendChart</text>
+
+  <!-- arrow band1 -> band2 -->
+  <line x1="750" y1="325" x2="750" y2="357" stroke="#e4e4e7" stroke-width="2" marker-end="url(#aHead)"/>
+  <text x="760" y="346" class="alab" fill="#cfcfd4">HTTPS request</text>
+
+  <!-- ============ BAND 2: EDGE ============ -->
+  <rect x="40" y="360" width="1420" height="74" rx="16" fill="#1f1f22" stroke="#34343a"/>
+  <rect x="60" y="374" width="24" height="24" rx="6" fill="#e4ff00"/>
+  <text x="72" y="391" text-anchor="middle" class="badge-n">2</text>
+  <text x="94" y="391" class="band-h">EDGE — proxy.ts (Next.js 16 middleware rename) · runs on every request</text>
+  <text x="94" y="418" class="box-l">Refreshes Supabase session cookie  ·  role-gates  /rep · /tam · /sm · /finance  (cross-role hits redirect home)</text>
+  <text x="1010" y="418" class="box-l" font-style="italic">ENFORCE_LOGIN = false (demo) → prod: Azure Entra ID (OIDC)</text>
+
+  <!-- arrow band2 -> band3 -->
+  <line x1="750" y1="434" x2="750" y2="448" stroke="#e4e4e7" stroke-width="2" marker-end="url(#aHead)"/>
+
+  <!-- ============ BAND 3: SERVER ============ -->
+  <rect x="40" y="450" width="1420" height="180" rx="16" fill="#1f1f22" stroke="#34343a"/>
+  <rect x="60" y="464" width="24" height="24" rx="6" fill="#e4ff00"/>
+  <text x="72" y="481" text-anchor="middle" class="badge-n">3</text>
+  <text x="94" y="481" class="band-h">NEXT.JS SERVER — App Router (Vercel Fluid Compute functions)</text>
+
+  <!-- Server Components -->
+  <rect x="60" y="500" width="420" height="115" rx="10" fill="#27272b" stroke="#3a3a40"/>
+  <text x="76" y="524" class="box-t">Server Components (RSC)</text>
+  <text x="76" y="546" class="box-l">Render server-side; await lib/db reads</text>
+  <text x="76" y="565" class="box-l">/rep /tam /sm /finance dashboards +</text>
+  <text x="76" y="583" class="box-l">accounts · deals · cases · pipeline ·</text>
+  <text x="76" y="601" class="box-l">reports · forecast · catalog · inbox</text>
+
+  <!-- Server Actions -->
+  <rect x="500" y="500" width="340" height="115" rx="10" fill="#27272b" stroke="#3a3a40"/>
+  <text x="516" y="524" class="box-t">Server Actions</text>
+  <text x="516" y="546" class="box-l">Button / form mutations invoked</text>
+  <text x="516" y="565" class="box-l">directly from components</text>
+  <text x="516" y="583" class="box-l">→ lib/db/mutations</text>
+  <text x="516" y="601" class="box-l">→ revalidatePath() refresh</text>
+
+  <!-- Route Handlers -->
+  <rect x="860" y="500" width="580" height="115" rx="10" fill="#27272b" stroke="#3a3a40"/>
+  <text x="876" y="524" class="box-t">Route Handlers — /api/*</text>
+  <text x="876" y="546" class="box-l">agent · agent/undo · agent/brief · agent/chats</text>
+  <text x="876" y="565" class="box-l">assistant · forecast · confidence</text>
+  <text x="876" y="583" class="box-l">meeting/draft · meeting/commit  (human-approval gate)</text>
+  <text x="876" y="601" class="box-l">export/pipeline · export/cases  (CSV)</text>
+
+  <!-- arrows band3 -> band4 -->
+  <line x1="250" y1="615" x2="210" y2="712" stroke="#60a5fa" stroke-width="2.5" marker-end="url(#bHead)"/>
+  <text x="120" y="668" class="alab" fill="#60a5fa">read (await)</text>
+  <line x1="640" y1="615" x2="530" y2="712" stroke="#fbbf24" stroke-width="2.5" marker-end="url(#amHead)"/>
+  <text x="560" y="668" class="alab" fill="#fbbf24">write</text>
+  <line x1="1130" y1="615" x2="930" y2="712" stroke="#a78bfa" stroke-width="2.5" marker-end="url(#vHead)"/>
+  <text x="1000" y="660" class="alab" fill="#a78bfa">AI calls</text>
+  <!-- API can also write (agent) -->
+  <line x1="1000" y1="615" x2="640" y2="712" stroke="#fbbf24" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#amHead)"/>
+
+  <!-- ============ BAND 4: LIBS ============ -->
+  <rect x="40" y="665" width="1420" height="300" rx="16" fill="#1f1f22" stroke="#34343a"/>
+  <rect x="60" y="679" width="24" height="24" rx="6" fill="#e4ff00"/>
+  <text x="72" y="696" text-anchor="middle" class="badge-n">4</text>
+  <text x="94" y="696" class="band-h">DOMAIN LIBRARIES — server-only (lib/)</text>
+
+  <!-- lib/db READ -->
+  <rect x="60" y="715" width="300" height="235" rx="10" fill="#27272b" stroke="#3a3a40"/>
+  <rect x="60" y="715" width="300" height="6" rx="3" fill="#60a5fa"/>
+  <text x="76" y="744" class="box-t" fill="#60a5fa">lib/db — READ</text>
+  <text x="76" y="768" class="box-l">Single source of read data</text>
+  <text x="76" y="787" class="box-l">index.ts · mappers · inbox</text>
+  <text x="76" y="806" class="box-l">search · chats — React cache()</text>
+  <text x="76" y="825" class="box-l">DB → UI type mapping</text>
+  <line x1="76" y1="842" x2="344" y2="842" stroke="#3a3a40"/>
+  <text x="76" y="864" class="box-l" font-weight="600" fill="#cfcfd4">client:</text>
+  <text x="76" y="884" class="box-l">Supabase server client</text>
+  <text x="76" y="903" class="box-l">anon key · RLS · cookie session</text>
+
+  <!-- lib/db/mutations WRITE -->
+  <rect x="380" y="715" width="300" height="235" rx="10" fill="#27272b" stroke="#3a3a40"/>
+  <rect x="380" y="715" width="300" height="6" rx="3" fill="#fbbf24"/>
+  <text x="396" y="744" class="box-t" fill="#fbbf24">lib/db/mutations — WRITE</text>
+  <text x="396" y="768" class="box-l">Typed write layer</text>
+  <text x="396" y="787" class="box-l">deals · cases · offers · contacts</text>
+  <text x="396" y="806" class="box-l">accounts · approvals · targets</text>
+  <text x="396" y="825" class="box-l">meeting commit · agent undo</text>
+  <line x1="396" y1="842" x2="664" y2="842" stroke="#3a3a40"/>
+  <text x="396" y="864" class="box-l" font-weight="600" fill="#cfcfd4">client:</text>
+  <text x="396" y="884" class="box-l">Supabase admin (service-role</text>
+  <text x="396" y="903" class="box-l">· bypasses RLS) — demo</text>
+  <text x="396" y="922" class="box-l" font-style="italic">prod → RLS-scoped session</text>
+
+  <!-- lib/ai -->
+  <rect x="700" y="715" width="420" height="235" rx="10" fill="#27272b" stroke="#3a3a40"/>
+  <rect x="700" y="715" width="420" height="6" rx="3" fill="#a78bfa"/>
+  <text x="716" y="744" class="box-t" fill="#a78bfa">lib/ai</text>
+  <text x="716" y="768" class="box-l" font-weight="600" fill="#cfcfd4">provider.ts = single LLM gateway</text>
+  <text x="716" y="789" class="box-l">Consumers: agent · assistant · brief ·</text>
+  <text x="716" y="807" class="box-l">forecast · confidence · case-summary ·</text>
+  <text x="716" y="825" class="box-l">lead · meeting</text>
+  <line x1="716" y1="842" x2="1104" y2="842" stroke="#3a3a40"/>
+  <text x="716" y="864" class="box-l">Each grounds on lib/db reads +</text>
+  <text x="716" y="883" class="box-l" font-weight="600" fill="#4ade80">deterministic fallback (no key → still works)</text>
+  <text x="716" y="906" class="box-l">enrich.ts → Gemini + Google Search</text>
+  <text x="716" y="924" class="box-l">grounding (the one live-web path)</text>
+
+  <!-- ground-reads arrow: ai -> db -->
+  <path d="M 700 800 C 540 800, 540 800, 364 800" fill="none" stroke="#60a5fa" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#bHead)"/>
+  <text x="430" y="793" class="alab" fill="#60a5fa" font-size="10">grounds on reads</text>
+
+  <!-- lib/integrations + shared -->
+  <rect x="1140" y="715" width="300" height="235" rx="10" fill="#27272b" stroke="#3a3a40"/>
+  <rect x="1140" y="715" width="300" height="6" rx="3" fill="#9ca3af"/>
+  <text x="1156" y="744" class="box-t" fill="#cbd5e1">lib/integrations + shared</text>
+  <text x="1156" y="768" class="box-l">graph.ts — MS Graph seam</text>
+  <text x="1156" y="787" class="box-l">  email → case · Outlook calendar</text>
+  <text x="1156" y="806" class="box-l">  honest “not configured” on demo</text>
+  <line x1="1156" y1="824" x2="1424" y2="824" stroke="#3a3a40"/>
+  <text x="1156" y="846" class="box-l" font-weight="600" fill="#cfcfd4">shared modules:</text>
+  <text x="1156" y="866" class="box-l">scoring · roles · format</text>
+  <text x="1156" y="885" class="box-l">brand · types · export/csv</text>
+
+  <!-- arrows band4 -> band5 -->
+  <line x1="210" y1="950" x2="270" y2="1043" stroke="#60a5fa" stroke-width="2.5" marker-end="url(#bHead)"/>
+  <text x="150" y="1000" class="alab" fill="#60a5fa">SQL (anon)</text>
+  <line x1="530" y1="950" x2="370" y2="1043" stroke="#fbbf24" stroke-width="2.5" marker-end="url(#amHead)"/>
+  <text x="540" y="1000" class="alab" fill="#fbbf24">SQL (admin)</text>
+  <line x1="910" y1="950" x2="790" y2="1043" stroke="#a78bfa" stroke-width="2.5" marker-end="url(#vHead)"/>
+  <text x="918" y="1000" class="alab" fill="#a78bfa">generateContent</text>
+  <line x1="1290" y1="950" x2="1170" y2="1043" stroke="#9ca3af" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#gHead)"/>
+  <text x="1300" y="1000" class="alab" fill="#9ca3af">deferred</text>
+
+  <!-- ============ BAND 5: EXTERNAL ============ -->
+  <rect x="40" y="995" width="1420" height="215" rx="16" fill="#1f1f22" stroke="#34343a"/>
+  <rect x="60" y="1009" width="24" height="24" rx="6" fill="#e4ff00"/>
+  <text x="72" y="1026" text-anchor="middle" class="badge-n">5</text>
+  <text x="94" y="1026" class="band-h">EXTERNAL SERVICES &amp; DATA</text>
+
+  <!-- Supabase -->
+  <rect x="60" y="1045" width="440" height="150" rx="10" fill="#27272b" stroke="#3a3a40"/>
+  <rect x="60" y="1045" width="440" height="6" rx="3" fill="#3ecf8e"/>
+  <text x="76" y="1073" class="box-t" fill="#3ecf8e">Supabase Postgres — EU (eu-north-1)</text>
+  <text x="76" y="1096" class="box-l" font-size="10">profiles · accounts · contacts · deals · deal_forecast_phases</text>
+  <text x="76" y="1113" class="box-l" font-size="10">offers · offer_line_items · offer_approvals · cases · notes</text>
+  <text x="76" y="1130" class="box-l" font-size="10">activity_timeline · notifications · products · services</text>
+  <text x="76" y="1147" class="box-l" font-size="10">forecast_targets · deal_confidence_overrides · ai_chats</text>
+  <text x="76" y="1172" class="box-l" font-style="italic">RLS enabled · Auth: Supabase (demo) → Entra ID (prod)</text>
+
+  <!-- LLM providers -->
+  <rect x="520" y="1045" width="520" height="150" rx="10" fill="#27272b" stroke="#3a3a40"/>
+  <rect x="520" y="1045" width="520" height="6" rx="3" fill="#a78bfa"/>
+  <text x="536" y="1073" class="box-t" fill="#a78bfa">AI providers — provider.ts priority chain</text>
+  <text x="536" y="1096" class="box-l">① Vertex AI (Gemini · IAM / ADC) — local dev</text>
+  <text x="536" y="1115" class="box-l">② Gemini API key (AI Studio) — runs on Vercel · <tspan fill="#4ade80" font-weight="600">prod live</tspan></text>
+  <text x="536" y="1134" class="box-l">③ Azure OpenAI — fallback</text>
+  <text x="536" y="1153" class="box-l">∅ none configured → deterministic grounded logic</text>
+  <text x="536" y="1176" class="box-l" font-style="italic">default model gemini-2.5-flash · enrich uses Google Search</text>
+
+  <!-- MS Graph -->
+  <rect x="1060" y="1045" width="180" height="150" rx="10" fill="#27272b" stroke="#3a3a40"/>
+  <rect x="1060" y="1045" width="180" height="6" rx="3" fill="#9ca3af"/>
+  <text x="1076" y="1073" class="box-t" fill="#cbd5e1">Microsoft Graph</text>
+  <text x="1076" y="1098" class="box-l">Email → case</text>
+  <text x="1076" y="1118" class="box-l">Outlook calendar</text>
+  <text x="1076" y="1143" class="box-l" font-style="italic">Deferred on the</text>
+  <text x="1076" y="1161" class="box-l" font-style="italic">Supabase demo</text>
+
+  <!-- Vercel -->
+  <rect x="1260" y="1045" width="180" height="150" rx="10" fill="#27272b" stroke="#3a3a40"/>
+  <rect x="1260" y="1045" width="180" height="6" rx="3" fill="#fafafa"/>
+  <text x="1276" y="1073" class="box-t">Vercel</text>
+  <text x="1276" y="1098" class="box-l">Hosting · project web</text>
+  <text x="1276" y="1118" class="box-l">root crm/</text>
+  <text x="1276" y="1138" class="box-l">Fluid Compute fns</text>
+  <text x="1276" y="1161" class="box-l" font-style="italic">web-teal-xi-17</text>
+
+  <!-- ============ FOOTER: agent loop ============ -->
+  <rect x="40" y="1235" width="1420" height="80" rx="16" fill="#26261c" stroke="#5c5c2e"/>
+  <rect x="40" y="1235" width="8" height="80" rx="4" fill="#e4ff00"/>
+  <text x="64" y="1262" class="box-t" font-size="14" fill="#e4ff00">⚡ Agent acting loop — auto-apply + Undo (deliberately overrides “no silent writes” for this surface)</text>
+  <text x="64" y="1286" class="box-l" font-size="11.5" fill="#d4d4c4">AgentDock ▸ POST /api/agent ▸ runAgentTurn = buildActionScope (lib/db) + complete() → Gemini ▸ executeAction (every id validated vs scope · ≤ 3 writes/turn)</text>
+  <text x="64" y="1304" class="box-l" font-size="11.5" fill="#d4d4c4">▸ lib/db/mutations (service-role write) ▸ returns human-readable summary + inverse op ▸ user taps Undo → POST /api/agent/undo → reverses the write</text>
+</svg>

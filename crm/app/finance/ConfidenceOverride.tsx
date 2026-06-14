@@ -1,16 +1,21 @@
 "use client";
 
-// Finance confidence override (brief Stage 5 — the forecast crown jewel).
-// Rule logic computes the score (lib/ai/confidence.ts, transparent, not a model);
-// Finance overrides the realistic number with a free-text reason. The override
-// is PERSISTED (saveOverrideAction) and is what feeds gap-to-target — both the
-// rule value and Finance's stored override are shown. Finance can also ping the
-// rep to ask why the forecast looks light. Pattern D: rules compute, the human
-// (not AI) judges the number.
+// Beat 3 — the crown jewel. "Finance doesn't just look — it decides."
+//
+// A list of opportunities, riskiest first. Each row shows the §0 single
+// confidence representation (ConfidenceMeter — a % with a small bar + a "Why?"
+// rule explanation), the stage and the deal value. Clicking "Override" opens
+// the editor: the rule confidence (e.g. 80%), a manual value Finance sets (e.g.
+// 65%) and a REQUIRED free-text reason ("this customer has delayed before").
+// BOTH values are stored (saveOverrideAction) and shown — the override is what
+// feeds gap-to-target and component ordering. Finance can also ping the rep.
+// Pattern D: rules compute the score, the human (not AI) judges the number.
 
 import { useState, useTransition } from "react";
-import { ConfidenceBand } from "@/lib/ai/confidence";
+import { ConfidenceMeter } from "@/components/ConfidenceMeter";
+import type { ConfidenceBand } from "@/lib/confidence";
 import { eur } from "@/lib/format";
+import { CONFIDENCE } from "@/lib/scoring";
 import { Badge, Button, Card } from "@/components/ui";
 import { toast } from "@/components/ui-client";
 import { pingRepAction, saveOverrideAction } from "./actions";
@@ -19,8 +24,11 @@ export interface DealConfidenceVM {
   dealId: string;
   dealName: string;
   accountName: string;
+  stageLabel: string;
   tcv: number;
+  /** Stage win-probability baseline (0–100). */
   base: number;
+  /** Rule confidence (0–100) — the "AI says 80%" figure. */
   score: number;
   band: ConfidenceBand;
   reasons: string[];
@@ -29,11 +37,11 @@ export interface DealConfidenceVM {
   storedReason?: string;
 }
 
-const BAND_TONE: Record<ConfidenceBand, "green" | "amber" | "red"> = {
-  high: "green",
-  medium: "amber",
-  low: "red",
-};
+function bandFor(score: number): ConfidenceBand {
+  if (score < CONFIDENCE.band.lowMax) return "low";
+  if (score < CONFIDENCE.band.mediumMax) return "medium";
+  return "high";
+}
 
 interface DraftState {
   value: string;
@@ -41,8 +49,10 @@ interface DraftState {
 }
 
 export function ConfidenceOverride({ deals }: { deals: DealConfidenceVM[] }) {
-  // Working draft per deal; defaults seeded from the STORED override so editing
-  // starts from what's persisted, not a blank box.
+  // Which deal's override editor is open. Click a row to toggle it.
+  const [openId, setOpenId] = useState<string | null>(null);
+  // Working draft per deal; seeded from the STORED override so editing starts
+  // from what's persisted, not a blank box.
   const [draft, setDraft] = useState<Record<string, DraftState>>({});
   const [pending, startTransition] = useTransition();
   const [busyId, setBusyId] = useState<string | null>(null);
@@ -62,7 +72,9 @@ export function ConfidenceOverride({ deals }: { deals: DealConfidenceVM[] }) {
     startTransition(async () => {
       try {
         await saveOverrideAction({ dealId: d.dealId, value, reason });
-        toast("Override saved — feeds gap-to-target", { variant: "success" });
+        toast("Override saved — feeds gap-to-target & ordering", {
+          variant: "success",
+        });
       } catch {
         toast("Could not save override", { variant: "error" });
       } finally {
@@ -85,9 +97,22 @@ export function ConfidenceOverride({ deals }: { deals: DealConfidenceVM[] }) {
     });
   }
 
+  if (deals.length === 0) {
+    return (
+      <p className="text-sm text-muted">No open deals to adjust right now.</p>
+    );
+  }
+
   return (
     <div className="space-y-3">
       {deals.map((d) => {
+        const open = openId === d.dealId;
+        const hasStored = d.storedOverride != null;
+        // Effective number feeding the forecast: stored override if present.
+        const effective = d.storedOverride ?? d.score;
+        const effectiveBand = hasStored ? bandFor(effective) : d.band;
+        const weighted = Math.round((effective / 100) * d.tcv);
+
         const draftFor = draft[d.dealId];
         const valueStr =
           draftFor?.value ??
@@ -97,11 +122,6 @@ export function ConfidenceOverride({ deals }: { deals: DealConfidenceVM[] }) {
           valueStr !== ""
             ? Math.max(0, Math.min(100, Number(valueStr)))
             : undefined;
-
-        // The effective number feeding the forecast: stored override if present.
-        const effective = d.storedOverride ?? d.score;
-        const weighted = Math.round((effective / 100) * d.tcv);
-        const hasStored = d.storedOverride != null;
         const dirty =
           draftFor != null &&
           (draftNum !== d.storedOverride ||
@@ -112,92 +132,120 @@ export function ConfidenceOverride({ deals }: { deals: DealConfidenceVM[] }) {
 
         return (
           <Card key={d.dealId} className="p-4">
-            <div className="flex flex-wrap items-start justify-between gap-3">
-              <div>
-                <p className="text-sm font-semibold">{d.accountName}</p>
-                <p className="text-xs text-muted">{d.dealName}</p>
-              </div>
-              <div className="text-right">
-                <div className="flex items-center justify-end gap-2">
-                  {hasStored && d.storedOverride !== d.score && (
-                    <span className="text-xs text-muted line-through">
-                      {d.score}%
-                    </span>
-                  )}
-                  <Badge tone={BAND_TONE[d.band]}>{effective}% confidence</Badge>
+            {/* Row — account · stage · confidence (§0 representation) · value */}
+            <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
+              <div className="min-w-[10rem]">
+                <div className="flex items-center gap-2">
+                  <p className="text-sm font-semibold">{d.accountName}</p>
+                  <Badge>{d.stageLabel}</Badge>
                 </div>
-                <p className="mt-1 text-xs text-muted">
-                  weighted {eur(weighted)} of {eur(d.tcv)}
+                <p className="text-xs text-muted">
+                  {d.dealName} · {eur(d.tcv)}
                 </p>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <ConfidenceMeter
+                  score={effective}
+                  band={effectiveBand}
+                  reasons={d.reasons}
+                  showLabel={false}
+                  size="sm"
+                />
+                <Button
+                  variant={open ? "secondary" : "primary"}
+                  type="button"
+                  onClick={() => setOpenId(open ? null : d.dealId)}
+                >
+                  {open ? "Close" : hasStored ? "Edit override" : "Override"}
+                </Button>
               </div>
             </div>
 
-            {/* Stored Finance override — sourced from the persisted value. */}
+            {/* Stored Finance override — both values shown (rule → override). */}
             {hasStored && (
               <p className="mt-2 text-xs text-foreground">
                 <Badge tone="blue">Finance override</Badge>{" "}
-                <span className="ml-1">
-                  {d.storedOverride}%
-                  {d.storedReason ? ` — “${d.storedReason}”` : ""}
-                </span>
+                {d.storedOverride !== d.score && (
+                  <span className="ml-1 text-muted line-through">{d.score}%</span>
+                )}{" "}
+                <span className="font-medium">{d.storedOverride}%</span>
+                {d.storedReason ? (
+                  <span className="text-muted"> — “{d.storedReason}”</span>
+                ) : null}
               </p>
             )}
 
-            {/* Why — the rule reasoning, so Finance trusts the number. */}
-            <details className="mt-3">
-              <summary className="cursor-pointer text-xs font-medium text-foreground">
-                Why {d.score}%? (rule logic)
-              </summary>
-              <ul className="mt-2 list-disc space-y-0.5 pl-4 text-xs text-muted">
-                {d.reasons.map((r, i) => (
-                  <li key={i}>{r}</li>
-                ))}
-              </ul>
-            </details>
-
-            {/* Override — Finance's manual judgment + reason (persisted). */}
-            <div className="mt-3 flex flex-wrap items-end gap-2 rounded-lg bg-background p-3">
-              <label className="text-xs">
-                <span className="block text-muted">Override %</span>
-                <input
-                  type="number"
-                  min={0}
-                  max={100}
-                  value={valueStr}
-                  placeholder={String(d.score)}
-                  onChange={(e) => set(d.dealId, { value: e.target.value }, d)}
-                  className="mt-1 w-20 rounded-md border border-border bg-surface px-2 py-1 text-sm focus:border-hmd-teal-600 focus:outline-none focus:ring-1 focus:ring-hmd-teal-600"
-                />
-              </label>
-              <label className="min-w-[12rem] flex-1 text-xs">
-                <span className="block text-muted">Reason</span>
-                <input
-                  type="text"
-                  value={reasonStr}
-                  placeholder="e.g. this customer has delayed before"
-                  onChange={(e) => set(d.dealId, { reason: e.target.value }, d)}
-                  className="mt-1 w-full rounded-md border border-border bg-surface px-2 py-1 text-sm focus:border-hmd-teal-600 focus:outline-none focus:ring-1 focus:ring-hmd-teal-600"
-                />
-              </label>
-              <button
-                type="button"
-                disabled={!canSave}
-                onClick={() =>
-                  draftNum != null && save(d, draftNum, reasonStr)
-                }
-                className="rounded-md bg-hmd-teal px-3.5 py-2 text-sm font-medium text-hmd-teal-700 transition-colors hover:bg-hmd-teal/90 disabled:cursor-not-allowed disabled:opacity-40"
-              >
-                {isBusy ? "Saving…" : hasStored ? "Update override" : "Save override"}
-              </button>
-              <Button
-                variant="secondary"
-                type="button"
-                disabled={pending}
-                onClick={() => ping(d)}
-              >
-                Ping rep
-              </Button>
-            </div>
+            {/* Override editor — Finance's manual judgment + reason (persisted). */}
+            {open && (
+              <div className="mt-3 rounded-lg bg-background p-3">
+                <p className="text-xs text-muted">
+                  Rule confidence is{" "}
+                  <span className="font-semibold text-foreground">
+                    {d.score}%
+                  </span>{" "}
+                  (stage baseline {d.base}% + recency, channel & timing). Set the
+                  realistic number — your override drives component ordering and
+                  gap-to-target.
+                </p>
+                <div className="mt-3 flex flex-wrap items-end gap-2">
+                  <label className="text-xs">
+                    <span className="block text-muted">Override %</span>
+                    <input
+                      type="number"
+                      min={0}
+                      max={100}
+                      value={valueStr}
+                      placeholder={String(d.score)}
+                      onChange={(e) =>
+                        set(d.dealId, { value: e.target.value }, d)
+                      }
+                      className="mt-1 w-20 rounded-md border border-border bg-surface px-2 py-1 text-sm focus:border-hmd-teal-600 focus:outline-none focus:ring-1 focus:ring-hmd-teal-600"
+                    />
+                  </label>
+                  <label className="min-w-[12rem] flex-1 text-xs">
+                    <span className="block text-muted">Reason (required)</span>
+                    <input
+                      type="text"
+                      value={reasonStr}
+                      placeholder="e.g. this customer has delayed before"
+                      onChange={(e) =>
+                        set(d.dealId, { reason: e.target.value }, d)
+                      }
+                      className="mt-1 w-full rounded-md border border-border bg-surface px-2 py-1 text-sm focus:border-hmd-teal-600 focus:outline-none focus:ring-1 focus:ring-hmd-teal-600"
+                    />
+                  </label>
+                  <button
+                    type="button"
+                    disabled={!canSave}
+                    onClick={() =>
+                      draftNum != null && save(d, draftNum, reasonStr)
+                    }
+                    className="rounded-md bg-hmd-teal px-3.5 py-2 text-sm font-medium text-hmd-teal-700 transition-colors hover:bg-hmd-teal/90 disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    {isBusy ? "Saving…" : hasStored ? "Update" : "Save override"}
+                  </button>
+                  <Button
+                    variant="secondary"
+                    type="button"
+                    disabled={pending}
+                    onClick={() => ping(d)}
+                  >
+                    Ping rep
+                  </Button>
+                </div>
+                {draftNum != null && (
+                  <p className="mt-2 text-xs text-muted">
+                    At {draftNum}% this deal weighs {eur(Math.round((draftNum / 100) * d.tcv))}{" "}
+                    of {eur(d.tcv)}{" "}
+                    {!hasStored && draftNum !== d.score
+                      ? `(rule says ${eur(weighted)})`
+                      : ""}
+                    .
+                  </p>
+                )}
+              </div>
+            )}
           </Card>
         );
       })}

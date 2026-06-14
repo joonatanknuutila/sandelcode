@@ -1,56 +1,31 @@
-// Finance visual dashboard (Option A — dashboard-first). Presentational: it
-// receives already-computed figures from the Finance page and renders the eight
-// chart sections. All money figures reconcile with the grid/band because they
-// flow from the same lib/finance/selectors + ForecastSummary math.
+// Finance visual cockpit — the three pitch beats, nothing else. Beat 1 (the
+// 3-year quarter-by-quarter forecast) dominates the screen; Beat 2 (device vs
+// service, kept separate per brief 2.2) and the small confidence-distribution
+// lead-in sit below it. Every figure flows from the same lib/finance/selectors +
+// ForecastSummary math the metric strip and the detail grid use, so the visuals
+// can never diverge. The metric strip and the deal-list confidence override
+// (Beat 3) live in the page; the old report-wall (gap gauge, stage funnel,
+// region/industry/channel mix, discount chart) has been cut — none served a beat.
 
-import Link from "next/link";
 import { Card, SectionTitle } from "@/components/ui";
-import { eur, num } from "@/lib/format";
+import { eur } from "@/lib/format";
 import {
   BarList,
   Donut,
-  Funnel,
-  Gauge,
-  KpiTile,
   StackedRevenueChart,
   CHART,
   type BarItem,
 } from "@/components/charts/primitives";
-import type {
-  ConfidenceBucket,
-  DimensionSlice,
-  DiscountExposure,
-  Dimension,
-  FunnelStage,
-  RevenueSplit,
-} from "@/lib/finance/selectors";
-import { DIMENSION_LABELS } from "@/lib/finance/selectors";
+import type { ConfidenceBucket, RevenueSplit } from "@/lib/finance/selectors";
 
 export interface FinanceDashboardData {
-  /** Time-phased rows for the selected horizon (drives the chart + KPI sparks). */
+  /** Time-phased rows for the selected horizon (drives the Beat 1 chart). */
   rows: { label: string; committed: number; weighted: number }[];
   quarterTargets: number[];
   horizonLabel: string;
 
-  forecastTotal: number;
-  committed: number;
-  atRisk: number;
-  target: number;
-  gap: number; // target − committed (positive ⇒ shortfall)
-  closeRate: number | null;
-  wonCount: number;
-  lostCount: number;
-
   split: RevenueSplit;
-  funnel: FunnelStage[];
-
-  dim: Dimension;
-  dimSlices: DimensionSlice[];
-  dimHrefs: Record<Dimension, string>;
-
   confidence: ConfidenceBucket[];
-  discount: DiscountExposure;
-  discountTopOffers: { label: string; total: number; discountPct: number }[];
 }
 
 const BAND_COLOR: Record<ConfidenceBucket["band"], string> = {
@@ -60,10 +35,6 @@ const BAND_COLOR: Record<ConfidenceBucket["band"], string> = {
 };
 
 export function FinanceDashboard({ data }: { data: FinanceDashboardData }) {
-  const totalSpark = data.rows.map((r) => r.committed + r.weighted);
-  const committedSpark = data.rows.map((r) => r.committed);
-  const covered = data.gap <= 0;
-
   const confidenceItems: BarItem[] = data.confidence.map((b) => ({
     label: b.label,
     value: b.value,
@@ -72,230 +43,67 @@ export function FinanceDashboard({ data }: { data: FinanceDashboardData }) {
     color: BAND_COLOR[b.band],
   }));
 
-  const dimItems: BarItem[] = data.dimSlices.map((s) => ({
-    label: s.key,
-    value: s.value,
-    valueLabel: eur(s.value),
-    sub: `${s.count}`,
-  }));
-
-  const funnelStages = data.funnel.map((s) => ({
-    label: s.label,
-    value: s.value,
-    count: s.count,
-    valueLabel: s.value ? eur(s.value) : "—",
-  }));
-
   return (
     <div className="space-y-6">
-      {/* 1 — KPI hero row */}
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <KpiTile
-          label="Forecast total"
-          value={eur(data.forecastTotal)}
-          hint="committed + weighted"
-          spark={totalSpark}
-        />
-        <KpiTile
-          label="Committed"
-          value={eur(data.committed)}
-          hint="won, time-phased"
-          tone="success"
-          spark={committedSpark}
-        />
-        <KpiTile
-          label="Gap to target"
-          value={covered ? `+${eur(-data.gap)}` : `−${eur(data.gap)}`}
-          hint={`target ${eur(data.target)}`}
-          tone={covered ? "success" : "danger"}
-        />
-        <KpiTile
-          label="Close rate"
-          value={data.closeRate === null ? "—" : `${data.closeRate}%`}
-          hint={`won ${data.wonCount} · lost ${data.lostCount}`}
-          tone="success"
-        />
-      </div>
-
-      {/* 2 — Gap-to-target gauge */}
-      <Card className="p-4">
-        <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
-          <p className="text-xs font-medium uppercase tracking-wide text-muted">
-            Gap to target · {data.horizonLabel}
-          </p>
-          <p className={`text-sm font-semibold ${covered ? "text-success" : "text-warning"}`}>
-            {covered ? "On / above target" : `Shortfall ${eur(data.gap)}`}
-          </p>
+      {/* BEAT 1 (dominant) — the 3-year forecast, quarter by quarter. This is
+          demo step 6 and must read in three seconds: Finance sees the whole
+          picture without phoning sales. */}
+      <Card className="p-5">
+        <SectionTitle>Forecast by quarter · {data.horizonLabel}</SectionTitle>
+        <div className="mt-3">
+          <StackedRevenueChart rows={data.rows} targets={data.quarterTargets} />
         </div>
-        <Gauge committed={data.committed} atRisk={data.atRisk} target={data.target} />
-        <div className="mt-3 flex flex-wrap gap-x-6 gap-y-1 text-xs">
-          <Legend swatch={CHART.committed} label="Committed" value={eur(data.committed)} />
-          <Legend swatch={CHART.weighted} label="At-risk" value={eur(data.atRisk)} />
-          <Legend swatch={CHART.target} label="Target" value={eur(data.target)} line />
-        </div>
-        <p className="mt-3 text-xs text-muted">
-          &ldquo;Committed&rdquo; = won + deals ≥80% confidence (bankable); at-risk and upside cover
-          the rest. The detail grid below lists won-only committed per quarter.
+        <p className="mt-3 text-sm text-muted">
+          Full 3-year forecast, quarter by quarter —{" "}
+          <span style={{ color: CHART.committed }}>■</span> committed{" "}
+          <span style={{ color: CHART.weighted }}>■</span> at-risk (weighted)
+          against the <span style={{ color: CHART.target }}>┄ target</span>.
+          Straight from the data, not phoned in from sales.
         </p>
       </Card>
 
-      {/* 3 — time-phased revenue ∥ device vs service */}
+      {/* BEAT 2 — device vs service (kept separate, brief 2.2) ∥ the small
+          confidence-distribution lead-in to the override list below. */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Card className="p-4">
-          <SectionTitle>Revenue by quarter · {data.horizonLabel}</SectionTitle>
-          <StackedRevenueChart rows={data.rows} targets={data.quarterTargets} />
-          <p className="mt-2 text-xs text-muted">
-            <span style={{ color: CHART.committed }}>■</span> committed{" "}
-            <span style={{ color: CHART.weighted }}>■</span> weighted (at-risk) · dashed line =
-            target
-          </p>
-        </Card>
-
-        <Card className="p-4">
           <SectionTitle>Device vs service revenue</SectionTitle>
-          <Donut
-            centerLabel={eur(data.split.device + data.split.service)}
-            centerSub="weighted"
-            segments={[
-              {
-                label: "Device",
-                value: data.split.device,
-                valueLabel: eur(data.split.device),
-                color: CHART.device,
-              },
-              {
-                label: "Service",
-                value: data.split.service,
-                valueLabel: eur(data.split.service),
-                color: CHART.service,
-              },
-            ]}
-          />
-          <p className="mt-3 text-xs text-muted">
-            Kept separate per the brief — service is back-loaded and volume-dependent · {data.horizonLabel}.
-          </p>
-        </Card>
-      </div>
-
-      {/* 4 — funnel ∥ region mix ∥ confidence distribution */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <Card className="p-4">
-          <SectionTitle>Pipeline by stage</SectionTitle>
-          <Funnel stages={funnelStages} />
-          <p className="mt-3 text-xs text-muted">Open pipeline value · {data.horizonLabel}.</p>
-        </Card>
-
-        <Card className="p-4">
-          <div className="mb-3 flex items-center justify-between gap-2">
-            <p className="text-sm font-semibold uppercase tracking-wide text-muted">Revenue by</p>
-            <div className="flex overflow-hidden rounded-lg border border-border">
-              {(Object.keys(DIMENSION_LABELS) as Dimension[]).map((d) => (
-                <Link
-                  key={d}
-                  href={data.dimHrefs[d]}
-                  scroll={false}
-                  className={`px-2.5 py-1 text-xs font-medium transition-colors ${
-                    data.dim === d
-                      ? "bg-hmd-teal text-hmd-teal-700"
-                      : "bg-surface text-muted hover:bg-background"
-                  }`}
-                >
-                  {DIMENSION_LABELS[d]}
-                </Link>
-              ))}
-            </div>
+          <div className="mt-3">
+            <Donut
+              centerLabel={eur(data.split.device + data.split.service)}
+              centerSub="weighted"
+              segments={[
+                {
+                  label: "Device",
+                  value: data.split.device,
+                  valueLabel: eur(data.split.device),
+                  color: CHART.device,
+                },
+                {
+                  label: "Service",
+                  value: data.split.service,
+                  valueLabel: eur(data.split.service),
+                  color: CHART.service,
+                },
+              ]}
+            />
           </div>
-          <BarList items={dimItems} color={CHART.committed} />
           <p className="mt-3 text-xs text-muted">
-            Weighted open pipeline · {data.horizonLabel} · count after label.
+            Device and service kept separate — service is back-loaded and
+            volume-dependent · {data.horizonLabel}.
           </p>
         </Card>
 
         <Card className="p-4">
           <SectionTitle>Confidence distribution</SectionTitle>
-          <BarList items={confidenceItems} />
+          <div className="mt-3">
+            <BarList items={confidenceItems} />
+          </div>
           <p className="mt-3 text-xs text-muted">
-            Open pipeline by confidence band · {data.horizonLabel} — how much rests on shaky deals.
+            Open pipeline by confidence band · {data.horizonLabel} — how much
+            value rests on shaky deals. Adjust any of them below.
           </p>
         </Card>
       </div>
-
-      {/* 5 — discount / margin exposure */}
-      <Card className="p-4">
-        <SectionTitle>Discount / margin exposure</SectionTitle>
-        {data.discount.count === 0 ? (
-          <p className="text-sm text-muted">Nothing awaiting the Finance gate — no discount exposure right now.</p>
-        ) : (
-          <>
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-              <Stat label="Awaiting approval" value={eur(data.discount.totalValue)} tone="warning" />
-              <Stat label="Offers in queue" value={num(data.discount.count)} />
-              <Stat label="Avg discount" value={`${data.discount.avgDiscount}%`} />
-              <Stat label="Max discount" value={`${data.discount.maxDiscount}%`} tone="danger" />
-            </div>
-            {data.discountTopOffers.length > 0 && (
-              <ul className="mt-4 border-t border-border">
-                {data.discountTopOffers.map((o, i) => (
-                  <li
-                    key={i}
-                    className="flex items-center justify-between gap-3 border-b border-border py-2 text-sm"
-                  >
-                    <span className="truncate text-foreground">{o.label}</span>
-                    <span className="flex shrink-0 items-center gap-3">
-                      <span className="text-muted">{o.discountPct}% off</span>
-                      <span className="font-medium text-foreground">{eur(o.total)}</span>
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            )}
-            <p className="mt-3 text-xs text-muted">
-              Live approval queue — not affected by the Period filter above.
-            </p>
-          </>
-        )}
-      </Card>
-    </div>
-  );
-}
-
-function Legend({
-  swatch,
-  label,
-  value,
-  line = false,
-}: {
-  swatch: string;
-  label: string;
-  value: string;
-  line?: boolean;
-}) {
-  return (
-    <span className="flex items-center gap-1.5 text-muted">
-      <span
-        className={line ? "inline-block h-3 w-0.5" : "inline-block h-2.5 w-2.5 rounded-sm"}
-        style={{ background: swatch }}
-      />
-      {label} <span className="font-medium text-foreground">{value}</span>
-    </span>
-  );
-}
-
-function Stat({
-  label,
-  value,
-  tone = "default",
-}: {
-  label: string;
-  value: string;
-  tone?: "default" | "warning" | "danger";
-}) {
-  const toneClass =
-    tone === "warning" ? "text-warning" : tone === "danger" ? "text-danger" : "text-foreground";
-  return (
-    <div>
-      <p className="text-xs font-medium uppercase tracking-wide text-muted">{label}</p>
-      <p className={`mt-0.5 text-lg font-semibold ${toneClass}`}>{value}</p>
     </div>
   );
 }

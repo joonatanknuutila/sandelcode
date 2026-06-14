@@ -49,10 +49,11 @@ export const ROLES: Record<Role, RoleConfig> = {
     role: "finance",
     label: "Finance",
     home: "/finance",
+    // Four pages only. The forecast IS the pipeline view for Finance, and a
+    // separate Reports page would duplicate the forecast (and drift into the
+    // out-of-scope custom-report-builder), so both are cut.
     nav: [
       { label: "Forecast", href: "/finance" },
-      { label: "Pipeline", href: "/finance/pipeline" },
-      { label: "Reports", href: "/finance/reports" },
       { label: "Accounts", href: "/finance/accounts" },
       { label: "Catalog", href: "/finance/catalog" },
       { label: "Inbox", href: "/finance/inbox" },

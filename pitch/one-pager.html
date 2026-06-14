@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HMD Secure CRM — One-Pager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  /* ============================================================
+     HMD SECURE CRM — single-page one-sheet (companion to the deck)
+     Brand tokens mirror crm/app/globals.css + pitch/index.html.
+     Everything is sized in cqw/cqh against a 16:9 container, so the
+     whole sheet fits one screen at any resolution — no scroll.
+     ============================================================ */
+  :root{
+    --lime:#e4ff00;
+    --bg:#0f0f12; --chrome:#0a0a0c; --surface:#18181c; --surface-2:#1c1c20;
+    --border:#2a2a30; --ink:#f3f3f5; --muted:#9b9ba4; --dim:#6a6a73;
+    --success:#22c55e; --warning:#f59e0b; --danger:#ef4444;
+    --ease:cubic-bezier(.76,0,.24,1);
+    --settle:cubic-bezier(.2,.75,.25,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--chrome);color:var(--ink);
+    font-family:"Inter",system-ui,-apple-system,sans-serif;overflow:hidden;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+
+  /* ---------- shell + 16:9 stage ---------- */
+  .frame{position:fixed;inset:0;display:grid;place-items:center;
+    background:radial-gradient(120% 90% at 50% -10%, #131318 0%, var(--chrome) 60%)}
+  .sheet{position:relative;
+    width:min(100vw, calc(100vh * 16 / 9));
+    height:min(100vh, calc(100vw * 9 / 16));
+    container-type:size;overflow:hidden;background:var(--bg);
+    box-shadow:0 0 0 1px var(--border), 0 4cqh 14cqh -4cqh rgba(0,0,0,.8);
+    display:flex;flex-direction:column}
+
+  /* ---------- atmosphere ---------- */
+  .bg{position:absolute;inset:0;z-index:0;pointer-events:none}
+  .bg .grid{position:absolute;inset:-2px;
+    background-image:linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);
+    background-size:4cqw 4cqw;
+    mask-image:radial-gradient(120% 100% at 72% 14%,#000 35%,transparent 82%);
+    animation:drift 28s linear infinite}
+  .bg .glow{position:absolute;width:64cqw;height:64cqw;right:-16cqw;top:-24cqw;
+    background:radial-gradient(circle,rgba(228,255,0,.10) 0%,rgba(228,255,0,0) 62%);
+    filter:blur(2px);animation:breathe 9s ease-in-out infinite}
+  .bg .glow.b{left:-22cqw;right:auto;top:auto;bottom:-30cqw;width:56cqw;height:56cqw;
+    background:radial-gradient(circle,rgba(228,255,0,.05) 0%,rgba(228,255,0,0) 60%);animation-delay:-4s}
+  .bg .grain{position:absolute;inset:-40%;opacity:.04;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    animation:grain 6s steps(6) infinite}
+  @keyframes drift{to{background-position:4cqw 4cqw}}
+  @keyframes breathe{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}
+  @keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}
+    40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,1%)}80%{transform:translate(3%,2%)}100%{transform:translate(0,0)}}
+
+  /* ---------- security-scan sweep (load-once) ---------- */
+  .sweep{position:absolute;z-index:40;inset:0;pointer-events:none;opacity:0}
+  .sweep.run{opacity:1}
+  .sweep .bar{position:absolute;top:-2%;bottom:-2%;width:.32cqw;left:-3%;
+    background:linear-gradient(180deg,transparent,var(--lime) 12%,#fff 50%,var(--lime) 88%,transparent);
+    box-shadow:0 0 3cqw 1cqw rgba(228,255,0,.55),0 0 .6cqw .2cqw #fff}
+  .sweep .haze{position:absolute;top:0;bottom:0;width:14cqw;left:-17cqw;
+    background:linear-gradient(90deg,rgba(228,255,0,0),rgba(228,255,0,.16))}
+  .sweep.run .bar{animation:barF 1.05s var(--ease) both}
+  .sweep.run .haze{animation:hazeF 1.05s var(--ease) both}
+  @keyframes barF{0%{left:-3%;opacity:0}8%{opacity:1}92%{opacity:1}100%{left:103%;opacity:0}}
+  @keyframes hazeF{0%{left:-17cqw;opacity:0}10%{opacity:1}90%{opacity:1}100%{left:100cqw;opacity:0}}
+
+  /* ---------- staggered reveal ---------- */
+  .r{opacity:0;transform:translateY(1.5cqh);filter:blur(8px)}
+  .sheet.play .r{animation:settle .7s var(--settle) forwards;animation-delay:calc(var(--i,0)*55ms + 360ms)}
+  @keyframes settle{to{opacity:1;transform:none;filter:none}}
+
+  .uline{position:relative;white-space:nowrap}
+  .uline::after{content:"";position:absolute;left:0;right:0;bottom:-.05em;height:.085em;
+    background:var(--lime);border-radius:2px;opacity:.92;transform:scaleX(0);transform-origin:left}
+  .sheet.play .uline::after{animation:wipe .7s var(--ease) forwards;animation-delay:.9s}
+  @keyframes wipe{to{transform:scaleX(1)}}
+
+  /* ---------- top chrome ---------- */
+  .top{position:relative;z-index:20;flex:0 0 8.5cqh;display:flex;align-items:center;
+    justify-content:space-between;padding:0 4.2cqw}
+  .logo{display:flex;align-items:center;gap:1cqw;cursor:pointer;user-select:none}
+  .logo .tile{width:3cqw;height:3cqw;min-width:3cqw;border-radius:.7cqw;background:var(--lime);
+    color:#0a0a0c;display:grid;place-items:center;font-weight:800;font-size:1.9cqw;line-height:1;
+    box-shadow:0 0 2.4cqw rgba(228,255,0,.35);transition:transform .4s var(--ease)}
+  .logo:hover .tile{transform:rotate(-8deg) scale(1.05)}
+  .logo .word{font-size:1.55cqw;font-weight:600;letter-spacing:-.01em}
+  .logo .word .s{font-weight:400;opacity:.6}
+  .status{display:flex;gap:.9cqw;align-items:center}
+  .chip{display:inline-flex;align-items:center;gap:.7cqw;padding:.7cqh 1.2cqw;
+    border:1px solid var(--border);border-radius:5cqw;font-size:1.06cqw;font-weight:500;
+    color:var(--ink);background:rgba(255,255,255,.02)}
+  .chip .d{width:.6cqw;height:.6cqw;border-radius:50%;background:var(--lime)}
+  .chip .d.g{background:var(--success);box-shadow:0 0 1cqw rgba(34,197,94,.7)}
+
+  /* ---------- HERO band ---------- */
+  .hero{position:relative;z-index:10;flex:0 0 32cqh;display:grid;
+    grid-template-columns:1fr 40cqw;align-items:center;padding:0 4.2cqw}
+  .tag{display:inline-flex;align-items:center;gap:.9cqw;font-size:1.05cqw;font-weight:600;
+    letter-spacing:.22em;color:var(--muted);text-transform:uppercase;margin-bottom:1.4cqh}
+  .tag .dot{width:.7cqw;height:.7cqw;border-radius:50%;background:var(--lime);
+    box-shadow:0 0 1.4cqw rgba(228,255,0,.8);animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+  .hero h1{font-size:3.5cqw;line-height:1.06;font-weight:800;letter-spacing:-.025em}
+  .hero .lead{font-size:1.2cqw;line-height:1.5;color:var(--muted);font-weight:400;
+    max-width:38cqw;margin-top:1.6cqh}
+
+  .hero-media{position:relative;height:26cqh;border-radius:1.4cqw;overflow:hidden;
+    border:1px solid var(--border)}
+  .hero-media img{width:100%;height:100%;object-fit:cover;object-position:46% 50%;
+    opacity:.96;animation:floaty 9s ease-in-out infinite}
+  .hero-media::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(to right,var(--bg),transparent 30%),
+      radial-gradient(70% 80% at 62% 46%,transparent 38%,rgba(15,15,18,.55))}
+  .hero-glow{position:absolute;z-index:-1;right:8cqw;top:50%;transform:translateY(-50%);
+    width:30cqw;height:30cqw;border-radius:50%;
+    background:radial-gradient(circle,rgba(228,255,0,.16) 0%,rgba(228,255,0,0) 62%);
+    filter:blur(2px);animation:breathe 8s ease-in-out infinite}
+  @keyframes floaty{0%,100%{transform:translateY(0) scale(1.02)}50%{transform:translateY(-1.1cqh) scale(1.02)}}
+  .media-cap{position:absolute;z-index:2;left:1.6cqw;bottom:1.4cqh;display:flex;align-items:center;
+    gap:.7cqw;font-size:.98cqw;font-weight:600;letter-spacing:.04em;color:var(--ink);
+    padding:.55cqh 1cqw;border-radius:5cqw;background:rgba(10,10,12,.55);
+    backdrop-filter:blur(6px);border:1px solid var(--border)}
+  .media-cap .od{width:.6cqw;height:.6cqw;border-radius:50%;background:var(--lime)}
+
+  /* ---------- PRODUCT band ---------- */
+  .roles{position:relative;z-index:10;flex:1 1 0;min-height:0;display:grid;
+    grid-template-columns:repeat(4,1fr);gap:1.4cqw;padding:0 4.2cqw;align-content:center}
+  .card{position:relative;border:1px solid var(--border);border-radius:1.2cqw;
+    background:var(--surface);padding:1.9cqh 1.4cqw;overflow:hidden;
+    transition:transform .35s var(--ease),border-color .35s var(--ease),background .35s var(--ease)}
+  .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:.3cqw;background:var(--lime);
+    transform:scaleY(0);transform-origin:top;transition:transform .45s var(--ease)}
+  .sheet.play .card::before{transform:scaleY(1);transition-delay:calc(var(--i,0)*60ms + .6s)}
+  .card:hover{transform:translateY(-.7cqh);border-color:#3a3a44;background:var(--surface-2)}
+  .card .ico{width:2.3cqw;height:2.3cqw;border-radius:.7cqw;display:grid;place-items:center;
+    background:rgba(228,255,0,.08);border:1px solid rgba(228,255,0,.22);color:var(--lime);margin-bottom:1.1cqh}
+  .card .ico svg{width:1.35cqw;height:1.35cqw}
+  .card .role{font-size:.88cqw;font-weight:700;letter-spacing:.18em;color:var(--muted);
+    text-transform:uppercase;margin-bottom:.5cqh}
+  .card .ct{font-size:1.3cqw;font-weight:700;letter-spacing:-.01em;line-height:1.12}
+  .card .cd{font-size:.98cqw;color:var(--muted);line-height:1.36;margin-top:.7cqh}
+  .card.pro::before{background:var(--success)}
+  .card.con::before{background:var(--warning)}
+  .card .mini{display:flex;flex-wrap:wrap;gap:.45cqw;margin-top:1cqh}
+  .card .mini span{font-size:.72cqw;font-weight:700;color:var(--ink);padding:.35cqh .55cqw;
+    border-radius:5cqw;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.08)}
+
+  /* ---------- PROOF band ---------- */
+  .proof{position:relative;z-index:10;flex:0 0 30cqh;display:grid;
+    grid-template-columns:1fr 1.15fr;gap:3cqw;align-items:center;
+    padding:0 4.2cqw;border-top:1px solid var(--border);
+    background:linear-gradient(180deg,transparent,rgba(228,255,0,.018))}
+  .ground .gt{font-size:1.7cqw;font-weight:800;letter-spacing:-.02em;line-height:1.12}
+  .ground .gd{font-size:1cqw;color:var(--muted);line-height:1.42;margin-top:.7cqh;max-width:36cqw}
+  .priority-list{display:grid;gap:.45cqh;margin-top:.9cqh;max-width:39cqw}
+  .priority{display:grid;grid-template-columns:1.7cqw 1fr;gap:.8cqw;align-items:start}
+  .priority b{width:1.7cqw;height:1.7cqw;border-radius:.48cqw;display:grid;place-items:center;
+    background:rgba(228,255,0,.1);border:1px solid rgba(228,255,0,.28);color:var(--lime);
+    font-size:.9cqw;line-height:1;font-variant-numeric:tabular-nums}
+  .priority span{font-size:.92cqw;color:var(--muted);line-height:1.24}
+  .priority strong{color:var(--ink);font-weight:700}
+  .pills{display:flex;gap:.8cqw;flex-wrap:wrap;margin-top:.8cqh}
+  .pill{display:inline-flex;align-items:center;gap:.6cqw;padding:.55cqh 1cqw;border-radius:5cqw;
+    font-size:.9cqw;font-weight:600;color:var(--lime);background:rgba(228,255,0,.08);
+    border:1px solid rgba(228,255,0,.28)}
+  .pill svg{width:1cqw;height:1cqw}
+
+  .closewrap{display:flex;flex-direction:column;gap:1.4cqh}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1cqw}
+  .stat{border:1px solid var(--border);border-radius:1cqw;background:rgba(24,24,28,.6);
+    padding:1.2cqh 1cqw;text-align:left;transition:border-color .3s var(--ease)}
+  .stat:hover{border-color:rgba(228,255,0,.4)}
+  .stat .n{font-size:2.3cqw;font-weight:800;letter-spacing:-.03em;line-height:1;
+    font-variant-numeric:tabular-nums}
+  .stat .n .u{color:var(--lime)}
+  .stat .sl{font-size:.78cqw;color:var(--muted);margin-top:.5cqh;line-height:1.22}
+  .close{display:flex;align-items:center;justify-content:space-between;gap:1.5cqw}
+  .close .cl{font-size:1.12cqw;font-weight:700;letter-spacing:-.01em;line-height:1.2}
+  .close .cl span{color:var(--muted);font-weight:500}
+  .cta{display:inline-flex;align-items:center;gap:.8cqw;padding:1.1cqh 1.7cqw;border-radius:.9cqw;
+    background:var(--lime);color:#0a0a0c;font-size:1.08cqw;font-weight:800;letter-spacing:-.01em;
+    text-decoration:none;white-space:nowrap;animation:ctaPulse 2.6s ease-in-out infinite;
+    transition:transform .25s var(--ease)}
+  .cta:hover{transform:translateY(-.4cqh) scale(1.02)}
+  @keyframes ctaPulse{0%,100%{box-shadow:0 0 0 0 rgba(228,255,0,.4)}50%{box-shadow:0 0 2.6cqw .4cqw rgba(228,255,0,.25)}}
+
+  /* ---------- corner hint ---------- */
+  .hint{position:absolute;z-index:30;right:1.6cqw;top:1.4cqh;font-size:.86cqw;color:var(--dim);
+    display:flex;align-items:center;gap:.7cqw}
+  .hint kbd{font-family:inherit;font-size:.8cqw;padding:.3cqh .7cqw;border-radius:.4cqw;
+    border:1px solid var(--border);background:var(--surface);color:var(--muted)}
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important}
+    .r{opacity:1;transform:none;filter:none}
+    .card::before{transform:scaleY(1)}
+  }
+</style>
+</head>
+<body>
+  <div class="frame">
+    <div class="sheet" id="sheet">
+
+      <div class="bg" aria-hidden="true">
+        <div class="grid"></div><div class="glow"></div><div class="glow b"></div><div class="grain"></div>
+      </div>
+
+      <div class="hint"><kbd>R</kbd> replay <span style="opacity:.4">·</span> <kbd>F</kbd> fullscreen</div>
+
+      <!-- TOP CHROME -->
+      <div class="top">
+        <div class="logo" id="logo" title="Replay">
+          <span class="tile">H</span><span class="word">HMD <span class="s">Secure</span></span>
+        </div>
+        <div class="status r" style="--i:0">
+          <span class="chip"><span class="d g"></span> Live on Vercel</span>
+          <span class="chip"><span class="d"></span> Supabase · EU&nbsp;(eu-north-1)</span>
+          <span class="chip"><span class="d"></span> 0 AI keys required</span>
+        </div>
+      </div>
+
+      <!-- HERO -->
+      <div class="hero">
+        <div>
+          <div class="tag r" style="--i:1"><span class="dot"></span> HMD Secure — Internal CRM</div>
+          <h1>
+            <span class="r" style="--i:2">Sell secure devices.</span><br/>
+            <span class="r" style="--i:3">Forecast the hardware.</span><br/>
+            <span class="r" style="--i:4"><span class="uline">Trust every number.</span></span>
+          </h1>
+          <p class="lead r" style="--i:6">An AI CRM that thinks like a security vendor — grounded in your
+            data, EU-resident, and useful with zero AI keys. Four roles, one opinionated tool.</p>
+        </div>
+        <div class="hero-media r" style="--i:5">
+          <div class="hero-glow" aria-hidden="true"></div>
+          <img src="assets/device.webp" alt="HMD Secure device" />
+          <span class="media-cap"><span class="od"></span> Security-grade by default</span>
+        </div>
+      </div>
+
+      <!-- PRODUCT -->
+      <div class="roles">
+        <div class="card r" style="--i:7">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h5"/></svg></span>
+          <div class="role">Software</div>
+          <div class="ct">Next.js CRM on live Postgres</div>
+          <div class="cd">Frontend, API routes and typed Supabase data layer in one deployable app.</div>
+          <div class="mini"><span>Next.js 16</span><span>Supabase EU</span><span>Vercel</span></div>
+        </div>
+        <div class="card r" style="--i:8">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 8h8M8 12h5M8 16h7"/></svg></span>
+          <div class="role">UI</div>
+          <div class="ct">Role-first workspaces</div>
+          <div class="cd">Rep, TAM, manager and finance screens expose the next action without hunting.</div>
+          <div class="mini"><span>Account 360</span><span>SLA queue</span><span>Forecast</span></div>
+        </div>
+        <div class="card pro r" style="--i:9">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg></span>
+          <div class="role">Pros</div>
+          <div class="ct">Grounded, demoable, secure</div>
+          <div class="cd">Real seed data, EU residency, deterministic fallbacks and human-approved writes.</div>
+          <div class="mini"><span>No fake facts</span><span>0 AI keys</span><span>Audit trail</span></div>
+        </div>
+        <div class="card con r" style="--i:10">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/><path d="M10.3 4.3L2 19h20L13.7 4.3a2 2 0 00-3.4 0z"/></svg></span>
+          <div class="role">Cons / Risks</div>
+          <div class="ct">Hackathon scope limits</div>
+          <div class="cd">Auth is demo-grade, no Azure/Graph wiring yet, and imports are intentionally out of scope.</div>
+          <div class="mini"><span>Needs hardening</span><span>No migration</span><span>Azure later</span></div>
+        </div>
+      </div>
+
+      <!-- PROOF -->
+      <div class="proof">
+        <div class="ground">
+          <div class="gt r" style="--i:11">Top 3 priorities.<br/><span class="uline">Finish what proves value.</span></div>
+          <div class="gd r" style="--i:12">The demo should show a CRM that reduces work now, while being honest about what still needs enterprise hardening.</div>
+          <div class="priority-list r" style="--i:13">
+            <div class="priority"><b>1</b><span><strong>Forecast trust:</strong> 3-year time-phased pipeline, confidence and manager/finance override.</span></div>
+            <div class="priority"><b>2</b><span><strong>Rep speed:</strong> account 360, offer builder, next best action and discount approvals.</span></div>
+            <div class="priority"><b>3</b><span><strong>TAM control:</strong> case triage, SLA risk and grounded summaries when threads get long.</span></div>
+          </div>
+          <div class="pills r" style="--i:13">
+            <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Can't invent a deal</span>
+            <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg> Enrichment opt-in</span>
+            <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> Agent on every page</span>
+          </div>
+        </div>
+        <div class="closewrap">
+          <div class="stats">
+            <div class="stat r" style="--i:12"><div class="n"><span class="count" data-to="4">0</span></div><div class="sl">role-specific workspaces</div></div>
+            <div class="stat r" style="--i:13"><div class="n"><span class="count" data-to="3">0</span><span class="u">yr</span></div><div class="sl">time-phased forecast</div></div>
+            <div class="stat r" style="--i:14"><div class="n"><span class="count" data-to="2">0</span></div><div class="sl">approval gates for discounts</div></div>
+            <div class="stat r" style="--i:15"><div class="n"><span class="u">0</span></div><div class="sl">AI keys required</div></div>
+          </div>
+          <div class="close r" style="--i:16">
+            <div class="cl">HMD Secure CRM <span>— live, grounded &amp; EU-resident.</span></div>
+            <a class="cta" href="index.html">▶ Open the full deck</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- load-once scan sweep -->
+      <div class="sweep" id="sweep"><div class="haze"></div><div class="bar"></div></div>
+
+    </div>
+  </div>
+
+<script>
+(function(){
+  const sheet = document.getElementById('sheet');
+  const sweep = document.getElementById('sweep');
+
+  function countUp(el){
+    const to=parseInt(el.dataset.to,10), suf=el.dataset.suffix||'', dur=1100, t0=performance.now();
+    const fmt=n=>n.toLocaleString('en-US')+suf;
+    (function step(now){ const p=Math.min((now-t0)/dur,1), e=1-Math.pow(1-p,3);
+      el.textContent=fmt(Math.round(to*e)); if(p<1) requestAnimationFrame(step); })(t0);
+  }
+  function play(){
+    sheet.classList.remove('play'); void sheet.offsetWidth; sheet.classList.add('play');
+    sweep.classList.remove('run'); void sweep.offsetWidth; sweep.classList.add('run');
+    sheet.querySelectorAll('.count').forEach(c=>{ c.textContent='0'+(c.dataset.suffix||''); });
+    setTimeout(()=>sheet.querySelectorAll('.count').forEach(countUp),650);
+  }
+
+  document.getElementById('logo').addEventListener('click',play);
+  window.addEventListener('keydown',e=>{
+    if(e.key==='r'||e.key==='R'){ play(); }
+    else if(e.key==='f'||e.key==='F'){
+      document.fullscreenElement?document.exitFullscreen?.():document.documentElement.requestFullscreen?.();
+    }
+  });
+
+  play();
+})();
+</script>
+</body>
+</html>

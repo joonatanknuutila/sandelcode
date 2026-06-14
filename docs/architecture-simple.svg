@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" font-family="Inter, system-ui, -apple-system, sans-serif">
+  <defs>
+    <style>
+      .title { font: 700 32px Inter, system-ui, sans-serif; fill:#fafafa; }
+      .sub   { font: 400 17px Inter, system-ui, sans-serif; fill:#a1a1aa; }
+      .role  { font: 700 17px Inter, system-ui, sans-serif; fill:#fafafa; }
+      .desc  { font: 400 12.5px Inter, system-ui, sans-serif; fill:#a1a1aa; }
+      .h     { font: 700 21px Inter, system-ui, sans-serif; fill:#fafafa; }
+      .pill  { font: 600 13px Inter, system-ui, sans-serif; fill:#e4e4e7; }
+      .body  { font: 400 14px Inter, system-ui, sans-serif; fill:#c7c7cc; }
+      .conn  { font: 600 13px Inter, system-ui, sans-serif; fill:#a1a1aa; }
+      .emoji { font: 30px Inter, "Apple Color Emoji", "Segoe UI Emoji", sans-serif; }
+    </style>
+    <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#5e5e5e"/>
+    </marker>
+  </defs>
+
+  <!-- background -->
+  <rect x="0" y="0" width="1200" height="800" fill="#161618"/>
+
+  <!-- title -->
+  <text x="600" y="56" text-anchor="middle" class="title">How the HMD Secure CRM works</text>
+  <text x="600" y="86" text-anchor="middle" class="sub">One smart sales workspace for the whole team</text>
+
+  <!-- ===== PEOPLE ===== -->
+  <!-- Rep -->
+  <rect x="55" y="125" width="250" height="145" rx="14" fill="#1f1f22" stroke="#34343a"/>
+  <text x="180" y="178" text-anchor="middle" class="emoji">💼</text>
+  <text x="180" y="210" text-anchor="middle" class="role">Sales Rep</text>
+  <text x="180" y="236" text-anchor="middle" class="desc">Wins new deals &amp; grows accounts</text>
+
+  <!-- TAM -->
+  <rect x="335" y="125" width="250" height="145" rx="14" fill="#1f1f22" stroke="#34343a"/>
+  <text x="460" y="178" text-anchor="middle" class="emoji">🔧</text>
+  <text x="460" y="210" text-anchor="middle" class="role">Account Manager</text>
+  <text x="460" y="236" text-anchor="middle" class="desc">Handles customer support cases</text>
+
+  <!-- SM -->
+  <rect x="615" y="125" width="250" height="145" rx="14" fill="#1f1f22" stroke="#34343a"/>
+  <text x="740" y="178" text-anchor="middle" class="emoji">📊</text>
+  <text x="740" y="210" text-anchor="middle" class="role">Sales Manager</text>
+  <text x="740" y="236" text-anchor="middle" class="desc">Tracks the team &amp; pipeline</text>
+
+  <!-- Finance -->
+  <rect x="895" y="125" width="250" height="145" rx="14" fill="#1f1f22" stroke="#34343a"/>
+  <text x="1020" y="178" text-anchor="middle" class="emoji">💶</text>
+  <text x="1020" y="210" text-anchor="middle" class="role">Finance</text>
+  <text x="1020" y="236" text-anchor="middle" class="desc">Owns pricing &amp; the forecast</text>
+
+  <!-- connector -->
+  <text x="600" y="300" text-anchor="middle" class="conn">Everyone logs in to their own simple view</text>
+  <line x1="600" y1="310" x2="600" y2="334" stroke="#5e5e5e" stroke-width="2" marker-end="url(#ah)"/>
+
+  <!-- ===== WORKSPACE ===== -->
+  <rect x="80" y="340" width="1040" height="270" rx="18" fill="#1f1f22" stroke="#34343a"/>
+  <rect x="80" y="340" width="1040" height="6" rx="3" fill="#e4ff00"/>
+  <text x="600" y="382" text-anchor="middle" class="h">HMD Secure CRM — one place for everything</text>
+
+  <!-- feature pills -->
+  <rect x="214" y="398" width="168" height="36" rx="18" fill="#27272b" stroke="#3a3a40"/>
+  <text x="298" y="421" text-anchor="middle" class="pill">Customers &amp; contacts</text>
+  <rect x="398" y="398" width="140" height="36" rx="18" fill="#27272b" stroke="#3a3a40"/>
+  <text x="468" y="421" text-anchor="middle" class="pill">Deals &amp; pipeline</text>
+  <rect x="554" y="398" width="120" height="36" rx="18" fill="#27272b" stroke="#3a3a40"/>
+  <text x="614" y="421" text-anchor="middle" class="pill">Support cases</text>
+  <rect x="690" y="398" width="154" height="36" rx="18" fill="#27272b" stroke="#3a3a40"/>
+  <text x="767" y="421" text-anchor="middle" class="pill">Quotes &amp; approvals</text>
+  <rect x="860" y="398" width="126" height="36" rx="18" fill="#27272b" stroke="#3a3a40"/>
+  <text x="923" y="421" text-anchor="middle" class="pill">Sales forecast</text>
+
+  <!-- AI copilot -->
+  <rect x="110" y="456" width="980" height="130" rx="14" fill="#27272b" stroke="#e4ff00" stroke-width="2"/>
+  <rect x="110" y="456" width="8" height="130" rx="4" fill="#e4ff00"/>
+  <text x="138" y="492" class="role" font-size="18">🤖 AI Copilot — built in on every page</text>
+  <text x="138" y="522" class="body">Ask it anything about your customers and deals, and it answers in plain English.</text>
+  <text x="138" y="546" class="body">It can also do the work for you — log a call, move a deal, open a case —</text>
+  <text x="138" y="570" class="body">and if it gets something wrong, one tap to <tspan fill="#e4ff00" font-weight="700">Undo</tspan>.</text>
+
+  <!-- connector -->
+  <line x1="600" y1="610" x2="600" y2="650" stroke="#5e5e5e" stroke-width="2" marker-end="url(#ah)"/>
+
+  <!-- ===== DATA ===== -->
+  <rect x="80" y="656" width="1040" height="104" rx="18" fill="#1f1f22" stroke="#34343a"/>
+  <text x="600" y="698" text-anchor="middle" class="h">🔒 Your data, kept safe in Europe</text>
+  <text x="600" y="730" text-anchor="middle" class="body">All customer information is stored securely on EU servers — private by design.</text>
+</svg>
