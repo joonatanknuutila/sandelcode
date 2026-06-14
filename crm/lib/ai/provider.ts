@@ -17,14 +17,14 @@
 // Env (.env.local, never hardcoded):
 //   GOOGLE_VERTEX_PROJECT     e.g. ferrous-wonder-491213-e7  (or GOOGLE_CLOUD_PROJECT)
 //   GOOGLE_VERTEX_LOCATION    default us-central1 (e.g. europe-west1 for EU)
-//   GOOGLE_VERTEX_MODEL       default gemini-2.5-pro
+//   GOOGLE_VERTEX_MODEL       default gemini-2.5-flash
 //
 // --- Gemini API key (AI Studio) — works on Vercel serverless ----------------
 // A plain Gemini Developer API key needs no IAM, so unlike Vertex it runs on
 // serverless. Same generateContent wire format as Vertex, different host/auth.
 // This is the same endpoint + key enrich.ts uses for web-grounded calls.
 //   GEMINI_API_KEY   server-only key (NEVER NEXT_PUBLIC_*). Absent => skipped.
-//   GEMINI_MODEL     optional, default gemini-2.5-pro.
+//   GEMINI_MODEL     optional, default gemini-2.5-flash.
 //
 // --- Azure OpenAI — fallback ------------------------------------------------
 //   AZURE_OPENAI_ENDPOINT / AZURE_OPENAI_API_KEY / AZURE_OPENAI_DEPLOYMENT
@@ -92,7 +92,12 @@ export async function complete(
 }
 
 const SAFETY_MODEL = "gemini-2.5-flash";
-const DEFAULT_MODEL = "gemini-2.5-pro";
+// Best model AVAILABLE on the prod Gemini Developer API key. gemini-2.5-pro 404s
+// on this (free-tier) key and its quota is far tighter — defaulting to it took
+// prod AI offline (404 → 429 RESOURCE_EXHAUSTED). Flash is the best served model
+// here. To run pro, set GEMINI_MODEL=gemini-2.5-pro on a paid/Vertex key — the
+// flash fallback below then covers any pro hiccup.
+const DEFAULT_MODEL = "gemini-2.5-flash";
 
 /** Quality-first with a safety net: try the configured model (default the more
  *  capable gemini-2.5-pro), then fall back to flash. So a pro hiccup — quota, or
