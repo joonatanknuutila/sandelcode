@@ -10,12 +10,11 @@ import {
 } from "@/lib/db";
 import { confidence } from "@/lib/ai/confidence";
 import { Deal, dealProbability } from "@/lib/types";
-import { eur, num, quarterLabel, quarterLabelShort } from "@/lib/format";
-import { Badge, Card, SectionTitle } from "@/components/ui";
+import { quarterLabel, quarterLabelShort } from "@/lib/format";
+import { Badge, Card } from "@/components/ui";
 import { ExportLinks } from "@/components/ExportLinks";
-import { OfferApproval, OfferVM } from "@/components/OfferApproval";
+import { OfferVM } from "@/components/OfferApproval";
 import { forecastNarrative } from "@/lib/ai/forecast";
-import { Assistant } from "@/components/Assistant";
 import {
   computeForecastSummary,
   HORIZON_QUARTERS,
@@ -23,12 +22,11 @@ import {
   Horizon,
   PERIOD_OPTIONS,
 } from "@/components/ForecastSummary";
-import { ConfidenceOverride, DealConfidenceVM } from "./ConfidenceOverride";
+import { DealConfidenceVM } from "./ConfidenceOverride";
 import {
   FinanceDashboard,
   type FinanceDashboardData,
 } from "@/components/finance/FinanceDashboard";
-import { TargetImport } from "@/components/finance/TargetImport";
 import {
   confidenceDistribution,
   dealRevenueInWindow,
@@ -40,13 +38,10 @@ import {
   type Dimension,
 } from "@/lib/finance/selectors";
 
-// Finance — dashboard-first cockpit. A visual top section (KPI row, gap-to-
-// target gauge, time-phased / device-vs-service / funnel / region / confidence
-// charts, discount exposure) makes the financial picture clear at a glance;
-// the working tools (detail grid, CSV target import, discount approvals,
-// confidence override) sit below. One opinionated view — the Quarter/Half/Year/
-// All toggle, the deal-size floor and the revenue-by dimension are all URL-
-// driven so the SAME horizon feeds the band, the gauge and the grid.
+// Finance — dashboard-first cockpit. This route stays an overview: KPI row,
+// gap-to-target gauge, forecast charts and risk signals. Working tools live in
+// the left-nav routes: Details for the grid/targets, Confidence for overrides,
+// Inbox for approvals.
 
 const YEARS = [0, 1, 2] as const;
 const QUARTERS = [1, 2, 3, 4] as const;
@@ -175,15 +170,6 @@ export default async function FinanceView({
   const rows = buildForecast(openF, wonF, overrides).filter(
     (r) => r.offset < window,
   );
-  const totals = rows.reduce(
-    (acc, r) => ({
-      committed: acc.committed + r.committed,
-      weighted: acc.weighted + r.weighted,
-      devices: acc.devices + r.devices,
-    }),
-    { committed: 0, weighted: 0, devices: 0 },
-  );
-
   const pendingApprovals: OfferVM[] = pendingOffers.map((o) => {
     const account = accountById.get(o.accountId);
     const deal = dealById.get(o.dealId);
@@ -334,109 +320,55 @@ export default async function FinanceView({
       {/* The visual cockpit — KPI row, gauge, charts, discount exposure. */}
       <FinanceDashboard data={dashboardData} />
 
-      {/* AI forecast narrative — "give me the number, plainly". */}
-      <Card className="p-4">
-        <div className="flex items-center justify-between">
-          <p className="text-xs font-medium uppercase tracking-wide text-muted">
-            Forecast narrative
-            {!narrative.modelUsed && (
-              <span className="ml-1 normal-case text-muted">
-                · model offline — deterministic
-              </span>
-            )}
+      <div className="grid gap-4 lg:grid-cols-[1.5fr_1fr]">
+        {/* AI forecast narrative — "give me the number, plainly". */}
+        <Card className="p-4">
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-medium uppercase tracking-wide text-muted">
+              Forecast narrative
+              {!narrative.modelUsed && (
+                <span className="ml-1 normal-case text-muted">
+                  · model offline — deterministic
+                </span>
+              )}
+            </p>
+            <Badge tone="blue">AI</Badge>
+          </div>
+          <p className="mt-2 text-sm leading-relaxed text-foreground">
+            {narrative.text}
           </p>
-          <Badge tone="blue">AI</Badge>
-        </div>
-        <p className="mt-2 text-sm leading-relaxed text-foreground">
-          {narrative.text}
-        </p>
-      </Card>
+        </Card>
 
-      {/* Conversational query (brief §05.03) — interrogate the pipeline. */}
-      <Assistant
-        role="finance"
-        scopeLabel="the pipeline & forecast"
-        suggestions={[
-          "Which deals are past their close date?",
-          "Biggest deals by value",
-          "Enterprise deals at risk",
-        ]}
-      />
-
-      {/* ---------------- Working tools ---------------- */}
-
-      {/* Time-phased forecast grid — the exact detail behind the chart. */}
-      <section>
-        <SectionTitle>Time-phased forecast · {rows.length} quarters</SectionTitle>
-        <div className="overflow-x-auto rounded-xl border border-border bg-surface">
-          <table className="w-full text-sm">
-            <thead className="bg-background text-left text-xs uppercase tracking-wide text-muted">
-              <tr>
-                <th className="px-3 py-2 font-medium">Quarter</th>
-                <th className="px-3 py-2 text-right font-medium">Committed €</th>
-                <th className="px-3 py-2 text-right font-medium">
-                  Weighted (at-risk) €
-                </th>
-                <th className="px-3 py-2 text-right font-medium">Total €</th>
-                <th className="px-3 py-2 text-right font-medium">
-                  Device units
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((r) => (
-                <tr key={r.label} className="border-t border-border">
-                  <td className="px-3 py-1.5 text-muted">{r.label}</td>
-                  <td className="px-3 py-1.5 text-right text-success">
-                    {r.committed ? eur(r.committed) : "—"}
-                  </td>
-                  <td className="px-3 py-1.5 text-right text-muted">
-                    {r.weighted ? eur(r.weighted) : "—"}
-                  </td>
-                  <td className="px-3 py-1.5 text-right font-medium">
-                    {eur(r.committed + r.weighted)}
-                  </td>
-                  <td className="px-3 py-1.5 text-right text-foreground">
-                    {r.devices ? num(r.devices) : "—"}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-            <tfoot>
-              <tr className="border-t-2 border-border bg-background font-semibold">
-                <td className="px-3 py-2">Horizon total</td>
-                <td className="px-3 py-2 text-right">{eur(totals.committed)}</td>
-                <td className="px-3 py-2 text-right">{eur(totals.weighted)}</td>
-                <td className="px-3 py-2 text-right">
-                  {eur(totals.committed + totals.weighted)}
-                </td>
-                <td className="px-3 py-2 text-right">{num(totals.devices)}</td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
-        <p className="mt-2 text-xs text-muted">
-          Device units = committed + open pipeline shipping per quarter — the
-          figure to buy components against. Weighted uses each deal&apos;s
-          Finance override when one is set.
-        </p>
-      </section>
-
-      {/* CSV target import — bulk-load the quarterly gap-to-target numbers. */}
-      <TargetImport />
-
-      {/* Discount approvals — second gate (locks the offer) */}
-      <OfferApproval offers={pendingApprovals} gate="finance" />
-
-      {/* Confidence override — drives hardware ordering & gap-to-target */}
-      <section>
-        <SectionTitle>Confidence — Finance override</SectionTitle>
-        <p className="mb-3 -mt-1 text-xs text-muted">
-          Rules compute the score; you adjust the realistic number. The stored
-          override is what feeds gap-to-target and ordering.
-        </p>
-        <ConfidenceOverride deals={confidenceVMs} />
-      </section>
+        <Card className="p-4">
+          <p className="text-xs font-medium uppercase tracking-wide text-muted">
+            Work the specifics
+          </p>
+          <div className="mt-3 grid gap-2">
+            <Link
+              href="/finance/details"
+              className="rounded-md border border-border px-3 py-2 text-sm font-medium text-foreground hover:bg-background"
+            >
+              Forecast details and targets
+            </Link>
+            <Link
+              href="/finance/confidence"
+              className="rounded-md border border-border px-3 py-2 text-sm font-medium text-foreground hover:bg-background"
+            >
+              Confidence overrides
+            </Link>
+            <Link
+              href="/finance/inbox"
+              className="rounded-md border border-border px-3 py-2 text-sm font-medium text-foreground hover:bg-background"
+            >
+              Discount approvals
+            </Link>
+          </div>
+          <p className="mt-3 text-xs text-muted">
+            The Forecast page stays short; detailed grids and action queues live
+            in the left navigation.
+          </p>
+        </Card>
+      </div>
     </div>
   );
 }
