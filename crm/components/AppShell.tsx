@@ -3,6 +3,7 @@
 // The application chrome: HMD-branded navy sidebar (role-aware nav) + top bar
 // with the role switcher and in-app notifications. Wraps every page.
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Logo } from "./Logo";
@@ -38,6 +39,10 @@ export function AppShell({
   const config = ROLES[activeRole];
   // Reps are non-technical: give them larger nav targets + plainer chrome.
   const repView = activeRole === "rep";
+  // Mobile nav drawer (md+ shows the sidebar statically; below md it slides in).
+  const [navOpen, setNavOpen] = useState(false);
+  // Close the drawer whenever the route changes (tapping a nav link navigates).
+  useEffect(() => setNavOpen(false), [pathname]);
 
   function switchRole(next: typeof role) {
     setRole(next);
@@ -46,8 +51,21 @@ export function AppShell({
 
   return (
     <div className="flex min-h-screen">
-      {/* Sidebar */}
-      <aside className="flex w-60 flex-col bg-hmd-charcoal text-white">
+      {/* Backdrop behind the mobile drawer */}
+      {navOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/60 md:hidden"
+          onClick={() => setNavOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
+      {/* Sidebar — static at md+, off-canvas drawer below md */}
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 flex w-64 transform flex-col bg-hmd-charcoal text-white transition-transform duration-200 md:static md:w-60 md:translate-x-0 ${
+          navOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
         <div className="border-b border-white/10 px-5 py-4">
           <Link href={config.home}>
             <Logo light />
@@ -82,16 +100,29 @@ export function AppShell({
 
       {/* Main column */}
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex items-center justify-between border-b border-border bg-surface px-6 py-3">
-          <div>
+        <header className="flex items-center justify-between gap-2 border-b border-border bg-surface px-4 py-3 md:px-6">
+          <div className="flex items-center gap-2">
+            {/* Hamburger — opens the nav drawer below md */}
+            <button
+              type="button"
+              onClick={() => setNavOpen(true)}
+              aria-label="Open navigation"
+              className="-ml-1 grid h-10 w-10 place-items-center rounded-md text-muted hover:bg-background hover:text-foreground md:hidden"
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" aria-hidden="true">
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+              </svg>
+            </button>
             <p className={`font-medium uppercase tracking-wide text-muted ${repView ? "text-sm" : "text-xs"}`}>
               {config.label}
             </p>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             {/* Role switcher — demo aid; replaced by SSO claims */}
             <label className={`flex items-center gap-2 text-muted ${repView ? "text-sm" : "text-xs"}`}>
-              View as
+              <span className="hidden sm:inline">View as</span>
               <select
                 value={activeRole}
                 onChange={(e) => switchRole(e.target.value as Role)}
@@ -113,7 +144,7 @@ export function AppShell({
             </div>
           </div>
         </header>
-        <main className="flex-1 overflow-auto p-6">{children}</main>
+        <main className="flex-1 overflow-auto p-4 md:p-6">{children}</main>
       </div>
     </div>
   );
