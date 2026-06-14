@@ -12,6 +12,7 @@ import {
 import { REP_STAGE_LABELS, STAGE_ORDER, Stage } from "@/lib/types";
 import { eur, relativeDays, shortDate } from "@/lib/format";
 import { Badge, Card, SectionTitle, StageBadge, StatTile } from "@/components/ui";
+import { Assistant } from "@/components/Assistant";
 
 // Sales Rep dashboard — "my pipeline at a glance" + what needs attention.
 // Pipeline columns exclude the terminal Won/Lost stages for focus.
@@ -75,6 +76,17 @@ export default async function RepDashboard() {
           large
         />
       </div>
+
+      {/* Ask the pipeline in plain words — Rep tone (brisk, action-oriented). */}
+      <Assistant
+        role="rep"
+        scopeLabel="your pipeline"
+        suggestions={[
+          "Which of my deals are stalled?",
+          "What's the biggest deal I should focus on?",
+          "Show me at-risk enterprise deals",
+        ]}
+      />
 
       {/* Needs attention */}
       {notifications.length > 0 && (
