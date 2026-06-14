@@ -839,3 +839,26 @@ export async function commitMeeting(
 
   return { activities, notes };
 }
+
+// --- agent reversals (Undo for the always-on agent) -------------------------
+// The always-on agent (lib/ai/agent.ts) auto-applies writes and offers Undo.
+// These are the inverse ops for the create-style actions; stage/status reverts
+// reuse updateDealStage / updateCaseStatus above.
+
+export async function deleteActivity(id: string): Promise<void> {
+  const admin = createAdminClient();
+  const { error } = await admin.from("activity_timeline").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+}
+
+export async function deleteContact(id: string): Promise<void> {
+  const admin = createAdminClient();
+  const { error } = await admin.from("contacts").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+}
+
+export async function deleteCase(id: string): Promise<void> {
+  const admin = createAdminClient();
+  const { error } = await admin.from("cases").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+}

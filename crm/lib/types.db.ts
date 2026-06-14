@@ -62,6 +62,44 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_chats: {
+        Row: {
+          created_at: string
+          id: string
+          title: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          title?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: Partial<Database["public"]["Tables"]["ai_chats"]["Insert"]>
+        Relationships: []
+      }
+      ai_messages: {
+        Row: {
+          actions: Json | null
+          chat_id: string
+          content: string
+          created_at: string
+          id: string
+          role: string
+        }
+        Insert: {
+          actions?: Json | null
+          chat_id: string
+          content?: string
+          created_at?: string
+          id?: string
+          role: string
+        }
+        Update: Partial<Database["public"]["Tables"]["ai_messages"]["Insert"]>
+        Relationships: []
+      }
       activity_timeline: {
         Row: {
           account_id: string

@@ -11,6 +11,7 @@ import { useRole } from "./RoleProvider";
 import { ROLES, ROLE_ORDER } from "@/lib/roles";
 import { NotificationCenter } from "./NotificationCenter";
 import { SearchCommand } from "./SearchCommand";
+import { AgentDock } from "./AgentDock";
 import type { AppNotification, Role } from "@/lib/types";
 
 function roleFromPath(pathname: string): Role | null {
@@ -146,6 +147,9 @@ export function AppShell({
         </header>
         <main className="flex-1 overflow-auto p-4 md:p-6">{children}</main>
       </div>
+
+      {/* Always-on AI agent — floats above everything, on every page. */}
+      <AgentDock role={activeRole} />
     </div>
   );
 }

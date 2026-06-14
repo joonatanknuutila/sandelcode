@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Role } from "@/lib/types";
 import { Card } from "@/components/ui";
+import { Markdown } from "./Markdown";
 
 // Grounded persona assistant widget (brief §05.03 conversational query). It is
 // read-only: answers from CRM facts and never writes. Posts to /api/assistant.
@@ -82,12 +83,12 @@ export function Assistant({
               {t.pending ? (
                 <p className="mt-0.5 text-sm text-muted">Thinking…</p>
               ) : (
-                <p className="mt-0.5 whitespace-pre-wrap text-sm text-foreground">
-                  {t.a}
+                <div className="mt-0.5 text-sm text-foreground">
+                  <Markdown content={t.a ?? ""} />
                   {t.modelUsed === false && (
-                    <span className="ml-1 align-middle text-[10px] text-muted">(model offline)</span>
+                    <span className="align-middle text-[10px] text-muted">(model offline)</span>
                   )}
-                </p>
+                </div>
               )}
             </div>
           ))}
