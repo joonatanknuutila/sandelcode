@@ -611,6 +611,27 @@ export interface RecordApprovalInput {
  *  -> approved + locked_at=now(). Threshold lives in lib/scoring. */
 export async function recordApproval(input: RecordApprovalInput) {
   const admin = createAdminClient();
+
+  // Read the offer's current gate + discount BEFORE recording anything, so an
+  // out-of-order decision never leaves a stray approval row.
+  const { data: offer, error: offErr } = await admin
+    .from("offers")
+    .select("status, discount_pct")
+    .eq("id", input.offerId)
+    .single();
+  if (offErr || !offer) throw new Error(offErr?.message ?? "Offer not found");
+
+  // A role may only decide the gate the offer is actually waiting on. The UI
+  // only surfaces an offer at its current gate, but a Server Action is callable
+  // directly — this guards against Finance approving before SM, or anyone
+  // re-deciding an already-resolved (approved/rejected) offer.
+  const expectedStatus = input.role === "sm" ? "pending_sm" : "pending_finance_approval";
+  if (offer.status !== expectedStatus) {
+    throw new Error(
+      `Offer is not awaiting ${input.role === "sm" ? "Sales Manager" : "Finance"} approval`,
+    );
+  }
+
   const approver = await actorId(input.approverId);
   const approvalRole: Tables<"offer_approvals">["approval_role"] =
     input.role === "sm" ? "sales_manager" : "finance";
@@ -624,14 +645,6 @@ export async function recordApproval(input: RecordApprovalInput) {
     resolved_at: new Date().toISOString(),
   });
   if (insErr) throw new Error(insErr.message);
-
-  // Need the offer's discount to decide the next status.
-  const { data: offer, error: offErr } = await admin
-    .from("offers")
-    .select("discount_pct")
-    .eq("id", input.offerId)
-    .single();
-  if (offErr || !offer) throw new Error(offErr?.message ?? "Offer not found");
 
   const update: Partial<Tables<"offers">> = {};
   if (input.decision === "rejected") {
