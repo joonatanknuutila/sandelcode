@@ -18,88 +18,89 @@
   <rect x="0" y="0" width="1300" height="880" fill="#161618"/>
 
   <!-- title -->
-  <text x="650" y="52" text-anchor="middle" class="title">HMD Secure CRM — how the pieces fit together</text>
-  <text x="650" y="83" text-anchor="middle" class="sub">What the team sees, the engine behind it, and how information moves</text>
+  <text x="650" y="52" text-anchor="middle" class="title">HMD Secure CRM — technical architecture</text>
+  <text x="650" y="83" text-anchor="middle" class="sub">Next.js App Router · typed Supabase data layer · grounded AI · EU-hosted operational data</text>
 
   <!-- ===== FRONTEND ===== -->
   <rect x="70" y="115" width="1160" height="205" rx="16" fill="#1f1f22" stroke="#34343a"/>
-  <text x="92" y="148" class="bandh">🖥️  The app — what the team uses in the browser</text>
+  <text x="92" y="148" class="bandh">🖥️  Next.js web app — role-aware CRM surfaces</text>
 
   <!-- screen tiles -->
   <rect x="95" y="170" width="145" height="80" rx="10" fill="#27272b" stroke="#3a3a40"/>
-  <text x="167" y="206" text-anchor="middle" class="tile">Dashboard</text>
-  <text x="167" y="224" text-anchor="middle" class="tile">&amp; inbox</text>
+  <text x="167" y="206" text-anchor="middle" class="tile">Dashboards</text>
+  <text x="167" y="224" text-anchor="middle" class="tile">/rep /sm /tam</text>
   <rect x="255" y="170" width="145" height="80" rx="10" fill="#27272b" stroke="#3a3a40"/>
-  <text x="327" y="206" text-anchor="middle" class="tile">Customers</text>
-  <text x="327" y="224" text-anchor="middle" class="tile">&amp; contacts</text>
+  <text x="327" y="206" text-anchor="middle" class="tile">Accounts</text>
+  <text x="327" y="224" text-anchor="middle" class="tile">contacts timeline</text>
   <rect x="415" y="170" width="145" height="80" rx="10" fill="#27272b" stroke="#3a3a40"/>
-  <text x="487" y="206" text-anchor="middle" class="tile">Deals &amp;</text>
-  <text x="487" y="224" text-anchor="middle" class="tile">pipeline</text>
+  <text x="487" y="206" text-anchor="middle" class="tile">Deals</text>
+  <text x="487" y="224" text-anchor="middle" class="tile">stages forecast</text>
   <rect x="575" y="170" width="145" height="80" rx="10" fill="#27272b" stroke="#3a3a40"/>
-  <text x="647" y="206" text-anchor="middle" class="tile">Support</text>
-  <text x="647" y="224" text-anchor="middle" class="tile">cases</text>
+  <text x="647" y="206" text-anchor="middle" class="tile">Cases</text>
+  <text x="647" y="224" text-anchor="middle" class="tile">SLA notes</text>
   <rect x="735" y="170" width="145" height="80" rx="10" fill="#27272b" stroke="#3a3a40"/>
-  <text x="807" y="206" text-anchor="middle" class="tile">Quotes &amp;</text>
-  <text x="807" y="224" text-anchor="middle" class="tile">approvals</text>
+  <text x="807" y="206" text-anchor="middle" class="tile">Offers</text>
+  <text x="807" y="224" text-anchor="middle" class="tile">SM + Finance</text>
   <rect x="895" y="170" width="145" height="80" rx="10" fill="#27272b" stroke="#3a3a40"/>
-  <text x="967" y="215" text-anchor="middle" class="tile">Forecast</text>
+  <text x="967" y="206" text-anchor="middle" class="tile">Finance</text>
+  <text x="967" y="224" text-anchor="middle" class="tile">3-yr forecast</text>
   <!-- AI copilot tile (highlighted) -->
   <rect x="1055" y="170" width="145" height="80" rx="10" fill="#27272b" stroke="#e4ff00" stroke-width="2"/>
-  <text x="1127" y="206" text-anchor="middle" class="tile" fill="#e4ff00">⚡ AI Copilot</text>
-  <text x="1127" y="224" text-anchor="middle" class="tile">on every page</text>
+  <text x="1127" y="206" text-anchor="middle" class="tile" fill="#e4ff00">⚡ AgentDock</text>
+  <text x="1127" y="224" text-anchor="middle" class="tile">role context</text>
 
-  <text x="95" y="294" class="note">Each role sees its own version — Sales Rep · Account Manager · Sales Manager · Finance</text>
+  <text x="95" y="294" class="note">Server components render live CRM data; client components handle offer sliders, drawers, chat and inline approvals.</text>
 
   <!-- arrows frontend <-> backend -->
   <line x1="560" y1="322" x2="560" y2="372" stroke="#8a8a92" stroke-width="2" marker-end="url(#mGen)"/>
-  <text x="572" y="352" class="alab" fill="#a1a1aa">view a page · save a change · ask the AI</text>
+  <text x="572" y="352" class="alab" fill="#a1a1aa">SSR page load · server action · API route · agent turn</text>
   <line x1="740" y1="372" x2="740" y2="322" stroke="#8a8a92" stroke-width="2" marker-end="url(#mGen)"/>
-  <text x="752" y="365" class="alab" fill="#a1a1aa">results come back</text>
+  <text x="752" y="365" class="alab" fill="#a1a1aa">HTML/RSC · JSON · revalidated UI</text>
 
   <!-- ===== BACKEND ===== -->
   <rect x="70" y="378" width="1160" height="200" rx="16" fill="#1f1f22" stroke="#34343a"/>
-  <text x="92" y="411" class="bandh">⚙️  The engine — runs on secure servers</text>
+  <text x="92" y="411" class="bandh">⚙️  Application layer — Vercel + Next.js server runtime</text>
 
   <rect x="95" y="432" width="350" height="120" rx="12" fill="#27272b" stroke="#3a3a40"/>
-  <text x="115" y="461" class="boxh">Checks access</text>
-  <text x="115" y="487" class="body">Confirms who is logged in and</text>
-  <text x="115" y="506" class="body">limits each person to their own</text>
-  <text x="115" y="525" class="body">role and accounts.</text>
+  <text x="115" y="461" class="boxh">Auth, role scope &amp; RLS</text>
+  <text x="115" y="487" class="body">Supabase Auth session + app role</text>
+  <text x="115" y="506" class="body">guarding Rep, TAM, SM and Finance</text>
+  <text x="115" y="525" class="body">reads before queries leave the server.</text>
 
   <rect x="475" y="432" width="350" height="120" rx="12" fill="#27272b" stroke="#3a3a40"/>
-  <text x="495" y="461" class="boxh">Runs the business rules</text>
-  <text x="495" y="487" class="body">Pricing &amp; discounts, approval</text>
-  <text x="495" y="506" class="body">steps, sales forecast, and</text>
-  <text x="495" y="525" class="body">deal-risk alerts.</text>
+  <text x="495" y="461" class="boxh">Domain services &amp; server actions</text>
+  <text x="495" y="487" class="body">Pricing, discount thresholds, offer</text>
+  <text x="495" y="506" class="body">approval workflow, SLA calculation,</text>
+  <text x="495" y="525" class="body">risk flags and forecast weighting.</text>
 
   <rect x="855" y="432" width="350" height="120" rx="12" fill="#27272b" stroke="#3a3a40"/>
-  <text x="875" y="461" class="boxh">Moves the information</text>
-  <text x="875" y="487" class="body">Fetches and saves data, and</text>
-  <text x="875" y="506" class="body">asks the AI when an answer or</text>
-  <text x="875" y="525" class="body">action is needed.</text>
+  <text x="875" y="461" class="boxh">API routes + typed DB mappers</text>
+  <text x="875" y="487" class="body">/api/agent, /api/forecast, exports</text>
+  <text x="875" y="506" class="body">and DB↔UI mapping through typed</text>
+  <text x="875" y="525" class="body">contracts before data hits React.</text>
 
   <!-- arrows backend -> AI / DB -->
   <line x1="350" y1="580" x2="350" y2="634" stroke="#a78bfa" stroke-width="2.5" marker-start="url(#mViolet)" marker-end="url(#mViolet)"/>
-  <text x="362" y="612" class="alab" fill="#a78bfa">asks the AI · gets answers</text>
+  <text x="362" y="612" class="alab" fill="#a78bfa">retrieval bundle · prompt · fallback</text>
   <line x1="950" y1="580" x2="950" y2="634" stroke="#60a5fa" stroke-width="2.5" marker-start="url(#mBlue)" marker-end="url(#mBlue)"/>
-  <text x="962" y="612" class="alab" fill="#60a5fa">reads &amp; saves data</text>
+  <text x="962" y="612" class="alab" fill="#60a5fa">typed queries · mutations · CSV exports</text>
 
   <!-- ===== AI + DATABASE ===== -->
   <rect x="70" y="640" width="560" height="140" rx="16" fill="#1f1f22" stroke="#34343a"/>
-  <text x="92" y="673" class="boxh" font-size="17" fill="#a78bfa">🤖 AI engine (Google Gemini)</text>
-  <text x="92" y="702" class="body" font-size="13">Answers questions in plain English and suggests or carries out</text>
-  <text x="92" y="723" class="body" font-size="13">actions. If it is ever unavailable, the app still works on its</text>
-  <text x="92" y="744" class="body" font-size="13">built-in rules — nothing breaks.</text>
+  <text x="92" y="673" class="boxh" font-size="17" fill="#a78bfa">🤖 Grounded AI layer</text>
+  <text x="92" y="702" class="body" font-size="13">Agent turns are retrieval-first: permitted CRM rows are fetched,</text>
+  <text x="92" y="723" class="body" font-size="13">summarized, then passed to the model. No key or provider failure</text>
+  <text x="92" y="744" class="body" font-size="13">falls back to deterministic business logic and labels the result.</text>
 
   <rect x="670" y="640" width="560" height="140" rx="16" fill="#1f1f22" stroke="#34343a"/>
-  <text x="692" y="673" class="boxh" font-size="17" fill="#3ecf8e">🔒 Database — stored in the EU</text>
-  <text x="692" y="702" class="body" font-size="13">Customers, contacts, deals, support cases, quotes, forecasts</text>
-  <text x="692" y="723" class="body" font-size="13">and the full activity history — all in one secure place.</text>
-  <text x="692" y="744" class="body" font-size="13" font-style="italic">Private &amp; EU-hosted.</text>
+  <text x="692" y="673" class="boxh" font-size="17" fill="#3ecf8e">🔒 Supabase Postgres — eu-north-1</text>
+  <text x="692" y="702" class="body" font-size="13">Normalized tables for accounts, contacts, deals, cases, offers,</text>
+  <text x="692" y="723" class="body" font-size="13">catalog, forecast periods, notifications and activity history.</text>
+  <text x="692" y="744" class="body" font-size="13" font-style="italic">RLS policies + server-side role scoping keep access narrow.</text>
 
   <!-- ===== AI COPILOT LOOP FOOTER ===== -->
   <rect x="70" y="800" width="1160" height="58" rx="14" fill="#26261c" stroke="#5c5c2e"/>
   <rect x="70" y="800" width="8" height="58" rx="4" fill="#e4ff00"/>
-  <text x="94" y="826" class="boxh" fill="#e4ff00">⚡ How the AI Copilot acts</text>
-  <text x="94" y="847" class="body" font-size="12.5" fill="#d4d4c4">You ask  ▸  the engine reads your live data and checks with the AI  ▸  it makes the change for you (e.g. moves a deal)  ▸  you can Undo it instantly.</text>
+  <text x="94" y="826" class="boxh" fill="#e4ff00">⚡ Agent control loop</text>
+  <text x="94" y="847" class="body" font-size="12.5" fill="#d4d4c4">User asks  ▸  server scopes retrieval  ▸  model proposes  ▸  deterministic action validates  ▸  human-approved mutation writes  ▸  UI revalidates and Undo remains available.</text>
 </svg>
