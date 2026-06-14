@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getAccounts, getAllCases, getUsers } from "@/lib/db";
+import { getAccounts, getCasesForTam, getCurrentUserForRole, getUsers } from "@/lib/db";
 import type { Account, Case, User } from "@/lib/types";
 import { caseAgeDays, getTamSummary, slaInfo, triageSort } from "@/lib/tam";
 import { Card, SectionTitle, StatTile } from "@/components/ui";
@@ -73,8 +73,9 @@ function CaseRow({
 }
 
 export default async function TamView() {
+  const user = await getCurrentUserForRole("tam");
   const [all, accounts, users] = await Promise.all([
-    getAllCases(),
+    user ? getCasesForTam(user.id) : Promise.resolve([]),
     getAccounts(),
     getUsers(),
   ]);

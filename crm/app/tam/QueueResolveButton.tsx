@@ -19,11 +19,12 @@ export function QueueResolveButton({ caseId }: Props) {
   function handleClick(e: React.MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
-    if (!confirm("Mark this case as resolved?")) return;
+    const resolution = prompt("Resolution to record before closing:");
+    if (!resolution?.trim()) return;
     startTransition(async () => {
       try {
-        await resolveCaseAction(caseId);
-        toast("Case resolved.", { variant: "success" });
+        await resolveCaseAction(caseId, resolution);
+        toast("Case resolved — resolution recorded.", { variant: "success" });
       } catch {
         toast("Failed to resolve.", { variant: "error" });
       }

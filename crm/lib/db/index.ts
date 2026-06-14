@@ -22,6 +22,7 @@ import {
   mapServiceEvent,
   mapTamService,
   mapUser,
+  roleToDb,
 } from "./mappers";
 import {
   Account,
@@ -71,6 +72,37 @@ export const getCurrentUser = cache(async (): Promise<User | null> => {
     .maybeSingle();
   return data ? mapUser(data) : null;
 });
+
+/** Current user for a role-scoped demo surface. Matching real auth wins; demo
+ *  mode falls back to the first user with the requested role so server-rendered
+ *  role pages match the client nav. */
+export async function getCurrentUserForRole(role: User["role"]): Promise<User | null> {
+  const supabase = await createClient();
+  const {
+    data: { user: authUser },
+  } = await supabase.auth.getUser();
+
+  if (authUser) {
+    const { data } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", authUser.id)
+      .maybeSingle();
+    if (data) {
+      const mapped = mapUser(data);
+      if (mapped.role === role) return mapped;
+    }
+  }
+
+  const { data } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("role", roleToDb(role))
+    .order("created_at")
+    .limit(1)
+    .maybeSingle();
+  return data ? mapUser(data) : null;
+}
 
 export async function getUser(id: string): Promise<User | null> {
   const supabase = await createClient();
@@ -421,6 +453,20 @@ export async function getServiceHistory(
     .from("activity_timeline")
     .select("*")
     .eq("account_id", accountId)
+    .order("created_at", { ascending: false });
+  return (data ?? []).map(mapServiceEvent);
+}
+
+/** A single case's own history, newest-first. This deliberately excludes deal
+ *  and account events so the TAM case view never shows sales-stage movement or
+ *  discount negotiation inside a technical case. */
+export async function getCaseHistory(caseId: string): Promise<ServiceEvent[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("activity_timeline")
+    .select("*")
+    .eq("entity_type", "case")
+    .eq("entity_id", caseId)
     .order("created_at", { ascending: false });
   return (data ?? []).map(mapServiceEvent);
 }

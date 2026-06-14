@@ -5,8 +5,8 @@
 //   • Save — writes the note to the case timeline as-is (zero friction).
 //   • Spar & structure — the assistant tidies the rough note (and asks one
 //     question if it's vague); NOTHING is saved until the TAM confirms.
-// A small toggle keeps the TAM's real internal-vs-working visibility model,
-// demoted below the buttons so the capture itself stays the focus.
+// A small toggle keeps the TAM's real internal-vs-sales-facing visibility model.
+// Sales-facing notes also write a summary line to the account timeline.
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
@@ -44,7 +44,9 @@ export function CaseAddNote({ caseId }: { caseId: string }) {
     try {
       await addNoteAction(caseId, content, isInternal);
       toast(
-        isInternal ? "Internal note added to the timeline" : "Working note added to the timeline",
+        isInternal
+          ? "Internal note added to the case"
+          : "Sales-facing note added to the case and account",
         { variant: "success" },
       );
       clearAll();
@@ -149,9 +151,9 @@ export function CaseAddNote({ caseId }: { caseId: string }) {
               />
             </button>
             {isInternal ? (
-              <span><span className="font-semibold text-foreground">Internal</span> — hidden from the customer-facing view</span>
+              <span><span className="font-semibold text-foreground">Internal</span> — only the service team sees this; case timeline only</span>
             ) : (
-              <span><span className="font-semibold text-foreground">Working</span> — customer-safe · end with “?” to flag waiting-on-customer</span>
+              <span><span className="font-semibold text-foreground">Sales-facing</span> — also appears on the account timeline so the rep stays informed</span>
             )}
           </label>
         </>

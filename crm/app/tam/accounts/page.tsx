@@ -1,9 +1,9 @@
-import { getAccountCards, getAccountsForTam, getCurrentUser } from "@/lib/db";
+import { getAccountCards, getAccountsForTam, getCurrentUserForRole } from "@/lib/db";
 import { AccountListView } from "@/components/AccountListView";
 
 // TAM — accounts where they have cases (brief Block 2).
 export default async function TamAccountsPage() {
-  const user = await getCurrentUser();
+  const user = await getCurrentUserForRole("tam");
   if (!user) return <p className="text-sm text-muted">No user signed in.</p>;
   const accounts = await getAccountsForTam(user.id);
   const cards = await getAccountCards(accounts);

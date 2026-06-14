@@ -3,10 +3,10 @@ import { notFound } from "next/navigation";
 import {
   getAccount,
   getCase,
+  getCaseHistory,
   getContactsForAccount,
   getNotesForCase,
   getService,
-  getServiceHistory,
   getUsers,
 } from "@/lib/db";
 import { caseAgeDays, requestStatus, slaInfo } from "@/lib/tam";
@@ -34,7 +34,7 @@ export default async function CaseDetail({
     c.serviceId ? getService(c.serviceId) : Promise.resolve(null),
     getContactsForAccount(c.accountId),
     getNotesForCase(c.id),
-    getServiceHistory(c.accountId),
+    getCaseHistory(c.id),
     getUsers(),
   ]);
   if (!account) notFound();
@@ -48,6 +48,10 @@ export default async function CaseDetail({
   const req = requestStatus(c, notes);
   const contact = contacts.find((p) => p.primary) ?? contacts[0];
   const tamUsers = users.filter((u) => u.role === "tam");
+  const latestEscalation = events.find((e) => e.kind === "escalation");
+  const waitingDays = latestEscalation
+    ? Math.max(0, Math.floor((Date.now() - new Date(latestEscalation.createdAt).getTime()) / 86_400_000))
+    : caseAgeDays(c);
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
@@ -71,6 +75,11 @@ export default async function CaseDetail({
             {service ? ` · ${service.name}` : ""} · opened {caseAgeDays(c)}d ago
             {assignee ? ` · ${assignee.name}` : ""}
           </p>
+          {c.escalatedToThirdParty && (
+            <p className="mt-1 text-sm font-medium text-amber-200">
+              Waiting on external party{c.thirdPartyReference ? ` · ${c.thirdPartyReference}` : ""}
+            </p>
+          )}
         </div>
         <CaseStatusControl caseId={c.id} status={c.status} tamUsers={tamUsers} />
       </div>
@@ -98,7 +107,10 @@ export default async function CaseDetail({
                 </p>
               </>
             ) : (
-              <p className="mt-1 text-sm text-muted">—</p>
+              <>
+                <p className="mt-1 text-sm font-semibold">Device provisioning</p>
+                <p className="mt-0.5 text-xs text-muted">internal · active</p>
+              </>
             )}
           </Card>
 
@@ -132,11 +144,13 @@ export default async function CaseDetail({
           {c.escalatedToThirdParty && (
             <Card className="border-l-2 border-l-amber-400/60 p-4">
               <p className="text-xs font-medium uppercase tracking-wide text-amber-200">
-                ↗ 3rd-party escalation
+                3rd-party escalation
               </p>
-              <p className="mt-1 text-sm font-semibold">Waiting on vendor</p>
+              <p className="mt-1 text-sm font-semibold">
+                Waiting on external party
+              </p>
               <p className="mt-1 text-xs text-muted">
-                Open {caseAgeDays(c)}d · {sla.label}
+                {c.thirdPartyReference ?? "Vendor response pending"} · waiting {waitingDays}d · {sla.label}
               </p>
             </Card>
           )}

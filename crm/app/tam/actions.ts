@@ -21,8 +21,25 @@ export async function addNoteAction(
   content: string,
   isInternal: boolean,
 ): Promise<void> {
+  const c = await getCase(caseId);
+  if (!c) throw new Error("Case not found");
+
   await addCaseNote({ caseId, content, isInternal });
+
+  if (!isInternal) {
+    await logActivity({
+      accountId: c.accountId,
+      eventType: "note",
+      title: "TAM sales-facing update",
+      body: `Case "${c.title}": ${content}`,
+      entityType: "account",
+      entityId: c.accountId,
+    });
+  }
+
   revalidatePath(`/tam/cases/${caseId}`);
+  revalidatePath(`/tam/accounts/${c.accountId}`);
+  revalidatePath(`/rep/accounts/${c.accountId}`);
   revalidatePath("/tam");
 }
 
@@ -30,21 +47,46 @@ export async function addNoteAction(
 // Resolve case
 // ---------------------------------------------------------------------------
 
-export async function resolveCaseAction(caseId: string): Promise<void> {
+export async function resolveCaseAction(
+  caseId: string,
+  resolution?: string,
+): Promise<void> {
   const c = await getCase(caseId);
   if (!c) throw new Error("Case not found");
 
   await updateCaseStatus(caseId, "resolved");
+  const cleanResolution = resolution?.trim();
+  if (cleanResolution) {
+    await addCaseNote({
+      caseId,
+      content: `Resolution recorded: ${cleanResolution}`,
+      isInternal: false,
+    });
+  }
   await logActivity({
     accountId: c.accountId,
     eventType: "case_resolved",
     title: "Case resolved",
-    body: `Case "${c.title}" marked as resolved.`,
+    body: cleanResolution
+      ? `Case "${c.title}" resolved: ${cleanResolution}`
+      : `Case "${c.title}" marked as resolved.`,
     entityType: "case",
     entityId: caseId,
   });
+  await logActivity({
+    accountId: c.accountId,
+    eventType: "case_resolved",
+    title: "Case resolved",
+    body: cleanResolution
+      ? `Case "${c.title}" resolved: ${cleanResolution}`
+      : `Case "${c.title}" marked as resolved.`,
+    entityType: "account",
+    entityId: c.accountId,
+  });
 
   revalidatePath(`/tam/cases/${caseId}`);
+  revalidatePath(`/tam/accounts/${c.accountId}`);
+  revalidatePath(`/rep/accounts/${c.accountId}`);
   revalidatePath("/tam");
 }
 
@@ -72,7 +114,7 @@ export async function setCaseStatusAction(
   await updateCaseStatus(caseId, status);
   await logActivity({
     accountId: c.accountId,
-    eventType: status === "resolved" ? "case_resolved" : "note",
+    eventType: status === "resolved" ? "case_resolved" : "status_change",
     title: `Case ${STATUS_VERB[status]}`,
     body: `Case "${c.title}" ${STATUS_VERB[status]}.`,
     entityType: "case",
@@ -89,21 +131,35 @@ export async function setCaseStatusAction(
 
 export async function escalateCaseAction(
   caseId: string,
-  thirdPartyReference?: string,
+  input?: {
+    party?: string;
+    status?: "waiting" | "replied" | "resolved";
+    reference?: string;
+    detail?: string;
+  },
 ): Promise<void> {
   const c = await getCase(caseId);
   if (!c) throw new Error("Case not found");
 
-  await escalateCase(caseId, thirdPartyReference);
+  const party = input?.party?.trim() || "3rd-party vendor";
+  const status = input?.status ?? "waiting";
+  const reference = input?.reference?.trim();
+  const detail = input?.detail?.trim();
+
+  await escalateCase(caseId, reference ? `${party} · ${reference}` : party);
   await logActivity({
     accountId: c.accountId,
     eventType: "escalation",
     title: "Case escalated to 3rd party",
-    body: thirdPartyReference
-      ? `Escalated — reference: ${thirdPartyReference}`
-      : `Case "${c.title}" escalated to a third-party vendor.`,
+    body:
+      status === "resolved"
+        ? `${party} replied and the external dependency is resolved${reference ? ` (${reference})` : ""}${detail ? ` — ${detail}` : ""}.`
+        : status === "replied"
+          ? `${party} replied${reference ? ` (${reference})` : ""}${detail ? ` — ${detail}` : ""}.`
+          : `Waiting on ${party}${reference ? ` (${reference})` : ""}${detail ? ` — ${detail}` : ""}.`,
     entityType: "case",
     entityId: caseId,
+    metadata: { party, status, reference: reference ?? null },
   });
 
   revalidatePath(`/tam/cases/${caseId}`);

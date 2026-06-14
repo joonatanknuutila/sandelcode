@@ -189,6 +189,7 @@ export interface Case {
    * and resolution-time metrics on the TAM dashboard. */
   resolvedAt?: string;
   escalatedToThirdParty?: boolean;
+  thirdPartyReference?: string;
 }
 
 // --- Activity timeline -----------------------------------------------------

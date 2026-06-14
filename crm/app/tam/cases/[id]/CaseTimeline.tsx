@@ -4,10 +4,9 @@ import { useState } from "react";
 import { CaseNote, ServiceEvent, ServiceEventKind } from "@/lib/tam";
 import { Card } from "@/components/ui";
 
-// Unified case timeline: service-history events + case notes on ONE thread,
-// newest first — so a TAM CC'd late has the whole story in one place. The
-// toggle hides INTERNAL notes to give the exact customer-facing view (what the
-// customer would see), the WORKING notes being the customer-safe ones.
+// Case timeline only: case lifecycle events + case notes on ONE thread, newest
+// first. Account/deal events deliberately stay out of this component; those
+// belong to the account timeline.
 
 const EVENT_DOT: Record<ServiceEventKind, string> = {
   deployed: "bg-hmd-teal-600",
@@ -18,6 +17,7 @@ const EVENT_DOT: Record<ServiceEventKind, string> = {
   case_opened: "bg-warning",
   case_resolved: "bg-success",
   escalation: "bg-warning",
+  status_change: "bg-hmd-gray",
   stage_change: "bg-hmd-teal-600",
   offer_sent: "bg-hmd-teal-600",
   call: "bg-hmd-gray",
@@ -35,6 +35,7 @@ const EVENT_LABEL: Record<ServiceEventKind, string> = {
   case_opened: "Case opened",
   case_resolved: "Case resolved",
   escalation: "Escalated",
+  status_change: "Status changed",
   stage_change: "Stage change",
   offer_sent: "Offer sent",
   call: "Call",
@@ -59,7 +60,7 @@ export function CaseTimeline({
 }) {
   const [showInternal, setShowInternal] = useState(true);
 
-  const visibleNotes = notes.filter((n) => showInternal || n.visibility === "working");
+  const visibleNotes = notes.filter((n) => showInternal || n.visibility !== "internal");
   const items: Item[] = [
     ...events.map((e): Item => ({ kind: "event", at: +new Date(e.createdAt), data: e })),
     ...visibleNotes.map((n): Item => ({ kind: "note", at: +new Date(n.createdAt), data: n })),
@@ -69,7 +70,7 @@ export function CaseTimeline({
     <div>
       <div className="mb-3 flex items-center justify-between">
         <p className="text-xs text-muted">
-          {showInternal ? "Full internal view" : "Customer-facing view"} ·{" "}
+          {showInternal ? "Full service-team view" : "Sales-facing view"} ·{" "}
           {items.length} entries
         </p>
         <button
@@ -106,7 +107,7 @@ export function CaseTimeline({
                 <span className={`absolute -left-[1.45rem] top-1 h-2.5 w-2.5 rounded-full ${internal ? "bg-muted" : "bg-hmd-teal"} ring-2 ring-surface`} />
                 <div className="flex items-center justify-between">
                   <span className={`inline-block rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${internal ? "border-border bg-background text-muted" : "border-hmd-teal/30 bg-hmd-teal/10 text-foreground"}`}>
-                    {internal ? "Internal note" : "Working note"}
+                    {internal ? "Internal note" : "Sales-facing note"}
                   </span>
                   <p className="text-xs text-muted">{new Date(n.createdAt).toLocaleString("en-IE", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}</p>
                 </div>

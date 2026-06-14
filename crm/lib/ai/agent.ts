@@ -22,10 +22,12 @@ import {
   getAccounts,
   getAllCases,
   getCase,
+  getCaseHistory,
   getCasesForTam,
   getDeal,
   getDealsForRep,
   getOpenDeals,
+  getNotesForCase,
 } from "@/lib/db";
 import {
   createCase,
@@ -45,6 +47,7 @@ import {
   STAGE_ORDER,
   Stage,
 } from "@/lib/types";
+import { caseAgeDays, requestStatus, slaInfo, summariseCase } from "@/lib/tam";
 
 const MAX_ACTIONS = 3;
 
@@ -322,6 +325,19 @@ export async function runAgentTurn(opts: {
   const { role, userId, message } = opts;
   const page = opts.pageContext ?? {};
 
+  if (role === "tam" && page.caseId) {
+    const caseReply = await maybeTamCaseReply(page.caseId, message);
+    if (caseReply) {
+      return {
+        reply: caseReply,
+        executed: [],
+        clarify: [],
+        suggestions: ["Record sales-facing update", "Escalate to 3rd party", "Resolve with note"],
+        modelUsed: false,
+      };
+    }
+  }
+
   const [facts, scope] = await Promise.all([
     buildContext(role, page.accountId, message),
     buildActionScope(role, userId, page),
@@ -405,4 +421,45 @@ ${facts}`;
   }
 
   return { reply, executed, clarify, suggestions, modelUsed: true };
+}
+
+async function maybeTamCaseReply(caseId: string, message: string): Promise<string | null> {
+  const q = message.toLowerCase();
+  const c = await getCase(caseId);
+  if (!c) return null;
+  const [notes, history] = await Promise.all([
+    getNotesForCase(caseId),
+    getCaseHistory(caseId),
+  ]);
+
+  if (/summari[sz]e|history|catch.*up/.test(q)) {
+    const s = summariseCase(c, notes, history);
+    return [
+      `${c.title}: ${s.headline}.`,
+      ...s.bullets.slice(0, 3),
+      `Next: ${s.suggestion}`,
+    ].join("\n");
+  }
+
+  if (/sales.*promise|promise.*sales|sales context/.test(q)) {
+    const handoff = history.find((e) => /sales|handoff|promis|pilot|deal/i.test(e.body));
+    const salesFacing = notes.find((n) => n.visibility !== "internal");
+    if (handoff) return `Sales context on this case: ${handoff.body}`;
+    if (salesFacing) return `Sales-facing context recorded on the case: ${salesFacing.body}`;
+    return "No sales promise is recorded on this case timeline.";
+  }
+
+  if (/3rd|third|party|vendor|blocked|external/.test(q)) {
+    const req = requestStatus(c, notes);
+    if (c.escalatedToThirdParty) {
+      const latest = history.find((e) => e.kind === "escalation");
+      const waited = latest
+        ? Math.max(0, Math.floor((Date.now() - new Date(latest.createdAt).getTime()) / 86_400_000))
+        : caseAgeDays(c);
+      return `Yes. This case is ${req.label.toLowerCase()}${c.thirdPartyReference ? ` (${c.thirdPartyReference})` : ""}; waiting ${waited}d. ${latest?.body ?? ""}`.trim();
+    }
+    return `No external dependency is recorded. Current status: ${req.label}; ${slaInfo(c).label}.`;
+  }
+
+  return null;
 }

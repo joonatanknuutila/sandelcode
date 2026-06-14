@@ -293,6 +293,7 @@ export function mapCase(c: Tables<"cases">): Case {
     slaDueDate: c.sla_due_date ?? undefined,
     resolvedAt: c.resolved_at ?? undefined,
     escalatedToThirdParty: c.is_escalated_to_third_party,
+    thirdPartyReference: c.third_party_reference ?? undefined,
   };
 }
 
@@ -403,6 +404,7 @@ const SERVICE_EVENT_KINDS = new Set<ServiceEventKind>([
   "case_opened",
   "case_resolved",
   "escalation",
+  "status_change",
   "stage_change",
   "offer_sent",
   "call",

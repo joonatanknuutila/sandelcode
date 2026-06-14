@@ -1,4 +1,4 @@
-import { getAccountsForTam, getConversations, getCurrentUser } from "@/lib/db";
+import { getAccountsForTam, getConversations, getCurrentUserForRole } from "@/lib/db";
 import { InboxScreen } from "@/components/Inbox";
 
 // TAM inbox — scoped to the accounts the TAM has cases on.
@@ -8,7 +8,7 @@ export default async function TamInboxPage({
   searchParams: Promise<{ c?: string }>;
 }) {
   const { c } = await searchParams;
-  const user = await getCurrentUser();
+  const user = await getCurrentUserForRole("tam");
   const accounts = user ? await getAccountsForTam(user.id) : [];
   const conversations = await getConversations({
     accountIds: accounts.map((a) => a.id),

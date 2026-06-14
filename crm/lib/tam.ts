@@ -35,6 +35,7 @@ export type ServiceEventKind =
   | "case_opened"
   | "case_resolved"
   | "escalation"
+  | "status_change"
   | "stage_change"
   | "offer_sent"
   | "call"
@@ -136,7 +137,7 @@ export function requestStatus(c: Case, notes: CaseNote[] = []): RequestStatus {
   if (latestWorking && /\?\s*$/.test(latestWorking.body.trim())) {
     return { waitingOn: "customer", label: "Waiting on customer reply" };
   }
-  return { waitingOn: "hmd", label: "Action with HMD" };
+  return { waitingOn: "hmd", label: "HMD owns next action" };
 }
 
 // --- Case summary (the AI hint) --------------------------------------------

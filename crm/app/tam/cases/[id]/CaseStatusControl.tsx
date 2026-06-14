@@ -36,7 +36,12 @@ export function CaseStatusControl({
 }) {
   const [isPending, startTransition] = useTransition();
   const [escalateOpen, setEscalateOpen] = useState(false);
+  const [partyValue, setPartyValue] = useState("3rd-party SOC");
+  const [escalationStatus, setEscalationStatus] = useState<"waiting" | "replied" | "resolved">("waiting");
   const [refValue, setRefValue] = useState("");
+  const [escalationDetail, setEscalationDetail] = useState("");
+  const [resolveOpen, setResolveOpen] = useState(false);
+  const [resolution, setResolution] = useState("");
   const [reassignOpen, setReassignOpen] = useState(false);
   const [selectedTam, setSelectedTam] = useState("");
 
@@ -46,18 +51,17 @@ export function CaseStatusControl({
       setEscalateOpen(true);
       return;
     }
+    if (next === "resolved") {
+      setResolveOpen(true);
+      return;
+    }
     startTransition(async () => {
       try {
-        if (next === "resolved") {
-          await resolveCaseAction(caseId);
-          toast("Case resolved — moved to recently resolved.", { variant: "success" });
-        } else {
-          await setCaseStatusAction(caseId, next);
-          toast(
-            next === "in_progress" ? "Marked in progress." : "Case reopened.",
-            { variant: "success" },
-          );
-        }
+        await setCaseStatusAction(caseId, next);
+        toast(
+          next === "in_progress" ? "Marked in progress." : "Case reopened.",
+          { variant: "success" },
+        );
       } catch {
         toast("Couldn't update the status.", { variant: "error" });
       }
@@ -68,12 +72,39 @@ export function CaseStatusControl({
     e.preventDefault();
     startTransition(async () => {
       try {
-        await escalateCaseAction(caseId, refValue.trim() || undefined);
-        toast("Escalated to 3rd-party vendor.", { variant: "warning" });
+        await escalateCaseAction(caseId, {
+          party: partyValue,
+          status: escalationStatus,
+          reference: refValue,
+          detail: escalationDetail,
+        });
+        toast(
+          escalationStatus === "waiting"
+            ? "Case is waiting on an external party."
+            : "3rd-party update recorded.",
+          { variant: "warning" },
+        );
         setEscalateOpen(false);
+        setPartyValue("3rd-party SOC");
+        setEscalationStatus("waiting");
         setRefValue("");
+        setEscalationDetail("");
       } catch {
         toast("Couldn't escalate the case.", { variant: "error" });
+      }
+    });
+  }
+
+  function submitResolve(e: React.FormEvent) {
+    e.preventDefault();
+    startTransition(async () => {
+      try {
+        await resolveCaseAction(caseId, resolution);
+        toast("Case resolved — resolution recorded.", { variant: "success" });
+        setResolveOpen(false);
+        setResolution("");
+      } catch {
+        toast("Couldn't resolve the case.", { variant: "error" });
       }
     });
   }
@@ -130,18 +161,49 @@ export function CaseStatusControl({
       </button>
 
       {/* Escalate — optional vendor reference */}
-      <Modal open={escalateOpen} onClose={() => setEscalateOpen(false)} title="Escalate to 3rd-party vendor">
+      <Modal open={escalateOpen} onClose={() => setEscalateOpen(false)} title="Escalate to 3rd party">
         <form onSubmit={submitEscalate} className="space-y-4">
           <p className="text-sm text-muted">
-            Sets the case to <strong>escalated</strong> and raises the third-party flag.
-            Optionally add a vendor ticket or RMA reference.
+            Logs the external dependency on the case timeline and keeps the case
+            visibly waiting on that party until it is resolved.
           </p>
+          <label className="block text-sm">
+            <span className="mb-1 block text-xs font-medium uppercase tracking-wide text-muted">
+              Party
+            </span>
+            <input
+              value={partyValue}
+              onChange={(e) => setPartyValue(e.target.value)}
+              placeholder="e.g. 3rd-party SOC, MDM vendor, carrier"
+              className="w-full rounded-md border border-border bg-background px-2 py-1.5 text-sm outline-none focus:border-hmd-teal-600"
+              disabled={isPending}
+            />
+          </label>
+          <Select
+            label="Escalation status"
+            options={[
+              { value: "waiting", label: "Waiting" },
+              { value: "replied", label: "Replied" },
+              { value: "resolved", label: "External issue resolved" },
+            ]}
+            value={escalationStatus}
+            onChange={(e) => setEscalationStatus(e.target.value as "waiting" | "replied" | "resolved")}
+            disabled={isPending}
+          />
           <Textarea
-            label="Vendor reference (optional)"
-            placeholder="e.g. JIRA-1234, RMA-5678, Nokia #9ABC…"
+            label="Reference"
+            placeholder="e.g. SOC-7741, RMA-5678"
             rows={2}
             value={refValue}
             onChange={(e) => setRefValue(e.target.value)}
+            disabled={isPending}
+          />
+          <Textarea
+            label="What happened?"
+            placeholder="What did you ask for, or what did they reply?"
+            rows={3}
+            value={escalationDetail}
+            onChange={(e) => setEscalationDetail(e.target.value)}
             disabled={isPending}
           />
           <div className="flex justify-end gap-2">
@@ -149,7 +211,33 @@ export function CaseStatusControl({
               Cancel
             </Button>
             <Button type="submit" variant="primary" disabled={isPending}>
-              {isPending ? "Escalating…" : "Escalate"}
+              {isPending ? "Recording…" : "Record escalation"}
+            </Button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Resolve — always capture the resolution while closing. */}
+      <Modal open={resolveOpen} onClose={() => setResolveOpen(false)} title="Resolve case">
+        <form onSubmit={submitResolve} className="space-y-4">
+          <p className="text-sm text-muted">
+            Record the resolution before closing so it stays on the case history
+            instead of disappearing into email.
+          </p>
+          <Textarea
+            label="Resolution"
+            placeholder="What fixed it? What should the next TAM know?"
+            rows={4}
+            value={resolution}
+            onChange={(e) => setResolution(e.target.value)}
+            disabled={isPending}
+          />
+          <div className="flex justify-end gap-2">
+            <Button type="button" variant="secondary" onClick={() => setResolveOpen(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" variant="primary" disabled={isPending || !resolution.trim()}>
+              {isPending ? "Resolving…" : "Resolve and record"}
             </Button>
           </div>
         </form>
