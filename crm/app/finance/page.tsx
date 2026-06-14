@@ -264,6 +264,14 @@ export default async function FinanceView({
       })),
     ),
     discount: discountExposure(pendingOffers),
+    discountTopOffers: [...pendingApprovals]
+      .sort((a, b) => b.total - a.total)
+      .slice(0, 5)
+      .map((o) => ({
+        label: `${o.accountName} — ${o.dealName}`,
+        total: o.total,
+        discountPct: o.maxDiscountPct,
+      })),
   };
 
   return (

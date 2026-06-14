@@ -50,6 +50,7 @@ export interface FinanceDashboardData {
 
   confidence: ConfidenceBucket[];
   discount: DiscountExposure;
+  discountTopOffers: { label: string; total: number; discountPct: number }[];
 }
 
 const BAND_COLOR: Record<ConfidenceBucket["band"], string> = {
@@ -221,12 +222,33 @@ export function FinanceDashboard({ data }: { data: FinanceDashboardData }) {
         {data.discount.count === 0 ? (
           <p className="text-sm text-muted">Nothing awaiting the Finance gate — no discount exposure right now.</p>
         ) : (
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-            <Stat label="Awaiting approval" value={eur(data.discount.totalValue)} tone="warning" />
-            <Stat label="Offers in queue" value={num(data.discount.count)} />
-            <Stat label="Avg discount" value={`${data.discount.avgDiscount}%`} />
-            <Stat label="Max discount" value={`${data.discount.maxDiscount}%`} tone="danger" />
-          </div>
+          <>
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+              <Stat label="Awaiting approval" value={eur(data.discount.totalValue)} tone="warning" />
+              <Stat label="Offers in queue" value={num(data.discount.count)} />
+              <Stat label="Avg discount" value={`${data.discount.avgDiscount}%`} />
+              <Stat label="Max discount" value={`${data.discount.maxDiscount}%`} tone="danger" />
+            </div>
+            {data.discountTopOffers.length > 0 && (
+              <ul className="mt-4 border-t border-border">
+                {data.discountTopOffers.map((o, i) => (
+                  <li
+                    key={i}
+                    className="flex items-center justify-between gap-3 border-b border-border py-2 text-sm"
+                  >
+                    <span className="truncate text-foreground">{o.label}</span>
+                    <span className="flex shrink-0 items-center gap-3">
+                      <span className="text-muted">{o.discountPct}% off</span>
+                      <span className="font-medium text-foreground">{eur(o.total)}</span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <p className="mt-3 text-xs text-muted">
+              Live approval queue — not affected by the Period filter above.
+            </p>
+          </>
         )}
       </Card>
     </div>
