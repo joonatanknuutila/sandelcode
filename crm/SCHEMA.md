@@ -18,7 +18,7 @@ Default win-probability per stage (used for weighted forecast until HMD gives us
 - **contacts** `(id, account_id, name, title, email, phone, is_primary)`
 - **products** `(id, sku, name, category, list_price_eur, active)` — category ∈ device | accessory
 - **services** `(id, sku, name, type, invoicing_model, unit_price_eur, active)` — type ∈ internal | third_party; invoicing_model ∈ one_off | fixed_term | monthly_recurring
-- **deals** `(id, account_id, name, channel, stage, owner_rep_id, currency, total_value_3yr_eur, expected_close, created_at, last_activity_at, lost_reason)`
+- **deals** `(id, account_id, name, channel, stage, owner_rep_id, currency, total_value_3yr_eur, expected_close, created_at, last_activity_at, lost_reason, parent_deal_id)` — `parent_deal_id` (nullable, self-FK) links a follow-on deal to its original opportunity (brief §2.1)
 - **deal_forecast** `(id, deal_id, period, device_units, device_revenue_eur, service_revenue_eur)` — period = `YYYY-Qn`, time-phased over ~3 years; device vs service kept **separate** (brief 2.2)
 - **offers** `(id, deal_id, account_id, version, status, discount_pct, justification, total_eur, created_by, created_at)` — status ∈ draft | pending_sm | pending_finance | approved | rejected
 - **offer_lines** `(id, offer_id, product_id, service_id, qty, unit_price_eur, discount_pct, line_total_eur)` (exactly one of product_id/service_id set)
