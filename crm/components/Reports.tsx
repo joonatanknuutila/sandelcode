@@ -7,7 +7,6 @@ import {
 } from "@/lib/db";
 import {
   CaseStatus,
-  Deal,
   STAGE_LABELS,
   STAGE_ORDER,
   Stage,

@@ -19,7 +19,6 @@ import "server-only";
 import { ChatMessage, complete } from "./provider";
 import { ask, buildContext } from "./assistant";
 import {
-  getAccount,
   getAccounts,
   getAllCases,
   getCase,

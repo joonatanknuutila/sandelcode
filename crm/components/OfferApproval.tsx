@@ -40,6 +40,26 @@ const GATE_LABEL = {
   finance: "Finance approval",
 } as const;
 
+/** Human-readable rendering of the raw offer status enum (never show the DB
+ *  string like "pending_finance_approval" straight to the user). */
+function humanStatus(status: string): string {
+  switch (status) {
+    case "approved":
+      return "Approved & locked";
+    case "rejected":
+      return "Rejected";
+    case "pending_finance_approval":
+    case "pending_finance":
+      return "Pending Finance approval";
+    case "pending_sm":
+      return "Pending SM approval";
+    case "draft":
+      return "Draft";
+    default:
+      return status.replace(/_/g, " ");
+  }
+}
+
 /** Plain-English outcome for the resolved badge, derived from the live status. */
 function outcomeLabel(
   decision: Decision,
@@ -154,7 +174,7 @@ export function OfferApproval({
                     <p className="text-xs text-muted">
                       Recorded · status now{" "}
                       <span className="font-medium text-foreground">
-                        {r.status}
+                        {humanStatus(r.status)}
                       </span>
                       . The rep has been notified.
                     </p>
