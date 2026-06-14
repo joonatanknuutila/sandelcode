@@ -17,14 +17,14 @@
 // Env (.env.local, never hardcoded):
 //   GOOGLE_VERTEX_PROJECT     e.g. ferrous-wonder-491213-e7  (or GOOGLE_CLOUD_PROJECT)
 //   GOOGLE_VERTEX_LOCATION    default us-central1 (e.g. europe-west1 for EU)
-//   GOOGLE_VERTEX_MODEL       default gemini-2.5-flash
+//   GOOGLE_VERTEX_MODEL       default gemini-2.5-pro
 //
 // --- Gemini API key (AI Studio) — works on Vercel serverless ----------------
 // A plain Gemini Developer API key needs no IAM, so unlike Vertex it runs on
 // serverless. Same generateContent wire format as Vertex, different host/auth.
 // This is the same endpoint + key enrich.ts uses for web-grounded calls.
 //   GEMINI_API_KEY   server-only key (NEVER NEXT_PUBLIC_*). Absent => skipped.
-//   GEMINI_MODEL     optional, default gemini-2.5-flash.
+//   GEMINI_MODEL     optional, default gemini-2.5-pro.
 //
 // --- Azure OpenAI — fallback ------------------------------------------------
 //   AZURE_OPENAI_ENDPOINT / AZURE_OPENAI_API_KEY / AZURE_OPENAI_DEPLOYMENT
@@ -104,6 +104,35 @@ function geminiBody(
       parts: [{ text: m.content }],
     }));
 
+  // Thinking control. FLASH models let us disable thinking (budget 0) to cut
+  // latency/cost, and these grounded CRM tasks don't need it. PRO / Gemini-3
+  // models REQUIRE thinking — sending budget 0 is a hard 400 — so we leave their
+  // default thinking on (or honour an explicit positive override). Thinking
+  // tokens are spent against maxOutputTokens, so thinking models get extra
+  // headroom or the visible answer can come back empty.
+  const supportsZeroThinking = /flash/.test(model);
+  const isThinkingModel = /gemini-(2\.5|3)/.test(model);
+  const envBudget =
+    process.env.GOOGLE_VERTEX_THINKING_BUDGET != null
+      ? Number(process.env.GOOGLE_VERTEX_THINKING_BUDGET)
+      : null;
+  const baseMax = opts.maxTokens ?? 700;
+
+  let thinkingConfig = {};
+  let maxOutputTokens = baseMax;
+  if (supportsZeroThinking) {
+    // Flash: thinking off by default (fast/cheap) — these grounded tasks don't
+    // need it. Overridable via GOOGLE_VERTEX_THINKING_BUDGET.
+    thinkingConfig = { thinkingConfig: { thinkingBudget: envBudget ?? 0 } };
+  } else if (isThinkingModel) {
+    // Pro / Gemini-3: thinking is MANDATORY (budget 0 → 400) and thinking tokens
+    // are billed against maxOutputTokens, so a small cap returns an EMPTY answer.
+    // Bound the thinking and give the visible reply generous headroom on top.
+    const budget = envBudget != null && envBudget > 0 ? envBudget : 2048;
+    thinkingConfig = { thinkingConfig: { thinkingBudget: budget } };
+    maxOutputTokens = Math.max(baseMax + budget + 1024, 8192);
+  }
+
   return {
     ...(systemText
       ? { systemInstruction: { parts: [{ text: systemText }] } }
@@ -111,21 +140,9 @@ function geminiBody(
     contents,
     generationConfig: {
       temperature: opts.temperature ?? 0.2,
-      maxOutputTokens: opts.maxTokens ?? 700,
+      maxOutputTokens,
       ...(opts.json ? { responseMimeType: "application/json" } : {}),
-      // Gemini 2.5+ "thinks" by default, which eats the output budget (so a
-      // small maxOutputTokens can return NO text) and adds latency. These
-      // grounded CRM tasks don't need it — disable it (override with
-      // GOOGLE_VERTEX_THINKING_BUDGET). Omitted for non-thinking models.
-      ...(/gemini-(2\.5|3)/.test(model)
-        ? {
-            thinkingConfig: {
-              thinkingBudget: Number(
-                process.env.GOOGLE_VERTEX_THINKING_BUDGET ?? 0,
-              ),
-            },
-          }
-        : {}),
+      ...thinkingConfig,
     },
   };
 }
@@ -149,7 +166,7 @@ async function completeGeminiApiKey(
   messages: ChatMessage[],
   opts: CompleteOptions,
 ): Promise<string | null> {
-  const model = process.env.GEMINI_MODEL ?? "gemini-2.5-flash";
+  const model = process.env.GEMINI_MODEL ?? "gemini-2.5-pro";
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
 
   try {
@@ -202,7 +219,7 @@ async function completeVertex(
   const project =
     process.env.GOOGLE_VERTEX_PROJECT ?? process.env.GOOGLE_CLOUD_PROJECT!;
   const location = process.env.GOOGLE_VERTEX_LOCATION ?? "us-central1";
-  const model = process.env.GOOGLE_VERTEX_MODEL ?? "gemini-2.5-flash";
+  const model = process.env.GOOGLE_VERTEX_MODEL ?? "gemini-2.5-pro";
 
   const token = await vertexAccessToken();
   if (!token) return null;

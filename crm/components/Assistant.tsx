@@ -101,7 +101,7 @@ export function Assistant({
             <button
               key={s}
               onClick={() => send(s)}
-              className="rounded-full border border-border px-2.5 py-1 text-xs text-muted hover:border-hmd-teal-600 hover:text-foreground"
+              className="rounded-full border border-hmd-teal/60 bg-hmd-teal/15 px-2.5 py-1 text-xs font-medium text-hmd-teal hover:bg-hmd-teal/25 hover:border-hmd-teal"
             >
               {s}
             </button>

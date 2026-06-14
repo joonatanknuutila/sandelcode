@@ -364,7 +364,7 @@ export function AgentDock({ role }: { role: Role }) {
                               className="flex items-center justify-between gap-2 rounded-lg border border-border bg-background px-3 py-2 text-xs"
                             >
                               <span className={a.undone ? "text-muted line-through" : "text-foreground"}>
-                                <span className="mr-1 text-hmd-teal-700">✓</span>
+                                <span className="mr-1 font-bold text-hmd-teal">✓</span>
                                 {a.label}
                               </span>
                               {a.undone ? (
@@ -406,7 +406,7 @@ export function AgentDock({ role }: { role: Role }) {
                                 key={si}
                                 onClick={() => send(s)}
                                 disabled={busy}
-                                className="rounded-full border border-hmd-teal-600/50 bg-hmd-teal/10 px-3 py-1.5 text-xs font-medium text-hmd-teal-700 hover:bg-hmd-teal/20 disabled:opacity-40"
+                                className="rounded-full border border-hmd-teal/60 bg-hmd-teal/20 px-3 py-1.5 text-xs font-semibold text-hmd-teal hover:bg-hmd-teal/30 hover:border-hmd-teal disabled:opacity-40"
                               >
                                 {s}
                               </button>
@@ -477,7 +477,7 @@ function BriefView({ brief, onPick }: { brief: Brief | null; onPick: (prompt: st
               <button
                 key={i}
                 onClick={() => onPick(s.prompt)}
-                className="rounded-lg border border-border bg-background px-3 py-2 text-left text-sm text-foreground hover:border-hmd-teal-600"
+                className="rounded-lg border border-hmd-teal/40 bg-hmd-teal/10 px-3 py-2 text-left text-sm font-medium text-foreground hover:border-hmd-teal hover:bg-hmd-teal/20"
               >
                 {s.label}
               </button>
