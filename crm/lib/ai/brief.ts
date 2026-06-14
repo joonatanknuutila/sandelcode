@@ -10,12 +10,14 @@ import {
   getAllCases,
   getCasesForTam,
   getDealsForRep,
+  getOffersByStatus,
   getOpenDeals,
   isAtRisk,
   isOverdue,
   isStalled,
   weightedValue,
 } from "@/lib/db";
+import { computeForecast } from "./forecast";
 import { slaInfo, triageSort } from "@/lib/tam";
 import { Role, STAGE_LABELS } from "@/lib/types";
 import { eur } from "@/lib/format";
@@ -34,7 +36,49 @@ export interface Brief {
 
 export async function buildBrief(role: Role, userId: string | null): Promise<Brief> {
   if (role === "tam") return tamBrief(userId);
+  if (role === "finance") return financeBrief();
   return salesBrief(role, userId);
+}
+
+// Finance gets a numbers-first lens (not the sales-manager pipeline view):
+// weighted forecast bands + the approvals actually sitting in their queue.
+async function financeBrief(): Promise<Brief> {
+  const [f, pendingFinance] = await Promise.all([
+    computeForecast(),
+    getOffersByStatus("pending_finance"),
+  ]);
+
+  const items: string[] = [
+    `Weighted pipeline ${eur(f.weightedPipeline, false)} · bankable (committed) ${eur(f.committed, false)}.`,
+    `${eur(f.atRisk, false)} weighted sits in mid-stage (at-risk) deals.`,
+    pendingFinance.length
+      ? `${pendingFinance.length} offer${pendingFinance.length === 1 ? "" : "s"} awaiting your finance sign-off.`
+      : "No offers waiting on finance approval.",
+  ];
+
+  const suggestions: Suggestion[] = [];
+  if (pendingFinance.length) {
+    suggestions.push({
+      label: "Review offers awaiting approval",
+      prompt: "Which offers are awaiting finance approval, and what discount does each carry?",
+    });
+  }
+  suggestions.push({
+    label: "Break down the forecast",
+    prompt: "Break down the weighted forecast into committed, at-risk and upside.",
+  });
+  suggestions.push({
+    label: "Where's the revenue risk?",
+    prompt: "Which deals carry the most weighted revenue at risk right now?",
+  });
+
+  return {
+    headline: pendingFinance.length
+      ? `${pendingFinance.length} offer${pendingFinance.length === 1 ? "" : "s"} need finance sign-off`
+      : "Forecast is in good shape",
+    items,
+    suggestions,
+  };
 }
 
 async function salesBrief(role: Role, userId: string | null): Promise<Brief> {
