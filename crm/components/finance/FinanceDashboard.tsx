@@ -133,6 +133,10 @@ export function FinanceDashboard({ data }: { data: FinanceDashboardData }) {
           <Legend swatch={CHART.weighted} label="At-risk" value={eur(data.atRisk)} />
           <Legend swatch={CHART.target} label="Target" value={eur(data.target)} line />
         </div>
+        <p className="mt-3 text-xs text-muted">
+          &ldquo;Committed&rdquo; = won + deals ≥80% confidence (bankable); at-risk and upside cover
+          the rest. The detail grid below lists won-only committed per quarter.
+        </p>
       </Card>
 
       {/* 3 — time-phased revenue ∥ device vs service */}
