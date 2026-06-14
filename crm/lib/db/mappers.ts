@@ -270,6 +270,7 @@ export function mapDeal(
     expectedCloseDate: d.expected_close_date ?? "",
     createdAt: d.created_at,
     updatedAt: d.last_activity_at,
+    parentDealId: d.parent_deal_id ?? undefined,
   };
 }
 

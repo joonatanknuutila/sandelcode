@@ -56,6 +56,7 @@ export default async function AccountDetail({
           tamUsers={tamUsers}
           defaultTamId={account.tamId}
           sensitive={isSensitiveIndustry(account.industry)}
+          existingDeals={deals.map((d) => ({ id: d.id, name: d.name }))}
         />
       }
     />

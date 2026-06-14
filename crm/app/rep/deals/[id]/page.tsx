@@ -4,6 +4,7 @@ import {
   getAccount,
   getActivitiesForDeal,
   getDeal,
+  getDealsForAccount,
   getOffersForDeal,
 } from "@/lib/db";
 import { nextBestAction } from "@/lib/ai";
@@ -39,12 +40,19 @@ export default async function DealDetail({
   const deal = await getDeal(id);
   if (!deal) notFound();
 
-  const [account, activities, offers] = await Promise.all([
+  const [account, activities, offers, accountDeals] = await Promise.all([
     getAccount(deal.accountId),
     getActivitiesForDeal(id),
     getOffersForDeal(id),
+    getDealsForAccount(deal.accountId),
   ]);
   if (!account) notFound();
+
+  // Follow-on / original-opportunity linkage (brief §2.1).
+  const parentDeal = deal.parentDealId
+    ? accountDeals.find((d) => d.id === deal.parentDealId)
+    : undefined;
+  const followOnDeals = accountDeals.filter((d) => d.parentDealId === deal.id);
 
   // Grounded NBA — async, uses full timeline + offers
   const nba = await nextBestAction(deal, activities, offers);
@@ -92,6 +100,44 @@ export default async function DealDetail({
           </Link>
         </div>
       </div>
+
+      {/* Follow-on / original-opportunity linkage (brief §2.1) */}
+      {(parentDeal || followOnDeals.length > 0) && (
+        <Card className="space-y-2 p-4">
+          {parentDeal && (
+            <p className="text-base">
+              <span className="text-muted">Follow-on order of</span>{" "}
+              <Link
+                href={`/rep/deals/${parentDeal.id}`}
+                className="font-medium text-foreground underline-offset-2 hover:underline"
+              >
+                {parentDeal.name}
+              </Link>{" "}
+              <span className="text-muted">
+                — the original {eur(parentDeal.tcv, false)} opportunity.
+              </span>
+            </p>
+          )}
+          {followOnDeals.length > 0 && (
+            <div className="text-base">
+              <span className="text-muted">Follow-on orders from this deal:</span>
+              <ul className="mt-1 space-y-1">
+                {followOnDeals.map((f) => (
+                  <li key={f.id}>
+                    <Link
+                      href={`/rep/deals/${f.id}`}
+                      className="font-medium text-foreground underline-offset-2 hover:underline"
+                    >
+                      {f.name}
+                    </Link>{" "}
+                    <span className="text-muted">· {eur(f.tcv, false)}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </Card>
+      )}
 
       <Card className="p-4">
         <StageStepper stage={deal.stage} channel={deal.channel} plain />

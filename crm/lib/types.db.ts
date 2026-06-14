@@ -229,6 +229,7 @@ export type Database = {
           last_activity_at: string
           lost_reason: string | null
           owner_id: string | null
+          parent_deal_id: string | null
           stage: Database["public"]["Enums"]["deal_stage"]
           title: string
           updated_at: string
@@ -244,6 +245,7 @@ export type Database = {
           last_activity_at?: string
           lost_reason?: string | null
           owner_id?: string | null
+          parent_deal_id?: string | null
           stage?: Database["public"]["Enums"]["deal_stage"]
           title: string
           updated_at?: string

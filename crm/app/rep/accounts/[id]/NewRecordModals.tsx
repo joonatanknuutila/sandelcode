@@ -33,11 +33,18 @@ function stageOptionsFor(channel: Channel) {
 // New Deal modal
 // ---------------------------------------------------------------------------
 
+interface DealRef {
+  id: string;
+  name: string;
+}
+
 interface NewDealModalProps {
   open: boolean;
   onClose: () => void;
   accountId: string;
   currentUserId: string;
+  /** Existing deals on this account — to optionally mark a follow-on order. */
+  existingDeals?: DealRef[];
 }
 
 export function NewDealModal({
@@ -45,6 +52,7 @@ export function NewDealModal({
   onClose,
   accountId,
   currentUserId,
+  existingDeals = [],
 }: NewDealModalProps) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -52,6 +60,7 @@ export function NewDealModal({
   const [channel, setChannel] = useState<Channel>("direct");
   const [stage, setStage] = useState<Stage>("interest");
   const [closeDate, setCloseDate] = useState("");
+  const [parentDealId, setParentDealId] = useState("");
 
   // Switching to reseller while on the direct-only "contract negotiation" stage
   // would submit a stage that channel can't have — snap back to interest.
@@ -67,6 +76,7 @@ export function NewDealModal({
     setChannel("direct");
     setStage("interest");
     setCloseDate("");
+    setParentDealId("");
     onClose();
   }
 
@@ -82,6 +92,7 @@ export function NewDealModal({
           stage,
           expectedCloseDate: closeDate || undefined,
           ownerId: currentUserId,
+          parentDealId: parentDealId || undefined,
         });
         toast("Deal created", { variant: "success" });
         handleClose();
@@ -127,6 +138,15 @@ export function NewDealModal({
           value={closeDate}
           onChange={(e) => setCloseDate(e.target.value)}
         />
+        {existingDeals.length > 0 && (
+          <Select
+            label="Follow-on of (optional)"
+            value={parentDealId}
+            onChange={(e) => setParentDealId(e.target.value)}
+            placeholder="Standalone — not a follow-on"
+            options={existingDeals.map((d) => ({ value: d.id, label: d.name }))}
+          />
+        )}
         <div className="flex justify-end gap-2 pt-2">
           <Button
             type="button"
@@ -387,6 +407,8 @@ interface AccountActionBarProps {
   defaultTamId?: string;
   /** Defense / government account: enrichment is off until the rep opts in. */
   sensitive: boolean;
+  /** Existing deals on this account, for the "follow-on of" picker. */
+  existingDeals?: DealRef[];
 }
 
 export function AccountActionBar({
@@ -396,6 +418,7 @@ export function AccountActionBar({
   tamUsers,
   defaultTamId,
   sensitive,
+  existingDeals = [],
 }: AccountActionBarProps) {
   const [dealOpen, setDealOpen] = useState(false);
   const [caseOpen, setCaseOpen] = useState(false);
@@ -423,6 +446,7 @@ export function AccountActionBar({
         onClose={() => setDealOpen(false)}
         accountId={accountId}
         currentUserId={currentUserId}
+        existingDeals={existingDeals}
       />
       <NewCaseModal
         open={caseOpen}

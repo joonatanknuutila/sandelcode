@@ -165,6 +165,8 @@ export interface CreateDealInput {
   expectedCloseDate?: string;
   deviceUnitPrice?: number;
   winProbability?: number; // 0..1 (UI) — persisted as 0..100
+  /** Original opportunity this deal is a follow-on order of (brief §2.1). */
+  parentDealId?: string;
 }
 
 export async function createDeal(input: CreateDealInput): Promise<Deal> {
@@ -178,6 +180,7 @@ export async function createDeal(input: CreateDealInput): Promise<Deal> {
     stage: input.stage ? stageToDb(input.stage) : "interest_shown",
     expected_close_date: input.expectedCloseDate ?? null,
     device_unit_price: input.deviceUnitPrice ?? null,
+    parent_deal_id: input.parentDealId ?? null,
     win_probability:
       input.winProbability != null
         ? Math.round(input.winProbability * 100)
