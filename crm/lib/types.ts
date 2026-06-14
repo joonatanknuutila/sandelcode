@@ -182,6 +182,9 @@ export interface Case {
   assigneeId?: string;
   createdAt: string;
   slaDueDate?: string;
+  /** ISO timestamp the case was resolved, if it has been. Drives throughput
+   * and resolution-time metrics on the TAM dashboard. */
+  resolvedAt?: string;
   escalatedToThirdParty?: boolean;
 }
 

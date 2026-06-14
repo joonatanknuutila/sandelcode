@@ -10,6 +10,7 @@ import "server-only";
 import { createAdminClient } from "@/lib/supabase/admin";
 import type { Json } from "@/lib/types.db";
 import type { ExecutedAction } from "@/lib/ai/agent";
+import type { Role } from "@/lib/types";
 
 export interface ChatSummary {
   id: string;
@@ -31,27 +32,34 @@ export interface ChatWithMessages {
   messages: StoredMessage[];
 }
 
-/** A new, empty chat for a user. Title defaults; renamed from the first turn. */
+/** A new, empty chat for a user, scoped to the persona (role) it's started in.
+ *  Title defaults; renamed from the first turn. */
 export async function createChat(
   userId: string | null,
+  role: Role,
   title = "New chat",
 ): Promise<ChatSummary> {
   const admin = createAdminClient();
   const { data, error } = await admin
     .from("ai_chats")
-    .insert({ user_id: userId, title })
+    .insert({ user_id: userId, role, title })
     .select()
     .single();
   if (error || !data) throw new Error(error?.message ?? "Failed to create chat");
   return { id: data.id, title: data.title, updatedAt: data.updated_at };
 }
 
-/** A user's chats, most-recently-updated first. */
-export async function listChats(userId: string | null): Promise<ChatSummary[]> {
+/** A user's chats FOR ONE PERSONA, most-recently-updated first. History is
+ *  persona-specific — a rep never sees the TAM's chats and vice versa. */
+export async function listChats(
+  userId: string | null,
+  role: Role,
+): Promise<ChatSummary[]> {
   const admin = createAdminClient();
   let q = admin
     .from("ai_chats")
     .select("id, title, updated_at")
+    .eq("role", role)
     .order("updated_at", { ascending: false })
     .limit(50);
   q = userId ? q.eq("user_id", userId) : q.is("user_id", null);

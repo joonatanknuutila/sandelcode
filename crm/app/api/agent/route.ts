@@ -38,7 +38,7 @@ export async function POST(req: Request) {
     else chatId = undefined;
   }
   if (!chatId) {
-    const chat = await createChat(userId, message.trim().slice(0, 60));
+    const chat = await createChat(userId, role, message.trim().slice(0, 60));
     chatId = chat.id;
   }
 

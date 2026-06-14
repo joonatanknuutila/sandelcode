@@ -33,6 +33,7 @@ export const ROLES: Record<Role, RoleConfig> = {
       { label: "Accounts", href: "/tam/accounts" },
       { label: "Inbox", href: "/tam/inbox" },
       { label: "AI Assistant", href: "/tam/ai" },
+      { label: "Integrations", href: "/tam/integrations" },
     ],
   },
   sm: {

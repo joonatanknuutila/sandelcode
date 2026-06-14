@@ -6,7 +6,7 @@
 // age maths, request-tracking derivation and the deterministic AI case summary.
 // Those functions are pure: the pages fetch rows via lib/db and pass them in.
 
-import { Case, CasePriority } from "./types";
+import { Account, Case, CasePriority } from "./types";
 import { relativeDays } from "./format";
 
 // --- Services: what HMD runs for an account --------------------------------
@@ -207,4 +207,165 @@ export function getTamSummary(cases: Case[]): TamSummary {
     dueSoon: open.filter((c) => slaInfo(c).state === "soon").length,
     escalated: open.filter((c) => c.escalatedToThirdParty).length,
   };
+}
+
+// ---------------------------------------------------------------------------
+// Dashboard chart datasets — pure shapers over the case/account lists.
+//
+// Each returns a plain serialisable shape the (server) TamHealthOverview maps
+// to colours and hands to the SVG chart components. No DB, no React — so they
+// stay trivially testable and the page passes in already-fetched rows.
+// ---------------------------------------------------------------------------
+
+/** UTC calendar-day key (YYYY-MM-DD) for an ISO/date-only string. */
+function dayKey(iso: string): string {
+  const norm = iso.includes("T") ? iso : `${iso}T00:00:00Z`;
+  return new Date(norm).toISOString().slice(0, 10);
+}
+
+// --- SLA health donut: open cases split by SLA pressure --------------------
+
+export type SlaSegmentKey = "breach" | "soon" | "ok" | "none";
+
+export interface SlaBreakdown {
+  segments: { key: SlaSegmentKey; count: number }[];
+  /** Total open cases (the donut's denominator). */
+  total: number;
+  /** Share of open cases that are not breaching/soon, 0–100. */
+  onTrackPct: number;
+}
+
+const SLA_SEGMENT_ORDER: SlaSegmentKey[] = ["breach", "soon", "ok", "none"];
+
+export function slaBreakdown(cases: Case[]): SlaBreakdown {
+  const open = cases.filter((c) => c.status !== "resolved");
+  const counts: Record<SlaSegmentKey, number> = { breach: 0, soon: 0, ok: 0, none: 0 };
+  for (const c of open) {
+    const s = slaInfo(c).state;
+    // "met" only applies to resolved cases, which are filtered out above.
+    if (s === "breach" || s === "soon" || s === "ok" || s === "none") counts[s] += 1;
+  }
+  const onTrack = counts.ok + counts.none;
+  return {
+    segments: SLA_SEGMENT_ORDER.map((key) => ({ key, count: counts[key] })),
+    total: open.length,
+    onTrackPct: open.length > 0 ? Math.round((onTrack / open.length) * 100) : 0,
+  };
+}
+
+// --- Case flow: opened vs resolved per day over a trailing window ----------
+
+export interface FlowPoint {
+  /** YYYY-MM-DD (UTC). */
+  date: string;
+  opened: number;
+  resolved: number;
+}
+
+export function caseFlow(cases: Case[], days = 21): FlowPoint[] {
+  // Build the window of day-keys, oldest → newest, ending today (UTC).
+  const today = new Date();
+  const buckets = new Map<string, FlowPoint>();
+  const order: string[] = [];
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate() - i));
+    const key = d.toISOString().slice(0, 10);
+    order.push(key);
+    buckets.set(key, { date: key, opened: 0, resolved: 0 });
+  }
+  for (const c of cases) {
+    const opened = buckets.get(dayKey(c.createdAt));
+    if (opened) opened.opened += 1;
+    if (c.resolvedAt) {
+      const resolved = buckets.get(dayKey(c.resolvedAt));
+      if (resolved) resolved.resolved += 1;
+    }
+  }
+  return order.map((k) => buckets.get(k)!);
+}
+
+// --- Hotspots: open cases per account, split by SLA state ------------------
+
+export interface AccountLoad {
+  accountId: string;
+  name: string;
+  open: number;
+  breach: number;
+  soon: number;
+  ok: number;
+}
+
+export function openByAccount(
+  cases: Case[],
+  accounts: Pick<Account, "id" | "name">[],
+  limit = 6,
+): AccountLoad[] {
+  const nameById = new Map(accounts.map((a) => [a.id, a.name]));
+  const byAccount = new Map<string, AccountLoad>();
+  for (const c of cases) {
+    if (c.status === "resolved") continue;
+    let row = byAccount.get(c.accountId);
+    if (!row) {
+      row = {
+        accountId: c.accountId,
+        name: nameById.get(c.accountId) ?? "Unknown account",
+        open: 0,
+        breach: 0,
+        soon: 0,
+        ok: 0,
+      };
+      byAccount.set(c.accountId, row);
+    }
+    row.open += 1;
+    const s = slaInfo(c).state;
+    if (s === "breach") row.breach += 1;
+    else if (s === "soon") row.soon += 1;
+    else row.ok += 1; // ok + none both read as "healthy" here
+  }
+  return [...byAccount.values()]
+    // Breaching accounts first, then by sheer volume — the TAM's eyes go there.
+    .sort((a, b) => b.breach - a.breach || b.open - a.open)
+    .slice(0, limit);
+}
+
+// --- Priority mix: the urgency profile of the open queue -------------------
+
+export interface PrioritySlice {
+  priority: CasePriority;
+  count: number;
+}
+
+const PRIORITY_ORDER: CasePriority[] = ["urgent", "high", "medium", "low"];
+
+export function priorityMix(cases: Case[]): PrioritySlice[] {
+  const open = cases.filter((c) => c.status !== "resolved");
+  return PRIORITY_ORDER.map((priority) => ({
+    priority,
+    count: open.filter((c) => c.priority === priority).length,
+  }));
+}
+
+// --- Resolution time: how fast cases close ---------------------------------
+
+export interface ResolutionStats {
+  resolvedCount: number;
+  /** Median days from open → resolved, or null when nothing has resolved. */
+  medianDays: number | null;
+}
+
+export function resolutionStats(cases: Case[]): ResolutionStats {
+  const spans = cases
+    .filter((c) => c.status === "resolved" && c.resolvedAt)
+    .map((c) => {
+      const opened = new Date(c.createdAt.includes("T") ? c.createdAt : `${c.createdAt}T00:00:00Z`).getTime();
+      const closed = new Date(c.resolvedAt!).getTime();
+      return (closed - opened) / 86_400_000;
+    })
+    .filter((d) => Number.isFinite(d) && d >= 0)
+    .sort((a, b) => a - b);
+
+  if (spans.length === 0) return { resolvedCount: 0, medianDays: null };
+  const mid = Math.floor(spans.length / 2);
+  const median = spans.length % 2 === 0 ? (spans[mid - 1] + spans[mid]) / 2 : spans[mid];
+  return { resolvedCount: spans.length, medianDays: Math.round(median * 10) / 10 };
 }

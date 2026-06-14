@@ -66,13 +66,21 @@ export function AgentDock({ role }: { role: Role }) {
 
   const refreshChats = useCallback(async () => {
     try {
-      const res = await fetch("/api/agent/chats");
+      const res = await fetch(`/api/agent/chats?role=${role}`);
       const data = await res.json();
       setChats(data.chats ?? []);
     } catch {
       /* ignore */
     }
-  }, []);
+  }, [role]);
+
+  // Switching persona resets the conversation: a rep's chat must NOT continue as
+  // the TAM. History is reloaded per-persona by the effect below.
+  useEffect(() => {
+    setChatId(undefined);
+    setMessages([]);
+    setShowHistory(false);
+  }, [role]);
 
   // On open (and whenever the role changes), load the brief + history.
   useEffect(() => {

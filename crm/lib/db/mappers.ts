@@ -285,6 +285,7 @@ export function mapCase(c: Tables<"cases">): Case {
     assigneeId: c.assigned_tam_id ?? undefined,
     createdAt: c.created_at,
     slaDueDate: c.sla_due_date ?? undefined,
+    resolvedAt: c.resolved_at ?? undefined,
     escalatedToThirdParty: c.is_escalated_to_third_party,
   };
 }

@@ -5,6 +5,7 @@ import { Card, SectionTitle, StatTile } from "@/components/ui";
 import { CaseStatusBadge, PriorityBadge, SlaBadge, ThirdPartyFlag } from "./ui";
 import { Assistant } from "@/components/Assistant";
 import { QueueResolveButton } from "./QueueResolveButton";
+import { TamHealthOverview } from "./TamHealthOverview";
 
 // Technical Account Manager dashboard — the case queue, triaged.
 // Triage order = SLA pressure → priority → age, so the row that needs eyes
@@ -32,6 +33,9 @@ export default async function TamView() {
           priority and age.
         </p>
       </div>
+
+      {/* Visual health band — what's happening, at a glance. */}
+      <TamHealthOverview cases={all} accounts={accounts} />
 
       {/* KPIs */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
