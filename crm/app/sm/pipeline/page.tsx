@@ -12,8 +12,8 @@ import { BoardDeal, PipelineBoard, RepOption } from "@/components/PipelineBoard"
 import { reassignDealAction } from "../actions";
 
 // Sales Manager pipeline — the whole team's board. Filter by rep / stage /
-// channel, and reassign a deal inline. (The /sm war-room stays the dashboard;
-// this is the kanban the brief asks for.)
+// channel, restage cards by drag/drop, and reassign a deal inline. (The /sm
+// war-room stays the dashboard; this is the kanban the brief asks for.)
 function asStage(v: string | undefined): Stage | undefined {
   return v && STAGE_ORDER.includes(v as Stage) ? (v as Stage) : undefined;
 }
@@ -114,8 +114,8 @@ export default async function SmPipelinePage({
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Team board</h1>
         <p className="mt-1 text-sm text-muted">
-          Every rep&apos;s pipeline. Filter, then reassign a card to rebalance the
-          team.
+          Every rep&apos;s pipeline. Move cards through stages or reassign them to
+          rebalance the team.
         </p>
       </div>
 
@@ -193,7 +193,7 @@ export default async function SmPipelinePage({
 
       <PipelineBoard
         deals={boardDeals}
-        capabilities={{ canDrag: false, canReassign: true }}
+        capabilities={{ canDrag: true, canReassign: true }}
         reps={repOptions}
         reassignAction={reassignDealAction}
         dealHref="/rep/deals"

@@ -108,7 +108,8 @@ export function PipelineBoard({
   }
 
   return (
-    <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-7">
+    <div className="-mx-4 overflow-x-auto px-4 pb-3 md:mx-0 md:px-0">
+      <div className="flex min-w-max snap-x snap-mandatory gap-3">
       {STAGE_ORDER.map((stage) => {
         const colDeals = deals.filter((d) => stageOf(d) === stage);
         const colValue = colDeals.reduce((s, d) => s + d.tcv, 0);
@@ -119,7 +120,7 @@ export function PipelineBoard({
               if (capabilities.canDrag) e.preventDefault();
             }}
             onDrop={() => capabilities.canDrag && onDrop(stage)}
-            className="flex min-h-[8rem] flex-col rounded-xl border border-border bg-surface"
+            className="flex min-h-[8rem] w-[18rem] shrink-0 snap-start flex-col rounded-xl border border-border bg-surface sm:w-[20rem]"
           >
             <div className="border-b border-border px-3 py-2.5">
               <p className={`font-semibold text-foreground ${plain ? "text-sm" : "text-xs"}`}>
@@ -238,6 +239,7 @@ export function PipelineBoard({
           </div>
         );
       })}
+      </div>
     </div>
   );
 }
