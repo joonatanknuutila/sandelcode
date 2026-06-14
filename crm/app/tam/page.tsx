@@ -34,10 +34,7 @@ export default async function TamView() {
         </p>
       </div>
 
-      {/* Visual health band — what's happening, at a glance. */}
-      <TamHealthOverview cases={all} accounts={accounts} />
-
-      {/* KPIs */}
+      {/* KPIs — the instant "am I on top of it?" read, first. */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <StatTile label="Open cases" value={String(summary.openCases)} />
         <StatTile
@@ -59,8 +56,8 @@ export default async function TamView() {
         />
       </div>
 
-      {/* Assistant */}
-      <Assistant role="tam" scopeLabel="your case queue" />
+      {/* Visual health band — the shape behind the numbers. */}
+      <TamHealthOverview cases={all} accounts={accounts} />
 
       {/* Case queue */}
       <section>
@@ -104,6 +101,9 @@ export default async function TamView() {
           })}
         </div>
       </section>
+
+      {/* Assistant — a helper, sitting below the work it supports. */}
+      <Assistant role="tam" scopeLabel="your case queue" />
 
       {/* Recently resolved — kept for service-history context */}
       {resolved.length > 0 && (

@@ -1,7 +1,9 @@
 // HBars — a list of labelled, stacked horizontal bars (the account hotspots).
 // Bars share one scale (`max`) so lengths compare across rows. Pure CSS
 // group-hover reveals a per-row breakdown tooltip, so this stays a server
-// component — no client JS needed.
+// component — no client JS needed. Rows with an `href` become drill-in links.
+
+import Link from "next/link";
 
 export interface HBarSegment {
   key: string;
@@ -15,6 +17,8 @@ export interface HBarRow {
   label: string;
   total: number;
   segments: HBarSegment[];
+  /** When set, the row links here (e.g. the account detail page). */
+  href?: string;
 }
 
 export function HBars({
@@ -31,14 +35,18 @@ export function HBars({
   }
   const scale = (v: number) => (max > 0 ? (v / max) * 100 : 0);
 
+  const rowClass =
+    "group grid grid-cols-[6.5rem_1fr_1.75rem] items-center gap-3 text-sm sm:grid-cols-[8rem_1fr_1.75rem]";
+
   return (
     <div className="space-y-2.5">
-      {rows.map((row) => (
-        <div
-          key={row.id}
-          className="group grid grid-cols-[6.5rem_1fr_1.75rem] items-center gap-3 text-sm sm:grid-cols-[8rem_1fr_1.75rem]"
-        >
-          <span className="truncate text-muted" title={row.label}>
+      {rows.map((row) => {
+        const inner = (
+          <>
+          <span
+            className={`truncate text-muted ${row.href ? "group-hover:text-foreground" : ""}`}
+            title={row.label}
+          >
             {row.label}
           </span>
 
@@ -76,8 +84,23 @@ export function HBars({
           <span className="text-right font-medium tabular-nums text-foreground">
             {row.total}
           </span>
-        </div>
-      ))}
+          </>
+        );
+
+        return row.href ? (
+          <Link
+            key={row.id}
+            href={row.href}
+            className={`${rowClass} rounded-md transition-colors hover:bg-background/60`}
+          >
+            {inner}
+          </Link>
+        ) : (
+          <div key={row.id} className={rowClass}>
+            {inner}
+          </div>
+        );
+      })}
     </div>
   );
 }

@@ -21,6 +21,9 @@ import { Account, Case, CasePriority } from "@/lib/types";
 // hover with pure CSS.
 
 const TREND_DAYS = 21;
+// A median over one or two cases is fake precision — only show it once there's
+// a real sample, otherwise report the raw resolved count honestly.
+const MIN_FOR_MEDIAN = 3;
 
 const SLA_COLORS: Record<SlaSegmentKey, string> = {
   breach: "var(--danger)",
@@ -63,6 +66,8 @@ export function TamHealthOverview({
   const hotspots = openByAccount(cases, accounts, 6);
   const priorities = priorityMix(cases);
   const resolution = resolutionStats(cases);
+  const hasMedian =
+    resolution.medianDays != null && resolution.resolvedCount >= MIN_FOR_MEDIAN;
 
   const donutSegments = sla.segments.map((s) => ({
     key: s.key,
@@ -76,6 +81,7 @@ export function TamHealthOverview({
     id: h.accountId,
     label: h.name,
     total: h.open,
+    href: `/tam/accounts/${h.accountId}`,
     segments: [
       { key: "breach", label: "breached", value: h.breach, color: SLA_COLORS.breach },
       { key: "soon", label: "due soon", value: h.soon, color: SLA_COLORS.soon },
@@ -153,12 +159,16 @@ export function TamHealthOverview({
           <StackedBar segments={prioritySegments} />
           <div className="mt-4 border-t border-border pt-3">
             <p className="text-xs uppercase tracking-wide text-muted">
-              Median resolution
+              {hasMedian ? "Median resolution" : "Resolved"}
             </p>
             <p className="mt-0.5 text-lg font-semibold text-foreground">
-              {resolution.medianDays != null ? `${resolution.medianDays}d` : "—"}
+              {hasMedian
+                ? `${resolution.medianDays}d`
+                : String(resolution.resolvedCount)}
               <span className="ml-2 text-xs font-normal text-muted">
-                across {resolution.resolvedCount} resolved
+                {hasMedian
+                  ? `across ${resolution.resolvedCount} resolved`
+                  : "median needs 3+ resolved"}
               </span>
             </p>
           </div>

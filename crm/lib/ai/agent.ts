@@ -84,6 +84,9 @@ export interface AgentTurnResult {
   executed: ExecutedAction[];
   /** Questions the agent needs answered before it can act. */
   clarify: string[];
+  /** Adaptive one-tap follow-ups for THIS point in the conversation. They change
+   *  every turn based on what was just said/done — rendered as quick-reply chips. */
+  suggestions: string[];
   /** True when a live model produced the turn; false = read-only fallback. */
   modelUsed: boolean;
 }
@@ -332,12 +335,13 @@ ${TOOL_SPEC}
 
 RULES:
 - Only reference ids that appear in ACTION SCOPE. Never invent an id.
-- Take an action only when the user's intent is clear. If you are missing a required detail (which deal? which account? what should the note say?), DO NOT act — put a short question in "clarify" instead.
+- Take an action only when the user's intent is clear. If you are missing a required detail (which deal? which account? what should the note say?), DO NOT act — instead put a SHORT, FULL-SENTENCE question in "clarify" (e.g. "Which deal do you mean?"). NEVER put a bare field name like "dealId" in clarify.
 - Prefer the CURRENT PAGE entity when the user says "this/here".
 - Keep "reply" short (1-3 sentences). Describe what you did or asked.
+- ALWAYS propose up to 3 "suggestions": the most likely next steps the user would take RIGHT NOW given this turn. Each is a short imperative the user could tap to send next (≤6 words, e.g. "Move it to Customer test", "Draft the follow-up email", "Show me at-risk deals"). Adapt them every turn to what just happened; never repeat the user's last message.
 - Return STRICT JSON ONLY:
-{"reply": string, "actions": [{"tool": string, "args": object, "label": string}], "clarify": string[]}
-Use an empty array when there are no actions or no questions.
+{"reply": string, "actions": [{"tool": string, "args": object, "label": string}], "clarify": string[], "suggestions": string[]}
+Use an empty array when a field has no items.
 
 ACTION SCOPE:
 ${scope.text}
@@ -356,14 +360,14 @@ ${facts}`;
   if (!raw) {
     // No model: read-only grounded answer, no writes.
     const fallback = await ask(role, message, page.accountId);
-    return { reply: fallback.text, executed: [], clarify: [], modelUsed: false };
+    return { reply: fallback.text, executed: [], clarify: [], suggestions: [], modelUsed: false };
   }
 
-  let parsed: { reply?: string; actions?: RawAction[]; clarify?: string[] };
+  let parsed: { reply?: string; actions?: RawAction[]; clarify?: string[]; suggestions?: string[] };
   try {
     parsed = JSON.parse(raw);
   } catch {
-    return { reply: raw.trim(), executed: [], clarify: [], modelUsed: true };
+    return { reply: raw.trim(), executed: [], clarify: [], suggestions: [], modelUsed: true };
   }
 
   const executed: ExecutedAction[] = [];
@@ -377,7 +381,19 @@ ${facts}`;
   }
 
   const clarify = Array.isArray(parsed.clarify)
-    ? parsed.clarify.filter((q): q is string => typeof q === "string").slice(0, 4)
+    ? parsed.clarify
+        .filter((q): q is string => typeof q === "string" && q.trim().length > 0)
+        // Drop bare field-name "questions" (e.g. "dealId") the model sometimes emits.
+        .filter((q) => /\s/.test(q.trim()) || q.trim().endsWith("?"))
+        .slice(0, 4)
+    : [];
+
+  const suggestions = Array.isArray(parsed.suggestions)
+    ? parsed.suggestions
+        .filter((s): s is string => typeof s === "string" && s.trim().length > 0)
+        .map((s) => s.trim())
+        .filter((s) => s.toLowerCase() !== message.toLowerCase())
+        .slice(0, 3)
     : [];
 
   let reply = str(parsed.reply) ?? "";
@@ -389,5 +405,5 @@ ${facts}`;
         : "I'm not sure how to help with that yet.";
   }
 
-  return { reply, executed, clarify, modelUsed: true };
+  return { reply, executed, clarify, suggestions, modelUsed: true };
 }

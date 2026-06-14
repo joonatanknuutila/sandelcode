@@ -27,6 +27,8 @@ interface UIMessage {
   content: string;
   actions?: UIAction[];
   clarify?: string[];
+  /** Adaptive one-tap follow-ups for this turn (only the latest turn shows them). */
+  suggestions?: string[];
   pending?: boolean;
 }
 
@@ -62,6 +64,8 @@ export function AgentDock({ role }: { role: Role }) {
   const [messages, setMessages] = useState<UIMessage[]>([]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
+  const [showNudge, setShowNudge] = useState(false);
+  const [nudgeDismissed, setNudgeDismissed] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const refreshChats = useCallback(async () => {
@@ -75,22 +79,39 @@ export function AgentDock({ role }: { role: Role }) {
   }, [role]);
 
   // Switching persona resets the conversation: a rep's chat must NOT continue as
-  // the TAM. History is reloaded per-persona by the effect below.
+  // the TAM. History is reloaded per-persona by the effect below. A fresh persona
+  // also re-arms the nudge so it can surface that persona's brief.
   useEffect(() => {
     setChatId(undefined);
     setMessages([]);
     setShowHistory(false);
+    setNudgeDismissed(false);
   }, [role]);
 
-  // On open (and whenever the role changes), load the brief + history.
+  // The brief drives both the panel's opening view AND the closed-state nudge
+  // bubble, so fetch it whenever the persona changes (not only when open).
   useEffect(() => {
-    if (!open) return;
     fetch(`/api/agent/brief?role=${role}`)
       .then((r) => r.json())
       .then((b) => setBrief(b))
       .catch(() => setBrief(null));
-    refreshChats();
-  }, [open, role, refreshChats]);
+  }, [role]);
+
+  // History is only needed once the panel is open.
+  useEffect(() => {
+    if (open) refreshChats();
+  }, [open, refreshChats]);
+
+  // Closed + a brief available + not dismissed → pop a speech bubble after a
+  // beat to draw attention to the assistant. Opening or dismissing hides it.
+  useEffect(() => {
+    if (open || nudgeDismissed || !brief?.headline) {
+      setShowNudge(false);
+      return;
+    }
+    const t = setTimeout(() => setShowNudge(true), 2500);
+    return () => clearTimeout(t);
+  }, [open, nudgeDismissed, brief]);
 
   // Keep the thread pinned to the newest message.
   useEffect(() => {
@@ -127,6 +148,7 @@ export function AgentDock({ role }: { role: Role }) {
                 content: data.reply ?? data.error ?? "No answer.",
                 actions: data.executed,
                 clarify: data.clarify,
+                suggestions: data.suggestions,
               }
             : turn,
         ),
@@ -196,15 +218,52 @@ export function AgentDock({ role }: { role: Role }) {
 
   return (
     <>
-      {/* Floating action button — always on, above the nav drawer (z-50). */}
+      {/* Floating action button + attention nudge — above the nav drawer (z-50). */}
       {!open && (
-        <button
-          onClick={() => setOpen(true)}
-          aria-label="Open AI assistant"
-          className="fixed bottom-5 right-5 z-[60] flex h-14 w-14 items-center justify-center rounded-full bg-hmd-teal text-hmd-charcoal shadow-lg shadow-black/20 transition-transform hover:scale-105 active:scale-95"
-        >
-          <SparkIcon />
-        </button>
+        <div className="fixed bottom-5 right-5 z-[60] flex flex-col items-end gap-3">
+          {/* Speech bubble: contextual nudge drawn from the persona's brief. */}
+          {showNudge && brief?.headline && (
+            <div className="relative max-w-[16rem]">
+              <button
+                onClick={() => {
+                  setShowNudge(false);
+                  setOpen(true);
+                }}
+                className="block rounded-2xl rounded-br-sm border border-border bg-surface px-3.5 py-2.5 text-left shadow-xl transition-transform hover:-translate-y-0.5"
+              >
+                <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-hmd-teal-700">
+                  <SparkIcon small /> Assistant
+                </span>
+                <span className="mt-0.5 block text-sm font-medium text-foreground">{brief.headline}</span>
+                <span className="mt-0.5 block text-xs text-muted">Tap to see what to do →</span>
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setNudgeDismissed(true);
+                }}
+                aria-label="Dismiss"
+                className="absolute -left-2 -top-2 grid h-6 w-6 place-items-center rounded-full border border-border bg-background text-muted shadow hover:text-foreground"
+              >
+                <CloseIcon small />
+              </button>
+            </div>
+          )}
+
+          <button
+            onClick={() => {
+              setShowNudge(false);
+              setOpen(true);
+            }}
+            aria-label="Open AI assistant"
+            className="relative flex h-14 w-14 items-center justify-center rounded-full bg-hmd-teal text-hmd-charcoal shadow-lg shadow-black/20 transition-transform hover:scale-105 active:scale-95"
+          >
+            {showNudge && (
+              <span className="pointer-events-none absolute inset-0 animate-ping rounded-full bg-hmd-teal/70" />
+            )}
+            <SparkIcon />
+          </button>
+        </div>
       )}
 
       {open && (
@@ -334,6 +393,26 @@ export function AgentDock({ role }: { role: Role }) {
                           </ul>
                         </div>
                       )}
+
+                      {/* Adaptive conversational buttons — only on the latest turn,
+                          so they change with the conversation. */}
+                      {!m.pending &&
+                        m.suggestions &&
+                        m.suggestions.length > 0 &&
+                        i === messages.length - 1 && (
+                          <div className="mt-2.5 flex flex-wrap gap-1.5">
+                            {m.suggestions.map((s, si) => (
+                              <button
+                                key={si}
+                                onClick={() => send(s)}
+                                disabled={busy}
+                                className="rounded-full border border-hmd-teal-600/50 bg-hmd-teal/10 px-3 py-1.5 text-xs font-medium text-hmd-teal-700 hover:bg-hmd-teal/20 disabled:opacity-40"
+                              >
+                                {s}
+                              </button>
+                            ))}
+                          </div>
+                        )}
                     </div>
                   )}
                 </div>

@@ -60,6 +60,7 @@ export async function POST(req: Request) {
     reply: turn.reply,
     executed: turn.executed,
     clarify: turn.clarify,
+    suggestions: turn.suggestions,
     modelUsed: turn.modelUsed,
   });
 }
