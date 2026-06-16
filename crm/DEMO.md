@@ -5,9 +5,10 @@ the **"View as"** switcher in the top bar. Seed data is realistic (8 accounts,
 10 deals across 3 years, 6 cases, offers mid-approval).
 
 > The app runs fully **without any AI keys**: every AI surface falls back to a
-> deterministic, grounded result and labels itself *"model offline"*. On prod
-> (Vercel) that fallback is what you see; locally with Gemini ADC the same cards
-> are model-phrased. Either way the **facts come from the DB, never the model**.
+> deterministic, grounded result and labels itself *"model offline"*. The
+> Google/Gemini model paths were removed after the hackathon, so this fallback
+> is what you see everywhere. Either way the **facts come from the DB, never the
+> model**.
 
 ## The walkthrough
 
